@@ -117,8 +117,7 @@ class _Login extends State<Login> {
             ),
             TextFieldWidget(
               width: width,
-              isObscureText: false,
-              autoFocus: true,
+              isObscureText: true,
               hintText: 'Mật khẩu',
               textStyle: const TextStyle(fontSize: 12),
               controller: passController,

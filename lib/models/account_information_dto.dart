@@ -12,13 +12,23 @@ class AccountInformationDTO {
       this.iat = 0,
       this.role = 0});
 
-  factory AccountInformationDTO.fromJson(Map<String, dynamic> json) {
+  factory AccountInformationDTO.fromJsonApi(Map<String, dynamic> json) {
     return AccountInformationDTO(
       name: json['name'] ?? '',
       adminId: json['adminId'] ?? '',
       exp: json['exp'] ?? 0,
       iat: json['iat'] ?? 0,
       role: json['role'] ?? 0,
+    );
+  }
+
+  factory AccountInformationDTO.fromJson(Map<String, dynamic> json) {
+    return AccountInformationDTO(
+      name: json['name'] ?? '',
+      adminId: json['adminId'] ?? '',
+      exp: int.parse(json['exp'] ?? '0'),
+      iat: int.parse(json['iat'] ?? '0'),
+      role: int.parse(json['role'] ?? '0'),
     );
   }
 

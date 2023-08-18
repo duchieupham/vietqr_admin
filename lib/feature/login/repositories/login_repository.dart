@@ -25,9 +25,8 @@ class LoginRepository {
       if (response.statusCode == 200) {
         String token = response.body;
         Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-        print('--------------------------------$decodedToken');
         AccountInformationDTO accountInformationDTO =
-            AccountInformationDTO.fromJson(decodedToken);
+            AccountInformationDTO.fromJsonApi(decodedToken);
         await AccountHelper.instance.setFcmToken('');
         await AccountHelper.instance.setToken(token);
         await UserInformationHelper.instance
