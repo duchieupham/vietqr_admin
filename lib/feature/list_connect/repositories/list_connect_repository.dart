@@ -7,14 +7,12 @@ import 'package:vietqr_admin/models/connect.dto.dart';
 import '../../../commons/utils/log.dart';
 
 class ListConnectRepository {
-  // static final codeLoginController = BehaviorSubject<CodeLoginDTO>();
-
   const ListConnectRepository();
 
   Future<List<ConnectDTO>> getListConnect() async {
     List<ConnectDTO> result = [];
     try {
-      String url = '${EnvConfig.getBaseUrl()}customer-sync';
+      String url = '${EnvConfig.instance.getBaseUrl()}admin/customer-sync';
 
       final response = await BaseAPIClient.getAPI(
         url: url,

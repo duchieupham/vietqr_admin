@@ -301,17 +301,15 @@ class DialogWidget {
         });
   }
 
-  openPopup(
-      {required Widget child,
-      required double width,
-      required double height,
-      Color barrierColor = Colors.black54}) {
+  openPopup({required Widget child, Color barrierColor = Colors.black54}) {
     final BuildContext context = NavigationService.navigatorKey.currentContext!;
     return showDialog(
       barrierDismissible: false,
       barrierColor: barrierColor,
       context: context,
       builder: (BuildContext context) {
+        double height = MediaQuery.of(context).size.height * 0.8;
+        double width = MediaQuery.of(context).size.width * 0.8;
         return Material(
           color: DefaultTheme.TRANSPARENT,
           child: Center(
@@ -321,7 +319,7 @@ class DialogWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: child,
           )),

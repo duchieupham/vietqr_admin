@@ -15,7 +15,7 @@ class LoginRepository {
   Future<bool> login(Map<String, dynamic> param) async {
     bool result = false;
     try {
-      String url = '${EnvConfig.getBaseUrl()}accounts-admin';
+      String url = '${EnvConfig.instance.getBaseUrl()}accounts-admin';
 
       final response = await BaseAPIClient.postAPI(
         url: url,

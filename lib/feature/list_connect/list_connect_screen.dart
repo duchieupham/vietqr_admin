@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/env/env_config.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/list_connect/provider/list_connect_provider.dart';
 import 'package:vietqr_admin/feature/list_connect/states/list_connect_state.dart';
+import 'package:vietqr_admin/feature/list_connect/widget/infomation_popup.dart';
 import 'package:vietqr_admin/models/connect.dto.dart';
 
 import 'blocs/list_connect_bloc.dart';
@@ -43,6 +46,9 @@ class ListConnectScreen extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
+                          EnvConfig.instance.updateEnv(EnvType.DEV);
+                          BlocProvider.of<ListConnectBloc>(context)
+                              .add(ListConnectGetListEvent());
                           provider.updateENV(0);
                         },
                         child: Container(
@@ -67,6 +73,9 @@ class ListConnectScreen extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
+                          EnvConfig.instance.updateEnv(EnvType.GOLIVE);
+                          BlocProvider.of<ListConnectBloc>(context)
+                              .add(ListConnectGetListEvent());
                           provider.updateENV(1);
                         },
                         child: Container(
@@ -319,7 +328,12 @@ class ListConnectScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            DialogWidget.instance.openPopup(
+                                child: InformationPopup(
+                              dto: e,
+                            ));
+                          },
                           child: const Text(
                             'Thông tin thêm',
                             style: TextStyle(

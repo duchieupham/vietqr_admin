@@ -1,26 +1,28 @@
 import 'package:vietqr_admin/commons/constants/env/dev_evn.dart';
-import 'package:vietqr_admin/commons/constants/env/evn.dart';
-import 'package:vietqr_admin/commons/constants/env/stg_env.dart';
+import 'package:vietqr_admin/commons/constants/env/go_live_env.dart';
 
 class EnvConfig {
-  static final Env _env = (getEnv() == EnvType.STG) ? StgEnv() : DevEnv();
+  const EnvConfig._privateConsrtructor();
 
-  static String getBaseUrl() {
-    return _env.getBaseUrl();
+  static const EnvConfig _instance = EnvConfig._privateConsrtructor();
+  static EnvConfig get instance => _instance;
+  static EnvType _currentEnv = EnvType.DEV;
+  static EnvType get currentEnv => _currentEnv;
+
+  String getBaseUrl() {
+    if (_currentEnv == EnvType.GOLIVE) {
+      return GoLiveEnv().getBaseUrl();
+    } else {
+      return DevEnv().getBaseUrl();
+    }
   }
 
-  // static FirebaseOptions getFirebaseConfig() {
-  //   return _env.getFirebaseCongig();
-  // }
-
-  static EnvType getEnv() {
-    // const EnvType env = EnvType.STG;
-    const EnvType env = EnvType.DEV;
-    return env;
+  void updateEnv(EnvType type) {
+    _currentEnv = type;
   }
 }
 
 enum EnvType {
-  STG,
+  GOLIVE,
   DEV,
 }
