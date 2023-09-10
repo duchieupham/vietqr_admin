@@ -23,3 +23,19 @@ class GetListBankEvent extends InfoConnectEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class AddBankConnectEvent extends InfoConnectEvent {
+  final Map<String, dynamic> param;
+  const AddBankConnectEvent({required this.param});
+
+  @override
+  List<Object?> get props => [param];
+}
+
+class RemoveBankConnectEvent extends InfoConnectEvent {
+  final Map<String, dynamic> param;
+  const RemoveBankConnectEvent({required this.param});
+
+  @override
+  List<Object?> get props => [param];
+}

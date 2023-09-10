@@ -28,11 +28,7 @@ class SelectBankTypeWidget extends StatelessWidget {
     bankTypesResult.clear();
     bankTypes.clear();
     bankTypeBloc = BlocProvider.of(context);
-    if (authenticated) {
-      bankTypeBloc.add(const BankTypeEventGetList());
-    } else {
-      bankTypeBloc.add(const BankTypeEventGetListUnauthenticated());
-    }
+    bankTypeBloc.add(const BankTypeEventGetListUnauthenticated());
   }
 
   @override

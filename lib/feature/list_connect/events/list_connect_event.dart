@@ -8,3 +8,11 @@ class ListConnectEvent extends Equatable {
 }
 
 class ListConnectGetListEvent extends ListConnectEvent {}
+
+class ListConnectUpdateStatusEvent extends ListConnectEvent {
+  final Map<String, dynamic> param;
+  const ListConnectUpdateStatusEvent({required this.param});
+
+  @override
+  List<Object?> get props => [param];
+}

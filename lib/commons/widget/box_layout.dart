@@ -43,6 +43,7 @@ class BoxLayout extends StatelessWidget {
         image: bgImage != null
             ? DecorationImage(image: AssetImage(bgImage!), fit: BoxFit.fitWidth)
             : null,
+        border: border,
         borderRadius:
             BorderRadius.circular((borderRadius != null) ? borderRadius! : 15),
         boxShadow: (enableShadow != null && enableShadow!)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/list_connect/blocs/info_connect_bloc.dart';
 import 'package:vietqr_admin/feature/list_connect/states/info_connect_state.dart';
 import 'package:vietqr_admin/feature/list_connect/widget/api_service_info.dart';
@@ -106,12 +107,22 @@ class InformationPopup extends StatelessWidget {
           if (state is GetListBankSuccessfulState) {
             result = state.list;
           }
+          if (state is RemoveBankConnectLoadingState) {
+            DialogWidget.instance.openLoadingDialog();
+          }
+          if (state is AddBankConnectSuccessState) {
+            Navigator.pop(context);
+          }
+          if (state is RemoveBankConnectSuccessState) {
+            Navigator.pop(context);
+          }
         }, builder: (context, state) {
           return ListBank(
             listBank: result,
             showButtonAddBank: dto.platform == 'API service',
             apiServiceDTO: apiServiceDTO,
             customerSyncId: dto.id,
+            bloc: BlocProvider.of<InfoConnectBloc>(context),
           );
         }));
   }

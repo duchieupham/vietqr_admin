@@ -49,3 +49,11 @@ class GetListBankSuccessfulState extends InfoConnectState {
 }
 
 class GetListFailedState extends InfoConnectState {}
+
+class AddBankConnectLoadingState extends InfoConnectState {}
+
+class AddBankConnectSuccessState extends InfoConnectState {}
+
+class RemoveBankConnectLoadingState extends InfoConnectState {}
+
+class RemoveBankConnectSuccessState extends InfoConnectState {}

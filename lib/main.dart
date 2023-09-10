@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
@@ -12,6 +13,7 @@ late SharedPreferences sharedPrefs;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPrefs = await SharedPreferences.getInstance();
+  setUrlStrategy(PathUrlStrategy());
   // LOG.verbose('Config Environment: ${EnvConfig.getEnv()}');
   runApp(const VietQRAdmin());
 }

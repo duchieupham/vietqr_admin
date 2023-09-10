@@ -13,6 +13,8 @@ class InfoConnectBloc extends Bloc<InfoConnectEvent, InfoConnectState> {
   InfoConnectBloc() : super(InfoConnectInitialState()) {
     on<GetInfoConnectEvent>(_getInfo);
     on<GetListBankEvent>(_getListBank);
+    on<AddBankConnectEvent>(_addBankConnect);
+    on<RemoveBankConnectEvent>(_removeBankConnect);
   }
 }
 
@@ -44,6 +46,40 @@ void _getListBank(InfoConnectEvent event, Emitter emit) async {
     if (event is GetListBankEvent) {
       emit(InfoConnectLoadingState());
       result = await infoConnectRepository.getListBank(event.id);
+      emit(GetListBankSuccessfulState(list: result));
+    }
+  } catch (e) {
+    debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
+    emit(GetListFailedState());
+  }
+}
+
+void _addBankConnect(InfoConnectEvent event, Emitter emit) async {
+  List<BankAccountDTO> result = [];
+  try {
+    if (event is AddBankConnectEvent) {
+      await infoConnectRepository.addBankConnect(event.param);
+      emit(AddBankConnectSuccessState());
+      result = await infoConnectRepository
+          .getListBank(event.param['customerSyncId']);
+      emit(GetListBankSuccessfulState(list: result));
+    }
+  } catch (e) {
+    debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
+    emit(GetListFailedState());
+  }
+}
+
+void _removeBankConnect(InfoConnectEvent event, Emitter emit) async {
+  List<BankAccountDTO> result = [];
+  try {
+    if (event is RemoveBankConnectEvent) {
+      emit(RemoveBankConnectLoadingState());
+
+      await infoConnectRepository.removeBankConnect(event.param);
+      emit(RemoveBankConnectSuccessState());
+      result = await infoConnectRepository
+          .getListBank(event.param['customerSyncId']);
       emit(GetListBankSuccessfulState(list: result));
     }
   } catch (e) {

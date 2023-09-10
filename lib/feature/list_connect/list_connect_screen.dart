@@ -128,7 +128,7 @@ class ListConnectScreen extends StatelessWidget {
                         _buildPort(result),
                         _buildStatus(result),
                         _buildPlatform(result),
-                        _buildAction(result),
+                        _buildAction(result, context),
                       ],
                     );
                   }
@@ -140,7 +140,7 @@ class ListConnectScreen extends StatelessWidget {
                       _buildPort(result),
                       _buildStatus(result),
                       _buildPlatform(result),
-                      _buildAction(result),
+                      _buildAction(result, context),
                     ],
                   );
                 });
@@ -311,7 +311,7 @@ class ListConnectScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAction(List<ConnectDTO> list) {
+  Widget _buildAction(List<ConnectDTO> list, BuildContext context) {
     return SizedBox(
       width: 220,
       child: Padding(
@@ -357,7 +357,13 @@ class ListConnectScreen extends StatelessWidget {
                         width: 16,
                       ),
                       InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Map<String, dynamic> param = {};
+                            param['customerSyncId'] = e.id;
+                            param['status'] = e.active == 1 ? 0 : 1;
+                            BlocProvider.of<ListConnectBloc>(context).add(
+                                ListConnectUpdateStatusEvent(param: param));
+                          },
                           child: Text(
                             e.active == 1 ? 'Tắt kết nối' : 'Bật kết nối',
                             style: TextStyle(

@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
-import 'package:vietqr_admin/feature/dashboard/bank/blocs/bank_type_bloc.dart';
-import 'package:vietqr_admin/feature/list_connect/provider/bank_type_provider.dart';
+import 'package:vietqr_admin/feature/list_connect/blocs/info_connect_bloc.dart';
+import 'package:vietqr_admin/feature/list_connect/provider/add_bank_provider.dart';
 import 'package:vietqr_admin/feature/list_connect/widget/add_bank_popup.dart';
 import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
 
 import '../../../commons/constants/utils/image_utils.dart';
+import '../events/info_connect_event.dart';
 
 class ListBank extends StatelessWidget {
   final List<BankAccountDTO> listBank;
   final bool showButtonAddBank;
   final ApiServiceDTO apiServiceDTO;
   final String customerSyncId;
+  final InfoConnectBloc bloc;
   const ListBank(
       {Key? key,
       required this.listBank,
       this.showButtonAddBank = false,
       required this.apiServiceDTO,
-      required this.customerSyncId})
+      required this.customerSyncId,
+      required this.bloc})
       : super(key: key);
 
   @override
@@ -41,7 +43,7 @@ class ListBank extends StatelessWidget {
             child: ListView(
           padding: EdgeInsets.zero,
           children: listBank.map((e) {
-            return _buildItemBank(e);
+            return _buildItemBank(e, context);
           }).toList(),
         )),
         if (showButtonAddBank) ...[
@@ -56,14 +58,12 @@ class ListBank extends StatelessWidget {
             bgColor: DefaultTheme.BLUE_TEXT,
             function: () {
               DialogWidget.instance.openPopupCenter(
-                  child: BlocProvider<BankTypeBloc>(
-                create: (BuildContext context) => BankTypeBloc(),
-                child: ChangeNotifierProvider<BankTypeProvider>(
-                  create: (context) => BankTypeProvider(),
-                  child: AddBankPopup(
-                    customerSyncId: customerSyncId,
-                    accountCustomerId: apiServiceDTO.accountCustomerId,
-                  ),
+                  child: ChangeNotifierProvider<AddBankProvider>(
+                create: (context) => AddBankProvider(),
+                child: AddBankPopup(
+                  customerSyncId: customerSyncId,
+                  accountCustomerId: apiServiceDTO.accountCustomerId,
+                  bloc: bloc,
                 ),
               ));
             },
@@ -73,7 +73,7 @@ class ListBank extends StatelessWidget {
     );
   }
 
-  Widget _buildItemBank(BankAccountDTO dto) {
+  Widget _buildItemBank(BankAccountDTO dto, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(top: 8),
@@ -174,7 +174,18 @@ class ListBank extends StatelessWidget {
                         )),
                     const Spacer(),
                     InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          DialogWidget.instance.openMsgDialogQuestion(
+                              title: 'Xoá đồng bộ',
+                              msg: 'Bạn có chắc chắn muốn xoá đồng bộ?',
+                              onConfirm: () {
+                                Map<String, dynamic> param = {};
+                                param['bankId'] = dto.bankId;
+                                param['customerSyncId'] = dto.customerSyncId;
+                                bloc.add(RemoveBankConnectEvent(param: param));
+                                Navigator.pop(context);
+                              });
+                        },
                         child: const Text(
                           'Xoá đông bộ',
                           style: TextStyle(
