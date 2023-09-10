@@ -4,13 +4,15 @@ import 'package:vietqr_admin/feature/list_connect/events/info_connect_event.dart
 import 'package:vietqr_admin/feature/list_connect/repositories/info_connect_repository.dart';
 import 'package:vietqr_admin/feature/list_connect/states/info_connect_state.dart';
 import 'package:vietqr_admin/models/api_service_dto.dart';
+import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/ecomerce_dto.dart';
 
-import '../states/list_connect_state.dart';
+import '../../../models/response_message_dto.dart';
 
 class InfoConnectBloc extends Bloc<InfoConnectEvent, InfoConnectState> {
   InfoConnectBloc() : super(InfoConnectInitialState()) {
     on<GetInfoConnectEvent>(_getInfo);
+    on<GetListBankEvent>(_getListBank);
   }
 }
 
@@ -32,6 +34,20 @@ void _getInfo(InfoConnectEvent event, Emitter emit) async {
     }
   } catch (e) {
     debugPrint('Error at get _getInfo- _getInfo ConnectBloc: $e');
-    emit(ListConnectFailedState());
+    emit(const InfoConnectFailedState(dto: ResponseMessageDTO()));
+  }
+}
+
+void _getListBank(InfoConnectEvent event, Emitter emit) async {
+  List<BankAccountDTO> result = [];
+  try {
+    if (event is GetListBankEvent) {
+      emit(InfoConnectLoadingState());
+      result = await infoConnectRepository.getListBank(event.id);
+      emit(GetListBankSuccessfulState(list: result));
+    }
+  } catch (e) {
+    debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
+    emit(GetListFailedState());
   }
 }

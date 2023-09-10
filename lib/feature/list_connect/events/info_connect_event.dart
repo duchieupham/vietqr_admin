@@ -15,3 +15,11 @@ class GetInfoConnectEvent extends InfoConnectEvent {
   @override
   List<Object?> get props => [id, platform];
 }
+
+class GetListBankEvent extends InfoConnectEvent {
+  final String id;
+  const GetListBankEvent({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}

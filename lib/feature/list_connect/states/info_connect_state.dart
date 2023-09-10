@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/ecomerce_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
 
@@ -38,3 +39,13 @@ class InfoConnectFailedState extends InfoConnectState {
   @override
   List<Object?> get props => [dto];
 }
+
+class GetListBankSuccessfulState extends InfoConnectState {
+  final List<BankAccountDTO> list;
+  const GetListBankSuccessfulState({required this.list});
+
+  @override
+  List<Object?> get props => [list];
+}
+
+class GetListFailedState extends InfoConnectState {}

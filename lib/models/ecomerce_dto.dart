@@ -32,4 +32,8 @@ class EcomerceDTO {
       firstName: json['firstName'] ?? '',
     );
   }
+
+  String getFullName() {
+    return '$firstName $middleName $lastName';
+  }
 }

@@ -4,70 +4,116 @@ import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/feature/list_connect/blocs/info_connect_bloc.dart';
 import 'package:vietqr_admin/feature/list_connect/states/info_connect_state.dart';
 import 'package:vietqr_admin/feature/list_connect/widget/api_service_info.dart';
+import 'package:vietqr_admin/feature/list_connect/widget/ecomerce_info.dart';
+import 'package:vietqr_admin/feature/list_connect/widget/list_bank.dart';
+import 'package:vietqr_admin/models/api_service_dto.dart';
+import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/connect.dto.dart';
 
 import '../events/info_connect_event.dart';
 
 class InformationPopup extends StatelessWidget {
   final ConnectDTO dto;
-  const InformationPopup({Key? key, required this.dto}) : super(key: key);
+  InformationPopup({Key? key, required this.dto}) : super(key: key);
 
+  ApiServiceDTO apiServiceDTO = const ApiServiceDTO();
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<InfoConnectBloc>(
-      create: (BuildContext context) => InfoConnectBloc()
-        ..add(GetInfoConnectEvent(id: dto.id, platform: dto.platform)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            _buildTitle(context),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Row(
-                children: [
-                  Expanded(child: _buildInfo()),
-                  Expanded(child: _buildListCard()),
-                ],
-              ),
-            )),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        children: [
+          _buildTitle(context),
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
+              children: [
+                Expanded(child: _buildInfo()),
+                const SizedBox(
+                  width: 48,
+                ),
+                Expanded(child: _buildListCard()),
+              ],
+            ),
+          )),
+        ],
       ),
     );
   }
 
   Widget _buildInfo() {
-    return BlocConsumer<InfoConnectBloc, InfoConnectState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          if (state is InfoApiServiceConnectSuccessfulState) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Thông tin kết nối của khách hàng',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+    return BlocProvider<InfoConnectBloc>(
+      create: (BuildContext context) => InfoConnectBloc()
+        ..add(GetInfoConnectEvent(id: dto.id, platform: dto.platform)),
+      child: BlocConsumer<InfoConnectBloc, InfoConnectState>(
+          listener: (context, state) {
+        if (state is InfoApiServiceConnectSuccessfulState) {
+          apiServiceDTO = state.dto;
+        }
+      }, builder: (context, state) {
+        if (state is InfoApiServiceConnectSuccessfulState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Thông tin kết nối của khách hàng',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Expanded(
+                child: ApiServiceInfo(
+                  dto: state.dto,
                 ),
-                const SizedBox(
-                  height: 16,
+              ),
+            ],
+          );
+        }
+        if (state is InfoEcomerceDTOConnectSuccessfulState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Thông tin kết nối của khách hàng',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Expanded(
+                child: EcomerceInfo(
+                  dto: state.dto,
                 ),
-                Expanded(
-                  child: ApiServiceInfo(
-                    dto: state.dto,
-                  ),
-                ),
-              ],
-            );
-          }
+              ),
+            ],
+          );
+        }
 
-          return Text('body');
-        });
+        return Text('Không có thông tin');
+      }),
+    );
   }
 
   Widget _buildListCard() {
-    return Text('list card');
+    List<BankAccountDTO> result = [];
+    return BlocProvider<InfoConnectBloc>(
+        create: (BuildContext context) =>
+            InfoConnectBloc()..add(GetListBankEvent(id: dto.id)),
+        child: BlocConsumer<InfoConnectBloc, InfoConnectState>(
+            listener: (context, state) {
+          if (state is GetListBankSuccessfulState) {
+            result = state.list;
+          }
+        }, builder: (context, state) {
+          return ListBank(
+            listBank: result,
+            showButtonAddBank: dto.platform == 'API service',
+            apiServiceDTO: apiServiceDTO,
+            customerSyncId: dto.id,
+          );
+        }));
   }
 
   Widget _buildTitle(BuildContext context) {

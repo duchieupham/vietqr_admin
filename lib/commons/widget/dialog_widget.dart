@@ -328,6 +328,34 @@ class DialogWidget {
     );
   }
 
+  openPopupCenter(
+      {required Widget child, Color barrierColor = Colors.black54}) {
+    final BuildContext context = NavigationService.navigatorKey.currentContext!;
+    return showDialog(
+      barrierDismissible: false,
+      barrierColor: barrierColor,
+      context: context,
+      builder: (BuildContext context) {
+        double height = MediaQuery.of(context).size.height * 0.75;
+        double width = MediaQuery.of(context).size.width * 0.5;
+        return Material(
+          color: DefaultTheme.TRANSPARENT,
+          child: Center(
+              child: Container(
+            width: width,
+            height: height,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: child,
+          )),
+        );
+      },
+    );
+  }
+
   openWidgetDialog({required Widget child}) {
     final BuildContext context = NavigationService.navigatorKey.currentContext!;
     return showDialog(
