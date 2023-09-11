@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -27,12 +28,22 @@ class _Login extends State<Login> {
   bool errPass = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(kDebugMode){
+      userNameController.text = 'adminvietqr';
+      passController.text = 'systemadmin123';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: DefaultTheme.GREY_BG,
+      backgroundColor: AppColor.GREY_BG,
       body: BlocProvider<LoginBloc>(
         create: (BuildContext context) => _loginBloc,
         child: BlocListener<LoginBloc, LoginState>(
@@ -109,7 +120,7 @@ class _Login extends State<Login> {
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
                   'Không được để trống',
-                  style: TextStyle(color: DefaultTheme.RED_TEXT, fontSize: 12),
+                  style: TextStyle(color: AppColor.RED_TEXT, fontSize: 12),
                 ),
               ),
             const SizedBox(
@@ -136,7 +147,7 @@ class _Login extends State<Login> {
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
                   'Không được để trống',
-                  style: TextStyle(color: DefaultTheme.RED_TEXT, fontSize: 12),
+                  style: TextStyle(color: AppColor.RED_TEXT, fontSize: 12),
                 ),
               ),
             const Padding(padding: EdgeInsets.only(top: 80)),
@@ -145,8 +156,8 @@ class _Login extends State<Login> {
               height: 40,
               text: 'Đăng nhập',
               borderRadius: 5,
-              textColor: DefaultTheme.WHITE,
-              bgColor: DefaultTheme.BLUE_TEXT,
+              textColor: AppColor.WHITE,
+              bgColor: AppColor.BLUE_TEXT,
               function: () {
                 if (userNameController.text.isEmpty) {
                   setState(() {

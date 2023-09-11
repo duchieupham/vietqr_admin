@@ -56,7 +56,7 @@ class WebMobileBlankWidget extends StatelessWidget {
                     const Text(
                       'VietQR chỉ hỗ trợ trình duyệt web cho PC.',
                       style: TextStyle(
-                        color: DefaultTheme.GREY_TEXT,
+                        color: AppColor.GREY_TEXT,
                       ),
                     ),
                   ],

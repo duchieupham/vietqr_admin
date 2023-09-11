@@ -1,9 +1,10 @@
 import '../../main.dart';
 
 class AccountHelper {
-  const AccountHelper._privateConsrtructor();
+  const AccountHelper._privateConstructor();
 
-  static const AccountHelper _instance = AccountHelper._privateConsrtructor();
+  static const AccountHelper _instance = AccountHelper._privateConstructor();
+
   static AccountHelper get instance => _instance;
 
   Future<void> initialAccountHelper() async {
@@ -21,5 +22,13 @@ class AccountHelper {
 
   Future<void> setFcmToken(String token) async {
     await sharedPrefs.setString('FCM_TOKEN', token);
+  }
+
+  Future<void> setTokenFree(String value) async {
+    await sharedPrefs.setString('TOKEN_FREE', value);
+  }
+
+  String getTokenFree() {
+    return sharedPrefs.getString('TOKEN_FREE')!;
   }
 }

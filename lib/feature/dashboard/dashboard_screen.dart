@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
+import 'package:vietqr_admin/feature/connect_service/list_connect/list_connect_screen.dart';
+import 'package:vietqr_admin/feature/connect_service/service_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_link.dart';
-import 'package:vietqr_admin/feature/list_connect/list_connect_screen.dart';
 import 'package:vietqr_admin/feature/new_connect/new_connect_screen.dart';
+import 'package:vietqr_admin/feature/run_callback/run_callback_screen.dart';
 
 import 'frames/dashboard_frame.dart';
 
@@ -18,6 +20,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashBroadScreenState extends State<DashboardScreen> {
   List<Widget> pages = [];
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +29,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const SizedBox.shrink(),
       ListConnectScreen(),
       const NewConnectScreen(),
-      const SizedBox.shrink(),
+      const RunCallBackScreen(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
@@ -51,21 +54,23 @@ class _DashBroadScreenState extends State<DashboardScreen> {
     return Scaffold(
       body: ChangeNotifierProvider(
         create: (context) => MenuProvider(),
-        child: Consumer<MenuProvider>(builder: (context, provider, child) {
-          return DashboardFrame(
-            page: pages[provider.initPage],
-            menu: MenuLeft(
-              menuProvider: provider,
-              onTab: (type) {
-                handleOnTabMenu(type, provider);
-              },
-            ),
-            menuLink: MenuLink(
-              onTab: (subMenuType) {},
-              menuProvider: provider,
-            ),
-          );
-        }),
+        child: Consumer<MenuProvider>(
+          builder: (context, provider, child) {
+            return DashboardFrame(
+              page: ServiceScreen(page: pages[provider.initPage]),
+              menu: MenuLeft(
+                menuProvider: provider,
+                onTab: (type) {
+                  handleOnTabMenu(type, provider);
+                },
+              ),
+              menuLink: MenuLink(
+                onTab: (subMenuType) {},
+                menuProvider: provider,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

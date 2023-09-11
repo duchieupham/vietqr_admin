@@ -13,6 +13,7 @@ late SharedPreferences sharedPrefs;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPrefs = await SharedPreferences.getInstance();
+  await sharedPrefs.setString('TOKEN_FREE', '');
   setUrlStrategy(PathUrlStrategy());
   // LOG.verbose('Config Environment: ${EnvConfig.getEnv()}');
   runApp(const VietQRAdmin());

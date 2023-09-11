@@ -7,6 +7,7 @@ import 'item_menu_home.dart';
 class MenuLink extends StatelessWidget {
   final Function(SubMenuType) onTab;
   final MenuProvider menuProvider;
+
   const MenuLink({super.key, required this.onTab, required this.menuProvider});
 
   @override
@@ -14,22 +15,26 @@ class MenuLink extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(padding: EdgeInsets.only(top: 15)),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Text(
-            'Dịch vụ kết nối',
+        Container(
+          height: 40,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.centerLeft,
+          child: const Text(
+            'Dịch vụ kết nối API',
             style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline),
           ),
         ),
-        const Padding(padding: EdgeInsets.only(top: 10)),
         Expanded(
-            child: _buildListItem(menuProvider, () {
-          menuProvider.updateShowMenuLink(false);
-        }))
+          child: _buildListItem(
+            menuProvider,
+            () {
+              menuProvider.updateShowMenuLink(false);
+            },
+          ),
+        )
       ],
     );
   }

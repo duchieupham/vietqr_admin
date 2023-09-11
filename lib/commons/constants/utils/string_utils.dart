@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/commons/constants/enum/text_data.dart';
 
@@ -5,6 +7,7 @@ class StringUtils {
   const StringUtils._privateConsrtructor();
 
   static const StringUtils _instance = StringUtils._privateConsrtructor();
+
   static StringUtils get instance => _instance;
 
   final String _transactionContentWithoutVietnamesePattern =
@@ -87,10 +90,20 @@ class StringUtils {
   }
 
   static String formatNumber(dynamic value) {
+    if (value is String) {
+      value = int.parse(value);
+    }
+
     if (value == null) {
       return '0';
     }
     var numberFormat = NumberFormat.decimalPattern('vi-VI');
-    return numberFormat.format(value);
+    return '${numberFormat.format(value).replaceAll('.', ',')} VND';
+  }
+
+  String authBase64(String username, String password) {
+    String credentials = "$username:$password";
+    String credentialsBase64 = base64Encode(utf8.encode(credentials));
+    return credentialsBase64;
   }
 }

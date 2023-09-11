@@ -11,6 +11,7 @@ class DashboardFrame extends StatelessWidget {
   final Widget page;
   final Widget menu;
   final Widget menuLink;
+
   const DashboardFrame(
       {Key? key,
       required this.page,
@@ -34,56 +35,58 @@ class DashboardFrame extends StatelessWidget {
                   child: Column(
                     children: [
                       const Header(),
-                      Row(
-                        children: [
-                          Consumer<MenuProvider>(
-                            builder: (context, provider, child) {
-                              double width = 0;
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Consumer<MenuProvider>(
+                              builder: (context, provider, child) {
+                                double width = 0;
 
-                              if (provider.showMenuLink) {
-                                width = 440;
-                              } else {
-                                width = 220;
-                              }
-                              return AnimatedContainer(
-                                duration: const Duration(milliseconds: 400),
-                                curve: Curves.easeInOut,
-                                width: width,
-                                child: SizedBox(
-                                  height: height - 60,
-                                  child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    children: [
-                                      BoxLayout(
-                                        width: 220,
-                                        height: height - 60,
-                                        borderRadius: 0,
-                                        padding: EdgeInsets.zero,
-                                        alignment: Alignment.centerLeft,
-                                        bgColor: DefaultTheme.BLUE_TEXT
-                                            .withOpacity(0.3),
-                                        child: menu,
-                                      ),
-                                      Container(
-                                        width: 220,
-                                        height: height - 60,
-                                        decoration: BoxDecoration(
-                                            color: DefaultTheme.BLUE_TEXT
+                                if (provider.showMenuLink) {
+                                  width = 440;
+                                } else {
+                                  width = 220;
+                                }
+                                return AnimatedContainer(
+                                  duration: const Duration(milliseconds: 400),
+                                  curve: Curves.easeInOut,
+                                  width: width,
+                                  child: SizedBox(
+                                    height: height,
+                                    child: ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      children: [
+                                        BoxLayout(
+                                          width: 220,
+                                          height: height,
+                                          borderRadius: 0,
+                                          padding: EdgeInsets.zero,
+                                          alignment: Alignment.centerLeft,
+                                          bgColor: AppColor.BLUE_TEXT
+                                              .withOpacity(0.3),
+                                          child: menu,
+                                        ),
+                                        Container(
+                                          width: 220,
+                                          height: height,
+                                          decoration: BoxDecoration(
+                                            color: AppColor.BLUE_TEXT
                                                 .withOpacity(0.2),
-                                           ),
-                                        padding: EdgeInsets.zero,
-                                        child: menuLink,
-                                      ),
-                                    ],
+                                          ),
+                                          padding: EdgeInsets.zero,
+                                          child: menuLink,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                          Expanded(child: page),
-                        ],
+                                );
+                              },
+                            ),
+                            Expanded(child: page),
+                          ],
+                        ),
                       )
                     ],
                   ),

@@ -3,9 +3,11 @@ import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 
 class MenuProvider with ChangeNotifier {
   int _initPage = 0;
+
   int get initPage => _initPage;
 
   bool _isShowMenuLink = false;
+
   bool get showMenuLink => _isShowMenuLink;
 
   void updateShowMenuLink(bool value) {
@@ -17,6 +19,7 @@ class MenuProvider with ChangeNotifier {
   MenuType get menuHomeType => _menuHomeType;
 
   SubMenuType _subMenuType = SubMenuType.OTHER;
+
   SubMenuType get subMenuType => _subMenuType;
 
   void selectSubMenu(SubMenuType value) {

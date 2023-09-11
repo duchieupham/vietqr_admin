@@ -47,172 +47,89 @@ class NewConnectScreen extends StatelessWidget {
         }
       }, builder: (context, state) {
         return SizedBox(
-          height: height - 60,
           width: width,
-          child: Column(
-            children: [
-              ChangeNotifierProvider(
-                create: (context) => EnvProvider(),
-                child:
-                    Consumer<EnvProvider>(builder: (context, provider, child) {
-                  return Container(
-                    color: DefaultTheme.BLUE_TEXT.withOpacity(0.2),
-                    height: 68,
-                    width: width,
-                    child: Row(
+          child: ChangeNotifierProvider<NewConnectProvider>(
+            create: (context) => NewConnectProvider(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16, vertical: 20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        const Text('Môi trường'),
-                        const SizedBox(
-                          width: 24,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            EnvConfig.instance.updateEnv(EnvType.DEV);
-                            // BlocProvider.of<EnvProvider>(context)
-                            //     .add(ListConnectGetListEvent());
-                            provider.updateENV(0);
-                          },
-                          child: Container(
-                            height: 35,
-                            width: 100,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: provider.environment == 0
-                                  ? DefaultTheme.BLUE_TEXT.withOpacity(0.1)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              'Test',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: provider.environment == 0
-                                      ? DefaultTheme.BLUE_TEXT
-                                      : DefaultTheme.BLACK),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            EnvConfig.instance.updateEnv(EnvType.GOLIVE);
-                            // BlocProvider.of<ListConnectBloc>(context)
-                            //     .add(ListConnectGetListEvent());
-                            provider.updateENV(1);
-                          },
-                          child: Container(
-                            height: 35,
-                            width: 100,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: provider.environment == 1
-                                  ? DefaultTheme.BLUE_TEXT.withOpacity(0.1)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              'GoLive',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: provider.environment == 1
-                                      ? DefaultTheme.BLUE_TEXT
-                                      : DefaultTheme.BLACK),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
-              Expanded(
-                child: ChangeNotifierProvider<NewConnectProvider>(
-                  create: (context) => NewConnectProvider(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Thông tin khách hàng cung cấp',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Expanded(child: _buildAddressConnect())
-                            ],
-                          ),
+                        const Text(
+                          'Thông tin khách hàng cung cấp',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
-                          width: 48,
+                          height: 16,
                         ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Thông tin hệ thống khởi tạo',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Expanded(child: _buildBasicAuthen()),
-                              Consumer<NewConnectProvider>(
-                                  builder: (context, provider, child) {
-                                return ButtonWidget(
-                                  height: 40,
-                                  text: 'Tạo kết nối',
-                                  borderRadius: 5,
-                                  sizeTitle: 12,
-                                  textColor: DefaultTheme.WHITE,
-                                  bgColor: DefaultTheme.BLUE_TEXT,
-                                  function: () {
-                                    provider.checkValidate();
-                                    if (provider.isValidate()) {
-                                      Map<String, dynamic> param = {};
-                                      param['merchantName'] = provider.merchant;
-                                      param['url'] = provider.urlConnect;
-                                      param['ip'] = provider.ipConnect;
-                                      param['port'] = provider.portConnect;
-                                      param['suffixUrl'] =
-                                          provider.suffixConnect;
-                                      param['address'] = provider.address;
-                                      param['bankAccount'] =
-                                          provider.bankAccount;
-                                      param['userBankName'] =
-                                          provider.userBankName;
-                                      param['customerUsername'] =
-                                          provider.username;
-                                      param['customerPassword'] =
-                                          provider.password;
-                                      param['systemUsername'] =
-                                          provider.customerName;
-                                      BlocProvider.of<NewConnectBloc>(context)
-                                          .add(AddCustomerSyncEvent(
-                                              param: param));
-                                    }
-                                  },
-                                );
-                              }),
-                            ],
-                          ),
-                        )
+                        Expanded(child: _buildAddressConnect())
                       ],
                     ),
                   ),
-                ),
+                  const SizedBox(
+                    width: 48,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Thông tin hệ thống khởi tạo',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Expanded(child: _buildBasicAuthen()),
+                        Consumer<NewConnectProvider>(
+                            builder: (context, provider, child) {
+                          return ButtonWidget(
+                            height: 40,
+                            text: 'Tạo kết nối',
+                            borderRadius: 5,
+                            sizeTitle: 12,
+                            textColor: AppColor.WHITE,
+                            bgColor: AppColor.BLUE_TEXT,
+                            function: () {
+                              provider.checkValidate();
+                              if (provider.isValidate()) {
+                                Map<String, dynamic> param = {};
+                                param['merchantName'] = provider.merchant;
+                                param['url'] = provider.urlConnect;
+                                param['ip'] = provider.ipConnect;
+                                param['port'] = provider.portConnect;
+                                param['suffixUrl'] =
+                                    provider.suffixConnect;
+                                param['address'] = provider.address;
+                                param['bankAccount'] =
+                                    provider.bankAccount;
+                                param['userBankName'] =
+                                    provider.userBankName;
+                                param['customerUsername'] =
+                                    provider.username;
+                                param['customerPassword'] =
+                                    provider.password;
+                                param['systemUsername'] =
+                                    provider.customerName;
+                                BlocProvider.of<NewConnectBloc>(context)
+                                    .add(AddCustomerSyncEvent(
+                                        param: param));
+                              }
+                            },
+                          );
+                        }),
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ],
+            ),
           ),
         );
       }),
@@ -256,7 +173,7 @@ class NewConnectScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
                   'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: DefaultTheme.RED_TEXT),
+                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
                 ),
               )
             ],
@@ -366,7 +283,7 @@ class NewConnectScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
                   'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: DefaultTheme.RED_TEXT),
+                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
                 ),
               )
             ],
@@ -402,7 +319,7 @@ class NewConnectScreen extends StatelessWidget {
                           child: Text(
                             'Không được để trống',
                             style: TextStyle(
-                                fontSize: 12, color: DefaultTheme.RED_TEXT),
+                                fontSize: 12, color: AppColor.RED_TEXT),
                           ),
                         )
                       ],
@@ -439,7 +356,7 @@ class NewConnectScreen extends StatelessWidget {
                           child: Text(
                             'Không được để trống',
                             style: TextStyle(
-                                fontSize: 12, color: DefaultTheme.RED_TEXT),
+                                fontSize: 12, color: AppColor.RED_TEXT),
                           ),
                         )
                       ],
@@ -480,7 +397,7 @@ class NewConnectScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
                   'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: DefaultTheme.RED_TEXT),
+                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
                 ),
               )
             ],
@@ -509,7 +426,7 @@ class NewConnectScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
                   'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: DefaultTheme.RED_TEXT),
+                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
                 ),
               )
             ],
@@ -525,8 +442,8 @@ class NewConnectScreen extends StatelessWidget {
                   text: 'Test Get Token của KH',
                   borderRadius: 5,
                   sizeTitle: 12,
-                  textColor: DefaultTheme.WHITE,
-                  bgColor: DefaultTheme.BLUE_TEXT,
+                  textColor: AppColor.WHITE,
+                  bgColor: AppColor.BLUE_TEXT,
                   function: () {
                     if (provider.ipConnect.isEmpty &&
                         provider.urlConnect.isEmpty &&
@@ -578,8 +495,8 @@ class NewConnectScreen extends StatelessWidget {
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
-                          backgroundColor: DefaultTheme.WHITE,
-                          textColor: DefaultTheme.BLACK,
+                          backgroundColor: AppColor.WHITE,
+                          textColor: AppColor.BLACK,
                           fontSize: 15,
                           webBgColor: 'rgba(255, 255, 255)',
                           webPosition: 'center',
@@ -591,7 +508,7 @@ class NewConnectScreen extends StatelessWidget {
                             horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: DefaultTheme.BLUE_TEXT.withOpacity(0.3)),
+                            color: AppColor.BLUE_TEXT.withOpacity(0.3)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -600,7 +517,7 @@ class NewConnectScreen extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: DefaultTheme.BLUE_TEXT),
+                                  color: AppColor.BLUE_TEXT),
                             ),
                             const SizedBox(
                               height: 4,
@@ -608,7 +525,7 @@ class NewConnectScreen extends StatelessWidget {
                             Text(
                               state.dto.message,
                               style: const TextStyle(
-                                  fontSize: 12, color: DefaultTheme.BLUE_TEXT),
+                                  fontSize: 12, color: AppColor.BLUE_TEXT),
                             )
                           ],
                         )),
@@ -620,7 +537,7 @@ class NewConnectScreen extends StatelessWidget {
                           horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
-                          color: DefaultTheme.RED_TEXT.withOpacity(0.3)),
+                          color: AppColor.RED_TEXT.withOpacity(0.3)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -629,7 +546,7 @@ class NewConnectScreen extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: DefaultTheme.RED_TEXT),
+                                color: AppColor.RED_TEXT),
                           ),
                           const SizedBox(
                             height: 4,
@@ -637,7 +554,7 @@ class NewConnectScreen extends StatelessWidget {
                           Text(
                             errorText(state.dto.message),
                             style: const TextStyle(
-                                fontSize: 12, color: DefaultTheme.RED_TEXT),
+                                fontSize: 12, color: AppColor.RED_TEXT),
                           )
                         ],
                       ));
@@ -691,7 +608,7 @@ class NewConnectScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 4),
                 child: Text(
                   'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: DefaultTheme.RED_TEXT),
+                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
                 ),
               )
             ],
@@ -715,19 +632,19 @@ class NewConnectScreen extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
-                          color: DefaultTheme.GREY_BUTTON),
+                          color: AppColor.GREY_BUTTON),
                       child: Row(
                         children: [
                           const SelectableText(
                             'Mật khẩu: ',
                             style: TextStyle(
-                                fontSize: 12, color: DefaultTheme.GREY_TEXT),
+                                fontSize: 12, color: AppColor.GREY_TEXT),
                           ),
                           Expanded(
                             child: Text(
                               state.dto.message,
                               style: const TextStyle(
-                                  fontSize: 12, color: DefaultTheme.GREY_TEXT),
+                                  fontSize: 12, color: AppColor.GREY_TEXT),
                             ),
                           ),
                           InkWell(
@@ -739,8 +656,8 @@ class NewConnectScreen extends StatelessWidget {
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 1,
-                                  backgroundColor: DefaultTheme.WHITE,
-                                  textColor: DefaultTheme.BLACK,
+                                  backgroundColor: AppColor.WHITE,
+                                  textColor: AppColor.BLACK,
                                   fontSize: 15,
                                   webBgColor: 'rgba(255, 255, 255)',
                                   webPosition: 'center',
@@ -750,7 +667,7 @@ class NewConnectScreen extends StatelessWidget {
                             child: const Text(
                               'Sao chép',
                               style: TextStyle(
-                                  fontSize: 12, color: DefaultTheme.BLUE_TEXT),
+                                  fontSize: 12, color: AppColor.BLUE_TEXT),
                             ),
                           )
                         ],
@@ -767,14 +684,13 @@ class NewConnectScreen extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              color: DefaultTheme.GREY_BUTTON),
+                              color: AppColor.GREY_BUTTON),
                           child: Row(
                             children: const [
                               Text(
                                 'Mật khẩu: ',
                                 style: TextStyle(
-                                    fontSize: 12,
-                                    color: DefaultTheme.GREY_TEXT),
+                                    fontSize: 12, color: AppColor.GREY_TEXT),
                               ),
                               SizedBox()
                             ],
@@ -785,7 +701,7 @@ class NewConnectScreen extends StatelessWidget {
                       Text(
                         state.dto.message,
                         style: const TextStyle(
-                            fontSize: 12, color: DefaultTheme.RED_TEXT),
+                            fontSize: 12, color: AppColor.RED_TEXT),
                       )
                     ],
                   );
@@ -796,13 +712,13 @@ class NewConnectScreen extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
-                        color: DefaultTheme.GREY_BUTTON),
+                        color: AppColor.GREY_BUTTON),
                     child: Row(
                       children: const [
                         Text(
                           'Mật khẩu: ',
                           style: TextStyle(
-                              fontSize: 12, color: DefaultTheme.GREY_TEXT),
+                              fontSize: 12, color: AppColor.GREY_TEXT),
                         ),
                         Spacer()
                       ],
@@ -821,8 +737,8 @@ class NewConnectScreen extends StatelessWidget {
                   text: 'Lấy mật khẩu',
                   borderRadius: 5,
                   sizeTitle: 12,
-                  textColor: DefaultTheme.WHITE,
-                  bgColor: DefaultTheme.BLUE_TEXT,
+                  textColor: AppColor.WHITE,
+                  bgColor: AppColor.BLUE_TEXT,
                   function: () {
                     if (provider.customerName.isEmpty) {
                       DialogWidget.instance.openMsgDialog(

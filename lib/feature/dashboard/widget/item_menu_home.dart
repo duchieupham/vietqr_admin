@@ -34,9 +34,9 @@ class _ItemMenuState extends State<ItemMenu> {
 
   getBgItem() {
     if (widget.isSelect) {
-      return DefaultTheme.BLUE_TEXT.withOpacity(0.2);
+      return AppColor.BLUE_TEXT.withOpacity(0.2);
     } else if (amIHovering) {
-      return DefaultTheme.BLUE_TEXT.withOpacity(0.1);
+      return AppColor.BLUE_TEXT.withOpacity(0.1);
     }
     return Colors.transparent;
   }
@@ -69,7 +69,7 @@ class _ItemMenuState extends State<ItemMenu> {
                       widget.title,
                       style: TextStyle(
                           fontSize: widget.titleSize,
-                          color: DefaultTheme.RED_TEXT),
+                          color: AppColor.RED_TEXT),
                     )
                   else
                     Text(
@@ -77,8 +77,8 @@ class _ItemMenuState extends State<ItemMenu> {
                       style: TextStyle(
                           fontSize: widget.titleSize,
                           color: widget.isSelect
-                              ? DefaultTheme.BLUE_TEXT
-                              : DefaultTheme.BLACK),
+                              ? AppColor.BLUE_TEXT
+                              : AppColor.BLACK),
                     ),
                   const Spacer(),
                 ],

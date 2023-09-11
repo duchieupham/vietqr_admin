@@ -1,5 +1,23 @@
 // ignore_for_file: constant_identifier_names
 
+enum BlocStatus {
+  NONE,
+  LOADING,
+  UNLOADING,
+}
+
+enum CallBackType {
+  NONE,
+  TRANS,
+  CUSTOMERS,
+  BANKS,
+  INFO_CONNECT,
+  FREE_TOKEN,
+  RUN_CALLBACK,
+  ERROR,
+  RUN_ERROR,
+}
+
 enum CheckType {
   C01,
   C02,

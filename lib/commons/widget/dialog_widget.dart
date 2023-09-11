@@ -9,7 +9,9 @@ import 'package:vietqr_admin/main.dart';
 class DialogWidget {
   //
   const DialogWidget._privateConstructor();
+
   static const DialogWidget _instance = DialogWidget._privateConstructor();
+
   static DialogWidget get instance => _instance;
 
   static bool isPopLoading = false;
@@ -25,7 +27,7 @@ class DialogWidget {
         context: context,
         builder: (BuildContext context) {
           return Material(
-            color: DefaultTheme.TRANSPARENT,
+            color: AppColor.TRANSPARENT,
             child: Center(
               child: Container(
                 width: width,
@@ -54,9 +56,10 @@ class DialogWidget {
     final double height = MediaQuery.of(context).size.height;
     return await showModalBottomSheet(
         isScrollControlled: true,
-        enableDrag: false, // Ngăn người dùng kéo ModalBottomSheet
+        enableDrag: false,
+        // Ngăn người dùng kéo ModalBottomSheet
         context: context,
-        backgroundColor: DefaultTheme.TRANSPARENT,
+        backgroundColor: AppColor.TRANSPARENT,
         builder: (context) {
           return Container(
             width: width,
@@ -77,9 +80,10 @@ class DialogWidget {
     context ??= NavigationService.navigatorKey.currentContext!;
     return await showModalBottomSheet(
         isScrollControlled: true,
-        enableDrag: false, // Ngăn người dùng kéo ModalBottomSheet
+        enableDrag: false,
+        // Ngăn người dùng kéo ModalBottomSheet
         context: context,
-        backgroundColor: DefaultTheme.TRANSPARENT,
+        backgroundColor: AppColor.TRANSPARENT,
         builder: (context) {
           final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
           return BackdropFilter(
@@ -116,7 +120,7 @@ class DialogWidget {
           context: NavigationService.navigatorKey.currentContext!,
           builder: (BuildContext context) {
             return Material(
-              color: DefaultTheme.TRANSPARENT,
+              color: AppColor.TRANSPARENT,
               child: Center(
                   child: Container(
                 width: 200,
@@ -133,7 +137,7 @@ class DialogWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: const [
                     CircularProgressIndicator(
-                      color: DefaultTheme.GREEN,
+                      color: AppColor.GREEN,
                     ),
                     Padding(padding: EdgeInsets.only(top: 30)),
                     Text(
@@ -162,7 +166,7 @@ class DialogWidget {
         context: context ?? NavigationService.navigatorKey.currentContext!,
         builder: (BuildContext context) {
           return Material(
-            color: DefaultTheme.TRANSPARENT,
+            color: AppColor.TRANSPARENT,
             child: Center(
                 child:
                     // (PlatformUtils.instance.isWeb())
@@ -213,8 +217,8 @@ class DialogWidget {
                     width: 250,
                     height: 40,
                     text: 'Đóng',
-                    textColor: DefaultTheme.WHITE,
-                    bgColor: DefaultTheme.GREEN,
+                    textColor: AppColor.WHITE,
+                    bgColor: AppColor.GREEN,
                     borderRadius: 5,
                     function: (function != null)
                         ? function
@@ -240,7 +244,7 @@ class DialogWidget {
         context: context ?? NavigationService.navigatorKey.currentContext!,
         builder: (BuildContext context) {
           return Material(
-            color: DefaultTheme.TRANSPARENT,
+            color: AppColor.TRANSPARENT,
             child: Center(
                 child: Container(
               width: 300,
@@ -284,8 +288,8 @@ class DialogWidget {
                     width: 250,
                     height: 35,
                     text: 'Đóng',
-                    textColor: DefaultTheme.WHITE,
-                    bgColor: DefaultTheme.GREEN,
+                    textColor: AppColor.WHITE,
+                    bgColor: AppColor.GREEN,
                     borderRadius: 5,
                     function: (function != null)
                         ? function
@@ -311,7 +315,7 @@ class DialogWidget {
         double height = MediaQuery.of(context).size.height * 0.8;
         double width = MediaQuery.of(context).size.width * 0.8;
         return Material(
-          color: DefaultTheme.TRANSPARENT,
+          color: AppColor.TRANSPARENT,
           child: Center(
               child: Container(
             width: width,
@@ -340,18 +344,19 @@ class DialogWidget {
       context: context,
       builder: (BuildContext context) {
         return Material(
-          color: DefaultTheme.TRANSPARENT,
+          color: AppColor.TRANSPARENT,
           child: Center(
-              child: Container(
-            width: width,
-            height: height,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(16),
+            child: Container(
+              width: width,
+              height: height,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: child,
             ),
-            child: child,
-          )),
+          ),
         );
       },
     );
@@ -368,7 +373,7 @@ class DialogWidget {
         double height = MediaQuery.of(context).size.height * 0.75;
         double width = MediaQuery.of(context).size.width * 0.5;
         return Material(
-          color: DefaultTheme.TRANSPARENT,
+          color: AppColor.TRANSPARENT,
           child: Center(
               child: Container(
             width: width,
@@ -392,7 +397,7 @@ class DialogWidget {
       context: context,
       builder: (BuildContext context) {
         return Material(
-          color: DefaultTheme.TRANSPARENT,
+          color: AppColor.TRANSPARENT,
           child: Center(
               child: Container(
             width: 800,
@@ -416,7 +421,7 @@ class DialogWidget {
       context: NavigationService.navigatorKey.currentContext!,
       builder: (BuildContext context) {
         return Material(
-          color: DefaultTheme.TRANSPARENT,
+          color: AppColor.TRANSPARENT,
           child: Center(
             child: Container(
               padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
@@ -451,7 +456,7 @@ class DialogWidget {
                             'Từ: ',
                             style: TextStyle(
                               fontSize: 15,
-                              color: DefaultTheme.GREY_TEXT,
+                              color: AppColor.GREY_TEXT,
                             ),
                           ),
                         ),
@@ -480,7 +485,7 @@ class DialogWidget {
                             'Nội dung: ',
                             style: TextStyle(
                               fontSize: 15,
-                              color: DefaultTheme.GREY_TEXT,
+                              color: AppColor.GREY_TEXT,
                             ),
                           ),
                         ),
@@ -508,14 +513,14 @@ class DialogWidget {
                       width: 250,
                       height: 50,
                       decoration: BoxDecoration(
-                        color: DefaultTheme.GREEN,
+                        color: AppColor.GREEN,
                         borderRadius: BorderRadius.circular(25),
                       ),
                       alignment: Alignment.center,
                       child: const Text(
                         'OK',
                         style: TextStyle(
-                          color: DefaultTheme.WHITE,
+                          color: AppColor.WHITE,
                         ),
                       ),
                     ),
@@ -530,39 +535,43 @@ class DialogWidget {
     );
   }
 
-  Future showModelBottomSheet(
-      {BuildContext? context,
-      required Widget widget,
-      required double height}) async {
+  Future showModelBottomSheet({
+    BuildContext? context,
+    required Widget widget,
+    double? height,
+    double? width,
+    double radius = 15,
+    EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
+    BorderRadiusGeometry? borderRadius,
+    Color? bgrColor,
+    bool isDismissible = false,
+  }) async {
     context ??= NavigationService.navigatorKey.currentContext!;
     return showModalBottomSheet(
       isScrollControlled: true,
       enableDrag: false,
+      isDismissible: isDismissible,
       useRootNavigator: true,
       context: context,
-      backgroundColor: DefaultTheme.TRANSPARENT,
+      backgroundColor: AppColor.TRANSPARENT,
       builder: (context) {
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: ClipRRect(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 10,
-                  bottom: keyboardHeight,
-                ),
-                width: MediaQuery.of(context).size.width - 10,
-                height: height + keyboardHeight,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Theme.of(context).cardColor,
-                ),
-                child: widget,
+            child: Container(
+              margin: margin ?? const EdgeInsets.only(top: kToolbarHeight),
+              padding: padding ??
+                  EdgeInsets.only(left: 20, right: 20, bottom: keyboardHeight),
+              width: width ?? (MediaQuery.of(context).size.width - 10),
+              height: height != null ? (height + keyboardHeight) : null,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius ??
+                    BorderRadius.vertical(top: Radius.circular(radius)),
+                color: bgrColor ?? Theme.of(context).cardColor,
               ),
+              child: widget,
             ),
           ),
         );
@@ -581,7 +590,7 @@ class DialogWidget {
         context: context ?? NavigationService.navigatorKey.currentContext!,
         builder: (BuildContext context) {
           return Material(
-            color: DefaultTheme.TRANSPARENT,
+            color: AppColor.TRANSPARENT,
             child: Center(
                 child: Container(
               width: 300,
@@ -632,8 +641,8 @@ class DialogWidget {
                           width: 250,
                           height: 40,
                           text: 'Đóng',
-                          textColor: DefaultTheme.GREEN,
-                          bgColor: DefaultTheme.WHITE,
+                          textColor: AppColor.GREEN,
+                          bgColor: AppColor.WHITE,
                           borderRadius: 5,
                           function: (onCancel != null)
                               ? onCancel
@@ -650,8 +659,8 @@ class DialogWidget {
                           width: 250,
                           height: 40,
                           text: 'Xác nhận',
-                          textColor: DefaultTheme.WHITE,
-                          bgColor: DefaultTheme.GREEN,
+                          textColor: AppColor.WHITE,
+                          bgColor: AppColor.GREEN,
                           borderRadius: 5,
                           function: (onConfirm != null)
                               ? onConfirm

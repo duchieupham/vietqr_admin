@@ -12,7 +12,7 @@ class Header extends StatelessWidget {
     return Container(
       height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      color: DefaultTheme.WHITE,
+      color: AppColor.WHITE,
       width: width,
       child: Row(
         children: [
@@ -29,7 +29,7 @@ class Header extends StatelessWidget {
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-                color: DefaultTheme.GREY_BUTTON,
+                color: AppColor.GREY_BUTTON,
                 borderRadius: BorderRadius.circular(5)),
             child: const Text(
               'Tìm kiếm người dùng',

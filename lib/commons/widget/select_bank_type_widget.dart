@@ -6,10 +6,10 @@ import 'package:vietqr_admin/commons/constants/utils/image_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/divider_widget.dart';
 import 'package:vietqr_admin/commons/widget/textfield_widget.dart';
+import 'package:vietqr_admin/feature/connect_service/list_connect/provider/bank_type_provider.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/blocs/bank_type_bloc.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/events/bank_type_event.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/states/bank_type_state.dart';
-import 'package:vietqr_admin/feature/list_connect/provider/bank_type_provider.dart';
 import 'package:vietqr_admin/models/bank_type_dto.dart';
 import 'package:vietqr_admin/service/shared_references/provider/search_clear_provider.dart';
 
@@ -22,6 +22,7 @@ class SelectBankTypeWidget extends StatelessWidget {
   static final List<BankTypeDTO> bankTypes = [];
   static late BankTypeBloc bankTypeBloc;
   final bool authenticated;
+
   const SelectBankTypeWidget({super.key, this.authenticated = true});
 
   void initialServices(BuildContext context) {
@@ -144,7 +145,7 @@ class SelectBankTypeWidget extends StatelessWidget {
                   height: 200,
                   child: const Center(
                     child: CircularProgressIndicator(
-                      color: DefaultTheme.GREEN,
+                      color: AppColor.GREEN,
                     ),
                   ),
                 );
@@ -195,7 +196,7 @@ class SelectBankTypeWidget extends StatelessWidget {
       child: BoxLayout(
         width: width,
         borderRadius: 0,
-        bgColor: DefaultTheme.TRANSPARENT,
+        bgColor: AppColor.TRANSPARENT,
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
         child: Row(
           children: [
@@ -204,7 +205,7 @@ class SelectBankTypeWidget extends StatelessWidget {
               height: 40,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: DefaultTheme.WHITE,
+                color: AppColor.WHITE,
                 image: DecorationImage(
                   image: ImageUtils.instance.getImageNetWork(
                     dto.imageId,
