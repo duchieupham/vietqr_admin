@@ -13,8 +13,10 @@ import 'provider/service_provider.dart';
 
 class ServiceScreen extends StatelessWidget {
   final Widget page;
+  final bool isShowHeader;
 
-  const ServiceScreen({super.key, required this.page});
+  const ServiceScreen(
+      {super.key, required this.page, this.isShowHeader = false});
 
   @override
   Widget build(BuildContext context) {
@@ -23,95 +25,96 @@ class ServiceScreen extends StatelessWidget {
       width: width,
       child: Column(
         children: [
-          ChangeNotifierProvider(
-            create: (context) => ServiceProvider(),
-            child: Consumer<ServiceProvider>(
-              builder: (context, provider, child) {
-                return Container(
-                  color: AppColor.BLUE_TEXT.withOpacity(0.2),
-                  height: 40,
-                  width: width,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      const Text('Môi trường'),
-                      const SizedBox(width: 24),
-                      InkWell(
-                        onTap: () {
-                          int intPage =
-                              Provider.of<MenuProvider>(context, listen: false)
-                                  .initPage;
-                          EnvConfig.instance.updateEnv(EnvType.DEV);
-                          if (intPage == 2) {
-                            eventBus.fire(GetListConnect());
-                          }
-                          provider.updateENV(0);
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: provider.environment == 0
-                                ? AppColor.BLUE_TEXT.withOpacity(0.1)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
-                            'Test',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: provider.environment == 0
-                                    ? AppColor.BLUE_TEXT
-                                    : AppColor.BLACK),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          int intPage =
-                              Provider.of<MenuProvider>(context, listen: false)
-                                  .initPage;
-
-                          if (intPage == 4) {
-                            await DialogWidget.instance.openMsgDialog(
-                                title: 'Thông báo',
-                                msg:
-                                    'Chức năng ko khả dụng cho môi trường Live');
-                          } else {
-                            EnvConfig.instance.updateEnv(EnvType.GOLIVE);
+          if (!isShowHeader)
+            ChangeNotifierProvider(
+              create: (context) => ServiceProvider(),
+              child: Consumer<ServiceProvider>(
+                builder: (context, provider, child) {
+                  return Container(
+                    color: AppColor.BLUE_TEXT.withOpacity(0.2),
+                    height: 40,
+                    width: width,
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        const Text('Môi trường'),
+                        const SizedBox(width: 24),
+                        InkWell(
+                          onTap: () {
+                            int intPage = Provider.of<MenuProvider>(context,
+                                    listen: false)
+                                .initPage;
+                            EnvConfig.instance.updateEnv(EnvType.DEV);
                             if (intPage == 2) {
                               eventBus.fire(GetListConnect());
                             }
-                            provider.updateENV(1);
-                          }
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 100,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: provider.environment == 1
-                                ? AppColor.BLUE_TEXT.withOpacity(0.1)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
-                            'GoLive',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: provider.environment == 1
-                                    ? AppColor.BLUE_TEXT
-                                    : AppColor.BLACK),
+                            provider.updateENV(0);
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 100,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: provider.environment == 0
+                                  ? AppColor.BLUE_TEXT.withOpacity(0.1)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              'Test',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: provider.environment == 0
+                                      ? AppColor.BLUE_TEXT
+                                      : AppColor.BLACK),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        InkWell(
+                          onTap: () async {
+                            int intPage = Provider.of<MenuProvider>(context,
+                                    listen: false)
+                                .initPage;
+
+                            if (intPage == 4) {
+                              await DialogWidget.instance.openMsgDialog(
+                                  title: 'Thông báo',
+                                  msg:
+                                      'Chức năng ko khả dụng cho môi trường Live');
+                            } else {
+                              EnvConfig.instance.updateEnv(EnvType.GOLIVE);
+                              if (intPage == 2) {
+                                eventBus.fire(GetListConnect());
+                              }
+                              provider.updateENV(1);
+                            }
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 100,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: provider.environment == 1
+                                  ? AppColor.BLUE_TEXT.withOpacity(0.1)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              'GoLive',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: provider.environment == 1
+                                      ? AppColor.BLUE_TEXT
+                                      : AppColor.BLACK),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
           Expanded(child: page),
         ],
       ),

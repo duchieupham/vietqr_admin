@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 
 import '../provider/menu_provider.dart';
 import 'item_menu_home.dart';
 
-class MenuLink extends StatelessWidget {
-  final Function(SubMenuType) onTab;
-  final MenuProvider menuProvider;
-
-  const MenuLink({super.key, required this.onTab, required this.menuProvider});
+class MenuConnect extends StatelessWidget {
+  const MenuConnect({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +27,9 @@ class MenuLink extends StatelessWidget {
         ),
         Expanded(
           child: _buildListItem(
-            menuProvider,
+            context.read<MenuProvider>(),
             () {
-              menuProvider.updateShowMenuLink(false);
+              context.read<MenuProvider>().updateShowMenuLink(false);
             },
           ),
         )
@@ -47,7 +45,6 @@ class MenuLink extends StatelessWidget {
           title: 'Danh sách kết nối',
           isSelect: provider.subMenuType == SubMenuType.LIST_CONNECT,
           onTap: () {
-            onTab(SubMenuType.LIST_CONNECT);
             provider.selectSubMenu(SubMenuType.LIST_CONNECT);
             closeMenuLink();
           },
@@ -56,7 +53,6 @@ class MenuLink extends StatelessWidget {
           title: 'Kết nối mới',
           isSelect: provider.subMenuType == SubMenuType.NEW_CONNECT,
           onTap: () {
-            onTab(SubMenuType.NEW_CONNECT);
             provider.selectSubMenu(SubMenuType.NEW_CONNECT);
             closeMenuLink();
           },
@@ -65,7 +61,6 @@ class MenuLink extends StatelessWidget {
           title: 'Chạy callback',
           isSelect: provider.subMenuType == SubMenuType.RUN_CALLBACK,
           onTap: () {
-            onTab(SubMenuType.RUN_CALLBACK);
             provider.selectSubMenu(SubMenuType.RUN_CALLBACK);
             closeMenuLink();
           },

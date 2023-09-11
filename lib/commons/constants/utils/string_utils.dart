@@ -90,13 +90,16 @@ class StringUtils {
   }
 
   static String formatNumber(dynamic value) {
-    if (value is String) {
-      value = int.parse(value);
+    if (value == null || value.isEmpty) {
+      return '0 VND';
     }
 
-    if (value == null) {
-      return '0';
+    if (value is String) {
+      if (value.isNotEmpty) {
+        value = int.parse(value);
+      }
     }
+
     var numberFormat = NumberFormat.decimalPattern('vi-VI');
     return '${numberFormat.format(value).replaceAll('.', ',')} VND';
   }

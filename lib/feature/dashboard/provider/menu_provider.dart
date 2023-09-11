@@ -3,6 +3,7 @@ import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 
 class MenuProvider with ChangeNotifier {
   int _initPage = 0;
+  int initMenuPage = 0;
 
   int get initPage => _initPage;
 
@@ -16,6 +17,7 @@ class MenuProvider with ChangeNotifier {
   }
 
   MenuType _menuHomeType = MenuType.USER;
+
   MenuType get menuHomeType => _menuHomeType;
 
   SubMenuType _subMenuType = SubMenuType.OTHER;
@@ -30,11 +32,13 @@ class MenuProvider with ChangeNotifier {
 
   void changeSubPage(SubMenuType value) {
     if (value == SubMenuType.LIST_CONNECT) {
-      _initPage = 2;
+      _initPage = 0;
     } else if (value == SubMenuType.NEW_CONNECT) {
-      _initPage = 3;
+      _initPage = 1;
     } else if (value == SubMenuType.RUN_CALLBACK) {
-      _initPage = 4;
+      _initPage = 2;
+    } else if (value == SubMenuType.SURPLUS) {
+      _initPage = 3;
     }
   }
 
@@ -44,15 +48,26 @@ class MenuProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changePage(MenuType value) {
+  void changePage(MenuType value, {bool isFirst = false}) {
     if (value == MenuType.USER) {
-      _initPage = 0;
+      if (isFirst) {}
+      initMenuPage = 0;
     } else if (value == MenuType.ACCOUNT_BANK) {
-      _initPage = 1;
+      initMenuPage = 1;
+    } else if (value == MenuType.SERVICE_CONNECT) {
+      if (isFirst) {
+        selectSubMenu(SubMenuType.LIST_CONNECT);
+      }
+      initMenuPage = 2;
     } else if (value == MenuType.PUSH_NOTIFICATION) {
-      _initPage = 5;
+      initMenuPage = 3;
     } else if (value == MenuType.POST) {
-      _initPage = 6;
+      initMenuPage = 4;
+    } else if (value == MenuType.VNPT_EPAY) {
+      if (isFirst) {
+        selectSubMenu(SubMenuType.SURPLUS);
+      }
+      initMenuPage = 5;
     }
   }
 }

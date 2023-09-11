@@ -7,6 +7,7 @@ import 'item_menu_home.dart';
 class MenuLeft extends StatelessWidget {
   final Function(MenuType) onTab;
   final MenuProvider menuProvider;
+
   const MenuLeft({super.key, required this.onTab, required this.menuProvider});
 
   @override
@@ -40,60 +41,62 @@ class MenuLeft extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-            child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ItemMenu(
-              title: 'Người dùng',
-              isSelect: provider.menuHomeType == MenuType.USER,
-              onTap: () {
-                onTab(MenuType.USER);
-                provider.selectMenu(MenuType.USER);
-                closeMenuLink();
-              },
-            ),
-            ItemMenu(
-              title: 'Tài khoản ngân hàng',
-              isSelect: provider.menuHomeType == MenuType.ACCOUNT_BANK,
-              onTap: () {
-                onTab(MenuType.ACCOUNT_BANK);
-                provider.selectMenu(MenuType.ACCOUNT_BANK);
-                closeMenuLink();
-              },
-            ),
-            ItemMenu(
-              title: 'Dịch vụ kết nối',
-              isSelect: provider.menuHomeType == MenuType.SERVICE_CONNECT,
-              onTap: () {
-                onTab(MenuType.SERVICE_CONNECT);
-                provider.selectMenu(MenuType.SERVICE_CONNECT);
-              },
-            ),
-            ItemMenu(
-              title: 'Thông báo đẩy',
-              isSelect: provider.menuHomeType == MenuType.PUSH_NOTIFICATION,
-              onTap: () {
-                closeMenuLink();
-                provider.selectMenu(MenuType.PUSH_NOTIFICATION);
-              },
-            ),
-            ItemMenu(
-              title: 'Bài Post',
-              isSelect: provider.menuHomeType == MenuType.POST,
-              onTap: () {
-                closeMenuLink();
-                provider.selectMenu(MenuType.POST);
-              },
-            ),
-          ],
-        )),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ItemMenu(
+                title: 'Người dùng',
+                isSelect: provider.menuHomeType == MenuType.USER,
+                onTap: () {
+                  onTab(MenuType.USER);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
+                title: 'Tài khoản ngân hàng',
+                isSelect: provider.menuHomeType == MenuType.ACCOUNT_BANK,
+                onTap: () {
+                  onTab(MenuType.ACCOUNT_BANK);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
+                title: 'Dịch vụ kết nối',
+                isSelect: provider.menuHomeType == MenuType.SERVICE_CONNECT,
+                onTap: () {
+                  onTab(MenuType.SERVICE_CONNECT);
+                },
+              ),
+              ItemMenu(
+                title: 'Thông báo đẩy',
+                isSelect: provider.menuHomeType == MenuType.PUSH_NOTIFICATION,
+                onTap: () {
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
+                title: 'Bài Post',
+                isSelect: provider.menuHomeType == MenuType.POST,
+                onTap: () {
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
+                title: 'VNPT Epay',
+                isSelect: provider.menuHomeType == MenuType.VNPT_EPAY,
+                onTap: () {
+                  onTab(MenuType.VNPT_EPAY);
+                },
+              ),
+            ],
+          ),
+        ),
         ItemMenu(
           title: 'Đăng xuất',
           isLogout: true,
           isSelect: provider.menuHomeType == MenuType.LOGOUT,
           onTap: () {
             onTab(MenuType.LOGOUT);
-            provider.selectMenu(MenuType.LOGOUT);
           },
         ),
       ],
