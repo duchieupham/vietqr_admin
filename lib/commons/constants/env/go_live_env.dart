@@ -10,7 +10,7 @@ class GoLiveEnv implements Env {
 
   @override
   String getBaseUrl() {
-    return 'https://api.vietqr.org/api/';
+    return 'https://api.vietqr.org/vqr/api/';
   }
 
   @override

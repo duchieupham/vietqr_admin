@@ -7,6 +7,7 @@ import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/list_connect/provider/list_connect_provider.dart';
 import 'package:vietqr_admin/feature/list_connect/states/list_connect_state.dart';
 import 'package:vietqr_admin/feature/list_connect/widget/infomation_popup.dart';
+import 'package:vietqr_admin/feature/list_connect/widget/update_merchant_info_popup.dart';
 import 'package:vietqr_admin/models/connect.dto.dart';
 
 import 'blocs/list_connect_bloc.dart';
@@ -345,7 +346,16 @@ class ListConnectScreen extends StatelessWidget {
                         width: 16,
                       ),
                       InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            DialogWidget.instance.openPopupCenter(
+                                child: UpdateMerchantPopup(
+                              dto: e,
+                              uploadSuccess: () {
+                                BlocProvider.of<ListConnectBloc>(context)
+                                    .add(ListConnectGetListEvent());
+                              },
+                            ));
+                          },
                           child: const Text(
                             'Chỉnh sửa',
                             style: TextStyle(

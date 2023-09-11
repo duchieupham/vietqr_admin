@@ -9,6 +9,7 @@ class ButtonWidget extends StatelessWidget {
   final VoidCallback function;
   final double? height;
   final double? borderRadius;
+  final double sizeTitle;
 
   const ButtonWidget({
     Key? key,
@@ -19,6 +20,7 @@ class ButtonWidget extends StatelessWidget {
     required this.function,
     this.height,
     this.borderRadius,
+    this.sizeTitle = 14,
   }) : super(key: key);
 
   @override
@@ -38,6 +40,7 @@ class ButtonWidget extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
           style: TextStyle(
+            fontSize: sizeTitle,
             color: textColor,
           ),
         ),

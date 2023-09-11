@@ -15,6 +15,7 @@ class InfoConnectBloc extends Bloc<InfoConnectEvent, InfoConnectState> {
     on<GetListBankEvent>(_getListBank);
     on<AddBankConnectEvent>(_addBankConnect);
     on<RemoveBankConnectEvent>(_removeBankConnect);
+    on<UpdateMerchantEvent>(_updateMerchantConnect);
   }
 }
 
@@ -85,5 +86,24 @@ void _removeBankConnect(InfoConnectEvent event, Emitter emit) async {
   } catch (e) {
     debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
     emit(GetListFailedState());
+  }
+}
+
+void _updateMerchantConnect(InfoConnectEvent event, Emitter emit) async {
+  ResponseMessageDTO dto = const ResponseMessageDTO();
+  try {
+    if (event is UpdateMerchantEvent) {
+      emit(UpdateMerchantLoadingState());
+
+      dto = await infoConnectRepository.updateMerchantConnect(event.param);
+      if (dto.status == "SUCCESS") {
+        emit(UpdateMerchantConnectSuccessState());
+      } else {
+        emit(UpdateFailedState(dto: dto));
+      }
+    }
+  } catch (e) {
+    debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
+    emit(UpdateFailedState(dto: dto));
   }
 }

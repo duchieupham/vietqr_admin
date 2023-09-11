@@ -13,7 +13,7 @@ class MenuProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  MenuType _menuHomeType = MenuType.SERVICE_CONNECT;
+  MenuType _menuHomeType = MenuType.USER;
   MenuType get menuHomeType => _menuHomeType;
 
   SubMenuType _subMenuType = SubMenuType.OTHER;

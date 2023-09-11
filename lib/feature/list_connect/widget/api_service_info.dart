@@ -15,7 +15,7 @@ class ApiServiceInfo extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            _buildTemplateInfo('Merchant', 'Fusoft'),
+            _buildTemplateInfo('Merchant', dto.merchant),
             _buildTemplateInfo('URL', dto.url),
             _buildTemplateInfo('IP', dto.ip),
             _buildTemplateInfo('Port', dto.port),

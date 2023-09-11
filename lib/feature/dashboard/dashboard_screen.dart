@@ -5,6 +5,7 @@ import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_link.dart';
 import 'package:vietqr_admin/feature/list_connect/list_connect_screen.dart';
+import 'package:vietqr_admin/feature/new_connect/new_connect_screen.dart';
 
 import 'frames/dashboard_frame.dart';
 
@@ -24,7 +25,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       ListConnectScreen(),
-      const SizedBox.shrink(),
+      const NewConnectScreen(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),

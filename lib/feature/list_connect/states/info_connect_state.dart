@@ -57,3 +57,15 @@ class AddBankConnectSuccessState extends InfoConnectState {}
 class RemoveBankConnectLoadingState extends InfoConnectState {}
 
 class RemoveBankConnectSuccessState extends InfoConnectState {}
+
+class UpdateMerchantLoadingState extends InfoConnectState {}
+
+class UpdateMerchantConnectSuccessState extends InfoConnectState {}
+
+class UpdateFailedState extends InfoConnectState {
+  final ResponseMessageDTO dto;
+  const UpdateFailedState({required this.dto});
+
+  @override
+  List<Object?> get props => [dto];
+}

@@ -39,3 +39,11 @@ class RemoveBankConnectEvent extends InfoConnectEvent {
   @override
   List<Object?> get props => [param];
 }
+
+class UpdateMerchantEvent extends InfoConnectEvent {
+  final Map<String, dynamic> param;
+  const UpdateMerchantEvent({required this.param});
+
+  @override
+  List<Object?> get props => [param];
+}

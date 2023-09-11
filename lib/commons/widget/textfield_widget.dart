@@ -4,7 +4,7 @@ import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 class TextFieldWidget extends StatelessWidget {
   final double? width;
   final String hintText;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final ValueChanged<Object>? onChange;
   final VoidCallback? onEdittingComplete;
   final ValueChanged<Object>? onSubmitted;
@@ -26,12 +26,13 @@ class TextFieldWidget extends StatelessWidget {
   final Function(PointerDownEvent)? onTapOutside;
   final EdgeInsets contentPadding;
   final TextStyle? textStyle;
+  final bool disableBorder;
 
   const TextFieldWidget({
     Key? key,
     this.width,
     required this.hintText,
-    required this.controller,
+    this.controller,
     required this.keyboardAction,
     required this.onChange,
     required this.inputType,
@@ -53,6 +54,7 @@ class TextFieldWidget extends StatelessWidget {
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 10),
     this.textStyle,
     this.required = false,
+    this.disableBorder = false,
   }) : super(key: key);
 
   @override
@@ -60,7 +62,7 @@ class TextFieldWidget extends StatelessWidget {
     return (textfieldType != null && textfieldType == TextfieldType.LABEL)
         ? Container(
             width: width,
-            height: 40,
+            height: 45,
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
@@ -111,6 +113,7 @@ class TextFieldWidget extends StatelessWidget {
                             ? DefaultTheme.GREY_TEXT
                             : Theme.of(context).hintColor,
                       ),
+                      border: disableBorder ? InputBorder.none : null,
                       contentPadding: contentPadding,
                     ),
                   ),
@@ -119,7 +122,7 @@ class TextFieldWidget extends StatelessWidget {
             ))
         : Container(
             width: width,
-            height: 60,
+            height: 45,
             alignment: Alignment.center,
             child: TextField(
               obscureText: isObscureText,
@@ -145,6 +148,7 @@ class TextFieldWidget extends StatelessWidget {
                   fontSize: (fontSize != null) ? fontSize : 12,
                   color: DefaultTheme.GREY_TEXT,
                 ),
+                border: disableBorder ? InputBorder.none : null,
                 contentPadding: contentPadding,
               ),
             ),

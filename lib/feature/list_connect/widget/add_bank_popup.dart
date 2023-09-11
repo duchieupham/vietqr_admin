@@ -84,12 +84,12 @@ class AddBankPopup extends StatelessWidget {
                       textColor: DefaultTheme.WHITE,
                       bgColor: DefaultTheme.BLUE_TEXT,
                       function: () {
-                        provider.checkErrorAccountNumber()();
+                        provider.checkErrorAccountNumber();
                         if (!provider.errorAccountNumber &&
                             !provider.errorAccountNumber) {
                           Map<String, dynamic> param = {};
-                          param['bankAccount'] = '203072022';
-                          param['userBankName'] = 'TRAN VAN KIM CUONG';
+                          param['bankAccount'] = provider.bankAccount;
+                          param['userBankName'] = provider.userBankName;
                           param['customerSyncId'] = customerSyncId;
                           param['accountCustomerId'] = accountCustomerId;
                           bloc.add(AddBankConnectEvent(param: param));

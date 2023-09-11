@@ -11,6 +11,7 @@ class ApiServiceDTO {
   final String systemPassword;
   final String customerUsername;
   final String customerPassword;
+  final String merchant;
   const ApiServiceDTO(
       {this.id = '',
       this.active = 0,
@@ -23,7 +24,8 @@ class ApiServiceDTO {
       this.customerUsername = '',
       this.suffix = '',
       this.systemPassword = '',
-      this.systemUsername = ''});
+      this.systemUsername = '',
+      this.merchant = ''});
 
   factory ApiServiceDTO.fromJson(Map<String, dynamic> json) {
     return ApiServiceDTO(
@@ -39,6 +41,7 @@ class ApiServiceDTO {
       suffix: json['suffix'] ?? '',
       systemPassword: json['systemPassword'] ?? '',
       systemUsername: json['systemUsername'] ?? '',
+      merchant: json['merchant'] ?? '',
     );
   }
 }
