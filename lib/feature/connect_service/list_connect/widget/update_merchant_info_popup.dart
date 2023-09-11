@@ -177,7 +177,7 @@ class _UpdateMerchantPopupState extends State<UpdateMerchantPopup> {
             }),
             ButtonWidget(
               height: 40,
-              text: 'Thêm',
+              text: 'Cập nhật',
               borderRadius: 5,
               textColor: AppColor.WHITE,
               bgColor: AppColor.BLUE_TEXT,
