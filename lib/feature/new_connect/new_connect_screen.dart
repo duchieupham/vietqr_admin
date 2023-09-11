@@ -15,9 +15,7 @@ import 'package:vietqr_admin/feature/new_connect/bloc/new_connect_bloc.dart';
 import 'package:vietqr_admin/feature/new_connect/event/new_connect_event.dart';
 import 'package:vietqr_admin/feature/new_connect/provider/new_connect_provider.dart';
 import 'package:vietqr_admin/feature/new_connect/state/new_connect_state.dart';
-import 'package:vietqr_admin/service/shared_references/provider/env_provider.dart';
 
-import '../../commons/constants/env/env_config.dart';
 
 class NewConnectScreen extends StatelessWidget {
   const NewConnectScreen({Key? key}) : super(key: key);
@@ -291,6 +289,7 @@ class NewConnectScreen extends StatelessWidget {
               height: 16,
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(
@@ -317,7 +316,7 @@ class NewConnectScreen extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Text(
-                            'Không được để trống',
+                            'Số tài khoản không đúng định dạng',
                             style: TextStyle(
                                 fontSize: 12, color: AppColor.RED_TEXT),
                           ),
@@ -340,6 +339,7 @@ class NewConnectScreen extends StatelessWidget {
                         child: TextFieldWidget(
                           isObscureText: false,
                           maxLines: 1,
+                          controller: provider.accountName,
                           disableBorder: true,
                           hintText: 'Tên chủ TK\u002A (Không dấu)',
                           inputType: TextInputType.text,

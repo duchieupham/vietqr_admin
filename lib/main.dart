@@ -83,6 +83,7 @@ class _VietQRAdmin extends State<VietQRAdmin> {
         themeMode: ThemeMode.light,
         darkTheme: DefaultThemeData(context: context).darkTheme,
         theme: DefaultThemeData(context: context).lightTheme,
+        debugShowCheckedModeBanner: false,
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

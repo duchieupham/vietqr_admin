@@ -40,7 +40,7 @@ class AddBankPopup extends StatelessWidget {
                         _buildTemplateInfo('Số tài khoản',
                             child: TextField(
                               style: const TextStyle(fontSize: 12),
-                              onChanged: provider.updateBankAccount,
+                              onChanged: provider.onSearchChanged,
                               decoration: const InputDecoration(
                                   border: InputBorder.none,
                                   hintText: 'Nhập STK MB Bank',

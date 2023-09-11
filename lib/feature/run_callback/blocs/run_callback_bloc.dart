@@ -155,10 +155,9 @@ class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
       } else {
         emit(
           state.copyWith(
-            status: BlocStatus.UNLOADING,
-            request: CallBackType.RUN_ERROR,
-            msg: ErrorUtils.instance.getErrorMessage(result.message),
-          ),
+              status: BlocStatus.UNLOADING,
+              request: CallBackType.RUN_ERROR,
+              msg: result.message),
         );
       }
     }

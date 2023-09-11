@@ -189,6 +189,7 @@ class _UpdateMerchantPopupState extends State<UpdateMerchantPopup> {
                 param['suffix'] = suffixEditingCtl.text;
                 param['username'] = userNameEditingCtl.text;
                 param['customerSyncId'] = widget.dto.id;
+                param['password'] = passEditingCtl.text;
                 infoConnectBloc.add(UpdateMerchantEvent(param: param));
               },
             ),

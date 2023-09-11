@@ -1,50 +1,74 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:vietqr_admin/feature/connect_service/list_connect/repositories/info_connect_repository.dart';
+import 'package:vietqr_admin/models/bank_name_information_dto.dart';
 
 class NewConnectProvider with ChangeNotifier {
   String _urlConnect = '';
+
   String get urlConnect => _urlConnect;
   String _suffixConnect = '';
+
   String get suffixConnect => _suffixConnect;
   String _ipConnect = '';
+
   String get ipConnect => _ipConnect;
 
   String _portConnect = '';
+
   String get portConnect => _portConnect;
 
   String _username = '';
+
   String get username => _username;
   bool _errorUsername = false;
+
   bool get errorUsername => _errorUsername;
 
   String _password = '';
+
   String get password => _password;
   bool _errorPassword = false;
+
   bool get errorPassword => _errorPassword;
 
   String _customerName = '';
+
   String get customerName => _customerName;
   bool _errorCustomerName = false;
+
   bool get errorCustomerName => _errorCustomerName;
 
   String _merchant = '';
+
   String get merchant => _merchant;
   bool _errorMerchant = false;
+
   bool get errorMerchant => _errorMerchant;
 
   String _bankAccount = '';
+
   String get bankAccount => _bankAccount;
   bool _errorBankAccount = false;
+
   bool get errorBankAccount => _errorBankAccount;
 
   String _address = '';
+
   String get address => _address;
   bool _errorAddress = false;
+
   bool get errorAddress => _errorAddress;
 
   String _userBankName = '';
+
   String get userBankName => _userBankName;
   bool _errorUserBankName = false;
+
   bool get errorUserBankName => _errorUserBankName;
+
+  TextEditingController accountName = TextEditingController();
 
   void updateMerchant(String value) {
     _merchant = value;
@@ -56,12 +80,37 @@ class NewConnectProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateBankAccount(String value) {
+  InfoConnectRepository infoConnectRepository = const InfoConnectRepository();
+
+  Timer? _debounce;
+
+  onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      updateBankAccount(query);
+    });
+  }
+
+  void updateBankAccount(String value) async {
     _bankAccount = value;
+    _errorBankAccount = false;
     if (_bankAccount.isNotEmpty) {
       _errorBankAccount = false;
     } else {
       _errorBankAccount = true;
+    }
+
+    if (_bankAccount.length > 8) {
+      BankNameInformationDTO bankNameInformationDTO =
+          await infoConnectRepository.searchBankName(_bankAccount);
+
+      if (bankNameInformationDTO.accountName.isNotEmpty) {
+        updateUserBankName(bankNameInformationDTO.accountName);
+        _errorBankAccount = false;
+      } else {
+        updateUserBankName('Không xác định');
+        _errorBankAccount = true;
+      }
     }
     notifyListeners();
   }
@@ -81,6 +130,7 @@ class NewConnectProvider with ChangeNotifier {
 
   void updateUserBankName(String value) {
     _userBankName = value;
+    accountName.text = value.trim();
     if (_userBankName.isNotEmpty) {
       _errorUserBankName = false;
     } else {
@@ -190,5 +240,11 @@ class NewConnectProvider with ChangeNotifier {
       url = '$url/$suffix';
     }
     return url;
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 }

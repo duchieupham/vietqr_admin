@@ -10,7 +10,6 @@ import 'package:vietqr_admin/feature/run_callback/blocs/callback_provider.dart';
 import 'package:vietqr_admin/feature/run_callback/blocs/run_callback_bloc.dart';
 import 'package:vietqr_admin/feature/run_callback/events/run_callback_event.dart';
 import 'package:vietqr_admin/feature/run_callback/states/run_callback_state.dart';
-import 'package:vietqr_admin/main.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/callback_dto.dart';
 import 'package:vietqr_admin/models/customer_dto.dart';

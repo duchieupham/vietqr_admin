@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:vietqr_admin/models/bank_name_information_dto.dart';
-
+import 'package:flutter/foundation.dart';
 import '../repositories/info_connect_repository.dart';
 
 class AddBankProvider with ChangeNotifier {
@@ -22,8 +24,18 @@ class AddBankProvider with ChangeNotifier {
 
   InfoConnectRepository infoConnectRepository = const InfoConnectRepository();
 
+  Timer? _debounce;
+
+  onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      updateBankAccount(query);
+    });
+  }
+
   void updateBankAccount(String value) async {
     _bankAccount = value;
+    _errorAccountName = false;
     if (_bankAccount.isNotEmpty) {
       _errorAccountNumber = false;
     } else {
@@ -36,6 +48,7 @@ class AddBankProvider with ChangeNotifier {
 
       if (bankNameInformationDTO.accountName.isNotEmpty) {
         updateUserBankName(bankNameInformationDTO.accountName);
+        _errorAccountNumber = false;
       } else {
         updateUserBankName('Không xác định');
         _errorAccountName = true;
@@ -45,7 +58,7 @@ class AddBankProvider with ChangeNotifier {
   }
 
   void updateUserBankName(String value) {
-    _userBankName = value;
+    _userBankName = value.trim();
   }
 
   checkErrorAccountNumber() {
@@ -55,5 +68,11 @@ class AddBankProvider with ChangeNotifier {
       _errorAccountNumber = true;
     }
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 }
