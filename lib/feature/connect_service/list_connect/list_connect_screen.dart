@@ -91,19 +91,21 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                     ],
                   );
                 }
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildStt(result),
-                    _buildMerchant(result),
-                    Expanded(child: _buildURL(result)),
-                    _buildIp(result),
-                    _buildPort(result),
-                    _buildStatus(result),
-                    _buildPlatform(result),
-                    _buildAction(result, context),
-                    const SizedBox(width: 12),
-                  ],
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildStt(result),
+                      _buildMerchant(result),
+                      Expanded(child: _buildURL(result)),
+                      _buildIp(result),
+                      _buildPort(result),
+                      _buildStatus(result),
+                      _buildPlatform(result),
+                      _buildAction(result, context),
+                      const SizedBox(width: 12),
+                    ],
+                  ),
                 );
               });
             }),
@@ -309,64 +311,66 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
             ),
             ...list.map((e) {
               return Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: Row(
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            DialogWidget.instance
-                                .openPopup(child: InformationPopup(dto: e));
-                          },
-                          child: const Text(
-                            'Thông tin thêm',
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: AppColor.BLUE_TEXT,
-                                decoration: TextDecoration.underline),
-                          )),
-                      const SizedBox(
-                        width: 16,
+                padding: const EdgeInsets.only(top: 24),
+                child: Row(
+                  children: [
+                    const Text('', style: TextStyle(fontSize: 12)),
+                    InkWell(
+                      onTap: () {
+                        DialogWidget.instance
+                            .openPopup(child: InformationPopup(dto: e));
+                      },
+                      child: const Text(
+                        'Thông tin thêm',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: AppColor.BLUE_TEXT,
+                            decoration: TextDecoration.underline),
                       ),
-                      InkWell(
-                          onTap: () {
-                            DialogWidget.instance.openPopupCenter(
-                                child: UpdateMerchantPopup(
-                              dto: e,
-                              uploadSuccess: () {
-                                BlocProvider.of<ListConnectBloc>(context)
-                                    .add(ListConnectGetListEvent());
-                              },
-                            ));
-                          },
-                          child: const Text(
-                            'Chỉnh sửa',
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: AppColor.BLUE_TEXT,
-                                decoration: TextDecoration.underline),
-                          )),
-                      const SizedBox(
-                        width: 16,
+                    ),
+                    const SizedBox(width: 16),
+                    InkWell(
+                      onTap: () {
+                        DialogWidget.instance.openPopupCenter(
+                          child: UpdateMerchantPopup(
+                            dto: e,
+                            uploadSuccess: () {
+                              BlocProvider.of<ListConnectBloc>(context)
+                                  .add(ListConnectGetListEvent());
+                            },
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Chỉnh sửa',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: AppColor.BLUE_TEXT,
+                            decoration: TextDecoration.underline),
                       ),
-                      InkWell(
-                          onTap: () {
-                            Map<String, dynamic> param = {};
-                            param['customerSyncId'] = e.id;
-                            param['status'] = e.active == 1 ? 0 : 1;
-                            BlocProvider.of<ListConnectBloc>(context).add(
-                                ListConnectUpdateStatusEvent(param: param));
-                          },
-                          child: Text(
-                            e.active == 1 ? 'Tắt kết nối' : 'Bật kết nối',
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: e.active == 1
-                                    ? AppColor.RED_TEXT
-                                    : AppColor.BLUE_TEXT,
-                                decoration: TextDecoration.underline),
-                          ))
-                    ],
-                  ));
+                    ),
+                    const SizedBox(width: 16),
+                    InkWell(
+                      onTap: () {
+                        Map<String, dynamic> param = {};
+                        param['customerSyncId'] = e.id;
+                        param['status'] = e.active == 1 ? 0 : 1;
+                        BlocProvider.of<ListConnectBloc>(context)
+                            .add(ListConnectUpdateStatusEvent(param: param));
+                      },
+                      child: Text(
+                        e.active == 1 ? 'Tắt kết nối' : 'Bật kết nối',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: e.active == 1
+                                ? AppColor.RED_TEXT
+                                : AppColor.BLUE_TEXT,
+                            decoration: TextDecoration.underline),
+                      ),
+                    )
+                  ],
+                ),
+              );
             }).toList(),
           ],
         ),

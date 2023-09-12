@@ -336,8 +336,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                   ),
                   const SizedBox(height: 20),
                   Expanded(
-                    child: ListView(
-                      controller: controller,
+                    child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -346,61 +345,71 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                             return _buildTableTitle(list[index].title, index);
                           }).toList(),
                         ),
-                        Column(
-                          children: List.generate(listCallBack.length, (index) {
-                            CallBackDTO model = listCallBack[index];
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildTableContent('${index + 1}', index: 0),
-                                _buildTableContent(model.createdTime, index: 1),
-                                _buildTableContent(model.bankAccount ?? '',
-                                    index: 2),
-                                _buildTableContent(
-                                    model.transType == 'D'
-                                        ? '- ${StringUtils.formatNumber(model.amount)}'
-                                        : '+ ${StringUtils.formatNumber(model.amount)}',
-                                    index: 3),
-                                _buildTableContent(model.getStatus, index: 4),
-                                _buildTableContent(model.content ?? '',
-                                    index: 5),
-                                _buildTableContent(
-                                  model.status == 0 ? 'Chạy callback' : '-',
-                                  index: 6,
-                                  isRunCallback: model.status == 0,
-                                  onTap: () {
-                                    if (model.status == 0) {
-                                      Provider.of<CallbackProvider>(context,
-                                              listen: false)
-                                          .updateCallbackDTO(model);
-
-                                      final customerDTO =
+                        Expanded(
+                          child: ListView(controller: controller, children: [
+                            Column(
+                              children:
+                                  List.generate(listCallBack.length, (index) {
+                                CallBackDTO model = listCallBack[index];
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _buildTableContent('${index + 1}',
+                                        index: 0),
+                                    _buildTableContent(model.createdTime,
+                                        index: 1),
+                                    _buildTableContent(model.bankAccount ?? '',
+                                        index: 2),
+                                    _buildTableContent(
+                                        model.transType == 'D'
+                                            ? '- ${StringUtils.formatNumber(model.amount)}'
+                                            : '+ ${StringUtils.formatNumber(model.amount)}',
+                                        index: 3),
+                                    _buildTableContent(model.getStatus,
+                                        index: 4),
+                                    _buildTableContent(model.content ?? '',
+                                        index: 5),
+                                    _buildTableContent(
+                                      model.status == 0 ? 'Chạy callback' : '-',
+                                      index: 6,
+                                      isRunCallback: model.status == 0,
+                                      onTap: () {
+                                        if (model.status == 0) {
                                           Provider.of<CallbackProvider>(context,
                                                   listen: false)
-                                              .customerDTO;
-                                      _bloc.add(
-                                        GetInfoConnectEvent(
-                                            platform: 'API service',
-                                            id: customerDTO.id),
-                                      );
-                                    }
-                                  },
-                                ),
-                              ],
-                            );
-                          }).toList(),
-                        ),
-                        const SizedBox(height: 12),
-                        if (!isLoadMore)
-                          const UnconstrainedBox(
-                            child: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                color: AppColor.BLUE_TEXT,
-                              ),
+                                              .updateCallbackDTO(model);
+
+                                          final customerDTO =
+                                              Provider.of<CallbackProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .customerDTO;
+                                          _bloc.add(
+                                            GetInfoConnectEvent(
+                                                platform: 'API service',
+                                                id: customerDTO.id),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
                             ),
-                          )
+                            const SizedBox(height: 12),
+                            if (!isLoadMore)
+                              const UnconstrainedBox(
+                                child: SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              )
+                          ]),
+                        ),
                       ],
                     ),
                   )
