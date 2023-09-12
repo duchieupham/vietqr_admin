@@ -35,7 +35,7 @@ class MenuLeft extends StatelessWidget {
                   provider.selectSubMenu(SubMenuType.OTHER);
                 },
                 (type) {
-                  provider.updateShowMenuLink(!provider.showMenuLink);
+                  provider.updateShowMenuLink(true);
                   provider.selectMenu(type);
                 },
               ),

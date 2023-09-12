@@ -62,10 +62,16 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               }
             }, builder: (context, state) {
               if (state is ListConnectLoadingState) {
-                return const Center(child: Text('Đang tải...'));
+                return const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Center(child: Text('Đang tải...')),
+                );
               }
               if (result.isEmpty) {
-                return const Center(child: Text('Danh sách trống'));
+                return const Padding(
+                  padding: EdgeInsets.only(top: 300),
+                  child: Center(child: Text('Danh sách trống')),
+                );
               }
               return LayoutBuilder(builder: (context, constraints) {
                 if (constraints.maxWidth < 900) {
@@ -86,6 +92,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                   );
                 }
                 return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildStt(result),
                     _buildMerchant(result),

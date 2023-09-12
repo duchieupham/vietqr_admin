@@ -41,7 +41,7 @@ class MenuEPay extends StatelessWidget {
               isSelect: provider.initPage == SubMenuType.SURPLUS.pageNumber,
               onTap: () {
                 provider.selectSubMenu(SubMenuType.SURPLUS);
-                provider.updateShowMenuLink(false);
+                // provider.updateShowMenuLink(false);
               },
             ),
           ],

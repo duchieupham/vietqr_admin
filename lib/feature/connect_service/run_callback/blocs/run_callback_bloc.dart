@@ -5,6 +5,7 @@ import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
+import 'package:vietqr_admin/models/callback_dto.dart';
 import 'package:vietqr_admin/service/shared_references/account_helper.dart';
 
 import '../events/run_callback_event.dart';
@@ -16,6 +17,7 @@ class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
       : super(const RunCallbackState(
             listTrans: [], listCustomers: [], listBankAccount: [])) {
     on<GetTransEvent>(_getTrans);
+    on<GetTransLoadMoreEvent>(_getTransLoadMore);
     on<GetListCustomerEvent>(_getListCustomer);
     on<GetListBankEvent>(_getListBank);
     on<GetInfoConnectEvent>(_getInfo);
@@ -30,15 +32,70 @@ class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
       if (event is GetTransEvent) {
         emit(
           state.copyWith(
-              status: BlocStatus.LOADING, request: CallBackType.NONE),
+              status: event.isLoading ? BlocStatus.LOADING : BlocStatus.NONE,
+              request: CallBackType.NONE,
+              msg: null),
         );
+
+        bool isLoadMore = false;
+
         final result = await repository.getTrans(
             event.bankId ?? '', event.customerId ?? '', 0);
+
+        if (result.isEmpty || result.length < 20) {
+          isLoadMore = true;
+        }
         emit(
           state.copyWith(
-              listTrans: result,
-              status: BlocStatus.UNLOADING,
-              request: CallBackType.TRANS),
+            listTrans: result,
+            status: event.isLoading ? BlocStatus.UNLOADING : BlocStatus.NONE,
+            request: CallBackType.TRANS,
+            isLoadMore: isLoadMore,
+            offset: 0,
+          ),
+        );
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+      emit(state.copyWith(
+        status: BlocStatus.NONE,
+        request: CallBackType.ERROR,
+      ));
+    }
+  }
+
+  void _getTransLoadMore(CallbackEvent event, Emitter emit) async {
+    try {
+      if (event is GetTransLoadMoreEvent) {
+        emit(
+          state.copyWith(
+              status: event.isLoading ? BlocStatus.LOADING : BlocStatus.NONE,
+              request: CallBackType.NONE,
+              msg: null),
+        );
+
+        bool isLoadMore = false;
+        int offset = state.offset;
+        offset += 1;
+
+        List<CallBackDTO> data = state.listTrans;
+
+        final result = await repository.getTrans(
+            event.bankId ?? '', event.customerId ?? '', offset * 20);
+
+        if (result.isEmpty || result.length < 20) {
+          isLoadMore = true;
+        }
+        data.addAll(result);
+
+        emit(
+          state.copyWith(
+            listTrans: data,
+            status: event.isLoading ? BlocStatus.UNLOADING : BlocStatus.NONE,
+            request: CallBackType.TRANS,
+            isLoadMore: isLoadMore,
+            offset: 0,
+          ),
         );
       }
     } catch (e) {
@@ -110,7 +167,6 @@ class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
               apiServiceDTO: apiServiceDTO,
               status: BlocStatus.NONE,
               request: CallBackType.INFO_CONNECT,
-              ecomerceDTO: null,
             ),
           );
         }

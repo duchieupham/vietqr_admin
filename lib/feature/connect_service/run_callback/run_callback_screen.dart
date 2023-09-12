@@ -39,12 +39,15 @@ class _RunCallBackScreen extends StatefulWidget {
 class _RunCallBackScreenState extends State<_RunCallBackScreen> {
   late RunCallbackBloc _bloc;
 
+  final controller = ScrollController();
+
   final List<DataModel> list = [
     DataModel(title: 'No.'),
-    DataModel(title: 'Giao dịch'),
-    DataModel(title: 'Nội dung'),
-    DataModel(title: 'Trạng thái'),
     DataModel(title: 'Thời gian tạo'),
+    DataModel(title: 'Số tài khoản'),
+    DataModel(title: 'Giao dịch'),
+    DataModel(title: 'Trạng thái'),
+    DataModel(title: 'Nội dung'),
     DataModel(title: 'Action'),
   ];
 
@@ -55,6 +58,22 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _bloc.add(GetListCustomerEvent());
     });
+
+    controller.addListener(_loadMore);
+  }
+
+  void _loadMore() async {
+    String customerId =
+        Provider.of<CallbackProvider>(context, listen: false).customerDTO.id;
+    String bankId = Provider.of<CallbackProvider>(context, listen: false)
+        .bankAccountDTO
+        .bankId;
+
+    final maxScroll = controller.position.maxScrollExtent;
+    if (controller.offset >= maxScroll && !controller.position.outOfRange) {
+      _bloc.add(GetTransLoadMoreEvent(
+          customerId: customerId, bankId: bankId, isLoading: false));
+    }
   }
 
   @override
@@ -114,20 +133,28 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
 
               _bloc.add(RunCallbackEvent(body));
             }
+
+            if (state.request == CallBackType.RUN_CALLBACK ||
+                state.request == CallBackType.RUN_ERROR) {
+              String customerId = provider.customerDTO.id;
+              String bankId = provider.bankAccountDTO.bankId;
+
+              _bloc.add(GetTransEvent(customerId: customerId, bankId: bankId));
+            }
           },
           builder: (context, state) {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.only(top: 16.0),
               child: Row(
                 children: [
                   _buildListConnect(state.listCustomers),
                   Expanded(
                     child: _buildContent(
-                      context,
-                      state.listTrans,
-                      state.listBankAccount,
-                      provider.bankAccountDTO,
-                    ),
+                        context,
+                        state.listTrans,
+                        state.listBankAccount,
+                        provider.bankAccountDTO,
+                        state.isLoadMore),
                   ),
                   _buildLogRunCallback(
                       state.msg, provider.callBackDTO, state.request),
@@ -195,6 +222,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
     List<CallBackDTO> listCallBack,
     List<BankAccountDTO> listBanks,
     BankAccountDTO bankAccountDTO,
+    bool isLoadMore,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -309,6 +337,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                   const SizedBox(height: 20),
                   Expanded(
                     child: ListView(
+                      controller: controller,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -323,16 +352,22 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _buildTableContent('$index', index: 0),
+                                _buildTableContent('${index + 1}', index: 0),
+                                _buildTableContent(model.createdTime, index: 1),
+                                _buildTableContent(model.bankAccount ?? '',
+                                    index: 2),
                                 _buildTableContent(
-                                    StringUtils.formatNumber(model.amount),
-                                    index: 1),
-                                _buildTableContent(model.getContent),
-                                _buildTableContent(model.getStatus),
-                                _buildTableContent(model.createdTime),
+                                    model.transType == 'D'
+                                        ? '- ${StringUtils.formatNumber(model.amount)}'
+                                        : '+ ${StringUtils.formatNumber(model.amount)}',
+                                    index: 3),
+                                _buildTableContent(model.getStatus, index: 4),
+                                _buildTableContent(model.content ?? '',
+                                    index: 5),
                                 _buildTableContent(
-                                  model.status == 0 ? 'Chạy callback' : '',
-                                  isRunCallback: true,
+                                  model.status == 0 ? 'Chạy callback' : '-',
+                                  index: 6,
+                                  isRunCallback: model.status == 0,
                                   onTap: () {
                                     if (model.status == 0) {
                                       Provider.of<CallbackProvider>(context,
@@ -355,6 +390,17 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                             );
                           }).toList(),
                         ),
+                        const SizedBox(height: 12),
+                        if (!isLoadMore)
+                          const UnconstrainedBox(
+                            child: SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: AppColor.BLUE_TEXT,
+                              ),
+                            ),
+                          )
                       ],
                     ),
                   )
@@ -371,7 +417,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
     return Expanded(
       flex: (index == 0)
           ? 1
-          : (index == 1)
+          : (index == 3)
               ? 2
               : 3,
       child: Container(
@@ -391,7 +437,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
     return Expanded(
       flex: (index == 0)
           ? 1
-          : (index == 1)
+          : (index == 3)
               ? 2
               : 3,
       child: GestureDetector(
@@ -403,6 +449,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
             title,
             style: TextStyle(
               color: isRunCallback ? AppColor.BLUE_TEXT : AppColor.BLACK,
+              fontSize: 13,
               decoration: isRunCallback
                   ? TextDecoration.underline
                   : TextDecoration.none,
@@ -420,7 +467,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
   ) {
     return Container(
       padding: const EdgeInsets.only(right: 16.0),
-      width: 250,
+      width: 200,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

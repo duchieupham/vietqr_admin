@@ -8,8 +8,20 @@ class CallbackEvent extends Equatable {
 class GetTransEvent extends CallbackEvent {
   final String? bankId;
   final String? customerId;
+  final bool isLoading;
 
-  GetTransEvent({this.bankId, this.customerId});
+  GetTransEvent({this.bankId, this.customerId, this.isLoading = true});
+
+  @override
+  List<Object?> get props => [bankId, customerId];
+}
+
+class GetTransLoadMoreEvent extends CallbackEvent {
+  final String? bankId;
+  final String? customerId;
+  final bool isLoading;
+
+  GetTransLoadMoreEvent({this.bankId, this.customerId, this.isLoading = true});
 
   @override
   List<Object?> get props => [bankId, customerId];

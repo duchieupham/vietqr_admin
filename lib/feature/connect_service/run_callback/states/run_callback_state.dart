@@ -14,7 +14,8 @@ class RunCallbackState extends Equatable {
   final List<CustomerDTO> listCustomers;
   final List<BankAccountDTO> listBankAccount;
   final ApiServiceDTO? apiServiceDTO;
-  final EcomerceDTO? ecomerceDTO;
+  final bool isLoadMore;
+  final int offset;
 
   const RunCallbackState({
     this.status = BlocStatus.NONE,
@@ -24,7 +25,8 @@ class RunCallbackState extends Equatable {
     required this.listCustomers,
     required this.listBankAccount,
     this.apiServiceDTO,
-    this.ecomerceDTO,
+    this.isLoadMore = false,
+    this.offset = 0,
   });
 
   RunCallbackState copyWith({
@@ -35,7 +37,8 @@ class RunCallbackState extends Equatable {
     List<CustomerDTO>? listCustomers,
     List<BankAccountDTO>? listBankAccount,
     ApiServiceDTO? apiServiceDTO,
-    EcomerceDTO? ecomerceDTO,
+    bool? isLoadMore,
+    int? offset,
   }) {
     return RunCallbackState(
       status: status ?? this.status,
@@ -45,7 +48,8 @@ class RunCallbackState extends Equatable {
       listCustomers: listCustomers ?? this.listCustomers,
       listBankAccount: listBankAccount ?? this.listBankAccount,
       apiServiceDTO: apiServiceDTO ?? this.apiServiceDTO,
-      ecomerceDTO: ecomerceDTO ?? this.ecomerceDTO,
+      isLoadMore: isLoadMore ?? this.isLoadMore,
+      offset: offset ?? this.offset,
     );
   }
 

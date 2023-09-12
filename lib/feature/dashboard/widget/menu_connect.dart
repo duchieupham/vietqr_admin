@@ -44,7 +44,7 @@ class MenuConnect extends StatelessWidget {
                   provider.initPage == SubMenuType.LIST_CONNECT.pageNumber,
               onTap: () {
                 provider.selectSubMenu(SubMenuType.LIST_CONNECT);
-                provider.updateShowMenuLink(false);
+                // provider.updateShowMenuLink(false);
               },
             ),
             ItemMenu(
@@ -52,7 +52,7 @@ class MenuConnect extends StatelessWidget {
               isSelect: provider.initPage == SubMenuType.NEW_CONNECT.pageNumber,
               onTap: () {
                 provider.selectSubMenu(SubMenuType.NEW_CONNECT);
-                provider.updateShowMenuLink(false);
+                // provider.updateShowMenuLink(false);
               },
             ),
             ItemMenu(
@@ -61,7 +61,7 @@ class MenuConnect extends StatelessWidget {
                   provider.initPage == SubMenuType.RUN_CALLBACK.pageNumber,
               onTap: () {
                 provider.selectSubMenu(SubMenuType.RUN_CALLBACK);
-                provider.updateShowMenuLink(false);
+                // provider.updateShowMenuLink(false);
               },
             ),
           ],
