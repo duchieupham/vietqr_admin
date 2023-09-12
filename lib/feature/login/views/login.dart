@@ -31,10 +31,10 @@ class _Login extends State<Login> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // if(kDebugMode){
-    //   userNameController.text = 'adminvietqr';
-    //   passController.text = 'systemadmin123';
-    // }
+    if(kDebugMode){
+      userNameController.text = 'adminvietqr';
+      passController.text = 'systemadmin123';
+    }
   }
 
   @override

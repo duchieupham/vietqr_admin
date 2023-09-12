@@ -31,42 +31,45 @@ class MenuProvider with ChangeNotifier {
   }
 
   void changeSubPage(SubMenuType value) {
-    if (value == SubMenuType.LIST_CONNECT) {
-      _initPage = 0;
-    } else if (value == SubMenuType.NEW_CONNECT) {
-      _initPage = 1;
-    } else if (value == SubMenuType.RUN_CALLBACK) {
-      _initPage = 2;
-    } else if (value == SubMenuType.SURPLUS) {
-      _initPage = 3;
+    switch (value) {
+      case SubMenuType.LIST_CONNECT:
+      case SubMenuType.SURPLUS:
+        _initPage = 0;
+        break;
+      case SubMenuType.NEW_CONNECT:
+        _initPage = 1;
+        break;
+      case SubMenuType.RUN_CALLBACK:
+        _initPage = 2;
+        break;
+      default:
+        _initPage = 0;
+        break;
     }
+    notifyListeners();
   }
 
   void selectMenu(MenuType value) {
+    if (value != _menuHomeType) {
+      _initPage = 0;
+    }
     _menuHomeType = value;
     changePage(value);
     notifyListeners();
   }
 
-  void changePage(MenuType value, {bool isFirst = false}) {
+  void changePage(MenuType value) {
     if (value == MenuType.USER) {
-      if (isFirst) {}
       initMenuPage = 0;
     } else if (value == MenuType.ACCOUNT_BANK) {
       initMenuPage = 1;
     } else if (value == MenuType.SERVICE_CONNECT) {
-      if (isFirst) {
-        selectSubMenu(SubMenuType.LIST_CONNECT);
-      }
       initMenuPage = 2;
     } else if (value == MenuType.PUSH_NOTIFICATION) {
       initMenuPage = 3;
     } else if (value == MenuType.POST) {
       initMenuPage = 4;
     } else if (value == MenuType.VNPT_EPAY) {
-      if (isFirst) {
-        selectSubMenu(SubMenuType.SURPLUS);
-      }
       initMenuPage = 5;
     }
   }

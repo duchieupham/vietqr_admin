@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
-import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
@@ -54,14 +53,8 @@ class _SurplusScreenState extends State<SurplusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Container(
-          color: AppColor.BLUE_TEXT.withOpacity(0.2),
-          height: 40,
-          width: width,
-        ),
         const SizedBox(height: 40),
         const Text(
           'Số dư khả dụng',

@@ -6,6 +6,13 @@ class ServiceProvider with ChangeNotifier {
 
   int get environment => _environment;
 
+  int pageIndex = 0;
+
+  void selectedPage(int value) {
+    pageIndex = value;
+    notifyListeners();
+  }
+
   void updateENV(int value) {
     _environment = value;
     notifyListeners();

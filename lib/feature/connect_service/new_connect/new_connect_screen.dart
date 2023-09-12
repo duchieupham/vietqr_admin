@@ -11,18 +11,17 @@ import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/textfield_widget.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
-import 'package:vietqr_admin/feature/new_connect/bloc/new_connect_bloc.dart';
-import 'package:vietqr_admin/feature/new_connect/event/new_connect_event.dart';
-import 'package:vietqr_admin/feature/new_connect/provider/new_connect_provider.dart';
-import 'package:vietqr_admin/feature/new_connect/state/new_connect_state.dart';
 
+import 'bloc/new_connect_bloc.dart';
+import 'event/new_connect_event.dart';
+import 'provider/new_connect_provider.dart';
+import 'state/new_connect_state.dart';
 
 class NewConnectScreen extends StatelessWidget {
   const NewConnectScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return BlocProvider<NewConnectBloc>(
       create: (BuildContext context) => NewConnectBloc(),
@@ -49,8 +48,7 @@ class NewConnectScreen extends StatelessWidget {
           child: ChangeNotifierProvider<NewConnectProvider>(
             create: (context) => NewConnectProvider(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               child: Row(
                 children: [
                   Expanded(
@@ -102,22 +100,15 @@ class NewConnectScreen extends StatelessWidget {
                                 param['url'] = provider.urlConnect;
                                 param['ip'] = provider.ipConnect;
                                 param['port'] = provider.portConnect;
-                                param['suffixUrl'] =
-                                    provider.suffixConnect;
+                                param['suffixUrl'] = provider.suffixConnect;
                                 param['address'] = provider.address;
-                                param['bankAccount'] =
-                                    provider.bankAccount;
-                                param['userBankName'] =
-                                    provider.userBankName;
-                                param['customerUsername'] =
-                                    provider.username;
-                                param['customerPassword'] =
-                                    provider.password;
-                                param['systemUsername'] =
-                                    provider.customerName;
+                                param['bankAccount'] = provider.bankAccount;
+                                param['userBankName'] = provider.userBankName;
+                                param['customerUsername'] = provider.username;
+                                param['customerPassword'] = provider.password;
+                                param['systemUsername'] = provider.customerName;
                                 BlocProvider.of<NewConnectBloc>(context)
-                                    .add(AddCustomerSyncEvent(
-                                        param: param));
+                                    .add(AddCustomerSyncEvent(param: param));
                               }
                             },
                           );

@@ -26,46 +26,47 @@ class MenuConnect extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: _buildListItem(
-            context.read<MenuProvider>(),
-            () {
-              context.read<MenuProvider>().updateShowMenuLink(false);
-            },
-          ),
+          child: _buildListItem(),
         )
       ],
     );
   }
 
-  Widget _buildListItem(MenuProvider provider, Function closeMenuLink) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ItemMenu(
-          title: 'Danh sách kết nối',
-          isSelect: provider.subMenuType == SubMenuType.LIST_CONNECT,
-          onTap: () {
-            provider.selectSubMenu(SubMenuType.LIST_CONNECT);
-            closeMenuLink();
-          },
-        ),
-        ItemMenu(
-          title: 'Kết nối mới',
-          isSelect: provider.subMenuType == SubMenuType.NEW_CONNECT,
-          onTap: () {
-            provider.selectSubMenu(SubMenuType.NEW_CONNECT);
-            closeMenuLink();
-          },
-        ),
-        ItemMenu(
-          title: 'Chạy callback',
-          isSelect: provider.subMenuType == SubMenuType.RUN_CALLBACK,
-          onTap: () {
-            provider.selectSubMenu(SubMenuType.RUN_CALLBACK);
-            closeMenuLink();
-          },
-        ),
-      ],
+  Widget _buildListItem() {
+    return Consumer<MenuProvider>(
+      builder: (context, provider, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ItemMenu(
+              title: 'Danh sách kết nối',
+              isSelect:
+                  provider.initPage == SubMenuType.LIST_CONNECT.pageNumber,
+              onTap: () {
+                provider.selectSubMenu(SubMenuType.LIST_CONNECT);
+                provider.updateShowMenuLink(false);
+              },
+            ),
+            ItemMenu(
+              title: 'Kết nối mới',
+              isSelect: provider.initPage == SubMenuType.NEW_CONNECT.pageNumber,
+              onTap: () {
+                provider.selectSubMenu(SubMenuType.NEW_CONNECT);
+                provider.updateShowMenuLink(false);
+              },
+            ),
+            ItemMenu(
+              title: 'Chạy callback',
+              isSelect:
+                  provider.initPage == SubMenuType.RUN_CALLBACK.pageNumber,
+              onTap: () {
+                provider.selectSubMenu(SubMenuType.RUN_CALLBACK);
+                provider.updateShowMenuLink(false);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
