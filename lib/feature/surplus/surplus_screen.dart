@@ -35,7 +35,7 @@ class _SurplusScreenState extends State<SurplusScreen> {
     BalanceDTO result = BalanceDTO();
 
     try {
-      String url = 'https://api.vietqr.org/vqr/api/epay/query-balance';
+      String url = '${EnvConfig.instance.getBaseUrl()}epay/query-balance';
 
       final response = await BaseAPIClient.getAPI(
         url: url,
@@ -54,14 +54,8 @@ class _SurplusScreenState extends State<SurplusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Container(
-          color: AppColor.BLUE_TEXT.withOpacity(0.2),
-          height: 40,
-          width: width,
-        ),
         const SizedBox(height: 40),
         const Text(
           'Số dư khả dụng',

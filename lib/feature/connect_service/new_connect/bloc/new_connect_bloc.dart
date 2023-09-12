@@ -1,8 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vietqr_admin/feature/new_connect/event/new_connect_event.dart';
-import 'package:vietqr_admin/feature/new_connect/respository/new_connect_repository.dart';
-import 'package:vietqr_admin/feature/new_connect/state/new_connect_state.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
+
+import '../event/new_connect_event.dart';
+import '../respository/new_connect_repository.dart';
+import '../state/new_connect_state.dart';
 
 class NewConnectBloc extends Bloc<NewConnectEvent, NewConnectState> {
   NewConnectBloc() : super(NewConnectInitialState()) {

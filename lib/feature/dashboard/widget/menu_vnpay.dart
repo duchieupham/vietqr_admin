@@ -25,31 +25,28 @@ class MenuEPay extends StatelessWidget {
                 decoration: TextDecoration.underline),
           ),
         ),
-        Expanded(
-          child: _buildListItem(
-            context.read<MenuProvider>(),
-            () {
-              context.read<MenuProvider>().updateShowMenuLink(false);
-            },
-          ),
-        )
+        Expanded(child: _buildListItem())
       ],
     );
   }
 
-  Widget _buildListItem(MenuProvider provider, Function closeMenuLink) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ItemMenu(
-          title: 'Số dư',
-          isSelect: provider.subMenuType == SubMenuType.SURPLUS,
-          onTap: () {
-            provider.selectSubMenu(SubMenuType.SURPLUS);
-            closeMenuLink();
-          },
-        ),
-      ],
+  Widget _buildListItem() {
+    return Consumer<MenuProvider>(
+      builder: (context, provider, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ItemMenu(
+              title: 'Số dư',
+              isSelect: provider.initPage == SubMenuType.SURPLUS.pageNumber,
+              onTap: () {
+                provider.selectSubMenu(SubMenuType.SURPLUS);
+                provider.updateShowMenuLink(false);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

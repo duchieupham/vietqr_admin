@@ -6,14 +6,14 @@ import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/constants/utils/image_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
-import 'package:vietqr_admin/feature/run_callback/blocs/callback_provider.dart';
-import 'package:vietqr_admin/feature/run_callback/blocs/run_callback_bloc.dart';
-import 'package:vietqr_admin/feature/run_callback/events/run_callback_event.dart';
-import 'package:vietqr_admin/feature/run_callback/states/run_callback_state.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/callback_dto.dart';
 import 'package:vietqr_admin/models/customer_dto.dart';
 
+import 'blocs/callback_provider.dart';
+import 'blocs/run_callback_bloc.dart';
+import 'events/run_callback_event.dart';
+import 'states/run_callback_state.dart';
 import 'views/dialog_select_bank.dart';
 
 class RunCallBackScreen extends StatelessWidget {

@@ -49,7 +49,6 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width,
@@ -75,6 +74,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                     scrollDirection: Axis.horizontal,
                     children: [
                       _buildStt(result),
+                      _buildMerchant(result),
                       SizedBox(width: 280, child: _buildURL(result)),
                       _buildIp(result),
                       _buildPort(result),
@@ -87,6 +87,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                 return Row(
                   children: [
                     _buildStt(result),
+                    _buildMerchant(result),
                     Expanded(child: _buildURL(result)),
                     _buildIp(result),
                     _buildPort(result),
@@ -119,6 +120,30 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               padding: const EdgeInsets.only(top: 24),
               child: Text(
                 '${index + 1}',
+                style: const TextStyle(fontSize: 12),
+              ),
+            );
+          }).toList(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMerchant(List<ConnectDTO> list) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12, left: 20),
+      child: Column(
+        children: [
+          const Text(
+            'Merchant',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          ...list.map((e) {
+            int index = list.indexOf(e);
+            return Padding(
+              padding: const EdgeInsets.only(top: 24),
+              child: Text(
+                e.merchant,
                 style: const TextStyle(fontSize: 12),
               ),
             );

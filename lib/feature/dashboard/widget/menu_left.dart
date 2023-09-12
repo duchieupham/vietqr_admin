@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 
 import '../provider/menu_provider.dart';
 import 'item_menu_home.dart';
 
 class MenuLeft extends StatelessWidget {
-  final Function(MenuType) onTab;
-  final MenuProvider menuProvider;
-
-  const MenuLeft({super.key, required this.onTab, required this.menuProvider});
+  const MenuLeft({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +25,29 @@ class MenuLeft extends StatelessWidget {
           ),
         ),
         const Padding(padding: EdgeInsets.only(top: 10)),
-        Expanded(
-            child: _buildListItem(menuProvider, () {
-          menuProvider.updateShowMenuLink(false);
-          menuProvider.selectSubMenu(SubMenuType.OTHER);
-        }))
+        Consumer<MenuProvider>(
+          builder: (context, provider, child) {
+            return Expanded(
+              child: _buildListItem(
+                provider,
+                () {
+                  provider.updateShowMenuLink(false);
+                  provider.selectSubMenu(SubMenuType.OTHER);
+                },
+                (type) {
+                  provider.updateShowMenuLink(!provider.showMenuLink);
+                  provider.selectMenu(type);
+                },
+              ),
+            );
+          },
+        ),
       ],
     );
   }
 
-  Widget _buildListItem(MenuProvider provider, Function closeMenuLink) {
+  Widget _buildListItem(
+      MenuProvider provider, Function closeMenuLink, Function(MenuType) onTab) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -71,6 +82,7 @@ class MenuLeft extends StatelessWidget {
                 title: 'Thông báo đẩy',
                 isSelect: provider.menuHomeType == MenuType.PUSH_NOTIFICATION,
                 onTap: () {
+                  onTab(MenuType.PUSH_NOTIFICATION);
                   closeMenuLink();
                 },
               ),
@@ -78,6 +90,7 @@ class MenuLeft extends StatelessWidget {
                 title: 'Bài Post',
                 isSelect: provider.menuHomeType == MenuType.POST,
                 onTap: () {
+                  onTab(MenuType.POST);
                   closeMenuLink();
                 },
               ),

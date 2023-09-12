@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 
-import 'list_connect/list_connect_screen.dart';
-import 'new_connect/new_connect_screen.dart';
-import 'run_callback/run_callback_screen.dart';
+import 'surplus_screen.dart';
 
-class ServiceScreen extends StatefulWidget {
-  const ServiceScreen({super.key});
+class EPayScreen extends StatefulWidget {
+  const EPayScreen({super.key});
 
   @override
-  State<ServiceScreen> createState() => _ServiceScreenState();
+  State<EPayScreen> createState() => _EPayScreenState();
 }
 
-class _ServiceScreenState extends State<ServiceScreen> {
+class _EPayScreenState extends State<EPayScreen> {
   List<Widget> pages = [];
 
   @override
   void initState() {
     super.initState();
-    pages = [
-      const ListConnectScreen(),
-      const NewConnectScreen(),
-      const RunCallBackScreen(),
-    ];
+    pages = [const SurplusScreen()];
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Column(
       children: [
+        Container(
+          color: AppColor.BLUE_TEXT.withOpacity(0.2),
+          height: 40,
+          width: width,
+        ),
         Consumer<MenuProvider>(
           builder: (context, provider, child) {
             return Expanded(

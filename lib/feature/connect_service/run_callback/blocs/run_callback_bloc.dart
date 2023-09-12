@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/commons/constants/configurations/stringify.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
-import 'package:vietqr_admin/commons/constants/utils/error_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
-import 'package:vietqr_admin/feature/run_callback/events/run_callback_event.dart';
-import 'package:vietqr_admin/feature/run_callback/respositories/callback_repository.dart';
-import 'package:vietqr_admin/feature/run_callback/states/run_callback_state.dart';
 import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/ecomerce_dto.dart';
 import 'package:vietqr_admin/service/shared_references/account_helper.dart';
+
+import '../events/run_callback_event.dart';
+import '../respositories/callback_repository.dart';
+import '../states/run_callback_state.dart';
 
 class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
   RunCallbackBloc()
@@ -99,7 +98,6 @@ class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
 
   void _getInfo(CallbackEvent event, Emitter emit) async {
     ApiServiceDTO apiServiceDTO = const ApiServiceDTO();
-    EcomerceDTO ecomerceDTO = const EcomerceDTO();
     await AccountHelper.instance.setTokenFree('');
     try {
       if (event is GetInfoConnectEvent) {

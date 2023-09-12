@@ -23,15 +23,14 @@ extension PageSubMenu on SubMenuType {
   int get pageNumber {
     switch (this) {
       case SubMenuType.LIST_CONNECT:
+      case SubMenuType.SURPLUS:
         return 0;
       case SubMenuType.NEW_CONNECT:
         return 1;
       case SubMenuType.RUN_CALLBACK:
         return 2;
-      case SubMenuType.SURPLUS:
-        return 3;
       default:
-        return -1;
+        return 0;
     }
   }
 }
