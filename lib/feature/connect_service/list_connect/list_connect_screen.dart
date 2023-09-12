@@ -81,6 +81,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                       _buildStatus(result),
                       _buildPlatform(result),
                       _buildAction(result, context),
+                      const SizedBox(width: 12),
                     ],
                   );
                 }
@@ -94,6 +95,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                     _buildStatus(result),
                     _buildPlatform(result),
                     _buildAction(result, context),
+                    const SizedBox(width: 12),
                   ],
                 );
               });
