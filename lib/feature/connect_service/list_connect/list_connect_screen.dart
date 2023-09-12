@@ -154,7 +154,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
             return Padding(
               padding: const EdgeInsets.only(top: 24),
               child: Text(
-                e.merchant,
+                e.merchant.isNotEmpty ? e.merchant : '-',
                 style: const TextStyle(fontSize: 12),
               ),
             );
@@ -179,7 +179,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               padding: const EdgeInsets.only(top: 24),
               child: SelectionArea(
                 child: Text(
-                  e.url,
+                  e.url.isNotEmpty ? e.url : '-',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 12),
@@ -207,7 +207,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                 padding: const EdgeInsets.only(top: 24),
                 child: SelectionArea(
                   child: Text(
-                    e.ip,
+                    e.ip.isNotEmpty ? e.ip : '-',
                     style: const TextStyle(fontSize: 12),
                   ),
                 ),
@@ -233,7 +233,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               padding: const EdgeInsets.only(top: 24),
               child: SelectionArea(
                 child: Text(
-                  e.port,
+                  e.port.isNotEmpty ? e.port : '-',
                   style: const TextStyle(fontSize: 12),
                 ),
               ),
@@ -286,7 +286,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                 padding: const EdgeInsets.only(top: 24),
                 child: SelectionArea(
                   child: Text(
-                    e.platform,
+                    e.platform.isNotEmpty ? e.platform : '-',
                     style: const TextStyle(
                       fontSize: 12,
                     ),
