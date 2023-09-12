@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
@@ -34,7 +35,7 @@ class _SurplusScreenState extends State<SurplusScreen> {
     BalanceDTO result = BalanceDTO();
 
     try {
-      String url = 'https://api.vietqr.org/vqr/api/epay/query-balance';
+      String url = '${EnvConfig.instance.getBaseUrl()}epay/query-balance';
 
       final response = await BaseAPIClient.getAPI(
         url: url,

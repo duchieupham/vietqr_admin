@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:vietqr_admin/commons/constants/configurations/numeral.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
+import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 
 class MenuProvider with ChangeNotifier {
+  int _environment = Numeral.ENV_TEST;
+
+  int get environment => _environment;
+
   int _initPage = 0;
   int initMenuPage = 0;
 
@@ -11,11 +17,6 @@ class MenuProvider with ChangeNotifier {
 
   bool get showMenuLink => _isShowMenuLink;
 
-  void updateShowMenuLink(bool value) {
-    _isShowMenuLink = value;
-    notifyListeners();
-  }
-
   MenuType _menuHomeType = MenuType.USER;
 
   MenuType get menuHomeType => _menuHomeType;
@@ -24,8 +25,22 @@ class MenuProvider with ChangeNotifier {
 
   SubMenuType get subMenuType => _subMenuType;
 
+  void updateENV(int value) {
+    _environment = value;
+    notifyListeners();
+  }
+
+  void updateShowMenuLink(bool value) {
+    _isShowMenuLink = value;
+    notifyListeners();
+  }
+
   void selectSubMenu(SubMenuType value) {
     _subMenuType = value;
+    if (value == SubMenuType.RUN_CALLBACK) {
+      EnvConfig.instance.updateEnv(EnvType.DEV);
+      updateENV(0);
+    }
     changeSubPage(value);
     notifyListeners();
   }
@@ -52,6 +67,10 @@ class MenuProvider with ChangeNotifier {
   void selectMenu(MenuType value) {
     if (value != _menuHomeType) {
       _initPage = 0;
+    }
+    if (value == MenuType.VNPT_EPAY) {
+      EnvConfig.instance.updateEnv(EnvType.GOLIVE);
+      updateENV(1);
     }
     _menuHomeType = value;
     changePage(value);
