@@ -1,5 +1,5 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 
 class TimeUtils {
@@ -54,12 +54,26 @@ class TimeUtils {
 
   String formatDate(String date) {
     String result = '';
-    DateFormat format = DateFormat('dd/MM/yyyy');
+    DateFormat format = DateFormat('yyyy/MM/dd');
     bool isValidDate = DateTime.tryParse(date.toString()) != null;
     if (date != '' && isValidDate) {
       result = format.format(DateTime.parse(date)).toString();
     }
     return result;
+  }
+
+  String formatDateToString(DateTime? now) {
+    now ??= DateTime.now();
+    DateFormat format = DateFormat('dd/MM/yyyy');
+    String formatted = format.format(now);
+    return formatted;
+  }
+
+  String getCurrentDate(DateTime? now) {
+    now ??= DateTime.now();
+    DateFormat format = DateFormat('yyyy-MM-dd');
+    String formatted = format.format(now);
+    return formatted;
   }
 
   String formatDateContent(String date) {

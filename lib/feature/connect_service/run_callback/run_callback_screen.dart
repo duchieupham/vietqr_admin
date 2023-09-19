@@ -468,7 +468,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
         child: Container(
           alignment: index == 0 ? Alignment.centerLeft : Alignment.center,
           margin: const EdgeInsets.symmetric(vertical: 10),
-          child: Text(
+          child: SelectableText(
             title,
             style: TextStyle(
               color: isRunCallback ? AppColor.BLUE_TEXT : AppColor.BLACK,

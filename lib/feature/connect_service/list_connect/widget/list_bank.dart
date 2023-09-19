@@ -9,6 +9,7 @@ import 'package:vietqr_admin/feature/connect_service/list_connect/provider/add_b
 import 'package:vietqr_admin/feature/connect_service/list_connect/widget/add_bank_popup.dart';
 import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
+
 import '../events/info_connect_event.dart';
 
 class ListBank extends StatelessWidget {
@@ -107,7 +108,7 @@ class ListBank extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  dto.bankShortName.toUpperCase(),
+                  dto.customerBankName.toUpperCase(),
                   style: const TextStyle(fontSize: 12),
                 ),
                 const SizedBox(

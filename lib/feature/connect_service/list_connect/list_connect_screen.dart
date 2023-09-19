@@ -326,7 +326,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                             .openPopup(child: InformationPopup(dto: e));
                       },
                       child: const Text(
-                        'Thông tin thêm',
+                        'Chi tiết',
                         style: TextStyle(
                             fontSize: 11,
                             color: AppColor.BLUE_TEXT,

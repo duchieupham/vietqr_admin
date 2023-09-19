@@ -42,12 +42,19 @@ class Header extends StatelessWidget {
                         int initPage =
                             Provider.of<MenuProvider>(context, listen: false)
                                 .initPage;
+                        MenuType menuTyoe =
+                            Provider.of<MenuProvider>(context, listen: false)
+                                .menuHomeType;
 
                         EnvConfig.instance.updateEnv(EnvType.DEV);
                         provider.updateENV(0);
 
                         if (initPage == SubMenuType.LIST_CONNECT.pageNumber) {
                           eventBus.fire(GetListConnect());
+                        }
+                        if (menuTyoe == MenuType.LOG) {
+                          eventBus.fire(RefreshLog());
+                          eventBus.fire(ResetDateLog());
                         }
                       },
                       child: Container(
@@ -93,6 +100,10 @@ class Header extends StatelessWidget {
                           if (initPage == SubMenuType.LIST_CONNECT.pageNumber) {
                             eventBus.fire(GetListConnect());
                           }
+                        }
+                        if (type == MenuType.LOG) {
+                          eventBus.fire(RefreshLog());
+                          eventBus.fire(ResetDateLog());
                         }
                       },
                       child: Container(

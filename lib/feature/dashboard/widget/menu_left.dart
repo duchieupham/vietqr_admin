@@ -95,6 +95,22 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
+                title: 'Giao dịch',
+                isSelect: provider.menuHomeType == MenuType.TRANSACTION,
+                onTap: () {
+                  onTab(MenuType.TRANSACTION);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
+                title: 'Log',
+                isSelect: provider.menuHomeType == MenuType.LOG,
+                onTap: () {
+                  onTab(MenuType.LOG);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
                 title: 'VNPT Epay',
                 isSelect: provider.menuHomeType == MenuType.VNPT_EPAY,
                 onTap: () {

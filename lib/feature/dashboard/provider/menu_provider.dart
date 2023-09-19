@@ -39,10 +39,9 @@ class MenuProvider with ChangeNotifier {
     _subMenuType = value;
     if (value == SubMenuType.RUN_CALLBACK) {
       EnvConfig.instance.updateEnv(EnvType.DEV);
-      updateENV(0);
+      _environment = Numeral.ENV_TEST;
     }
     changeSubPage(value);
-    notifyListeners();
   }
 
   void changeSubPage(SubMenuType value) {
@@ -88,8 +87,12 @@ class MenuProvider with ChangeNotifier {
       initMenuPage = 3;
     } else if (value == MenuType.POST) {
       initMenuPage = 4;
-    } else if (value == MenuType.VNPT_EPAY) {
+    } else if (value == MenuType.TRANSACTION) {
       initMenuPage = 5;
+    } else if (value == MenuType.LOG) {
+      initMenuPage = 6;
+    } else if (value == MenuType.VNPT_EPAY) {
+      initMenuPage = 7;
     }
   }
 }

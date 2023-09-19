@@ -5,3 +5,11 @@ EventBus eventBus = EventBus();
 class GetListConnect {
   GetListConnect();
 }
+
+class RefreshLog {
+  RefreshLog();
+}
+
+class ResetDateLog {
+  ResetDateLog();
+}

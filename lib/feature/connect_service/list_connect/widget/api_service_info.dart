@@ -69,10 +69,9 @@ class ApiServiceInfo extends StatelessWidget {
           ),
           Expanded(
               flex: 4,
-              child: Text(
+              child: SelectableText(
                 value,
                 style: const TextStyle(fontSize: 12),
-                overflow: TextOverflow.ellipsis,
               )),
         ],
       ),
@@ -101,10 +100,9 @@ class ApiServiceInfo extends StatelessWidget {
           ),
           Expanded(
               flex: 4,
-              child: Text(
+              child: SelectableText(
                 showPass ? value : '***********',
                 style: const TextStyle(fontSize: 12),
-                overflow: TextOverflow.ellipsis,
               )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
