@@ -30,30 +30,42 @@ class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
   void _getTrans(CallbackEvent event, Emitter emit) async {
     try {
       if (event is GetTransEvent) {
-        emit(
-          state.copyWith(
-              status: event.isLoading ? BlocStatus.LOADING : BlocStatus.NONE,
-              request: CallBackType.NONE,
-              msg: null),
-        );
+        if (event.bankId?.isEmpty ?? true) {
+          emit(
+            state.copyWith(
+              listTrans: [],
+              status: BlocStatus.UNLOADING,
+              request: CallBackType.TRANS,
+              isLoadMore: false,
+              offset: 0,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+                status: event.isLoading ? BlocStatus.LOADING : BlocStatus.NONE,
+                request: CallBackType.NONE,
+                msg: null),
+          );
 
-        bool isLoadMore = false;
+          bool isLoadMore = false;
 
-        final result = await repository.getTrans(
-            event.bankId ?? '', event.customerId ?? '', 0);
+          final result = await repository.getTrans(
+              event.bankId ?? '', event.customerId ?? '', 0);
 
-        if (result.isEmpty || result.length < 20) {
-          isLoadMore = true;
+          if (result.isEmpty || result.length < 20) {
+            isLoadMore = true;
+          }
+          emit(
+            state.copyWith(
+              listTrans: result,
+              status: BlocStatus.UNLOADING,
+              request: CallBackType.TRANS,
+              isLoadMore: isLoadMore,
+              offset: 0,
+            ),
+          );
         }
-        emit(
-          state.copyWith(
-            listTrans: result,
-            status: event.isLoading ? BlocStatus.UNLOADING : BlocStatus.NONE,
-            request: CallBackType.TRANS,
-            isLoadMore: isLoadMore,
-            offset: 0,
-          ),
-        );
       }
     } catch (e) {
       LOG.error(e.toString());

@@ -7,6 +7,7 @@ import 'package:vietqr_admin/commons/constants/mixin/events.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/models/connect.dto.dart';
 
+import '../../../commons/constants/utils/custom_scroll.dart';
 import 'blocs/list_connect_bloc.dart';
 import 'events/list_connect_event.dart';
 import 'states/list_connect_state.dart';
@@ -75,20 +76,24 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               }
               return LayoutBuilder(builder: (context, constraints) {
                 if (constraints.maxWidth < 900) {
-                  return ListView(
-                    padding: EdgeInsets.zero,
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      _buildStt(result),
-                      _buildMerchant(result),
-                      SizedBox(width: 280, child: _buildURL(result)),
-                      _buildIp(result),
-                      _buildPort(result),
-                      _buildStatus(result),
-                      _buildPlatform(result),
-                      _buildAction(result, context),
-                      const SizedBox(width: 12),
-                    ],
+                  return ScrollConfiguration(
+                    behavior: MyCustomScrollBehavior(),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _buildStt(result),
+                          _buildMerchant(result),
+                          SizedBox(width: 280, child: _buildURL(result)),
+                          _buildIp(result),
+                          _buildPort(result),
+                          _buildStatus(result),
+                          _buildPlatform(result),
+                          _buildAction(result, context),
+                          const SizedBox(width: 12),
+                        ],
+                      ),
+                    ),
                   );
                 }
                 return IntrinsicHeight(

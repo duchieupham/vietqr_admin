@@ -106,6 +106,8 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                     customerId: customerId,
                     bankId: state.listBankAccount.first.bankId));
                 provider.updateBankAccount(state.listBankAccount.first);
+              } else {
+                _bloc.add(GetTransEvent(customerId: '', bankId: ''));
               }
             }
 
@@ -230,192 +232,204 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ...[
-            Row(
-              children: [
-                const Text(
-                  'Tài khoản ngân hàng đã kết nối',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(width: 6),
-                GestureDetector(
-                  onTap: () async {
-                    final data = await showDialog(
-                      barrierDismissible: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return DialogSelectBank(
-                          list: listBanks,
-                        );
-                      },
-                    );
-
-                    if (data != null && data is BankAccountDTO) {
-                      if (!mounted) return;
-                      Provider.of<CallbackProvider>(context, listen: false)
-                          .updateBankAccount(data);
-                    }
-                  },
-                  child: const Text(
-                    'Chọn TK ngân hàng khác',
-                    style: TextStyle(
-                      color: AppColor.BLUE_TEXT,
-                      fontSize: 12,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.grey)),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+            if (listBanks.isEmpty)
+              const Text(
+                'Không có dữ liệu',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              )
+            else ...[
+              Row(
                 children: [
-                  if (bankAccountDTO.imgId.isNotEmpty)
-                    Image(
-                      height: 24,
-                      fit: BoxFit.fitHeight,
-                      image: ImageUtils.instance
-                          .getImageNetWork(bankAccountDTO.imgId),
-                    ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${bankAccountDTO.bankShortName} - ${bankAccountDTO.bankAccount}',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                  const Text(
+                    'Tài khoản ngân hàng đã kết nối',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 6),
+                  GestureDetector(
+                    onTap: () async {
+                      final data = await showDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return DialogSelectBank(
+                            list: listBanks,
+                          );
+                        },
+                      );
+
+                      if (data != null && data is BankAccountDTO) {
+                        if (!mounted) return;
+                        Provider.of<CallbackProvider>(context, listen: false)
+                            .updateBankAccount(data);
+                      }
+                    },
+                    child: const Text(
+                      'Chọn TK ngân hàng khác',
+                      style: TextStyle(
+                        color: AppColor.BLUE_TEXT,
+                        fontSize: 12,
+                        decoration: TextDecoration.underline,
                       ),
-                      const SizedBox(height: 4),
-                      Text(bankAccountDTO.customerBankName),
-                    ],
+                    ),
                   )
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        'Danh sách giao dịch',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.grey)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (bankAccountDTO.imgId.isNotEmpty)
+                      Image(
+                        height: 24,
+                        fit: BoxFit.fitHeight,
+                        image: ImageUtils.instance
+                            .getImageNetWork(bankAccountDTO.imgId),
                       ),
-                      const SizedBox(width: 6),
-                      GestureDetector(
-                        onTap: () {
-                          String customerId = Provider.of<CallbackProvider>(
-                                  context,
-                                  listen: false)
-                              .customerDTO
-                              .id;
-                          String bankId = Provider.of<CallbackProvider>(context,
-                                  listen: false)
-                              .bankAccountDTO
-                              .bankId;
-
-                          _bloc.add(GetTransEvent(
-                              customerId: customerId, bankId: bankId));
-                        },
-                        child: const Text(
-                          'Refresh Danh sách',
-                          style: TextStyle(
-                            color: AppColor.BLUE_TEXT,
-                            fontSize: 12,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: Column(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(list.length, (index) {
-                            return _buildTableTitle(list[index].title, index);
-                          }).toList(),
+                        Text(
+                          '${bankAccountDTO.bankShortName} - ${bankAccountDTO.bankAccount}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        Expanded(
-                          child: ListView(controller: controller, children: [
-                            Column(
-                              children:
-                                  List.generate(listCallBack.length, (index) {
-                                CallBackDTO model = listCallBack[index];
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    _buildTableContent('${index + 1}',
-                                        index: 0),
-                                    _buildTableContent(model.createdTime,
-                                        index: 1),
-                                    _buildTableContent(model.bankAccount ?? '',
-                                        index: 2),
-                                    _buildTableContent(
-                                        model.transType == 'D'
-                                            ? '- ${StringUtils.formatNumber(model.amount)}'
-                                            : '+ ${StringUtils.formatNumber(model.amount)}',
-                                        index: 3),
-                                    _buildTableContent(model.getStatus,
-                                        index: 4),
-                                    _buildTableContent(model.content ?? '',
-                                        index: 5),
-                                    _buildTableContent(
-                                      model.status == 0 ? 'Chạy callback' : '-',
-                                      index: 6,
-                                      isRunCallback: model.status == 0,
-                                      onTap: () {
-                                        if (model.status == 0) {
-                                          Provider.of<CallbackProvider>(context,
-                                                  listen: false)
-                                              .updateCallbackDTO(model);
+                        const SizedBox(height: 4),
+                        Text(bankAccountDTO.customerBankName),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          'Danh sách giao dịch',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(width: 6),
+                        GestureDetector(
+                          onTap: () {
+                            String customerId = Provider.of<CallbackProvider>(
+                                    context,
+                                    listen: false)
+                                .customerDTO
+                                .id;
+                            String bankId = Provider.of<CallbackProvider>(
+                                    context,
+                                    listen: false)
+                                .bankAccountDTO
+                                .bankId;
 
-                                          final customerDTO =
-                                              Provider.of<CallbackProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .customerDTO;
-                                          _bloc.add(
-                                            GetInfoConnectEvent(
-                                                platform: 'API service',
-                                                id: customerDTO.id),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
+                            _bloc.add(GetTransEvent(
+                                customerId: customerId, bankId: bankId));
+                          },
+                          child: const Text(
+                            'Refresh Danh sách',
+                            style: TextStyle(
+                              color: AppColor.BLUE_TEXT,
+                              fontSize: 12,
+                              decoration: TextDecoration.underline,
                             ),
-                            const SizedBox(height: 12),
-                            if (!isLoadMore)
-                              const UnconstrainedBox(
-                                child: SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    color: AppColor.BLUE_TEXT,
-                                  ),
-                                ),
-                              )
-                          ]),
-                        ),
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            )
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(list.length, (index) {
+                              return _buildTableTitle(list[index].title, index);
+                            }).toList(),
+                          ),
+                          Expanded(
+                            child: ListView(controller: controller, children: [
+                              Column(
+                                children:
+                                    List.generate(listCallBack.length, (index) {
+                                  CallBackDTO model = listCallBack[index];
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _buildTableContent('${index + 1}',
+                                          index: 0),
+                                      _buildTableContent(model.createdTime,
+                                          index: 1),
+                                      _buildTableContent(
+                                          model.bankAccount ?? '',
+                                          index: 2),
+                                      _buildTableContent(
+                                          model.transType == 'D'
+                                              ? '- ${StringUtils.formatNumber(model.amount)}'
+                                              : '+ ${StringUtils.formatNumber(model.amount)}',
+                                          index: 3),
+                                      _buildTableContent(model.getStatus,
+                                          index: 4),
+                                      _buildTableContent(model.content ?? '',
+                                          index: 5),
+                                      _buildTableContent(
+                                        model.status == 0
+                                            ? 'Chạy callback'
+                                            : '-',
+                                        index: 6,
+                                        isRunCallback: model.status == 0,
+                                        onTap: () {
+                                          if (model.status == 0) {
+                                            Provider.of<CallbackProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .updateCallbackDTO(model);
+
+                                            final customerDTO =
+                                                Provider.of<CallbackProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .customerDTO;
+                                            _bloc.add(
+                                              GetInfoConnectEvent(
+                                                  platform: 'API service',
+                                                  id: customerDTO.id),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                              const SizedBox(height: 12),
+                              if (!isLoadMore)
+                                const UnconstrainedBox(
+                                  child: SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      color: AppColor.BLUE_TEXT,
+                                    ),
+                                  ),
+                                )
+                            ]),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ]
           ]
         ],
       ),
