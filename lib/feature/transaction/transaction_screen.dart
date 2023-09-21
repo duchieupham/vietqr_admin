@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/mixin/events.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
@@ -40,18 +40,16 @@ class _TransactionScreenState extends State<_TransactionScreen> {
   List<TransactionDTO> transactionList = [];
   int offset = 0;
   ScrollController scrollControllerList = ScrollController();
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+
   bool isCalling = true;
   @override
   void initState() {
     super.initState();
+    var provider = Provider.of<TransactionProvider>(context, listen: false);
     scrollControllerList.addListener(() {
       if (isCalling) {
         if (scrollControllerList.offset ==
             scrollControllerList.position.maxScrollExtent) {
-          var provider =
-              Provider.of<TransactionProvider>(context, listen: false);
           Map<String, dynamic> param = {};
           offset = offset + 20;
           param['type'] = provider.valueFilter.id;
@@ -79,9 +77,10 @@ class _TransactionScreenState extends State<_TransactionScreen> {
     param['offset'] = 0;
     _bloc = TransactionBloc()
       ..add(TransactionGetListEvent(param: param, isLoadingPage: true));
-    // _subscription = eventBus.on<RefreshLog>().listen((data) {
-    //   _bloc.add(const LogGetListEvent(date: ''));
-    // });
+    _subscription = eventBus.on<RefreshTransaction>().listen((data) {
+      _bloc.add(TransactionGetListEvent(param: param, isLoadingPage: true));
+      provider.resetFilter();
+    });
   }
 
   @override
@@ -144,18 +143,6 @@ class _TransactionScreenState extends State<_TransactionScreen> {
 
                                       return _buildItem(e, index);
                                     }).toList(),
-                                    // _buildStt(transactionList),
-                                    // _buildAccountNumber(transactionList),
-                                    // _buildAmount(transactionList),
-                                    // _buildOrderId(transactionList),
-                                    // _buildReferenceNumber(transactionList),
-                                    // _buildStatus(transactionList),
-                                    // _buildContent(transactionList),
-                                    // _buildTimeCreate(
-                                    //   transactionList,
-                                    // ),
-                                    // _buildTimePaid(transactionList),
-                                    // _buildAction(transactionList, context),
                                     const SizedBox(width: 12),
                                   ],
                                 ),
@@ -318,8 +305,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                               context: context,
                               initialDate: provider.fromDate,
                               firstDate: DateTime(2022),
-                              lastDate: DateTime.now()
-                                  .subtract(const Duration(days: 1)),
+                              lastDate: DateTime.now(),
                             );
                             provider.updateFromDate(date ?? DateTime.now());
                           },
@@ -432,7 +418,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                       ),
                     InkWell(
                       onTap: () {
-                        if (provider.fromDate.isBefore(provider.toDate)) {
+                        if (provider.fromDate.millisecondsSinceEpoch <=
+                            provider.toDate.millisecondsSinceEpoch) {
                           Map<String, dynamic> param = {};
                           param['type'] = provider.valueFilter.id;
                           if (provider.valueTimeFilter.id == 0 ||
@@ -496,7 +483,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           ),
         ),
         SizedBox(
-          width: 100,
+          width: 110,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
@@ -518,7 +505,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           ),
         ),
         SizedBox(
-          width: 100,
+          width: 110,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
@@ -595,128 +582,152 @@ class _TransactionScreenState extends State<_TransactionScreen> {
   }
 
   Widget _buildItem(TransactionDTO dto, int index) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 50,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              '$index',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+    return SizedBox(
+      height: 50,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 50,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  '$index',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.bankAccount,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+          SizedBox(
+            width: 110,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.bankAccount,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 150,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.transType == 'D'
-                  ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
-                  : '+ ${StringUtils.formatNumber(dto.amount.toString())}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.transType == 'D'
-                      ? AppColor.RED_TEXT
-                      : AppColor.BLUE_TEXT),
+          SizedBox(
+            width: 150,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.transType == 'D'
+                      ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
+                      : '+ ${StringUtils.formatNumber(dto.amount.toString())}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: dto.getAmountColor()),
+                ),
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.orderId.isNotEmpty ? dto.orderId : '-',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+          SizedBox(
+            width: 110,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.orderId.isNotEmpty ? dto.orderId : '-',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.referenceNumber.isNotEmpty ? dto.referenceNumber : '-',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.referenceNumber.isNotEmpty ? dto.referenceNumber : '-',
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 110,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.getStatus(),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: dto.getStatusColor()),
+          SizedBox(
+            width: 110,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.getStatus(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: dto.getStatusColor()),
+                ),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.content,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.content,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 120,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.timeCreated == 0
-                  ? '-'
-                  : TimeUtils.instance.formatTimeDateFromInt(dto.timeCreated),
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+          SizedBox(
+            width: 120,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.timeCreated == 0
+                      ? '-'
+                      : TimeUtils.instance
+                          .formatTimeDateFromInt(dto.timeCreated),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              dto.timePaid == 0
-                  ? '-'
-                  : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
+          SizedBox(
+            width: 140,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 20),
+              child: SelectionArea(
+                child: Text(
+                  dto.timePaid == 0
+                      ? '-'
+                      : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(top: 12, left: 20, right: 20),
-          child: Text(
-            'Chi tiết',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 12,
-                color: AppColor.BLUE_TEXT,
-                decoration: TextDecoration.underline),
+          const Padding(
+            padding: EdgeInsets.only(top: 12, left: 20, right: 20),
+            child: InkWell(
+              child: Text(
+                'Chi tiết',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 12,
+                    color: AppColor.BLUE_TEXT,
+                    decoration: TextDecoration.underline),
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

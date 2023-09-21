@@ -7,9 +7,14 @@ class GetListConnect {
 }
 
 class RefreshLog {
-  RefreshLog();
+  final bool envGoLive;
+  RefreshLog({this.envGoLive = false});
 }
 
 class ResetDateLog {
   ResetDateLog();
+}
+
+class RefreshTransaction {
+  RefreshTransaction();
 }

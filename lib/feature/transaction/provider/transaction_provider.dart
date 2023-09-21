@@ -20,15 +20,20 @@ class TransactionProvider with ChangeNotifier {
   FilterTimeTransaction _valueTimeFilter =
       const FilterTimeTransaction(id: 0, title: 'Tất cả');
   FilterTimeTransaction get valueTimeFilter => _valueTimeFilter;
-
-  DateTime _formDate = DateTime.now().subtract(const Duration(days: 1));
-  DateTime get fromDate => _formDate;
-
   DateTime _toDate = DateTime.now();
   DateTime get toDate => _toDate;
 
+  DateTime _formDate = DateTime.now();
+  DateTime get fromDate => _formDate;
+
   String _keywordSearch = '';
   String get keywordSearch => _keywordSearch;
+
+  resetFilter() {
+    _valueFilter = const FilterTransaction(id: 9, title: 'Tất cả');
+    _valueTimeFilter = const FilterTimeTransaction(id: 0, title: 'Tất cả');
+    notifyListeners();
+  }
 
   void changeFilter(FilterTransaction value) {
     _valueFilter = value;

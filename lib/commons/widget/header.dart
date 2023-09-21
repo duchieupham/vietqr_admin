@@ -53,8 +53,11 @@ class Header extends StatelessWidget {
                           eventBus.fire(GetListConnect());
                         }
                         if (menuTyoe == MenuType.LOG) {
-                          eventBus.fire(RefreshLog());
+                          eventBus.fire(RefreshLog(envGoLive: false));
                           eventBus.fire(ResetDateLog());
+                        }
+                        if (menuTyoe == MenuType.TRANSACTION) {
+                          eventBus.fire(RefreshTransaction());
                         }
                       },
                       child: Container(
@@ -101,10 +104,13 @@ class Header extends StatelessWidget {
                             eventBus.fire(GetListConnect());
                           }
                         }
-                        // if (type == MenuType.LOG) {
-                        //   eventBus.fire(RefreshLog());
-                        //   eventBus.fire(ResetDateLog());
-                        // }
+                        if (type == MenuType.TRANSACTION) {
+                          eventBus.fire(RefreshTransaction());
+                        }
+                        if (type == MenuType.LOG) {
+                          eventBus.fire(RefreshLog(envGoLive: true));
+                          // eventBus.fire(ResetDateLog());
+                        }
                       },
                       child: Container(
                         height: 30,

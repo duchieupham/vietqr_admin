@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 
-class TransactionDTO {
+class TransactionDetailDTO {
   final String id;
   final String orderId;
   final String referenceNumber;
@@ -14,7 +14,19 @@ class TransactionDTO {
   final int timeCreated;
   final String content;
   final int status;
-  const TransactionDTO(
+  final String sign;
+  final String traceId;
+  final int type;
+  final String userBankName;
+  final String nationalId;
+  final String phoneAuthenticated;
+  final bool sync;
+  final String bankCode;
+  final String bankShortName;
+  final String bankName;
+  final String imgId;
+  final bool flow;
+  const TransactionDetailDTO(
       {this.id = '',
       this.status = 0,
       this.bankAccount = '',
@@ -25,10 +37,22 @@ class TransactionDTO {
       this.timeCreated = 0,
       this.timePaid = 0,
       this.orderId = '',
-      this.referenceNumber = ''});
+      this.referenceNumber = '',
+      this.userBankName = '',
+      this.flow = false,
+      this.bankShortName = '',
+      this.bankCode = '',
+      this.imgId = '',
+      this.phoneAuthenticated = '',
+      this.nationalId = '',
+      this.type = 0,
+      this.bankName = '',
+      this.sign = '',
+      this.sync = false,
+      this.traceId = ''});
 
-  factory TransactionDTO.fromJson(Map<String, dynamic> json) {
-    return TransactionDTO(
+  factory TransactionDetailDTO.fromJson(Map<String, dynamic> json) {
+    return TransactionDetailDTO(
       id: json['id'] ?? '',
       status: json['status'] ?? 0,
       bankAccount: json['bankAccount'] ?? '',
@@ -60,16 +84,6 @@ class TransactionDTO {
       return AppColor.BLUE_TEXT;
     } else {
       return AppColor.BLACK;
-    }
-  }
-
-  Color getAmountColor() {
-    if (status == 0) {
-      return AppColor.ORANGE;
-    } else if (transType == 'C') {
-      return AppColor.BLUE_TEXT;
-    } else {
-      return AppColor.RED_TEXT;
     }
   }
 }

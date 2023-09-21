@@ -21,13 +21,24 @@ class LogScreen extends StatefulWidget {
 
 class _LogScreenState extends State<LogScreen> {
   StreamSubscription? _subscription;
+  bool envGoLive = false;
   late LogBloc _bloc;
   @override
   void initState() {
     super.initState();
     _bloc = LogBloc()..add(const LogGetListEvent(date: ''));
     _subscription = eventBus.on<RefreshLog>().listen((data) {
-      _bloc.add(const LogGetListEvent(date: ''));
+      if (!data.envGoLive) {
+        _bloc.add(const LogGetListEvent(date: ''));
+      }
+
+      updateEnv(data.envGoLive);
+    });
+  }
+
+  updateEnv(bool value) {
+    setState(() {
+      envGoLive = value;
     });
   }
 
@@ -120,6 +131,13 @@ class _LogScreenState extends State<LogScreen> {
                 child: BlocConsumer<LogBloc, LogState>(
                     listener: (context, state) {},
                     builder: (context, state) {
+                      if (envGoLive) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Text('Đang bảo trì'),
+                        );
+                      }
+
                       if (state is LogLoadingState) {
                         return const Padding(
                           padding: EdgeInsets.only(top: 40),
