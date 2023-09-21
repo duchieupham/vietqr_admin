@@ -72,7 +72,7 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                title: 'Dịch vụ kết nối',
+                title: 'Merchant',
                 isSelect: provider.menuHomeType == MenuType.SERVICE_CONNECT,
                 onTap: () {
                   onTab(MenuType.SERVICE_CONNECT);

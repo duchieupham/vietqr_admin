@@ -6,6 +6,7 @@ import 'package:vietqr_admin/feature/dashboard/widget/menu_connect.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/log/log_screen.dart';
 import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
+import 'package:vietqr_admin/feature/transaction/transaction_screen.dart';
 
 import 'frames/dashboard_frame.dart';
 import 'widget/menu_vnpay.dart';
@@ -41,7 +42,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const ServiceScreen(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
-      const SizedBox.shrink(),
+      const TransactionScreen(),
       const LogScreen(),
       const EPayScreen(),
     ];

@@ -101,10 +101,10 @@ class Header extends StatelessWidget {
                             eventBus.fire(GetListConnect());
                           }
                         }
-                        if (type == MenuType.LOG) {
-                          eventBus.fire(RefreshLog());
-                          eventBus.fire(ResetDateLog());
-                        }
+                        // if (type == MenuType.LOG) {
+                        //   eventBus.fire(RefreshLog());
+                        //   eventBus.fire(ResetDateLog());
+                        // }
                       },
                       child: Container(
                         height: 30,
