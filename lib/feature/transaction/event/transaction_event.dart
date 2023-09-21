@@ -19,3 +19,14 @@ class TransactionGetListEvent extends TransactionEvent {
   @override
   List<Object?> get props => [param];
 }
+
+class TransactionGetDetailEvent extends TransactionEvent {
+  final String id;
+
+  const TransactionGetDetailEvent({
+    required this.id,
+  });
+
+  @override
+  List<Object?> get props => [id];
+}

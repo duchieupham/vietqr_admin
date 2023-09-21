@@ -12,7 +12,9 @@ import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/transaction/bloc/transaction_bloc.dart';
 import 'package:vietqr_admin/feature/transaction/event/transaction_event.dart';
 import 'package:vietqr_admin/feature/transaction/state/transaction_state.dart';
+import 'package:vietqr_admin/feature/transaction/widget/transaction_detail.dart';
 import 'package:vietqr_admin/models/transaction_dto.dart';
+import 'package:vietqr_admin/service/shared_references/session.dart';
 
 import 'provider/transaction_provider.dart';
 
@@ -37,10 +39,10 @@ class _TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<_TransactionScreen> {
   StreamSubscription? _subscription;
   late TransactionBloc _bloc;
+  final PageController pageViewController = PageController();
   List<TransactionDTO> transactionList = [];
   int offset = 0;
   ScrollController scrollControllerList = ScrollController();
-
   bool isCalling = true;
   @override
   void initState() {
@@ -90,78 +92,11 @@ class _TransactionScreenState extends State<_TransactionScreen> {
       child: Column(
         children: [
           _buildTitle(),
-          Expanded(child: LayoutBuilder(builder: (context, constraints) {
-            print('---------------------${constraints.maxWidth}');
-            return BlocConsumer<TransactionBloc, TransactionState>(
-                listener: (context, state) {
-              if (state is TransactionGetListLoadingState) {
-                DialogWidget.instance.openLoadingDialog();
-              }
-              if (state is TransactionGetListSuccessState) {
-                if (state.isLoadMore) {
-                  transactionList.addAll(state.result);
-                  isCalling = true;
-                } else {
-                  if (state.isPopLoading) {
-                    Navigator.pop(context);
-                  }
-                  transactionList = state.result;
-                }
-              }
-            }, builder: (context, state) {
-              if (state is TransactionLoadingState) {
-                return const Padding(
-                  padding: EdgeInsets.only(top: 40),
-                  child: Text('Đang tải...'),
-                );
-              } else {
-                if (transactionList.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.only(top: 40),
-                    child: Text('Không có dữ liệu'),
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          controller: scrollControllerList,
-                          child: ScrollConfiguration(
-                            behavior: MyCustomScrollBehavior(),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: SizedBox(
-                                width: constraints.maxWidth > 1300
-                                    ? constraints.maxWidth
-                                    : 1300,
-                                child: Column(
-                                  children: [
-                                    _buildTitleItem(),
-                                    ...transactionList.map((e) {
-                                      int index =
-                                          transactionList.indexOf(e) + 1;
-
-                                      return _buildItem(e, index);
-                                    }).toList(),
-                                    const SizedBox(width: 12),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (state is TransactionGetListLoadingLoadMoreState)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text('Đang tải...'),
-                        )
-                    ],
-                  );
-                }
-              }
-            });
-          }))
+          Expanded(
+              child: PageView(
+            controller: pageViewController,
+            children: [_buildListTransaction(), TransactionDetailScreen()],
+          ))
         ],
       ),
     );
@@ -175,6 +110,42 @@ class _TransactionScreenState extends State<_TransactionScreen> {
       child: Consumer<TransactionProvider>(builder: (context, provider, child) {
         return Row(
           children: [
+            if (provider.currentPage == 1)
+              InkWell(
+                onTap: () {
+                  provider.updateCurrentPage(0);
+                  pageViewController.previousPage(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeIn);
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(
+                      top: 8, bottom: 8, left: 16, right: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColor.BLUE_TEXT.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    children: const [
+                      Icon(
+                        Icons.arrow_back_ios,
+                        color: AppColor.BLUE_TEXT,
+                        size: 12,
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        'Trở về',
+                        style:
+                            TextStyle(fontSize: 11, color: AppColor.BLUE_TEXT),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -188,69 +159,37 @@ class _TransactionScreenState extends State<_TransactionScreen> {
             const SizedBox(
               width: 24,
             ),
-            Expanded(
-              child: ScrollConfiguration(
-                behavior: MyCustomScrollBehavior(),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    const SizedBox(
-                      width: 24,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: AppColor.GREY_BG,
-                        borderRadius: BorderRadius.circular(5),
+            if (provider.currentPage == 1) ...[
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: AppColor.BLUE_TEXT,
+                size: 20,
+              ),
+              const SizedBox(
+                width: 24,
+              ),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Chi tiết giao dịch',
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline),
+                ),
+              ),
+            ] else
+              Expanded(
+                child: ScrollConfiguration(
+                  behavior: MyCustomScrollBehavior(),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      const SizedBox(
+                        width: 24,
                       ),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Lọc theo',
-                            style: TextStyle(
-                                fontSize: 11, color: AppColor.GREY_TEXT),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          DropdownButton<FilterTransaction>(
-                            value: provider.valueFilter,
-                            icon: const RotatedBox(
-                              quarterTurns: 5,
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 12,
-                              ),
-                            ),
-                            underline: const SizedBox.shrink(),
-                            onChanged: (FilterTransaction? value) {
-                              provider.changeFilter(value!);
-                            },
-                            items: provider.listFilter
-                                .map<DropdownMenuItem<FilterTransaction>>(
-                                    (FilterTransaction value) {
-                              return DropdownMenuItem<FilterTransaction>(
-                                value: value,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 4),
-                                  child: Text(
-                                    value.title,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (provider.valueFilter.id == 9 ||
-                        provider.valueFilter.id == 0) ...[
                       Container(
-                        margin:
-                            const EdgeInsets.only(top: 8, bottom: 8, left: 16),
+                        margin: const EdgeInsets.symmetric(vertical: 8),
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -260,15 +199,15 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                         child: Row(
                           children: [
                             const Text(
-                              'Thời gian',
+                              'Lọc theo',
                               style: TextStyle(
                                   fontSize: 11, color: AppColor.GREY_TEXT),
                             ),
                             const SizedBox(
                               width: 20,
                             ),
-                            DropdownButton<FilterTimeTransaction>(
-                              value: provider.valueTimeFilter,
+                            DropdownButton<FilterTransaction>(
+                              value: provider.valueFilter,
                               icon: const RotatedBox(
                                 quarterTurns: 5,
                                 child: Icon(
@@ -277,13 +216,13 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                                 ),
                               ),
                               underline: const SizedBox.shrink(),
-                              onChanged: (FilterTimeTransaction? value) {
-                                provider.changeTimeFilter(value!);
+                              onChanged: (FilterTransaction? value) {
+                                provider.changeFilter(value!);
                               },
-                              items: provider.listTimeFilter
-                                  .map<DropdownMenuItem<FilterTimeTransaction>>(
-                                      (FilterTimeTransaction value) {
-                                return DropdownMenuItem<FilterTimeTransaction>(
+                              items: provider.listFilter
+                                  .map<DropdownMenuItem<FilterTransaction>>(
+                                      (FilterTransaction value) {
+                                return DropdownMenuItem<FilterTransaction>(
                                   value: value,
                                   child: Padding(
                                     padding: const EdgeInsets.only(right: 4),
@@ -298,175 +237,308 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                           ],
                         ),
                       ),
-                      if (provider.valueTimeFilter.id == 1) ...[
-                        InkWell(
-                          onTap: () async {
-                            DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: provider.fromDate,
-                              firstDate: DateTime(2022),
-                              lastDate: DateTime.now(),
-                            );
-                            provider.updateFromDate(date ?? DateTime.now());
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 8, bottom: 8, left: 16),
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: AppColor.GREY_BG,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Row(
-                              children: [
-                                const Text(
-                                  'Từ ngày',
-                                  style: TextStyle(
-                                      fontSize: 11, color: AppColor.GREY_TEXT),
+                      if (provider.valueFilter.id == 9 ||
+                          provider.valueFilter.id == 0) ...[
+                        Container(
+                          margin: const EdgeInsets.only(
+                              top: 8, bottom: 8, left: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColor.GREY_BG,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Thời gian',
+                                style: TextStyle(
+                                    fontSize: 11, color: AppColor.GREY_TEXT),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              DropdownButton<FilterTimeTransaction>(
+                                value: provider.valueTimeFilter,
+                                icon: const RotatedBox(
+                                  quarterTurns: 5,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 12,
+                                  ),
                                 ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  TimeUtils.instance
-                                      .formatDateToString(provider.fromDate),
-                                  style: const TextStyle(fontSize: 11),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                const Icon(
-                                  Icons.calendar_month_outlined,
-                                  size: 12,
-                                )
-                              ],
-                            ),
+                                underline: const SizedBox.shrink(),
+                                onChanged: (FilterTimeTransaction? value) {
+                                  provider.changeTimeFilter(value!);
+                                },
+                                items: provider.listTimeFilter.map<
+                                        DropdownMenuItem<
+                                            FilterTimeTransaction>>(
+                                    (FilterTimeTransaction value) {
+                                  return DropdownMenuItem<
+                                      FilterTimeTransaction>(
+                                    value: value,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 4),
+                                      child: Text(
+                                        value.title,
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
                           ),
                         ),
-                        InkWell(
-                          onTap: () async {
-                            DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: provider.toDate,
-                              firstDate: DateTime(2022),
-                              lastDate: DateTime.now(),
-                            );
-                            provider.updateToDate(date ?? DateTime.now());
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 8, bottom: 8, left: 16),
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: AppColor.GREY_BG,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Row(
-                              children: [
-                                const Text(
-                                  'Đến ngày',
-                                  style: TextStyle(
-                                      fontSize: 11, color: AppColor.GREY_TEXT),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  TimeUtils.instance
-                                      .formatDateToString(provider.toDate),
-                                  style: const TextStyle(fontSize: 11),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                const Icon(
-                                  Icons.calendar_month_outlined,
-                                  size: 12,
-                                )
-                              ],
+                        if (provider.valueTimeFilter.id == 1) ...[
+                          InkWell(
+                            onTap: () async {
+                              DateTime? date = await showDatePicker(
+                                context: context,
+                                initialDate: provider.fromDate,
+                                firstDate: DateTime(2022),
+                                lastDate: DateTime.now(),
+                              );
+                              provider.updateFromDate(date ?? DateTime.now());
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 8, bottom: 8, left: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColor.GREY_BG,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Từ ngày',
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        color: AppColor.GREY_TEXT),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    TimeUtils.instance
+                                        .formatDateToString(provider.fromDate),
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  const Icon(
+                                    Icons.calendar_month_outlined,
+                                    size: 12,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
+                          InkWell(
+                            onTap: () async {
+                              DateTime? date = await showDatePicker(
+                                context: context,
+                                initialDate: provider.toDate,
+                                firstDate: DateTime(2022),
+                                lastDate: DateTime.now(),
+                              );
+                              provider.updateToDate(date ?? DateTime.now());
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 8, bottom: 8, left: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColor.GREY_BG,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Đến ngày',
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        color: AppColor.GREY_TEXT),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    TimeUtils.instance
+                                        .formatDateToString(provider.toDate),
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  const Icon(
+                                    Icons.calendar_month_outlined,
+                                    size: 12,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
-                    if (provider.valueFilter.id != 9)
-                      Container(
-                        margin:
-                            const EdgeInsets.only(top: 8, bottom: 8, left: 16),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        width: 180,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppColor.GREY_BG,
-                          borderRadius: BorderRadius.circular(5),
+                      if (provider.valueFilter.id != 9)
+                        Container(
+                          margin: const EdgeInsets.only(
+                              top: 8, bottom: 8, left: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          width: 180,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColor.GREY_BG,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: TextField(
+                            style: const TextStyle(fontSize: 12),
+                            onChanged: (value) {
+                              provider.updateKeyword(value);
+                            },
+                            decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.only(bottom: 18),
+                                border: InputBorder.none,
+                                hintText:
+                                    'Tìm kiếm bằng ${provider.valueFilter.title.toLowerCase()}',
+                                hintStyle: const TextStyle(
+                                    fontSize: 12, color: AppColor.GREY_TEXT)),
+                          ),
                         ),
-                        child: TextField(
-                          style: const TextStyle(fontSize: 12),
-                          onChanged: (value) {
-                            provider.updateKeyword(value);
-                          },
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.only(bottom: 18),
-                              border: InputBorder.none,
-                              hintText:
-                                  'Tìm kiếm bằng ${provider.valueFilter.title.toLowerCase()}',
-                              hintStyle: const TextStyle(
-                                  fontSize: 12, color: AppColor.GREY_TEXT)),
-                        ),
-                      ),
-                    InkWell(
-                      onTap: () {
-                        if (provider.fromDate.millisecondsSinceEpoch <=
-                            provider.toDate.millisecondsSinceEpoch) {
-                          Map<String, dynamic> param = {};
-                          param['type'] = provider.valueFilter.id;
-                          if (provider.valueTimeFilter.id == 0 ||
-                              (provider.valueFilter.id != 0 &&
-                                  provider.valueFilter.id != 9)) {
-                            param['from'] = '0';
-                            param['to'] = '0';
+                      InkWell(
+                        onTap: () {
+                          if (provider.fromDate.millisecondsSinceEpoch <=
+                              provider.toDate.millisecondsSinceEpoch) {
+                            Map<String, dynamic> param = {};
+                            param['type'] = provider.valueFilter.id;
+                            if (provider.valueTimeFilter.id == 0 ||
+                                (provider.valueFilter.id != 0 &&
+                                    provider.valueFilter.id != 9)) {
+                              param['from'] = '0';
+                              param['to'] = '0';
+                            } else {
+                              param['from'] = TimeUtils.instance
+                                  .getCurrentDate(provider.fromDate);
+                              param['to'] = TimeUtils.instance
+                                  .getCurrentDate(provider.toDate);
+                            }
+                            param['value'] = provider.keywordSearch;
+                            param['offset'] = 0;
+                            _bloc.add(TransactionGetListEvent(param: param));
                           } else {
-                            param['from'] = TimeUtils.instance
-                                .getCurrentDate(provider.fromDate);
-                            param['to'] = TimeUtils.instance
-                                .getCurrentDate(provider.toDate);
+                            DialogWidget.instance.openMsgDialog(
+                                title: 'Không hợp lệ',
+                                msg:
+                                    'Ngày bắt đầu không được lớn hơn ngày kết thúc');
                           }
-                          param['value'] = provider.keywordSearch;
-                          param['offset'] = 0;
-                          _bloc.add(TransactionGetListEvent(param: param));
-                        } else {
-                          DialogWidget.instance.openMsgDialog(
-                              title: 'Không hợp lệ',
-                              msg:
-                                  'Ngày bắt đầu không được lớn hơn ngày kết thúc');
-                        }
-                      },
-                      child: Container(
-                        margin:
-                            const EdgeInsets.only(top: 8, bottom: 8, left: 16),
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        width: 120,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppColor.BLUE_TEXT,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: const Text(
-                          'Tìm kiếm',
-                          style: TextStyle(fontSize: 12, color: AppColor.WHITE),
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 8, bottom: 8, left: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          width: 120,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColor.BLUE_TEXT,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Text(
+                            'Tìm kiếm',
+                            style:
+                                TextStyle(fontSize: 12, color: AppColor.WHITE),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         );
       }),
     );
+  }
+
+  Widget _buildListTransaction() {
+    return LayoutBuilder(builder: (context, constraints) {
+      return BlocConsumer<TransactionBloc, TransactionState>(
+          listener: (context, state) {
+        if (state is TransactionGetListLoadingState) {
+          DialogWidget.instance.openLoadingDialog();
+        }
+        if (state is TransactionGetListSuccessState) {
+          if (state.isLoadMore) {
+            transactionList.addAll(state.result);
+            isCalling = true;
+          } else {
+            if (state.isPopLoading) {
+              Navigator.pop(context);
+            }
+            transactionList = state.result;
+          }
+        }
+      }, builder: (context, state) {
+        if (state is TransactionLoadingState) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 40),
+            child: Center(child: Text('Đang tải...')),
+          );
+        } else {
+          if (transactionList.isEmpty) {
+            return const Padding(
+              padding: EdgeInsets.only(top: 40),
+              child: Center(child: Text('Không có dữ liệu')),
+            );
+          } else {
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollControllerList,
+                    child: ScrollConfiguration(
+                      behavior: MyCustomScrollBehavior(),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SizedBox(
+                          width: constraints.maxWidth > 1350
+                              ? constraints.maxWidth
+                              : 1350,
+                          child: Column(
+                            children: [
+                              _buildTitleItem(),
+                              ...transactionList.map((e) {
+                                int index = transactionList.indexOf(e) + 1;
+
+                                return _buildItem(e, index);
+                              }).toList(),
+                              const SizedBox(width: 12),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                if (state is TransactionGetListLoadingLoadMoreState)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Đang tải...'),
+                  )
+              ],
+            );
+          }
+        }
+      });
+    });
   }
 
   Widget _buildTitleItem() {
@@ -483,7 +555,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           ),
         ),
         SizedBox(
-          width: 110,
+          width: 130,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
@@ -600,7 +672,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
             ),
           ),
           SizedBox(
-            width: 110,
+            width: 130,
             child: Padding(
               padding: const EdgeInsets.only(top: 12, left: 20),
               child: SelectionArea(
@@ -713,10 +785,20 @@ class _TransactionScreenState extends State<_TransactionScreen> {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 12, left: 20, right: 20),
+          Padding(
+            padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
             child: InkWell(
-              child: Text(
+              onTap: () {
+                Session.instance.updateTransactionId(dto.id);
+
+                Provider.of<TransactionProvider>(context, listen: false)
+                    .updateCurrentPage(1);
+
+                pageViewController.nextPage(
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeIn);
+              },
+              child: const Text(
                 'Chi tiết',
                 textAlign: TextAlign.center,
                 style: TextStyle(

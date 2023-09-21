@@ -25,7 +25,7 @@ class TransactionDetailDTO {
   final String bankShortName;
   final String bankName;
   final String imgId;
-  final bool flow;
+  final int flow;
   const TransactionDetailDTO(
       {this.id = '',
       this.status = 0,
@@ -39,7 +39,7 @@ class TransactionDetailDTO {
       this.orderId = '',
       this.referenceNumber = '',
       this.userBankName = '',
-      this.flow = false,
+      this.flow = 0,
       this.bankShortName = '',
       this.bankCode = '',
       this.imgId = '',
@@ -64,6 +64,18 @@ class TransactionDetailDTO {
       timePaid: json['timePaid'] ?? 0,
       orderId: json['orderId'] ?? '',
       referenceNumber: json['referenceNumber'] ?? '',
+      userBankName: json['userBankName'] ?? '',
+      flow: json['flow'] ?? 0,
+      bankShortName: json['bankShortName'] ?? '',
+      bankCode: json['bankCode'] ?? '',
+      imgId: json['imgId'] ?? '',
+      phoneAuthenticated: json['phoneAuthenticated'] ?? '',
+      nationalId: json['nationalId'] ?? '',
+      type: json['type'] ?? 0,
+      bankName: json['bankName'] ?? '',
+      sign: json['sign'] ?? '',
+      sync: json['sync'] ?? false,
+      traceId: json['traceId'] ?? '',
     );
   }
 
@@ -84,6 +96,28 @@ class TransactionDetailDTO {
       return AppColor.BLUE_TEXT;
     } else {
       return AppColor.BLACK;
+    }
+  }
+
+  Color getAmountColor() {
+    if (status == 0) {
+      return AppColor.ORANGE;
+    } else if (transType == 'C') {
+      return AppColor.BLUE_TEXT;
+    } else {
+      return AppColor.RED_TEXT;
+    }
+  }
+
+  String getTypeTrace() {
+    if (type == 5) {
+      return 'Giao dịch nạp tiền VQR vào hệ thống';
+    } else if (type == 2) {
+      return 'Giao dịch ngoài hệ thống VietQR';
+    } else if (type == 4) {
+      return 'Giao dịch đồng bộ RPA';
+    } else {
+      return 'Giao dịch từ hệ thống VietQR';
     }
   }
 }

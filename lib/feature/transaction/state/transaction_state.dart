@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:vietqr_admin/models/transaction_detail_dto.dart';
 import 'package:vietqr_admin/models/transaction_dto.dart';
+import 'package:vietqr_admin/models/transaction_log_dto.dart';
 
 class TransactionState extends Equatable {
   const TransactionState();
@@ -27,4 +29,15 @@ class TransactionGetListSuccessState extends TransactionState {
 
   @override
   List<Object?> get props => [result];
+}
+
+class TransactionGetDetailSuccessState extends TransactionState {
+  final TransactionDetailDTO result;
+  final List<TransactionLogDTO> listLog;
+  const TransactionGetDetailSuccessState({
+    required this.result,
+    required this.listLog,
+  });
+  @override
+  List<Object?> get props => [result, listLog];
 }

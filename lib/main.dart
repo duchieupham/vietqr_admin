@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/feature/dashboard/dashboard_screen.dart';
 import 'package:vietqr_admin/feature/login/views/login.dart';
+import 'package:vietqr_admin/service/shared_references/session.dart';
 import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
 //Share Preferences
@@ -15,6 +16,7 @@ void main() async {
   sharedPrefs = await SharedPreferences.getInstance();
   await sharedPrefs.setString('TOKEN_FREE', '');
   setUrlStrategy(PathUrlStrategy());
+  Session.load;
   // LOG.verbose('Config Environment: ${EnvConfig.getEnv()}');
   runApp(const VietQRAdmin());
 }

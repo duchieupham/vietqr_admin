@@ -29,6 +29,9 @@ class TransactionProvider with ChangeNotifier {
   String _keywordSearch = '';
   String get keywordSearch => _keywordSearch;
 
+  int _currentPage = 0;
+  int get currentPage => _currentPage;
+
   resetFilter() {
     _valueFilter = const FilterTransaction(id: 9, title: 'Tất cả');
     _valueTimeFilter = const FilterTimeTransaction(id: 0, title: 'Tất cả');
@@ -59,6 +62,11 @@ class TransactionProvider with ChangeNotifier {
 
   void updateToDate(DateTime value) {
     _toDate = value;
+    notifyListeners();
+  }
+
+  void updateCurrentPage(int page) {
+    _currentPage = page;
     notifyListeners();
   }
 }
