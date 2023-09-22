@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:vietqr_admin/commons/constants/configurations/numeral.dart';
 
 class ListConnectProvider with ChangeNotifier {
-  int _environment = Numeral.ENV_TEST;
-  int get environment => _environment;
+  int _page = 0;
+  int get page => _page;
 
-  void updateENV(int value) {
-    _environment = value;
+  void changePage(int page) {
+    _page = page;
     notifyListeners();
   }
 }

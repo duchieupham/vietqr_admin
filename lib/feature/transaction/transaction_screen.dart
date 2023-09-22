@@ -559,7 +559,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Số tài khoản',
+              'Số TK',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -581,7 +581,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Order id',
+              'Order ID',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -591,7 +591,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Mã giao dịch (FT Code)',
+              'Mã GD (FT Code)',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -624,7 +624,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Thời gian tạo GD',
+              'TG tạo GD',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -635,7 +635,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Thời gian thanh toán',
+              'TG thanh toán',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),

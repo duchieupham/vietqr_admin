@@ -104,6 +104,15 @@ class StringUtils {
     return '${numberFormat.format(value).replaceAll('.', ',')} VND';
   }
 
+  static String formatAmount(int value) {
+    if (value == 0) {
+      return '0';
+    }
+
+    var numberFormat = NumberFormat.decimalPattern('vi-VI');
+    return numberFormat.format(value).replaceAll('.', ',');
+  }
+
   String authBase64(String username, String password) {
     String credentials = "$username:$password";
     String credentialsBase64 = base64Encode(utf8.encode(credentials));

@@ -7,7 +7,7 @@ import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/ecomerce_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
-
+import 'package:vietqr_admin/models/statistic_dto.dart';
 
 class InfoConnectBloc extends Bloc<InfoConnectEvent, InfoConnectState> {
   InfoConnectBloc() : super(InfoConnectInitialState()) {
@@ -16,6 +16,7 @@ class InfoConnectBloc extends Bloc<InfoConnectEvent, InfoConnectState> {
     on<AddBankConnectEvent>(_addBankConnect);
     on<RemoveBankConnectEvent>(_removeBankConnect);
     on<UpdateMerchantEvent>(_updateMerchantConnect);
+    on<GetStatisticEvent>(_getStatistic);
   }
 }
 
@@ -105,5 +106,18 @@ void _updateMerchantConnect(InfoConnectEvent event, Emitter emit) async {
   } catch (e) {
     debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
     emit(UpdateFailedState(dto: dto));
+  }
+}
+
+void _getStatistic(InfoConnectEvent event, Emitter emit) async {
+  StatisticDTO dto = const StatisticDTO();
+  try {
+    if (event is GetStatisticEvent) {
+      dto = await infoConnectRepository.getStatistic(event.param);
+      emit(GetStatisticSuccessState(dto: dto));
+    }
+  } catch (e) {
+    debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
+    emit(GetStatisticSuccessState(dto: dto));
   }
 }

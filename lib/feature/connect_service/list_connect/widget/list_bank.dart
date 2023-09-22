@@ -18,6 +18,7 @@ class ListBank extends StatelessWidget {
   final ApiServiceDTO apiServiceDTO;
   final String customerSyncId;
   final InfoConnectBloc bloc;
+  final bool isVertical;
 
   const ListBank(
       {Key? key,
@@ -25,12 +26,14 @@ class ListBank extends StatelessWidget {
       this.showButtonAddBank = false,
       required this.apiServiceDTO,
       required this.customerSyncId,
+      this.isVertical = false,
       required this.bloc})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
@@ -40,13 +43,18 @@ class ListBank extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        Expanded(
-            child: ListView(
-          padding: EdgeInsets.zero,
-          children: listBank.map((e) {
+        if (isVertical)
+          ...listBank.map((e) {
             return _buildItemBank(e, context);
-          }).toList(),
-        )),
+          }).toList()
+        else
+          Expanded(
+              child: ListView(
+            padding: EdgeInsets.zero,
+            children: listBank.map((e) {
+              return _buildItemBank(e, context);
+            }).toList(),
+          )),
         if (showButtonAddBank) ...[
           const SizedBox(
             height: 16,
@@ -80,7 +88,7 @@ class ListBank extends StatelessWidget {
       margin: const EdgeInsets.only(top: 8),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: AppColor.GREY_BUTTON)),
+          border: Border.all(color: AppColor.GREY_TEXT.withOpacity(0.5))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -98,6 +106,7 @@ class ListBank extends StatelessWidget {
           ),
           Expanded(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(

@@ -3,7 +3,7 @@ import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/ecomerce_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
-
+import 'package:vietqr_admin/models/statistic_dto.dart';
 
 class InfoConnectState extends Equatable {
   const InfoConnectState();
@@ -65,6 +65,14 @@ class UpdateMerchantConnectSuccessState extends InfoConnectState {}
 class UpdateFailedState extends InfoConnectState {
   final ResponseMessageDTO dto;
   const UpdateFailedState({required this.dto});
+
+  @override
+  List<Object?> get props => [dto];
+}
+
+class GetStatisticSuccessState extends InfoConnectState {
+  final StatisticDTO dto;
+  const GetStatisticSuccessState({required this.dto});
 
   @override
   List<Object?> get props => [dto];

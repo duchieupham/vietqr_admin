@@ -69,9 +69,23 @@ class TimeUtils {
     return formatted;
   }
 
+  String formatMonthToString(DateTime? now) {
+    now ??= DateTime.now();
+    DateFormat format = DateFormat('MM/yyyy');
+    String formatted = format.format(now);
+    return formatted;
+  }
+
   String getCurrentDate(DateTime? now) {
     now ??= DateTime.now();
     DateFormat format = DateFormat('yyyy-MM-dd');
+    String formatted = format.format(now);
+    return formatted;
+  }
+
+  String getFormatMonth(DateTime? now) {
+    now ??= DateTime.now();
+    DateFormat format = DateFormat('yyyy-MM');
     String formatted = format.format(now);
     return formatted;
   }
@@ -268,12 +282,12 @@ class TimeUtils {
     return result;
   }
 
-  String formatTimeDateFromInt(int time) {
+  String formatTimeDateFromInt(num time) {
     String result = '';
     try {
       if (time != 0) {
         DateTime timeConverted =
-            DateTime.fromMillisecondsSinceEpoch(time * 1000);
+            DateTime.fromMillisecondsSinceEpoch(time.toInt() * 1000);
         DateFormat format = DateFormat('HH:mm dd/MM/yyyy');
         result = format.format(timeConverted).toString();
       }

@@ -43,7 +43,7 @@ class EcomerceInfo extends StatelessWidget {
           Expanded(
               flex: 4,
               child: Text(
-                value,
+                value.isEmpty ?'-': value ,
                 style: const TextStyle(fontSize: 12),
                 overflow: TextOverflow.ellipsis,
               )),

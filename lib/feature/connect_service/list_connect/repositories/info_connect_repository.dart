@@ -8,7 +8,7 @@ import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/bank_name_information_dto.dart';
 import 'package:vietqr_admin/models/ecomerce_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
-
+import 'package:vietqr_admin/models/statistic_dto.dart';
 
 class InfoConnectRepository {
   const InfoConnectRepository();
@@ -166,6 +166,29 @@ class InfoConnectRepository {
         var data = jsonDecode(response.body);
         if (data != null) {
           result = ResponseMessageDTO.fromJson(data);
+          return result;
+        }
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return result;
+  }
+
+  Future<StatisticDTO> getStatistic(Map<String, dynamic> param) async {
+    StatisticDTO result = const StatisticDTO();
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}admin/transactions/statistic?type=${param['type']}&customerSyncId=${param['customerSyncId']}&month=${param['month']}';
+
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        if (data != null) {
+          result = StatisticDTO.fromJson(data);
           return result;
         }
       }

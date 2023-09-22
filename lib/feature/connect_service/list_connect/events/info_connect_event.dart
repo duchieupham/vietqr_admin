@@ -47,3 +47,11 @@ class UpdateMerchantEvent extends InfoConnectEvent {
   @override
   List<Object?> get props => [param];
 }
+
+class GetStatisticEvent extends InfoConnectEvent {
+  final Map<String, dynamic> param;
+  const GetStatisticEvent({required this.param});
+
+  @override
+  List<Object?> get props => [param];
+}

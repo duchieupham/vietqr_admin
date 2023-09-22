@@ -16,6 +16,11 @@ class ApiServiceInfo extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             _buildTemplateInfo('Merchant', dto.merchant),
+            _buildTemplateInfo('Nền tảng', dto.platform),
+            _buildTemplateInfo(
+                'Trạng thái', dto.active == 0 ? 'Không hoạt động' : 'Hoạt động',
+                colorValue:
+                    dto.active == 0 ? AppColor.BLACK : AppColor.BLUE_TEXT),
             _buildTemplateInfo('URL', dto.url),
             _buildTemplateInfo('IP', dto.ip),
             _buildTemplateInfo('Port', dto.port),
@@ -50,7 +55,8 @@ class ApiServiceInfo extends StatelessWidget {
         ));
   }
 
-  Widget _buildTemplateInfo(String title, String value) {
+  Widget _buildTemplateInfo(String title, String value,
+      {Color colorValue = AppColor.BLACK}) {
     return Container(
       height: 48,
       alignment: Alignment.centerLeft,
@@ -70,8 +76,8 @@ class ApiServiceInfo extends StatelessWidget {
           Expanded(
               flex: 4,
               child: SelectableText(
-                value,
-                style: const TextStyle(fontSize: 12),
+                value.isEmpty ? '-' : value,
+                style: TextStyle(fontSize: 12, color: colorValue),
               )),
         ],
       ),

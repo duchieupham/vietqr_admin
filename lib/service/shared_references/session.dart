@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vietqr_admin/models/connect.dto.dart';
 
 class Session {
   static final Session _singleton = Session._privateConstructor();
@@ -27,5 +28,11 @@ class Session {
 
   void updateTransactionId(String value) {
     _transactionId = value;
+  }
+
+  ConnectDTO _connectDTO = const ConnectDTO();
+  ConnectDTO get connectDTO => _connectDTO;
+  void updateConnectDTO(ConnectDTO value) {
+    _connectDTO = value;
   }
 }

@@ -127,8 +127,9 @@ class TransactionDetailScreen extends StatelessWidget {
                 ),
               ),
               _buildItemTemplate(
-                  'Số tài khoản', transactionDetailDTO.bankAccount,
-                  colorValue: transactionDetailDTO.getAmountColor()),
+                'Số tài khoản',
+                transactionDetailDTO.bankAccount,
+              ),
               _buildItemTemplate(
                   'Chủ tải khoản', transactionDetailDTO.userBankName),
               _buildItemTemplate('Trạng thái',
@@ -137,7 +138,10 @@ class TransactionDetailScreen extends StatelessWidget {
                       ? AppColor.BLUE_TEXT
                       : AppColor.BLACK),
               _buildItemTemplate(
-                  'Đồng bộ', 'Luồng ${transactionDetailDTO.flow}',
+                  'Đồng bộ',
+                  transactionDetailDTO.flow == 0
+                      ? 'Chưa đồng bộ Merchant'
+                      : 'Luồng ${transactionDetailDTO.flow}',
                   colorValue: AppColor.BLUE_TEXT),
               const SizedBox(
                 height: 40,
@@ -176,72 +180,74 @@ class TransactionDetailScreen extends StatelessWidget {
   }
 
   Widget _buildItemLog(TransactionLogDTO dto) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: dto.status == 'SUCCESS'
-              ? AppColor.BLUE_TEXT.withOpacity(0.3)
-              : AppColor.RED_TEXT.withOpacity(0.3)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Text(
-                'URL callback: ',
-                style: TextStyle(fontSize: 12),
-              ),
-              Expanded(
-                  child: Text(
-                dto.urlCallback,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColor.BLUE_TEXT,
-                    decoration: TextDecoration.underline),
-              ))
-            ],
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Row(
-            children: [
-              const Text(
-                'Trạng thái: ',
-                style: TextStyle(fontSize: 12),
-              ),
-              Text(
-                dto.status == 'SUCCESS' ? 'Thành công' : 'Thất bại',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    fontSize: 12,
-                    color: dto.status == 'SUCCESS'
-                        ? AppColor.BLUE_TEXT
-                        : AppColor.RED_TEXT,
-                    fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            'Thời gian: ${TimeUtils.instance.formatTimeDateFromInt(dto.time)}',
-            style: const TextStyle(
-              fontSize: 12,
+    return SelectionArea(
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: dto.status == 'SUCCESS'
+                ? AppColor.BLUE_TEXT.withOpacity(0.3)
+                : AppColor.RED_TEXT.withOpacity(0.3)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Text(
+                  'URL callback: ',
+                  style: TextStyle(fontSize: 12),
+                ),
+                Expanded(
+                    child: Text(
+                  dto.urlCallback,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColor.BLUE_TEXT,
+                      decoration: TextDecoration.underline),
+                ))
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text('Thời gian: ${dto.message}',
+            const SizedBox(
+              height: 4,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Trạng thái: ',
+                  style: TextStyle(fontSize: 12),
+                ),
+                Text(
+                  dto.status == 'SUCCESS' ? 'Thành công' : 'Thất bại',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: dto.status == 'SUCCESS'
+                          ? AppColor.BLUE_TEXT
+                          : AppColor.RED_TEXT,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(
+              'Thời gian: ${TimeUtils.instance.formatTimeDateFromInt(dto.time.toString().length >= 13 ? dto.time / 1000 : dto.time)}',
               style: const TextStyle(
                 fontSize: 12,
-              )),
-        ],
+              ),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text('Mô tả: ${dto.message}',
+                style: const TextStyle(
+                  fontSize: 12,
+                )),
+          ],
+        ),
       ),
     );
   }
@@ -264,7 +270,7 @@ class TransactionDetailScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-              child: SelectableText(value,
+              child: SelectableText(value.isEmpty ? '-' : value,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 12, color: colorValue))),
           logo
