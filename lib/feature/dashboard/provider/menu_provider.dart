@@ -4,7 +4,7 @@ import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 
 class MenuProvider with ChangeNotifier {
-  int _environment = Numeral.ENV_TEST;
+  int _environment = Numeral.ENV_GO_LIVE;
 
   int get environment => _environment;
 

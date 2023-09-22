@@ -9,7 +9,7 @@ class EnvConfig {
   static const EnvConfig _instance = EnvConfig._privateConstructor();
 
   static EnvConfig get instance => _instance;
-  static EnvType _currentEnv = EnvType.DEV;
+  static EnvType _currentEnv = EnvType.GOLIVE;
 
   static EnvType get currentEnv => _currentEnv;
 

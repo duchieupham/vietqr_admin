@@ -38,7 +38,9 @@ class _UpdateMerchantPopupState extends State<UpdateMerchantPopup> {
   TextEditingController suffixEditingCtl = TextEditingController();
   TextEditingController userNameEditingCtl = TextEditingController();
   TextEditingController passEditingCtl = TextEditingController();
-
+  TextEditingController sdtEditingCtl = TextEditingController();
+  TextEditingController emailEditingCtl = TextEditingController();
+  TextEditingController nameEditingCtl = TextEditingController();
   @override
   void initState() {
     infoConnectBloc = InfoConnectBloc()
@@ -84,13 +86,11 @@ class _UpdateMerchantPopupState extends State<UpdateMerchantPopup> {
                 passEditingCtl.text = apiServiceDTO.customerPassword;
               }
               if (state is InfoEcomerceDTOConnectSuccessfulState) {
-                // ecomerceDTO = state.dto;
-                // urlEditingCtl.text = ecomerceDTO.url;
-                // ipEditingCtl.text = ecomerceDTO.ip;
-                // portEditingCtl.text = ecomerceDTO.port;
-                // suffixEditingCtl.text = ecomerceDTO.suffix;
-                // userNameEditingCtl.text = ecomerceDTO.customerUsername;
-                // passEditingCtl.text = ecomerceDTO.customerPassword;
+                ecomerceDTO = state.dto;
+                urlEditingCtl.text = ecomerceDTO.url;
+                sdtEditingCtl.text = ecomerceDTO.phoneNo;
+                emailEditingCtl.text = ecomerceDTO.email;
+                nameEditingCtl.text = ecomerceDTO.getFullName();
               }
             }, builder: (context, state) {
               return ChangeNotifierProvider<ConnectInfoProvider>(
@@ -110,67 +110,103 @@ class _UpdateMerchantPopupState extends State<UpdateMerchantPopup> {
                     const SizedBox(
                       height: 8,
                     ),
-                    _buildTemplateInfo('IP',
-                        child: TextField(
-                          style: const TextStyle(fontSize: 12),
-                          controller: ipEditingCtl,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    _buildTemplateInfo('PORT',
-                        child: TextField(
-                          style: const TextStyle(fontSize: 12),
-                          controller: portEditingCtl,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    _buildTemplateInfo('Suffix',
-                        child: TextField(
-                          style: const TextStyle(fontSize: 12),
-                          controller: suffixEditingCtl,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Text(
-                      'Basic Authentication',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    _buildTemplateInfo('Username*',
-                        child: TextField(
-                          style: const TextStyle(fontSize: 12),
-                          controller: userNameEditingCtl,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                        )),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Consumer<ConnectInfoProvider>(
-                        builder: (context, provider, child) {
-                      return _buildTemplateInfoPass(
-                          'Password',
-                          passEditingCtl.text,
-                          provider.showPassUser, onShow: () {
-                        provider.updateShowPassUser(!provider.showPassUser);
-                      });
-                    }),
+                    if (ecomerceDTO.id.isNotEmpty) ...[
+                      _buildTemplateInfo('Số điện thoại',
+                          child: TextField(
+                            readOnly: true,
+                            style: const TextStyle(fontSize: 12),
+                            controller: sdtEditingCtl,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _buildTemplateInfo('Email',
+                          child: TextField(
+                            readOnly: true,
+                            style: const TextStyle(fontSize: 12),
+                            controller: emailEditingCtl,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _buildTemplateInfo('Họ tên',
+                          child: TextField(
+                            style: const TextStyle(fontSize: 12),
+                            readOnly: true,
+                            controller: nameEditingCtl,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                    ] else ...[
+                      _buildTemplateInfo('IP',
+                          child: TextField(
+                            style: const TextStyle(fontSize: 12),
+                            controller: ipEditingCtl,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _buildTemplateInfo('PORT',
+                          child: TextField(
+                            style: const TextStyle(fontSize: 12),
+                            controller: portEditingCtl,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      _buildTemplateInfo('Suffix',
+                          child: TextField(
+                            style: const TextStyle(fontSize: 12),
+                            controller: suffixEditingCtl,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text(
+                        'Basic Authentication',
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      _buildTemplateInfo('Username*',
+                          child: TextField(
+                            style: const TextStyle(fontSize: 12),
+                            controller: userNameEditingCtl,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Consumer<ConnectInfoProvider>(
+                          builder: (context, provider, child) {
+                        return _buildTemplateInfoPass(
+                            'Password',
+                            passEditingCtl.text,
+                            provider.showPassUser, onShow: () {
+                          provider.updateShowPassUser(!provider.showPassUser);
+                        });
+                      }),
+                    ],
                   ],
                 )),
               );
@@ -183,13 +219,17 @@ class _UpdateMerchantPopupState extends State<UpdateMerchantPopup> {
               bgColor: AppColor.BLUE_TEXT,
               function: () {
                 Map<String, dynamic> param = {};
+
                 param['url'] = urlEditingCtl.text;
-                param['ip'] = ipEditingCtl.text;
-                param['port'] = portEditingCtl.text;
-                param['suffix'] = suffixEditingCtl.text;
-                param['username'] = userNameEditingCtl.text;
-                param['customerSyncId'] = widget.dto.id;
-                param['password'] = passEditingCtl.text;
+                if (apiServiceDTO.id.isNotEmpty) {
+                  param['ip'] = ipEditingCtl.text;
+                  param['port'] = portEditingCtl.text;
+                  param['suffix'] = suffixEditingCtl.text;
+                  param['username'] = userNameEditingCtl.text;
+                  param['customerSyncId'] = widget.dto.id;
+                  param['password'] = passEditingCtl.text;
+                }
+
                 infoConnectBloc.add(UpdateMerchantEvent(param: param));
               },
             ),
