@@ -9,6 +9,7 @@ enum MenuType {
   TRANSACTION,
   LOG,
   VNPT_EPAY,
+  SERVICE_PACK,
   LOGOUT,
   OTHER,
 }

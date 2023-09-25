@@ -12,14 +12,18 @@ class EcomerceInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ConnectInfoProvider>(
         create: (context) => ConnectInfoProvider(),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            _buildTemplateInfo('URL', dto.url),
-            _buildTemplateInfo('Số điện thoại', dto.phoneNo),
-            _buildTemplateInfo('Email', dto.email),
-            _buildTemplateInfo('Họ tên', dto.getFullName()),
-          ],
+        child: SelectionArea(
+          child: Builder(builder: (context) {
+            return ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _buildTemplateInfo('URL', dto.url),
+                _buildTemplateInfo('Số điện thoại', dto.phoneNo),
+                _buildTemplateInfo('Email', dto.email),
+                _buildTemplateInfo('Họ tên', dto.getFullName()),
+              ],
+            );
+          }),
         ));
   }
 
@@ -43,7 +47,7 @@ class EcomerceInfo extends StatelessWidget {
           Expanded(
               flex: 4,
               child: Text(
-                value.isEmpty ?'-': value ,
+                value.isEmpty ? '-' : value,
                 style: const TextStyle(fontSize: 12),
                 overflow: TextOverflow.ellipsis,
               )),

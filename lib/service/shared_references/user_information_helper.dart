@@ -12,7 +12,7 @@ class UserInformationHelper {
 
   Future<void> initialUserInformationHelper() async {
     const AccountInformationDTO accountInformationDTO = AccountInformationDTO();
-    await sharedPrefs.setString('USER_ID', '');
+    await sharedPrefs.setString('ADMIN_ID', '');
     await sharedPrefs.setString('PHONE_NO', '');
     await sharedPrefs.setString(
         'ACCOUNT_INFORMATION', accountInformationDTO.toDataString().toString());

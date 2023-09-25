@@ -89,10 +89,12 @@ class MenuProvider with ChangeNotifier {
       initMenuPage = 4;
     } else if (value == MenuType.TRANSACTION) {
       initMenuPage = 5;
-    } else if (value == MenuType.LOG) {
+    } else if (value == MenuType.SERVICE_PACK) {
       initMenuPage = 6;
-    } else if (value == MenuType.VNPT_EPAY) {
+    } else if (value == MenuType.LOG) {
       initMenuPage = 7;
+    } else if (value == MenuType.VNPT_EPAY) {
+      initMenuPage = 8;
     }
   }
 }

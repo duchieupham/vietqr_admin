@@ -103,6 +103,14 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
+                title: 'Gói dịch vụ',
+                isSelect: provider.menuHomeType == MenuType.SERVICE_PACK,
+                onTap: () {
+                  onTab(MenuType.SERVICE_PACK);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
                 title: 'Log',
                 isSelect: provider.menuHomeType == MenuType.LOG,
                 onTap: () {

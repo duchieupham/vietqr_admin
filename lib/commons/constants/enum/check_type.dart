@@ -43,3 +43,24 @@ extension TypeMemberExt on TypeAddMember {
     }
   }
 }
+
+enum HomeType {
+  NONE,
+  TOKEN,
+  GET_LIST,
+  UPLOAD,
+  ERROR,
+}
+
+enum TokenType {
+  NONE,
+  InValid,
+  Valid,
+  MainSystem,
+  Internet,
+  Expired,
+  Logout,
+  Logout_failed,
+  Fcm_success,
+  Fcm_failed,
+}

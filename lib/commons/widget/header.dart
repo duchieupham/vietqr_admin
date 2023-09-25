@@ -59,6 +59,9 @@ class Header extends StatelessWidget {
                         if (menuTyoe == MenuType.TRANSACTION) {
                           eventBus.fire(RefreshTransaction());
                         }
+                        if (menuTyoe == MenuType.SERVICE_PACK) {
+                          eventBus.fire(RefreshServicePackList());
+                        }
                       },
                       child: Container(
                         height: 30,
@@ -110,6 +113,9 @@ class Header extends StatelessWidget {
                         if (type == MenuType.LOG) {
                           eventBus.fire(RefreshLog(envGoLive: true));
                           // eventBus.fire(ResetDateLog());
+                        }
+                        if (type == MenuType.SERVICE_PACK) {
+                          eventBus.fire(RefreshServicePackList());
                         }
                       },
                       child: Container(

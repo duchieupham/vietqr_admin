@@ -18,3 +18,7 @@ class ResetDateLog {
 class RefreshTransaction {
   RefreshTransaction();
 }
+
+class RefreshServicePackList {
+  RefreshServicePackList();
+}
