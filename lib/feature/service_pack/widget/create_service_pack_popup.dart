@@ -127,7 +127,7 @@ class _CreateServicePackPopupState extends State<CreateServicePackPopup> {
         Row(
           children: [
             Expanded(
-              child: _buildTemplateInput('Gói',
+              child: _buildTemplateInput('Mã gói',
                   controller: provider.packCodeCtrl,
                   hintText: 'Ví dụ VIETQR_1',
                   onChange: (value) {}),
@@ -137,9 +137,9 @@ class _CreateServicePackPopupState extends State<CreateServicePackPopup> {
             ),
             Expanded(
               flex: 2,
-              child: _buildTemplateInput('Tên gói',
+              child: _buildTemplateInput('Mô tả ngắn',
                   controller: provider.packNameCtrl,
-                  hintText: 'Nhập tên gói',
+                  hintText: 'Nhập mô tả',
                   onChange: (value) {}),
             ),
           ],

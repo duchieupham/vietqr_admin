@@ -133,7 +133,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12),
             child: Text(
-              'Gói',
+              'Mã gói',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -144,7 +144,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Tên gói',
+              'Mô tả ngắn',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -331,7 +331,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: _buildTemplateInput(
-                        hintText: 'Nhập tên gói',
+                        hintText: 'Nhập mô tả',
                         controller: provider.packNameCtrl,
                       ),
                     ),
@@ -611,7 +611,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top: 12, left: 20),
               child: SelectableText(
-                '${dto.percentFee}%',
+                '${dto.vat}%',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -677,7 +677,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
           const Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Gói dịch vụ',
+              'Bảng giá',
               style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -697,14 +697,14 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
             child: Container(
               margin: const EdgeInsets.only(top: 8, bottom: 8, left: 16),
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              width: 120,
+              width: 180,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: AppColor.BLUE_TEXT,
                 borderRadius: BorderRadius.circular(5),
               ),
               child: const Text(
-                'Tạo gói mới',
+                'Tạo bảng giá mới',
                 style: TextStyle(fontSize: 12, color: AppColor.WHITE),
               ),
             ),

@@ -86,7 +86,7 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                title: 'Gói dịch vụ',
+                title: 'Thiết lập bảng giá',
                 isSelect: provider.menuHomeType == MenuType.SERVICE_PACK,
                 onTap: () {
                   onTab(MenuType.SERVICE_PACK);

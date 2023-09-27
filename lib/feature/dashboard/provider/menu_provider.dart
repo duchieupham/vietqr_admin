@@ -56,6 +56,12 @@ class MenuProvider with ChangeNotifier {
       case SubMenuType.RUN_CALLBACK:
         _initPage = 2;
         break;
+      case SubMenuType.ACTIVE_FEE:
+        _initPage = 3;
+        break;
+      case SubMenuType.ANNUAL_FEE:
+        _initPage = 4;
+        break;
       default:
         _initPage = 0;
         break;
