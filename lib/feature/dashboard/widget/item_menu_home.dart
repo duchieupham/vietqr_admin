@@ -68,8 +68,7 @@ class _ItemMenuState extends State<ItemMenu> {
                     Text(
                       widget.title,
                       style: TextStyle(
-                          fontSize: widget.titleSize,
-                          color: AppColor.RED_TEXT),
+                          fontSize: widget.titleSize, color: AppColor.RED_TEXT),
                     )
                   else
                     Text(

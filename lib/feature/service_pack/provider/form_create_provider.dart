@@ -15,7 +15,7 @@ class FormCreateProvider with ChangeNotifier {
   TextEditingController monthlyCycleCtrl = TextEditingController();
   TextEditingController transFeeCtrl = TextEditingController();
   TextEditingController percentFeeCtrl = TextEditingController();
-
+  TextEditingController vatCtrl = TextEditingController();
   TextEditingController desCtrl = TextEditingController();
 
   void updateTypeGd(GDItem value) {
@@ -47,6 +47,7 @@ class FormCreateProvider with ChangeNotifier {
     transFeeCtrl.clear();
     percentFeeCtrl.clear();
     desCtrl.clear();
+    vatCtrl.clear();
     _typeGD = const GDItem(title: 'Tất cả', id: 0);
     notifyListeners();
   }

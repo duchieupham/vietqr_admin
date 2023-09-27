@@ -26,7 +26,13 @@ class ServicePackGetListSuccessState extends ServicePackState {
   List<Object?> get props => [result];
 }
 
-class ServicePackInsertSuccessState extends ServicePackState {}
+class ServicePackInsertSuccessState extends ServicePackState {
+  final String servicePackId;
+
+  const ServicePackInsertSuccessState({required this.servicePackId});
+  @override
+  List<Object?> get props => [servicePackId];
+}
 
 class ServicePackInsertFailsState extends ServicePackState {
   final ResponseMessageDTO dto;

@@ -56,6 +56,44 @@ class MenuLeft extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: [
               ItemMenu(
+                title: 'VNPT Epay',
+                isSelect: provider.menuHomeType == MenuType.VNPT_EPAY,
+                onTap: () {
+                  onTab(MenuType.VNPT_EPAY);
+                },
+              ),
+              ItemMenu(
+                title: 'Merchant',
+                isSelect: provider.menuHomeType == MenuType.SERVICE_CONNECT,
+                onTap: () {
+                  onTab(MenuType.SERVICE_CONNECT);
+                },
+              ),
+              ItemMenu(
+                title: 'Giao dịch',
+                isSelect: provider.menuHomeType == MenuType.TRANSACTION,
+                onTap: () {
+                  onTab(MenuType.TRANSACTION);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
+                title: 'Log',
+                isSelect: provider.menuHomeType == MenuType.LOG,
+                onTap: () {
+                  onTab(MenuType.LOG);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
+                title: 'Gói dịch vụ',
+                isSelect: provider.menuHomeType == MenuType.SERVICE_PACK,
+                onTap: () {
+                  onTab(MenuType.SERVICE_PACK);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
                 title: 'Người dùng',
                 isSelect: provider.menuHomeType == MenuType.USER,
                 onTap: () {
@@ -72,13 +110,6 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                title: 'Merchant',
-                isSelect: provider.menuHomeType == MenuType.SERVICE_CONNECT,
-                onTap: () {
-                  onTab(MenuType.SERVICE_CONNECT);
-                },
-              ),
-              ItemMenu(
                 title: 'Thông báo đẩy',
                 isSelect: provider.menuHomeType == MenuType.PUSH_NOTIFICATION,
                 onTap: () {
@@ -92,37 +123,6 @@ class MenuLeft extends StatelessWidget {
                 onTap: () {
                   onTab(MenuType.POST);
                   closeMenuLink();
-                },
-              ),
-              ItemMenu(
-                title: 'Giao dịch',
-                isSelect: provider.menuHomeType == MenuType.TRANSACTION,
-                onTap: () {
-                  onTab(MenuType.TRANSACTION);
-                  closeMenuLink();
-                },
-              ),
-              ItemMenu(
-                title: 'Gói dịch vụ',
-                isSelect: provider.menuHomeType == MenuType.SERVICE_PACK,
-                onTap: () {
-                  onTab(MenuType.SERVICE_PACK);
-                  closeMenuLink();
-                },
-              ),
-              ItemMenu(
-                title: 'Log',
-                isSelect: provider.menuHomeType == MenuType.LOG,
-                onTap: () {
-                  onTab(MenuType.LOG);
-                  closeMenuLink();
-                },
-              ),
-              ItemMenu(
-                title: 'VNPT Epay',
-                isSelect: provider.menuHomeType == MenuType.VNPT_EPAY,
-                onTap: () {
-                  onTab(MenuType.VNPT_EPAY);
                 },
               ),
             ],

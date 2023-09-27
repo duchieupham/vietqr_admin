@@ -19,6 +19,8 @@ enum SubMenuType {
   NEW_CONNECT,
   RUN_CALLBACK,
   SURPLUS,
+  ACTIVE_FEE,
+  ANNUAL_FEE,
   OTHER,
 }
 
@@ -32,6 +34,10 @@ extension PageSubMenu on SubMenuType {
         return 1;
       case SubMenuType.RUN_CALLBACK:
         return 2;
+      case SubMenuType.ACTIVE_FEE:
+        return 3;
+      case SubMenuType.ANNUAL_FEE:
+        return 4;
       default:
         return 0;
     }

@@ -463,7 +463,7 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
           : (index == 3)
               ? 2
               : 3,
-      child: GestureDetector(
+      child: InkWell(
         onTap: onTap,
         child: Container(
           alignment: index == 0 ? Alignment.centerLeft : Alignment.center,

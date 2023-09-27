@@ -160,7 +160,8 @@ class DialogWidget {
       {required String title,
       required String msg,
       VoidCallback? function,
-      BuildContext? context}) {
+      BuildContext? context,
+      bool isSuccess = false}) {
     return showDialog(
         barrierDismissible: false,
         context: context ?? NavigationService.navigatorKey.currentContext!,
@@ -185,7 +186,9 @@ class DialogWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/images/ic-warning.png',
+                    isSuccess
+                        ? 'assets/images/ic-viet-qr.png'
+                        : 'assets/images/ic-warning.png',
                     width: 80,
                     height: 80,
                   ),

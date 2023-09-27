@@ -29,6 +29,7 @@ class SubServicePackDTO {
   final bool active;
   final String refId;
   final String id;
+  final double vat;
   final int countingTransType;
   const SubServicePackDTO(
       {this.name = '',
@@ -43,7 +44,8 @@ class SubServicePackDTO {
       this.active = false,
       this.id = '',
       this.transFee = 0,
-      this.countingTransType = 0});
+      this.countingTransType = 0,
+      this.vat = 0.0});
 
   factory SubServicePackDTO.fromJson(Map<String, dynamic> json) {
     return SubServicePackDTO(
@@ -53,6 +55,7 @@ class SubServicePackDTO {
       annualFee: json['annualFee'] ?? 0,
       monthlyCycle: json['monthlyCycle'] ?? 0,
       percentFee: json['percentFee'] ?? 0.0,
+      vat: json['vat'] ?? 0.0,
       refId: json['refId'] ?? '',
       shortName: json['shortName'] ?? '',
       sub: json['sub'] ?? false,

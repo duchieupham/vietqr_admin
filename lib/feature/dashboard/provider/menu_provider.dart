@@ -13,11 +13,11 @@ class MenuProvider with ChangeNotifier {
 
   int get initPage => _initPage;
 
-  bool _isShowMenuLink = false;
+  bool _isShowMenuLink = true;
 
   bool get showMenuLink => _isShowMenuLink;
 
-  MenuType _menuHomeType = MenuType.USER;
+  MenuType _menuHomeType = MenuType.VNPT_EPAY;
 
   MenuType get menuHomeType => _menuHomeType;
 
@@ -77,23 +77,23 @@ class MenuProvider with ChangeNotifier {
   }
 
   void changePage(MenuType value) {
-    if (value == MenuType.USER) {
+    if (value == MenuType.VNPT_EPAY) {
       initMenuPage = 0;
-    } else if (value == MenuType.ACCOUNT_BANK) {
-      initMenuPage = 1;
     } else if (value == MenuType.SERVICE_CONNECT) {
-      initMenuPage = 2;
-    } else if (value == MenuType.PUSH_NOTIFICATION) {
-      initMenuPage = 3;
-    } else if (value == MenuType.POST) {
-      initMenuPage = 4;
+      initMenuPage = 1;
     } else if (value == MenuType.TRANSACTION) {
-      initMenuPage = 5;
-    } else if (value == MenuType.SERVICE_PACK) {
-      initMenuPage = 6;
+      initMenuPage = 2;
     } else if (value == MenuType.LOG) {
+      initMenuPage = 3;
+    } else if (value == MenuType.SERVICE_PACK) {
+      initMenuPage = 4;
+    } else if (value == MenuType.ACCOUNT_BANK) {
+      initMenuPage = 5;
+    } else if (value == MenuType.POST) {
+      initMenuPage = 6;
+    } else if (value == MenuType.PUSH_NOTIFICATION) {
       initMenuPage = 7;
-    } else if (value == MenuType.VNPT_EPAY) {
+    } else if (value == MenuType.USER) {
       initMenuPage = 8;
     }
   }

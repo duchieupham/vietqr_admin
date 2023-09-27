@@ -41,7 +41,8 @@ void _insertServicePack(ServicePackEvent event, Emitter emit) async {
       result = await servicePackRepository.insertServicePack(event.param);
 
       if (result.status == 'SUCCESS') {
-        emit(ServicePackInsertSuccessState());
+        emit(
+            ServicePackInsertSuccessState(servicePackId: event.param['refId']));
       } else {
         emit(ServicePackInsertFailsState(dto: result));
       }

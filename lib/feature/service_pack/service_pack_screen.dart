@@ -66,7 +66,13 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
               }
               if (state is ServicePackInsertSuccessState) {
                 Navigator.pop(context);
+
+                provider.showFromInsert(state.servicePackId);
                 _bloc.add(const ServicePackGetListEvent());
+                DialogWidget.instance.openMsgDialog(
+                    title: 'Thành công',
+                    msg: 'Tạo gói nhỏ thành công',
+                    isSuccess: true);
               }
               if (state is ServicePackInsertFailsState) {
                 Navigator.pop(context);
@@ -160,7 +166,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Phí thường niên',
+              'Phí thuê bao',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -199,22 +205,34 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
             ),
           ),
         ),
-        Expanded(
-          flex: 2,
+        SizedBox(
+          width: 100,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Mô tả',
+              'Thuế(VAT)',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 135,
+          child: Padding(
+            padding: EdgeInsets.only(top: 12, left: 20),
+            child: Text(
+              'Ghi nhận GD',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
           ),
         ),
         Expanded(
+          flex: 2,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Ghi nhận GD',
+              'Mô tả',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -376,13 +394,13 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
+                  SizedBox(
+                    width: 100,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: _buildTemplateInput(
-                        hintText: 'Nhập mô tả',
-                        controller: provider.desCtrl,
+                        hintText: 'Nhập thuế',
+                        controller: provider.vatCtrl,
                       ),
                     ),
                   ),
@@ -428,6 +446,16 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                       ),
                     ),
                   ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: _buildTemplateInput(
+                        hintText: 'Nhập mô tả',
+                        controller: provider.desCtrl,
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     width: 120,
                     child: Padding(
@@ -466,6 +494,12 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                               param['percentFee'] = percentFee;
                             }
 
+                            String vat = provider.vatCtrl.text;
+                            if (percentFee.contains(',')) {
+                              param['vat'] = vat.replaceAll(',', '.');
+                            } else {
+                              param['vat'] = vat.isEmpty ? '0' : vat;
+                            }
                             _bloc.add(InsertServicePackEvent(param: param));
                           } else {
                             DialogWidget.instance.openMsgDialog(
@@ -572,12 +606,12 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
+          SizedBox(
+            width: 100,
             child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 12),
+              padding: const EdgeInsets.only(top: 12, left: 20),
               child: SelectableText(
-                dto.description.isNotEmpty ? dto.description : '-',
+                '${dto.percentFee}%',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -594,6 +628,17 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
               ),
             ),
           ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, left: 12),
+              child: SelectableText(
+                dto.description.isNotEmpty ? dto.description : '-',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
           SizedBox(
             width: 120,
             child: Padding(
@@ -602,7 +647,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                   ? const SizedBox.shrink()
                   : InkWell(
                       onTap: () {
-                        provider.showFromInsert(dto);
+                        provider.showFromInsert(dto.id);
                       },
                       child: Text(
                         provider!.checkShowFromInsert(dto)

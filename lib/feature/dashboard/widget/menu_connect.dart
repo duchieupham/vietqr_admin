@@ -18,7 +18,7 @@ class MenuConnect extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.centerLeft,
           child: const Text(
-            'Dịch vụ kết nối API',
+            'Merchant',
             style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ class MenuConnect extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ItemMenu(
-              title: 'Danh sách kết nối',
+              title: 'Danh sách Merchant',
               isSelect:
                   provider.initPage == SubMenuType.LIST_CONNECT.pageNumber,
               onTap: () {
@@ -61,6 +61,22 @@ class MenuConnect extends StatelessWidget {
                   provider.initPage == SubMenuType.RUN_CALLBACK.pageNumber,
               onTap: () {
                 provider.selectSubMenu(SubMenuType.RUN_CALLBACK);
+                // provider.updateShowMenuLink(false);
+              },
+            ),
+            ItemMenu(
+              title: 'Phí dịch vụ',
+              isSelect: provider.initPage == SubMenuType.ACTIVE_FEE.pageNumber,
+              onTap: () {
+                provider.selectSubMenu(SubMenuType.ACTIVE_FEE);
+                // provider.updateShowMenuLink(false);
+              },
+            ),
+            ItemMenu(
+              title: 'Phí thuê bao',
+              isSelect: provider.initPage == SubMenuType.ANNUAL_FEE.pageNumber,
+              onTap: () {
+                provider.selectSubMenu(SubMenuType.ANNUAL_FEE);
                 // provider.updateShowMenuLink(false);
               },
             ),

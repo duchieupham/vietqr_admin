@@ -91,9 +91,9 @@ class ServicePackProvider with ChangeNotifier {
     return false;
   }
 
-  showFromInsert(SubServicePackDTO item) {
+  showFromInsert(String itemId) {
     for (Map<String, dynamic> value in _itemHasFormInsert) {
-      if (value['itemId'] == item.id) {
+      if (value['itemId'] == itemId) {
         value['showFormInsert'] = !value['showFormInsert'];
       }
     }

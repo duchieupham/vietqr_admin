@@ -91,7 +91,12 @@ class _CreateServicePackPopupState extends State<CreateServicePackPopup> {
                         } else {
                           param['percentFee'] = percentFee;
                         }
-
+                        String vat = provider.vatCtrl.text;
+                        if (vat.contains(',')) {
+                          param['vat'] = vat.replaceAll(',', '.');
+                        } else {
+                          param['vat'] = vat.isEmpty ? '0' : vat;
+                        }
                         bloc.add(InsertServicePackEvent(param: param));
                       } else {
                         DialogWidget.instance.openMsgDialog(
@@ -188,6 +193,15 @@ class _CreateServicePackPopupState extends State<CreateServicePackPopup> {
           'Phần trăm phí/Tổng tiền GD',
           onChange: (value) {},
           controller: provider.percentFeeCtrl,
+          until: '%',
+        ),
+        const SizedBox(
+          height: 12,
+        ),
+        _buildTemplateInput(
+          'Thuế(VAT)',
+          onChange: (value) {},
+          controller: provider.vatCtrl,
           until: '%',
         ),
         const SizedBox(
