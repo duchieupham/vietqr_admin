@@ -158,8 +158,8 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                         provider.bankAccountDTO,
                         state.isLoadMore),
                   ),
-                  _buildLogRunCallback(
-                      state.msg, provider.callBackDTO, state.request),
+                  _buildLogRunCallback(state.msg, provider.callBackDTO,
+                      state.runCallBackSuccess),
                 ],
               ),
             );
@@ -463,30 +463,41 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
           : (index == 3)
               ? 2
               : 3,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          alignment: index == 0 ? Alignment.centerLeft : Alignment.center,
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          child: SelectableText(
-            title,
-            style: TextStyle(
-              color: isRunCallback ? AppColor.BLUE_TEXT : AppColor.BLACK,
-              fontSize: 13,
-              decoration: isRunCallback
-                  ? TextDecoration.underline
-                  : TextDecoration.none,
+      child: isRunCallback
+          ? InkWell(
+              onTap: onTap,
+              child: Container(
+                alignment: index == 0 ? Alignment.centerLeft : Alignment.center,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppColor.BLUE_TEXT,
+                    fontSize: 13,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            )
+          : Container(
+              alignment: index == 0 ? Alignment.centerLeft : Alignment.center,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              child: SelectableText(
+                title,
+                style: const TextStyle(
+                  color: AppColor.BLACK,
+                  fontSize: 13,
+                  decoration: TextDecoration.none,
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
   Widget _buildLogRunCallback(
     String? msg,
     CallBackDTO dto,
-    CallBackType type,
+    int statusRunCallBack,
   ) {
     return Container(
       padding: const EdgeInsets.only(right: 16.0),
@@ -521,15 +532,17 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
               children: [
                 const Text('Trạng thái:'),
                 const SizedBox(height: 4),
-                if (type == CallBackType.RUN_CALLBACK)
+                if (statusRunCallBack == 1)
                   const Text(
                     'SUCCESS',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, color: AppColor.BLUE_TEXT),
                   )
-                else if (type == CallBackType.RUN_ERROR)
+                else if (statusRunCallBack == 0)
                   const Text(
                     'FAILED',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, color: AppColor.RED_TEXT),
                   )
                 else
                   const Text(''),

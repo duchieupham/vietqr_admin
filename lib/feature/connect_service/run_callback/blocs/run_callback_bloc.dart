@@ -217,12 +217,16 @@ class RunCallbackBloc extends Bloc<CallbackEvent, RunCallbackState> {
 
       if (result.status == Stringify.RESPONSE_STATUS_SUCCESS) {
         emit(state.copyWith(
-            status: BlocStatus.UNLOADING, request: CallBackType.RUN_CALLBACK));
+            status: BlocStatus.UNLOADING,
+            request: CallBackType.RUN_CALLBACK,
+            runCallBackSuccess: 1,
+            msgRunCallBack: result.status));
       } else {
         emit(
           state.copyWith(
               status: BlocStatus.UNLOADING,
               request: CallBackType.RUN_ERROR,
+              runCallBackSuccess: 0,
               msg: result.message),
         );
       }

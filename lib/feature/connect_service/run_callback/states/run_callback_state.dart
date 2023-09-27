@@ -4,7 +4,6 @@ import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/callback_dto.dart';
 import 'package:vietqr_admin/models/customer_dto.dart';
-import 'package:vietqr_admin/models/ecomerce_dto.dart';
 
 class RunCallbackState extends Equatable {
   final BlocStatus status;
@@ -15,19 +14,23 @@ class RunCallbackState extends Equatable {
   final List<BankAccountDTO> listBankAccount;
   final ApiServiceDTO? apiServiceDTO;
   final bool isLoadMore;
+  final int runCallBackSuccess;
+  final String msgRunCallBack;
+
   final int offset;
 
-  const RunCallbackState({
-    this.status = BlocStatus.NONE,
-    this.msg,
-    this.request = CallBackType.NONE,
-    required this.listTrans,
-    required this.listCustomers,
-    required this.listBankAccount,
-    this.apiServiceDTO,
-    this.isLoadMore = false,
-    this.offset = 0,
-  });
+  const RunCallbackState(
+      {this.status = BlocStatus.NONE,
+      this.msg,
+      this.request = CallBackType.NONE,
+      required this.listTrans,
+      required this.listCustomers,
+      required this.listBankAccount,
+      this.apiServiceDTO,
+      this.isLoadMore = false,
+      this.offset = 0,
+      this.runCallBackSuccess = 2,
+      this.msgRunCallBack = ''});
 
   RunCallbackState copyWith({
     BlocStatus? status,
@@ -38,6 +41,8 @@ class RunCallbackState extends Equatable {
     List<BankAccountDTO>? listBankAccount,
     ApiServiceDTO? apiServiceDTO,
     bool? isLoadMore,
+    int? runCallBackSuccess,
+    String? msgRunCallBack,
     int? offset,
   }) {
     return RunCallbackState(
@@ -49,6 +54,8 @@ class RunCallbackState extends Equatable {
       listBankAccount: listBankAccount ?? this.listBankAccount,
       apiServiceDTO: apiServiceDTO ?? this.apiServiceDTO,
       isLoadMore: isLoadMore ?? this.isLoadMore,
+      runCallBackSuccess: runCallBackSuccess ?? this.runCallBackSuccess,
+      msgRunCallBack: msgRunCallBack ?? this.msgRunCallBack,
       offset: offset ?? this.offset,
     );
   }
