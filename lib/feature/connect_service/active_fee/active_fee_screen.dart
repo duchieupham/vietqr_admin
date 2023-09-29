@@ -284,11 +284,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                       child: SelectableText(
                         '${index + 1}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: dto.status == 0
-                                ? AppColor.RED_TEXT
-                                : AppColor.BLACK),
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
@@ -299,12 +297,10 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                       child: SelectableText(
                         dto.merchant,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: dto.status == 0
-                                ? AppColor.RED_TEXT
-                                : AppColor.BLACK),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -316,12 +312,10 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                       child: SelectableText(
                         StringUtils.formatNumber(dto.totalPayment.toString()),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: dto.status == 0
-                                ? AppColor.RED_TEXT
-                                : AppColor.BLACK),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -428,9 +422,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             child: SelectableText(
               dto.shortName,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -443,11 +437,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 12,
-                  color: dto.status == 0
-                      ? AppColor.RED_TEXT
-                      : dto.countingTransType == 1
-                          ? AppColor.GREEN
-                          : AppColor.BLACK),
+                  color: dto.countingTransType == 1
+                      ? AppColor.GREEN
+                      : AppColor.BLACK),
             ),
           ),
         ),
@@ -458,9 +450,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             child: SelectableText(
               dto.totalTrans.toString(),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -473,11 +465,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 12,
-                  color: dto.status == 0
-                      ? AppColor.RED_TEXT
-                      : dto.countingTransType == 1
-                          ? AppColor.GREEN
-                          : AppColor.BLACK),
+                  color: dto.countingTransType == 1
+                      ? AppColor.GREEN
+                      : AppColor.BLACK),
             ),
           ),
         ),
@@ -488,9 +478,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             child: SelectableText(
               '${dto.vat}%',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -501,9 +491,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             child: SelectableText(
               StringUtils.formatNumber(dto.discountAmount.toString()),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -514,9 +504,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             child: SelectableText(
               StringUtils.formatNumber(dto.totalPayment.toString()),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -575,105 +565,52 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
               width: 24,
             ),
             if (provider.currentPage == 0) ...[
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColor.GREY_BG,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Lọc theo',
-                      style: TextStyle(fontSize: 11, color: AppColor.GREY_TEXT),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    DropdownButton<FilterActiveFee>(
-                      value: provider.valueFilter,
-                      icon: const RotatedBox(
-                        quarterTurns: 5,
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 12,
-                        ),
+              InkWell(
+                onTap: () async {
+                  final selected = await showMonthYearPicker(
+                    context: context,
+                    initialDate: provider.currentDate,
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime.now(),
+                  );
+                  provider.changeDate(selected!);
+                  String month = TimeUtils.instance.getFormatMonth(selected);
+                  _activeFeeBloc.add(ActiveFeeGetListEvent(month: month));
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColor.GREY_BG,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Tháng',
+                        style:
+                            TextStyle(fontSize: 11, color: AppColor.GREY_TEXT),
                       ),
-                      underline: const SizedBox.shrink(),
-                      onChanged: (FilterActiveFee? value) {
-                        provider.updateFilter(value!);
-                      },
-                      items: provider.listFilter
-                          .map<DropdownMenuItem<FilterActiveFee>>(
-                              (FilterActiveFee value) {
-                        return DropdownMenuItem<FilterActiveFee>(
-                          value: value,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Text(
-                              value.title,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              if (provider.valueFilter.id == 0) ...[
-                const SizedBox(
-                  width: 16,
-                ),
-                InkWell(
-                  onTap: () async {
-                    final selected = await showMonthYearPicker(
-                      context: context,
-                      initialDate: provider.currentDate,
-                      firstDate: DateTime(2022),
-                      lastDate: DateTime.now(),
-                    );
-                    provider.changeDate(selected!);
-                    String month = TimeUtils.instance.getFormatMonth(selected);
-                    _activeFeeBloc.add(ActiveFeeGetListEvent(month: month));
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColor.GREY_BG,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Tháng',
-                          style: TextStyle(
-                              fontSize: 11, color: AppColor.GREY_TEXT),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          TimeUtils.instance
-                              .formatMonthToString(provider.currentDate),
-                          style: const TextStyle(fontSize: 11),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        const Icon(
-                          Icons.calendar_month_outlined,
-                          size: 12,
-                        )
-                      ],
-                    ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        TimeUtils.instance
+                            .formatMonthToString(provider.currentDate),
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Icon(
+                        Icons.calendar_month_outlined,
+                        size: 12,
+                      )
+                    ],
                   ),
                 ),
-              ]
+              ),
             ]
           ],
         ),

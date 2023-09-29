@@ -267,11 +267,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
                       child: SelectableText(
                         '${index + 1}',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: dto.status == 0
-                                ? AppColor.RED_TEXT
-                                : AppColor.BLACK),
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
@@ -282,12 +280,10 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
                       child: SelectableText(
                         dto.merchant,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: dto.status == 0
-                                ? AppColor.RED_TEXT
-                                : AppColor.BLACK),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -299,12 +295,10 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
                       child: SelectableText(
                         StringUtils.formatNumber(dto.totalPayment.toString()),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: dto.status == 0
-                                ? AppColor.RED_TEXT
-                                : AppColor.BLACK),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -409,9 +403,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
             child: SelectableText(
               dto.shortName,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -422,9 +416,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
             child: SelectableText(
               StringUtils.formatNumber(dto.annualFee.toString()),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -435,9 +429,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
             child: SelectableText(
               '${dto.monthlyCycle}T',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -448,9 +442,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
             child: SelectableText(
               TimeUtils.instance.formatOnlyDate(dto.startDate),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -461,9 +455,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
             child: SelectableText(
               TimeUtils.instance.formatOnlyDate(dto.endDate),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -474,9 +468,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
             child: SelectableText(
               '${dto.vat}%',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
@@ -487,9 +481,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
             child: SelectableText(
               StringUtils.formatNumber(dto.totalPayment.toString()),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+              style: const TextStyle(
+                fontSize: 12,
+              ),
             ),
           ),
         ),
