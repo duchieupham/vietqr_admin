@@ -83,132 +83,135 @@ class ListBank extends StatelessWidget {
   }
 
   Widget _buildItemBank(BankAccountDTO dto, BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(top: 8),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: AppColor.GREY_TEXT.withOpacity(0.5))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: AppColor.GREY_BUTTON),
-                image: DecorationImage(
-                    image: ImageUtils.instance.getImageNetWork(dto.imgId))),
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${dto.bankCode} -  ${dto.bankAccount}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                Text(
-                  dto.customerBankName.toUpperCase(),
-                  style: const TextStyle(fontSize: 12),
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Trạng thái: ',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    Text(
-                      dto.authenticated ? 'Đã liên kết' : 'Chưa liên kết',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: dto.authenticated
-                              ? AppColor.BLUE_TEXT
-                              : AppColor.BLACK),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Đồng bộ: ',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    Text(
-                      'Luồng ${dto.flow}',
-                      style: const TextStyle(
-                          fontSize: 12, color: AppColor.BLUE_TEXT),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Row(
-                  children: [
-                    const Spacer(
-                      flex: 4,
-                    ),
-                    InkWell(
-                        onTap: () {},
-                        child: const Text(
-                          'Chi tiết',
-                          style: TextStyle(
-                              color: AppColor.BLUE_TEXT,
-                              decoration: TextDecoration.underline,
-                              fontSize: 13),
-                        )),
-                    const Spacer(),
-                    InkWell(
-                        onTap: () {},
-                        child: const Text(
-                          'Chuyển hướng',
-                          style: TextStyle(
-                              color: AppColor.BLUE_TEXT,
-                              decoration: TextDecoration.underline,
-                              fontSize: 13),
-                        )),
-                    const Spacer(),
-                    InkWell(
-                        onTap: () {
-                          DialogWidget.instance.openMsgDialogQuestion(
-                              title: 'Xoá đồng bộ',
-                              msg: 'Bạn có chắc chắn muốn xoá đồng bộ?',
-                              onConfirm: () {
-                                Map<String, dynamic> param = {};
-                                param['bankId'] = dto.bankId;
-                                param['customerSyncId'] = dto.customerSyncId;
-                                bloc.add(RemoveBankConnectEvent(param: param));
-                                Navigator.pop(context);
-                              });
-                        },
-                        child: const Text(
-                          'Xoá đông bộ',
-                          style: TextStyle(
-                              color: AppColor.RED_TEXT,
-                              decoration: TextDecoration.underline,
-                              fontSize: 13),
-                        )),
-                  ],
-                ),
-              ],
+    return SelectionArea(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(top: 8),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: AppColor.GREY_TEXT.withOpacity(0.5))),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(color: AppColor.GREY_BUTTON),
+                  image: DecorationImage(
+                      image: ImageUtils.instance.getImageNetWork(dto.imgId))),
             ),
-          ),
-        ],
+            const SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${dto.bankCode} -  ${dto.bankAccount}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Text(
+                    dto.customerBankName.toUpperCase(),
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        'Trạng thái: ',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Text(
+                        dto.authenticated ? 'Đã liên kết' : 'Chưa liên kết',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: dto.authenticated
+                                ? AppColor.BLUE_TEXT
+                                : AppColor.BLACK),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        'Đồng bộ: ',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Text(
+                        'Luồng ${dto.flow}',
+                        style: const TextStyle(
+                            fontSize: 12, color: AppColor.BLUE_TEXT),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    children: [
+                      const Spacer(
+                        flex: 4,
+                      ),
+                      InkWell(
+                          onTap: () {},
+                          child: const Text(
+                            'Chi tiết',
+                            style: TextStyle(
+                                color: AppColor.BLUE_TEXT,
+                                decoration: TextDecoration.underline,
+                                fontSize: 13),
+                          )),
+                      const Spacer(),
+                      InkWell(
+                          onTap: () {},
+                          child: const Text(
+                            'Chuyển hướng',
+                            style: TextStyle(
+                                color: AppColor.BLUE_TEXT,
+                                decoration: TextDecoration.underline,
+                                fontSize: 13),
+                          )),
+                      const Spacer(),
+                      InkWell(
+                          onTap: () {
+                            DialogWidget.instance.openMsgDialogQuestion(
+                                title: 'Xoá đồng bộ',
+                                msg: 'Bạn có chắc chắn muốn xoá đồng bộ?',
+                                onConfirm: () {
+                                  Map<String, dynamic> param = {};
+                                  param['bankId'] = dto.bankId;
+                                  param['customerSyncId'] = dto.customerSyncId;
+                                  bloc.add(
+                                      RemoveBankConnectEvent(param: param));
+                                  Navigator.pop(context);
+                                });
+                          },
+                          child: const Text(
+                            'Xoá đông bộ',
+                            style: TextStyle(
+                                color: AppColor.RED_TEXT,
+                                decoration: TextDecoration.underline,
+                                fontSize: 13),
+                          )),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -22,3 +22,11 @@ class RefreshTransaction {
 class RefreshServicePackList {
   RefreshServicePackList();
 }
+
+class RefreshListActiveFee {
+  RefreshListActiveFee();
+}
+
+class RefreshListAnnualFee {
+  RefreshListAnnualFee();
+}

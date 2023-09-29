@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/feature/connect_service/active_fee/active_fee_screen.dart';
+import 'package:vietqr_admin/feature/connect_service/annual_fee/annual_fee_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 
 import 'list_connect/list_connect_screen.dart';
@@ -25,7 +26,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
       const NewConnectScreen(),
       const RunCallBackScreen(),
       const ActiveFeeScreen(),
-      const SizedBox(),
+      const AnnualFeeScreen(),
     ];
   }
 

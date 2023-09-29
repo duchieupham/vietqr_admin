@@ -103,9 +103,9 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                 child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SizedBox(
-                        width: constraints.maxWidth > 1350
+                        width: constraints.maxWidth > 1440
                             ? constraints.maxWidth
-                            : 1350,
+                            : 1440,
                         child: Column(
                           children: [
                             _buildTitleItem(),
@@ -140,7 +140,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
           ),
         ),
         SizedBox(
-          width: 130,
+          width: 140,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
@@ -526,7 +526,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
   Widget _buildInfoServicePack(SubServicePackDTO dto,
       {bool isSubItem = false, ServicePackProvider? provider}) {
     return SizedBox(
-      height: 50,
+      height: 60,
       child: Row(
         children: [
           SizedBox(
@@ -541,7 +541,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
             ),
           ),
           SizedBox(
-            width: 130,
+            width: 140,
             child: Padding(
               padding: const EdgeInsets.only(top: 12, left: 12),
               child: SelectableText(

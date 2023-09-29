@@ -2,61 +2,72 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/mixin/events.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
-import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
-import 'package:vietqr_admin/feature/connect_service/active_fee/bloc/active_fee_bloc.dart';
-import 'package:vietqr_admin/feature/connect_service/active_fee/event/active_fee_event.dart';
-import 'package:vietqr_admin/feature/connect_service/active_fee/provider/active_fee_provider.dart';
-import 'package:vietqr_admin/feature/connect_service/active_fee/state/active_fee_state.dart';
-import 'package:vietqr_admin/feature/connect_service/active_fee/widget/active_fee_detail.dart';
-import 'package:vietqr_admin/models/active_fee_dto.dart';
+import 'package:vietqr_admin/feature/connect_service/annual_fee/bloc/annual_fee_bloc.dart';
+import 'package:vietqr_admin/feature/connect_service/annual_fee/event/annual_fee_event.dart';
+import 'package:vietqr_admin/feature/connect_service/annual_fee/provider/annual_fee_provider.dart';
+import 'package:vietqr_admin/feature/connect_service/annual_fee/state/annual_fee_state.dart';
+import 'package:vietqr_admin/models/annual_fee_dto.dart';
 
-class ActiveFeeScreen extends StatefulWidget {
-  const ActiveFeeScreen({Key? key}) : super(key: key);
+class AnnualFeeScreen extends StatefulWidget {
+  const AnnualFeeScreen({Key? key}) : super(key: key);
 
   @override
-  State<ActiveFeeScreen> createState() => _ActiveFeeScreenState();
+  State<AnnualFeeScreen> createState() => _AnnualFeeScreenState();
 }
 
-class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
-  final PageController pageViewController = PageController();
-  late ActiveFeeBloc _activeFeeBloc;
+class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
+  late AnnualFeeBloc _annualFeeBloc;
+  List<AnnualFeeDTO> listAnnualFee = [];
   StreamSubscription? _subscription;
-  List<ActiveFeeDTO> listActiveFeeDTO = [];
   @override
   void initState() {
-    String nowMonth = TimeUtils.instance.getFormatMonth(DateTime.now());
-    _activeFeeBloc = ActiveFeeBloc()
-      ..add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
-    _subscription = eventBus.on<RefreshListActiveFee>().listen((data) {
-      _activeFeeBloc
-          .add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
+    _annualFeeBloc = AnnualFeeBloc()..add(const AnnualFeeGetListEvent());
+
+    _subscription = eventBus.on<RefreshListAnnualFee>().listen((data) {
+      _annualFeeBloc = AnnualFeeBloc()..add(const AnnualFeeGetListEvent());
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ActiveFeeBloc>(
-      create: (context) => _activeFeeBloc,
-      child: ChangeNotifierProvider<ActiveFeeProvider>(
-        create: (context) => ActiveFeeProvider(),
+    return BlocProvider<AnnualFeeBloc>(
+      create: (context) => _annualFeeBloc,
+      child: ChangeNotifierProvider<AnnualFeeProvider>(
+        create: (context) => AnnualFeeProvider(),
         child: Column(
           children: [
             _buildTitle(),
             Expanded(
-              child: PageView(
-                controller: pageViewController,
-                children: [
-                  _buildList(),
-                  const ActiveFeeDetail(),
-                ],
+              child: BlocConsumer<AnnualFeeBloc, AnnualFeeState>(
+                listener: (context, state) {
+                  if (state is AnnualFeeGetListSuccessState) {
+                    listAnnualFee = state.result;
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AnnualFeeLoadingState) {
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 40),
+                      child: Center(child: Text('Đang tải...')),
+                    );
+                  } else {
+                    if (listAnnualFee.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 40),
+                        child: Center(child: Text('Không có dữ liệu')),
+                      );
+                    } else {
+                      return _buildList();
+                    }
+                  }
+                },
               ),
             ),
           ],
@@ -67,54 +78,26 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
 
   Widget _buildList() {
     return LayoutBuilder(builder: (context, constraints) {
-      return BlocConsumer<ActiveFeeBloc, ActiveFeeState>(
-          listener: (context, state) {
-        if (state is ActiveFeeLoadingState) {
-          DialogWidget.instance.openLoadingDialog();
-        }
-
-        if (state is ActiveFeeGetListSuccessState) {
-          if (!state.initPage) {
-            Navigator.pop(context);
-          }
-          listActiveFeeDTO = state.result;
-        }
-      }, builder: (context, state) {
-        if (state is ActiveFeeLoadingInitState) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Center(child: Text('Đang tải...')),
-          );
-        } else {
-          if (listActiveFeeDTO.isEmpty) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 40),
-              child: Center(child: Text('Không có dữ liệu')),
-            );
-          } else {
-            return SingleChildScrollView(
-              child: ScrollConfiguration(
-                behavior: MyCustomScrollBehavior(),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    width: 1350,
-                    child: Column(
-                      children: [
-                        _buildTitleItem(),
-                        ...listActiveFeeDTO.map((e) {
-                          int i = listActiveFeeDTO.indexOf(e);
-                          return _buildItem(i, e);
-                        }).toList()
-                      ],
-                    ),
-                  ),
-                ),
+      return SingleChildScrollView(
+        child: ScrollConfiguration(
+          behavior: MyCustomScrollBehavior(),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: 1300,
+              child: Column(
+                children: [
+                  _buildTitleItem(),
+                  ...listAnnualFee.map((e) {
+                    int i = listAnnualFee.indexOf(e);
+                    return _buildItem(i, e);
+                  }).toList()
+                ],
               ),
-            );
-          }
-        }
-      });
+            ),
+          ),
+        ),
+      );
     });
   }
 
@@ -133,7 +116,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 120,
+          width: 130,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
@@ -144,7 +127,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 120,
+          width: 110,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
@@ -166,33 +149,44 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 136,
+          width: 120,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'GD Ghi nhận',
+              'Phí thuê bao',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
           ),
         ),
         SizedBox(
-          width: 100,
+          width: 80,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Tổng GD',
+              'Chu kỳ',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
           ),
         ),
         SizedBox(
-          width: 140,
+          width: 120,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Tổng tiền GD',
+              'Đầu kì',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 120,
+          child: Padding(
+            padding: EdgeInsets.only(top: 12, left: 20),
+            child: Text(
+              'Cuối kỳ',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
@@ -210,29 +204,18 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 120,
+          width: 150,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
-              'Khuyến mại',
+              'Số tiền cần TT',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             ),
           ),
         ),
         SizedBox(
-          width: 120,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Số tiền cần thu',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 120,
+          width: 100,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20),
             child: Text(
@@ -257,7 +240,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
     );
   }
 
-  Widget _buildItem(int index, ActiveFeeDTO dto) {
+  Widget _buildItem(int index, AnnualFeeDTO dto) {
     return Container(
       decoration: const BoxDecoration(
           border: Border(
@@ -293,7 +276,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 120,
+                    width: 130,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20, top: 12),
                       child: SelectableText(
@@ -310,7 +293,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                   ),
                   const Spacer(),
                   SizedBox(
-                    width: 120,
+                    width: 150,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 12, left: 20),
                       child: SelectableText(
@@ -326,7 +309,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 120,
+                    width: 100,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 12, left: 20),
                       child: SelectableText(
@@ -344,34 +327,32 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                   SizedBox(
                     width: 120,
                     child: InkWell(
-                      onTap: () {},
                       child: Padding(
                         padding:
                             const EdgeInsets.only(top: 12, left: 20, right: 20),
                         child: Text(
-                          dto.status == 0 ? 'Đã thanh toán' : 'Chi tiết',
+                          dto.status == 1 ? '' : 'Đã thanh toán',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 12,
                               color: AppColor.BLUE_TEXT,
-                              decoration: TextDecoration.underline),
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
             if (dto.bankAccounts?.isNotEmpty ?? false)
               Row(
                 children: [
-                  const SizedBox(
-                    width: 170,
-                  ),
+                  const Spacer(),
                   Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: dto.bankAccounts!.map((bankAccount) {
                       int index = dto.bankAccounts!.indexOf(bankAccount);
+
                       return Container(
                         padding: const EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
@@ -435,28 +416,11 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 139,
+          width: 120,
           child: Padding(
             padding: const EdgeInsets.only(top: 12, left: 20),
             child: SelectableText(
-              dto.countingTransType == 0 ? 'Tất cả' : 'Chỉ GD có đối soát',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0
-                      ? AppColor.RED_TEXT
-                      : dto.countingTransType == 1
-                          ? AppColor.GREEN
-                          : AppColor.BLACK),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: SelectableText(
-              dto.totalTrans.toString(),
+              StringUtils.formatNumber(dto.annualFee.toString()),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 12,
@@ -465,19 +429,41 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 140,
+          width: 80,
           child: Padding(
             padding: const EdgeInsets.only(top: 12, left: 20),
             child: SelectableText(
-              StringUtils.formatNumber(dto.totalAmount.toString()),
+              '${dto.monthlyCycle}T',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 12,
-                  color: dto.status == 0
-                      ? AppColor.RED_TEXT
-                      : dto.countingTransType == 1
-                          ? AppColor.GREEN
-                          : AppColor.BLACK),
+                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 120,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 12, left: 20),
+            child: SelectableText(
+              TimeUtils.instance.formatOnlyDate(dto.startDate),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 120,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 12, left: 20),
+            child: SelectableText(
+              TimeUtils.instance.formatOnlyDate(dto.endDate),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
             ),
           ),
         ),
@@ -495,20 +481,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 120,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20),
-            child: SelectableText(
-              StringUtils.formatNumber(dto.discountAmount.toString()),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: dto.status == 0 ? AppColor.RED_TEXT : AppColor.BLACK),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 120,
+          width: 150,
           child: Padding(
             padding: const EdgeInsets.only(top: 12, left: 20),
             child: SelectableText(
@@ -521,7 +494,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           ),
         ),
         SizedBox(
-          width: 120,
+          width: 100,
           child: Padding(
             padding: const EdgeInsets.only(top: 12, left: 20),
             child: SelectableText(
@@ -554,7 +527,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
   }
 
   Widget _buildTitle() {
-    return Consumer<ActiveFeeProvider>(builder: (context, provider, child) {
+    return Consumer<AnnualFeeProvider>(builder: (context, provider, child) {
       return Container(
         height: 45,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -564,7 +537,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Phí dịch vụ',
+                'Phí thuê bao',
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -574,107 +547,103 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             const SizedBox(
               width: 24,
             ),
-            if (provider.currentPage == 0) ...[
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColor.GREY_BG,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Lọc theo',
-                      style: TextStyle(fontSize: 11, color: AppColor.GREY_TEXT),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    DropdownButton<FilterActiveFee>(
-                      value: provider.valueFilter,
-                      icon: const RotatedBox(
-                        quarterTurns: 5,
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 12,
-                        ),
-                      ),
-                      underline: const SizedBox.shrink(),
-                      onChanged: (FilterActiveFee? value) {
-                        provider.updateFilter(value!);
-                      },
-                      items: provider.listFilter
-                          .map<DropdownMenuItem<FilterActiveFee>>(
-                              (FilterActiveFee value) {
-                        return DropdownMenuItem<FilterActiveFee>(
-                          value: value,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 4),
-                            child: Text(
-                              value.title,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              if (provider.valueFilter.id == 0) ...[
-                const SizedBox(
-                  width: 16,
-                ),
-                InkWell(
-                  onTap: () async {
-                    final selected = await showMonthYearPicker(
-                      context: context,
-                      initialDate: provider.currentDate,
-                      firstDate: DateTime(2022),
-                      lastDate: DateTime.now(),
-                    );
-                    provider.changeDate(selected!);
-                    String month = TimeUtils.instance.getFormatMonth(selected);
-                    _activeFeeBloc.add(ActiveFeeGetListEvent(month: month));
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColor.GREY_BG,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Tháng',
-                          style: TextStyle(
-                              fontSize: 11, color: AppColor.GREY_TEXT),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          TimeUtils.instance
-                              .formatMonthToString(provider.currentDate),
-                          style: const TextStyle(fontSize: 11),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        const Icon(
-                          Icons.calendar_month_outlined,
-                          size: 12,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ]
-            ]
+            // Container(
+            //   margin: const EdgeInsets.symmetric(vertical: 8),
+            //   padding: const EdgeInsets.symmetric(horizontal: 12),
+            //   alignment: Alignment.center,
+            //   decoration: BoxDecoration(
+            //     color: AppColor.GREY_BG,
+            //     borderRadius: BorderRadius.circular(5),
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       const Text(
+            //         'Lọc theo',
+            //         style: TextStyle(fontSize: 11, color: AppColor.GREY_TEXT),
+            //       ),
+            //       const SizedBox(
+            //         width: 20,
+            //       ),
+            //       DropdownButton<FilterAnnualFee>(
+            //         value: provider.valueFilter,
+            //         icon: const RotatedBox(
+            //           quarterTurns: 5,
+            //           child: Icon(
+            //             Icons.arrow_forward_ios,
+            //             size: 12,
+            //           ),
+            //         ),
+            //         underline: const SizedBox.shrink(),
+            //         onChanged: (FilterAnnualFee? value) {
+            //           provider.updateFilter(value!);
+            //         },
+            //         items: provider.listFilter
+            //             .map<DropdownMenuItem<FilterAnnualFee>>(
+            //                 (FilterAnnualFee value) {
+            //           return DropdownMenuItem<FilterAnnualFee>(
+            //             value: value,
+            //             child: Padding(
+            //               padding: const EdgeInsets.only(right: 4),
+            //               child: Text(
+            //                 value.title,
+            //                 style: const TextStyle(fontSize: 12),
+            //               ),
+            //             ),
+            //           );
+            //         }).toList(),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // if (provider.valueFilter.id == 0) ...[
+            //   const SizedBox(
+            //     width: 16,
+            //   ),
+            //   InkWell(
+            //     onTap: () async {
+            //       final selected = await showMonthYearPicker(
+            //         context: context,
+            //         initialDate: provider.currentDate,
+            //         firstDate: DateTime(2022),
+            //         lastDate: DateTime(20240),
+            //       );
+            //       provider.changeDate(selected!);
+            //     },
+            //     child: Container(
+            //       margin: const EdgeInsets.symmetric(vertical: 8),
+            //       padding: const EdgeInsets.symmetric(horizontal: 12),
+            //       alignment: Alignment.center,
+            //       decoration: BoxDecoration(
+            //         color: AppColor.GREY_BG,
+            //         borderRadius: BorderRadius.circular(5),
+            //       ),
+            //       child: Row(
+            //         children: [
+            //           const Text(
+            //             'Tháng',
+            //             style:
+            //                 TextStyle(fontSize: 11, color: AppColor.GREY_TEXT),
+            //           ),
+            //           const SizedBox(
+            //             width: 20,
+            //           ),
+            //           Text(
+            //             TimeUtils.instance
+            //                 .formatMonthToString(provider.currentDate),
+            //             style: const TextStyle(fontSize: 11),
+            //           ),
+            //           const SizedBox(
+            //             width: 8,
+            //           ),
+            //           const Icon(
+            //             Icons.calendar_month_outlined,
+            //             size: 12,
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ]
           ],
         ),
       );

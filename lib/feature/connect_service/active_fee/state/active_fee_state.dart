@@ -10,6 +10,8 @@ class ActiveFeeState extends Equatable {
 
 class ActiveFeeInitialState extends ActiveFeeState {}
 
+class ActiveFeeLoadingInitState extends ActiveFeeState {}
+
 class ActiveFeeLoadingState extends ActiveFeeState {}
 
 class ActiveFeeGetListSuccessState extends ActiveFeeState {

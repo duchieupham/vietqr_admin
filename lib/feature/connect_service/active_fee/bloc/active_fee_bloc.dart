@@ -6,26 +6,30 @@ import 'package:vietqr_admin/models/active_fee_dto.dart';
 
 class ActiveFeeBloc extends Bloc<ActiveFeeEvent, ActiveFeeState> {
   ActiveFeeBloc() : super(ActiveFeeInitialState()) {
-    on<ActiveFeeGetListEvent>(_getListServicePack);
+    on<ActiveFeeGetListEvent>(_getListActiveFee);
   }
 }
 
 const ActiveFeeRepository activeFeeRepository = ActiveFeeRepository();
 
-void _getListServicePack(ActiveFeeEvent event, Emitter emit) async {
+void _getListActiveFee(ActiveFeeEvent event, Emitter emit) async {
   List<ActiveFeeDTO> result = [];
   try {
     if (event is ActiveFeeGetListEvent) {
-      emit(ActiveFeeLoadingState());
+      if (event.initPage) {
+        emit(ActiveFeeLoadingInitState());
+      } else {
+        emit(ActiveFeeLoadingState());
+      }
 
-      result = await activeFeeRepository.getServicePackList();
+      result = await activeFeeRepository.getListActiveFee(event.month);
       emit(ActiveFeeGetListSuccessState(
           result: result,
           initPage: event.initPage,
           isLoadMore: event.isLoadMore));
     }
   } catch (e) {
-    print('Error at get list active fee- _getListServicePack: $e');
+    print('Error at get list active fee- _getListActiveFee: $e');
     emit(const ActiveFeeGetListSuccessState(result: []));
   }
 }

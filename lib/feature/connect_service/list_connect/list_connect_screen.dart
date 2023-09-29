@@ -145,7 +145,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               controller: pageViewController,
               children: [
                 _buildListConnect(),
-                InformationPopup(),
+                const InformationPopup(),
               ],
             ),
           ),

@@ -52,6 +52,13 @@ class Header extends StatelessWidget {
                         if (initPage == SubMenuType.LIST_CONNECT.pageNumber) {
                           eventBus.fire(GetListConnect());
                         }
+                        if (initPage == SubMenuType.ANNUAL_FEE.pageNumber) {
+                          eventBus.fire(RefreshListAnnualFee());
+                        }
+                        if (initPage == SubMenuType.ACTIVE_FEE.pageNumber) {
+                          eventBus.fire(RefreshListActiveFee());
+                        }
+
                         if (menuTyoe == MenuType.LOG) {
                           eventBus.fire(RefreshLog(envGoLive: false));
                           eventBus.fire(ResetDateLog());
@@ -105,6 +112,12 @@ class Header extends StatelessWidget {
                         if (type == MenuType.SERVICE_CONNECT) {
                           if (initPage == SubMenuType.LIST_CONNECT.pageNumber) {
                             eventBus.fire(GetListConnect());
+                          }
+                          if (initPage == SubMenuType.ANNUAL_FEE.pageNumber) {
+                            eventBus.fire(RefreshListAnnualFee());
+                          }
+                          if (initPage == SubMenuType.ACTIVE_FEE.pageNumber) {
+                            eventBus.fire(RefreshListActiveFee());
                           }
                         }
                         if (type == MenuType.TRANSACTION) {

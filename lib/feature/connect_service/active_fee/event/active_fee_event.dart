@@ -10,8 +10,10 @@ class ActiveFeeEvent extends Equatable {
 class ActiveFeeGetListEvent extends ActiveFeeEvent {
   final bool initPage;
   final bool isLoadMore;
+  final String month;
 
-  const ActiveFeeGetListEvent({this.initPage = false, this.isLoadMore = false});
+  const ActiveFeeGetListEvent(
+      {this.initPage = false, this.isLoadMore = false, required this.month});
 
   @override
   List<Object?> get props => [initPage, isLoadMore];
