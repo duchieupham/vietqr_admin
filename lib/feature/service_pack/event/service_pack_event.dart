@@ -28,3 +28,16 @@ class InsertServicePackEvent extends ServicePackEvent {
   @override
   List<Object?> get props => [param];
 }
+
+class GetListMerchantBankAccountEvent extends ServicePackEvent {}
+
+class InsertBankAccountFeeEvent extends ServicePackEvent {
+  final Map<String, dynamic> param;
+
+  const InsertBankAccountFeeEvent({
+    required this.param,
+  });
+
+  @override
+  List<Object?> get props => [param];
+}

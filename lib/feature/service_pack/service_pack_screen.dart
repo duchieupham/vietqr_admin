@@ -17,6 +17,7 @@ import 'package:vietqr_admin/feature/service_pack/provider/form_create_provider.
 import 'package:vietqr_admin/feature/service_pack/provider/service_pack_provider.dart';
 import 'package:vietqr_admin/feature/service_pack/state/service_pack_state.dart';
 import 'package:vietqr_admin/feature/service_pack/widget/create_service_pack_popup.dart';
+import 'package:vietqr_admin/feature/service_pack/widget/insert_bank_account_fee.dart';
 import 'package:vietqr_admin/models/service_pack_dto.dart';
 
 class ServicePackScreen extends StatefulWidget {
@@ -239,7 +240,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
           ),
         ),
         SizedBox(
-          width: 120,
+          width: 200,
           child: Padding(
             padding: EdgeInsets.only(top: 12, left: 20, right: 20),
             child: Text(
@@ -640,25 +641,69 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
             ),
           ),
           SizedBox(
-            width: 120,
+            width: 200,
             child: Padding(
               padding: const EdgeInsets.only(top: 11, left: 20, right: 20),
               child: isSubItem
-                  ? const SizedBox.shrink()
-                  : InkWell(
+                  ? InkWell(
                       onTap: () {
-                        provider.showFromInsert(dto.id);
+                        DialogWidget.instance.openPopupCenter(
+                            child: InsertBankAccountFeePopup(
+                          servicePackBloc: _bloc,
+                          merchantName: dto.shortName,
+                          serviceFeeId: dto.id,
+                        ));
                       },
-                      child: Text(
-                        provider!.checkShowFromInsert(dto)
-                            ? 'Đóng'
-                            : 'Tạo gói nhỏ',
+                      child: const Text(
+                        'Áp dụng cho Merchant',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 12,
                             decoration: TextDecoration.underline,
                             color: AppColor.BLUE_TEXT),
                       ),
+                    )
+                  : Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            provider.showFromInsert(dto.id);
+                          },
+                          child: Text(
+                            provider!.checkShowFromInsert(dto)
+                                ? 'Đóng'
+                                : 'Tạo gói nhỏ',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 12,
+                                decoration: TextDecoration.underline,
+                                color: AppColor.BLUE_TEXT),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              DialogWidget.instance.openPopupCenter(
+                                  child: InsertBankAccountFeePopup(
+                                servicePackBloc: _bloc,
+                                merchantName: dto.shortName,
+                                serviceFeeId: dto.id,
+                              ));
+                            },
+                            child: const Text(
+                              'Áp dụng cho Merchant',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  decoration: TextDecoration.underline,
+                                  color: AppColor.BLUE_TEXT),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
             ),
           ),
