@@ -16,6 +16,7 @@ import 'package:vietqr_admin/feature/connect_service/active_fee/provider/active_
 import 'package:vietqr_admin/feature/connect_service/active_fee/state/active_fee_state.dart';
 import 'package:vietqr_admin/feature/connect_service/active_fee/widget/active_fee_detail.dart';
 import 'package:vietqr_admin/models/active_fee_dto.dart';
+import 'package:vietqr_admin/models/active_fee_total_static.dart';
 
 class ActiveFeeScreen extends StatefulWidget {
   const ActiveFeeScreen({Key? key}) : super(key: key);
@@ -29,14 +30,18 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
   late ActiveFeeBloc _activeFeeBloc;
   StreamSubscription? _subscription;
   List<ActiveFeeDTO> listActiveFeeDTO = [];
+  ActiveFeeStaticDto activeFeeStaticDto = const ActiveFeeStaticDto();
+  String nowMonth = '';
   @override
   void initState() {
-    String nowMonth = TimeUtils.instance.getFormatMonth(DateTime.now());
+    nowMonth = TimeUtils.instance.getFormatMonth(DateTime.now());
     _activeFeeBloc = ActiveFeeBloc()
       ..add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
+
     _subscription = eventBus.on<RefreshListActiveFee>().listen((data) {
       _activeFeeBloc
           .add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
+      _activeFeeBloc.add(ActiveFeeGetTotalEvent(month: nowMonth));
     });
     super.initState();
   }
@@ -76,7 +81,10 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
         if (state is ActiveFeeGetListSuccessState) {
           if (!state.initPage) {
             Navigator.pop(context);
+          } else {
+            activeFeeStaticDto = state.activeFeeStaticDto;
           }
+
           listActiveFeeDTO = state.result;
         }
       }, builder: (context, state) {
@@ -575,7 +583,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                   );
                   provider.changeDate(selected!);
                   String month = TimeUtils.instance.getFormatMonth(selected);
+                  nowMonth = month;
                   _activeFeeBloc.add(ActiveFeeGetListEvent(month: month));
+                  _activeFeeBloc.add(ActiveFeeGetTotalEvent(month: month));
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 8),
@@ -611,10 +621,79 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                   ),
                 ),
               ),
-            ]
+            ],
+            BlocConsumer<ActiveFeeBloc, ActiveFeeState>(
+              listener: (context, state) {
+                if (state is ActiveFeeGetTotalSuccessState) {
+                  activeFeeStaticDto = state.activeFeeStaticDto;
+                }
+              },
+              builder: (context, state) {
+                return Row(
+                  children: [
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    _buildTemplateTotal(
+                        'Tổng GD', activeFeeStaticDto.totalTrans.toString()),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    _buildTemplateTotal(
+                        'Tổng số tiền',
+                        StringUtils.formatNumber(
+                            activeFeeStaticDto.totalPayment.toString())),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    _buildTemplateTotal(
+                        'Chưa TT',
+                        StringUtils.formatNumber(
+                            activeFeeStaticDto.totalPaymentUnpaid.toString()),
+                        valueColor: AppColor.RED_TEXT),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    _buildTemplateTotal(
+                        'Đã TT',
+                        StringUtils.formatNumber(
+                            activeFeeStaticDto.totalPaymentPaid.toString()),
+                        valueColor: AppColor.BLUE_TEXT),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       );
     });
+  }
+
+  Widget _buildTemplateTotal(String title, String value,
+      {Color valueColor = AppColor.GREY_TEXT}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: AppColor.GREY_BG,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 11, color: AppColor.GREY_TEXT),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          Text(
+            value,
+            style: TextStyle(fontSize: 11, color: valueColor),
+          ),
+        ],
+      ),
+    );
   }
 }

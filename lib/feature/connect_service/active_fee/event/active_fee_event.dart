@@ -18,3 +18,11 @@ class ActiveFeeGetListEvent extends ActiveFeeEvent {
   @override
   List<Object?> get props => [initPage, isLoadMore];
 }
+
+class ActiveFeeGetTotalEvent extends ActiveFeeEvent {
+  final String month;
+  const ActiveFeeGetTotalEvent({required this.month});
+
+  @override
+  List<Object?> get props => [month];
+}

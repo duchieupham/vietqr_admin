@@ -161,15 +161,15 @@ class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
           ),
           if (dto.bankAccounts?.isNotEmpty ?? false)
             ...dto.bankAccounts!.map((e) {
-              return _buildItemBankAccount(e, provider);
+              return _buildItemBankAccount(e, provider, dto);
             }).toList()
         ],
       ),
     );
   }
 
-  Widget _buildItemBankAccount(
-      MerchantBankAccount dto, InsertBankAccountFeeProvider provider) {
+  Widget _buildItemBankAccount(MerchantBankAccount dto,
+      InsertBankAccountFeeProvider provider, MerchantFee merchantFee) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Row(
@@ -197,13 +197,40 @@ class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
           const SizedBox(
             width: 12,
           ),
-          Radio<MerchantBankAccount>(
-              value: dto,
-              activeColor: AppColor.BLUE_TEXT,
-              groupValue: provider.valueSubItem,
-              onChanged: (dto) {
-                provider.changeValueSubItem(dto!);
-              })
+          if (merchantFee.customerSyncId == provider.valueRadio.customerSyncId)
+            InkWell(
+              onTap: () {
+                print('-dadadad');
+                provider.changeValueSubItem(dto);
+              },
+              child: Container(
+                width: 18,
+                height: 18,
+                padding: const EdgeInsets.all(2),
+                margin: const EdgeInsets.only(right: 7),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: AppColor.BLUE_TEXT,
+                ),
+                child: Container(
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColor.WHITE, width: 2.5),
+                    borderRadius: BorderRadius.circular(30),
+                    color: AppColor.BLUE_TEXT,
+                  ),
+                ),
+              ),
+            )
+          else
+            Radio<MerchantBankAccount>(
+                value: dto,
+                activeColor: AppColor.BLUE_TEXT,
+                groupValue: provider.valueSubItem,
+                onChanged: (dto) {
+                  provider.changeValueSubItem(dto!);
+                })
         ],
       ),
     );
