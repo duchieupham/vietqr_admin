@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
-import 'package:vietqr_admin/commons/constants/env/env_config.dart';
-import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
-import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/models/balance_dto.dart';
+import 'package:vietqr_admin/service/shared_references/session.dart';
 
 class SurplusScreen extends StatefulWidget {
   const SurplusScreen({super.key});
@@ -27,35 +23,19 @@ class _SurplusScreenState extends State<SurplusScreen> {
   }
 
   initData() async {
-    dto = await getBalance();
+    await Session.instance.fetchBalanceDTO();
+    dto = Session.instance.balanceDTO;
     setState(() {});
-  }
-
-  Future<BalanceDTO> getBalance() async {
-    BalanceDTO result = BalanceDTO();
-
-    try {
-      String url = '${EnvConfig.instance.getBaseUrl()}epay/query-balance';
-
-      final response = await BaseAPIClient.getAPI(
-        url: url,
-        type: AuthenticationType.SYSTEM,
-      );
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        result = BalanceDTO.fromJson(data);
-        return result;
-      }
-    } catch (e) {
-      LOG.error(e.toString());
-    }
-    return result;
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Container(
+          color: AppColor.BLUE_TEXT.withOpacity(0.2),
+          height: 45,
+        ),
         const SizedBox(height: 40),
         const Text(
           'Số dư khả dụng',

@@ -30,3 +30,7 @@ class RefreshListActiveFee {
 class RefreshListAnnualFee {
   RefreshListAnnualFee();
 }
+
+class RefreshTransactionVNPTPage {
+  RefreshTransactionVNPTPage();
+}

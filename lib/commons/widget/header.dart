@@ -42,12 +42,18 @@ class Header extends StatelessWidget {
                         int initPage =
                             Provider.of<MenuProvider>(context, listen: false)
                                 .initPage;
-                        MenuType menuTyoe =
+                        MenuType menuType =
                             Provider.of<MenuProvider>(context, listen: false)
                                 .menuHomeType;
 
                         EnvConfig.instance.updateEnv(EnvType.DEV);
                         provider.updateENV(0);
+
+                        if (menuType == MenuType.VNPT_EPAY) {
+                          if (initPage == SubMenuType.TOP_UP_PHONE.pageNumber) {
+                            eventBus.fire(RefreshTransactionVNPTPage());
+                          }
+                        }
 
                         if (initPage == SubMenuType.LIST_CONNECT.pageNumber) {
                           eventBus.fire(GetListConnect());
@@ -59,14 +65,14 @@ class Header extends StatelessWidget {
                           eventBus.fire(RefreshListActiveFee());
                         }
 
-                        if (menuTyoe == MenuType.LOG) {
+                        if (menuType == MenuType.LOG) {
                           eventBus.fire(RefreshLog(envGoLive: false));
                           eventBus.fire(ResetDateLog());
                         }
-                        if (menuTyoe == MenuType.TRANSACTION) {
+                        if (menuType == MenuType.TRANSACTION) {
                           eventBus.fire(RefreshTransaction());
                         }
-                        if (menuTyoe == MenuType.SERVICE_PACK) {
+                        if (menuType == MenuType.SERVICE_PACK) {
                           eventBus.fire(RefreshServicePackList());
                         }
                       },
@@ -120,6 +126,12 @@ class Header extends StatelessWidget {
                             eventBus.fire(RefreshListActiveFee());
                           }
                         }
+                        if (type == MenuType.VNPT_EPAY) {
+                          if (initPage == SubMenuType.TOP_UP_PHONE.pageNumber) {
+                            eventBus.fire(RefreshTransactionVNPTPage());
+                          }
+                        }
+
                         if (type == MenuType.TRANSACTION) {
                           eventBus.fire(RefreshTransaction());
                         }

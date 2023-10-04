@@ -19,6 +19,7 @@ enum SubMenuType {
   NEW_CONNECT,
   RUN_CALLBACK,
   SURPLUS,
+  TOP_UP_PHONE,
   ACTIVE_FEE,
   ANNUAL_FEE,
   OTHER,
@@ -30,6 +31,7 @@ extension PageSubMenu on SubMenuType {
       case SubMenuType.LIST_CONNECT:
       case SubMenuType.SURPLUS:
         return 0;
+      case SubMenuType.TOP_UP_PHONE:
       case SubMenuType.NEW_CONNECT:
         return 1;
       case SubMenuType.RUN_CALLBACK:

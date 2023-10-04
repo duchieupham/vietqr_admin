@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vietqr_admin/feature/top_up_phone/responsitory/top_up_phone_provider.dart';
+import 'package:vietqr_admin/models/balance_dto.dart';
 import 'package:vietqr_admin/models/connect.dto.dart';
 
 class Session {
@@ -34,5 +36,13 @@ class Session {
   ConnectDTO get connectDTO => _connectDTO;
   void updateConnectDTO(ConnectDTO value) {
     _connectDTO = value;
+  }
+
+  BalanceDTO _balanceDTO = BalanceDTO();
+  BalanceDTO get balanceDTO => _balanceDTO;
+
+  TopUpPhoneRepository topUpPhoneRepository = const TopUpPhoneRepository();
+  fetchBalanceDTO() async {
+    _balanceDTO = await topUpPhoneRepository.getBalance();
   }
 }

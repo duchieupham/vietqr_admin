@@ -50,6 +50,7 @@ class MenuProvider with ChangeNotifier {
       case SubMenuType.SURPLUS:
         _initPage = 0;
         break;
+      case SubMenuType.TOP_UP_PHONE:
       case SubMenuType.NEW_CONNECT:
         _initPage = 1;
         break;

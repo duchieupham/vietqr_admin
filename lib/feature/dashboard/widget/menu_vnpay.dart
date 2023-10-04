@@ -44,6 +44,15 @@ class MenuEPay extends StatelessWidget {
                 // provider.updateShowMenuLink(false);
               },
             ),
+            ItemMenu(
+              title: 'Giao dịch nạp tiền ĐT',
+              isSelect:
+                  provider.initPage == SubMenuType.TOP_UP_PHONE.pageNumber,
+              onTap: () {
+                provider.selectSubMenu(SubMenuType.TOP_UP_PHONE);
+                // provider.updateShowMenuLink(false);
+              },
+            ),
           ],
         );
       },
