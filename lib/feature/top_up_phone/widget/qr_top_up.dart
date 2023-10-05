@@ -24,13 +24,13 @@ class QRTopUp extends StatelessWidget {
           fit: BoxFit.fitWidth,
         ),
         Expanded(
-          child: QrImageView(
+          child: QrImage(
             data: qrCodeTDTO.qrCode,
             version: QrVersions.auto,
             embeddedImage:
                 const AssetImage('assets/images/ic-viet-qr-small.png'),
-            embeddedImageStyle: const QrEmbeddedImageStyle(
-              size: Size(25, 25),
+            embeddedImageStyle: QrEmbeddedImageStyle(
+              size: const Size(25, 25),
             ),
           ),
         ),
