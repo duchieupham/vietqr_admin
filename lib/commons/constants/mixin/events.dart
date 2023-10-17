@@ -34,3 +34,7 @@ class RefreshListAnnualFee {
 class RefreshTransactionVNPTPage {
   RefreshTransactionVNPTPage();
 }
+
+class GetListLark {
+  GetListLark();
+}

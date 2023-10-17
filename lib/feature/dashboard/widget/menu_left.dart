@@ -94,6 +94,13 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
+                title: 'Cấu hình',
+                isSelect: provider.menuHomeType == MenuType.CONFIG,
+                onTap: () {
+                  onTab(MenuType.CONFIG);
+                },
+              ),
+              ItemMenu(
                 title: 'Người dùng',
                 isSelect: provider.menuHomeType == MenuType.USER,
                 onTap: () {

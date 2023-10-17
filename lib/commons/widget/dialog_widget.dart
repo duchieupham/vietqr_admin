@@ -221,7 +221,7 @@ class DialogWidget {
                     height: 40,
                     text: 'Đóng',
                     textColor: AppColor.WHITE,
-                    bgColor: AppColor.GREEN,
+                    bgColor: AppColor.BLUE_TEXT,
                     borderRadius: 5,
                     function: (function != null)
                         ? function
@@ -644,7 +644,7 @@ class DialogWidget {
                           width: 250,
                           height: 40,
                           text: 'Đóng',
-                          textColor: AppColor.GREEN,
+                          textColor: AppColor.BLUE_TEXT,
                           bgColor: AppColor.WHITE,
                           borderRadius: 5,
                           function: (onCancel != null)
@@ -663,7 +663,7 @@ class DialogWidget {
                           height: 40,
                           text: 'Xác nhận',
                           textColor: AppColor.WHITE,
-                          bgColor: AppColor.GREEN,
+                          bgColor: AppColor.BLUE_TEXT,
                           borderRadius: 5,
                           function: (onConfirm != null)
                               ? onConfirm

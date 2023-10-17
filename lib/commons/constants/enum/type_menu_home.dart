@@ -10,6 +10,7 @@ enum MenuType {
   LOG,
   VNPT_EPAY,
   SERVICE_PACK,
+  CONFIG,
   LOGOUT,
   OTHER,
 }
@@ -22,6 +23,7 @@ enum SubMenuType {
   TOP_UP_PHONE,
   ACTIVE_FEE,
   ANNUAL_FEE,
+  LARK_WEB_HOOK,
   OTHER,
 }
 
@@ -29,6 +31,7 @@ extension PageSubMenu on SubMenuType {
   int get pageNumber {
     switch (this) {
       case SubMenuType.LIST_CONNECT:
+      case SubMenuType.LARK_WEB_HOOK:
       case SubMenuType.SURPLUS:
         return 0;
       case SubMenuType.TOP_UP_PHONE:

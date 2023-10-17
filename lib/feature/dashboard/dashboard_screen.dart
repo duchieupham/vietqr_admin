@@ -4,10 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
+import 'package:vietqr_admin/feature/config/config_screen.dart';
 import 'package:vietqr_admin/feature/connect_service/service_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/bloc/token_bloc.dart';
 import 'package:vietqr_admin/feature/dashboard/event/token_event.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
+import 'package:vietqr_admin/feature/dashboard/widget/menu_config.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_connect.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/log/log_screen.dart';
@@ -40,6 +42,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
+      const MenuConfig(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
@@ -52,6 +55,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const TransactionScreen(),
       const LogScreen(),
       const ServicePackScreen(),
+      const ConfigScreen(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
