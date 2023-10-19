@@ -15,11 +15,11 @@ class StatisticDTO {
 
   factory StatisticDTO.fromJson(Map<String, dynamic> json) {
     return StatisticDTO(
-      totalCashIn: json['totalCashIn'] ?? '',
-      totalCashOut: json['totalCashOut'] ?? '',
-      totalTransC: json['totalTransC'] ?? '',
-      totalTransD: json['totalTransD'] ?? '',
-      totalTrans: json['totalTrans'] ?? '',
+      totalCashIn: json['totalCashIn'] ?? 0,
+      totalCashOut: json['totalCashOut'] ?? 0,
+      totalTransC: json['totalTransC'] ?? 0,
+      totalTransD: json['totalTransD'] ?? 0,
+      totalTrans: json['totalTrans'] ?? 0,
     );
   }
 }
