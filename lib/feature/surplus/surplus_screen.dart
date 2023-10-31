@@ -32,10 +32,6 @@ class _SurplusScreenState extends State<SurplusScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          color: AppColor.BLUE_TEXT.withOpacity(0.2),
-          height: 45,
-        ),
         const SizedBox(height: 40),
         const Text(
           'Số dư khả dụng',

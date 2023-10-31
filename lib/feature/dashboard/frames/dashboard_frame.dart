@@ -10,14 +10,12 @@ import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 class DashboardFrame extends StatelessWidget {
   final Widget page;
   final Widget menu;
-  final Widget menuLink;
 
-  const DashboardFrame(
-      {Key? key,
-      required this.page,
-      required this.menu,
-      required this.menuLink})
-      : super(key: key);
+  const DashboardFrame({
+    Key? key,
+    required this.page,
+    required this.menu,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +40,7 @@ class DashboardFrame extends StatelessWidget {
                               builder: (context, provider, child) {
                                 double width = 0;
 
-                                if (provider.showMenuLink) {
-                                  width = 440;
-                                } else {
-                                  width = 220;
-                                }
+                                width = 220;
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 400),
                                   curve: Curves.easeInOut,
@@ -67,16 +61,6 @@ class DashboardFrame extends StatelessWidget {
                                           bgColor: AppColor.BLUE_TEXT
                                               .withOpacity(0.3),
                                           child: menu,
-                                        ),
-                                        Container(
-                                          width: 220,
-                                          height: height,
-                                          decoration: BoxDecoration(
-                                            color: AppColor.BLUE_TEXT
-                                                .withOpacity(0.2),
-                                          ),
-                                          padding: EdgeInsets.zero,
-                                          child: menuLink,
                                         ),
                                       ],
                                     ),

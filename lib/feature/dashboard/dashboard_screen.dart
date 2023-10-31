@@ -9,8 +9,6 @@ import 'package:vietqr_admin/feature/connect_service/service_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/bloc/token_bloc.dart';
 import 'package:vietqr_admin/feature/dashboard/event/token_event.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
-import 'package:vietqr_admin/feature/dashboard/widget/menu_config.dart';
-import 'package:vietqr_admin/feature/dashboard/widget/menu_connect.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/log/log_screen.dart';
 import 'package:vietqr_admin/feature/service_pack/service_pack_screen.dart';
@@ -19,7 +17,6 @@ import 'package:vietqr_admin/feature/transaction/transaction_screen.dart';
 
 import 'frames/dashboard_frame.dart';
 import 'state/token_state.dart';
-import 'widget/menu_vnpay.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -37,12 +34,12 @@ class _DashBroadScreenState extends State<DashboardScreen> {
     super.initState();
     _bloc = TokenBloc()..add(const TokenEventCheckValid());
     menus = [
-      const MenuEPay(),
-      const MenuConnect(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
-      const MenuConfig(),
+      const SizedBox.shrink(),
+      const SizedBox.shrink(),
+      const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
@@ -89,7 +86,6 @@ class _DashBroadScreenState extends State<DashboardScreen> {
                 return DashboardFrame(
                   page: pages[provider.initMenuPage],
                   menu: const MenuLeft(),
-                  menuLink: menus[provider.initMenuPage],
                 );
               },
             ),

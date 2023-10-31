@@ -31,8 +31,8 @@ class _Login extends State<Login> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(kDebugMode){
-      userNameController.text = 'adminvietqr';
+    if (kDebugMode) {
+      userNameController.text = 'vietqradmin';
       passController.text = 'systemadmin123';
     }
   }

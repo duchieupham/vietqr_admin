@@ -67,7 +67,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               height: 45,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration:
-                  BoxDecoration(color: AppColor.BLUE_TEXT.withOpacity(0.2)),
+                  BoxDecoration(color: AppColor.BLUE_TEXT.withOpacity(0.1)),
               child: Row(
                 children: [
                   if (provider.page == 1)
@@ -84,7 +84,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: AppColor.BLUE_TEXT.withOpacity(0.2),
+                          color: AppColor.BLUE_TEXT.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Row(
