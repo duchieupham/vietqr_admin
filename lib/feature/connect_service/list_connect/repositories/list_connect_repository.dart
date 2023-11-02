@@ -9,10 +9,11 @@ import 'package:vietqr_admin/models/response_message_dto.dart';
 class ListConnectRepository {
   const ListConnectRepository();
 
-  Future<List<ConnectDTO>> getListConnect() async {
+  Future<List<ConnectDTO>> getListConnect(int type) async {
     List<ConnectDTO> result = [];
     try {
-      String url = '${EnvConfig.instance.getBaseUrl()}admin/customer-sync';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}admin/customer-sync?type=$type';
 
       final response = await BaseAPIClient.getAPI(
         url: url,

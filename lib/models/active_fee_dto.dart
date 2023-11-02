@@ -13,14 +13,15 @@ class ActiveFeeDTO {
     this.bankAccounts,
   });
 
-  factory ActiveFeeDTO.fromJson(Map<String, dynamic> json) {
+  factory ActiveFeeDTO.fromJson(Map<String, dynamic> data) {
     return ActiveFeeDTO(
-      customerSyncId: json['customerSyncId'] ?? '',
-      merchant: json['merchant'] ?? '',
-      status: json['status'] ?? 0,
-      totalPayment: json['totalPayment'] ?? 0,
-      bankAccounts: json['bankAccounts']
-          .map<ActiveFeeBankDTO>((json) => ActiveFeeBankDTO.fromJson(json))
+      customerSyncId: data['customerSyncId'] ?? '',
+      merchant: data['merchant'] ?? '',
+      status: data['status'] ?? 0,
+      totalPayment: data['totalPayment'] ?? 0,
+      bankAccounts: data['bankAccounts']
+          .map<ActiveFeeBankDTO>(
+              (json) => ActiveFeeBankDTO.fromJson(json, data['merchant'] ?? ''))
           .toList(),
     );
   }
@@ -30,6 +31,7 @@ class ActiveFeeBankDTO {
   final String bankId;
   final String bankAccount;
   final String bankCode;
+  final String merchant;
   final String bankShortName;
   late List<FeeDTO>? fees;
 
@@ -38,13 +40,16 @@ class ActiveFeeBankDTO {
       this.bankAccount = '',
       this.bankCode = '',
       this.bankShortName = '',
+      this.merchant = '',
       this.fees});
 
-  factory ActiveFeeBankDTO.fromJson(Map<String, dynamic> json) {
+  factory ActiveFeeBankDTO.fromJson(
+      Map<String, dynamic> json, String merchant) {
     return ActiveFeeBankDTO(
         bankId: json['bankId'] ?? '',
         bankAccount: json['bankAccount'] ?? '',
         bankCode: json['bankCode'] ?? '',
+        merchant: merchant,
         bankShortName: json['bankShortName'] ?? '',
         fees:
             json['fees'].map<FeeDTO>((json) => FeeDTO.fromJson(json)).toList());

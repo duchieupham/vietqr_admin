@@ -6,8 +6,8 @@ class ItemMenu extends StatefulWidget {
   final Function onTap;
   final bool isSelect, isLogout;
   final String? pathImage;
-  final List<Widget> listItemDrop;
-  final bool isDropDownItem;
+  final bool isOnlyIcon;
+  final IconData? iconData;
   final double titleSize;
 
   const ItemMenu({
@@ -17,9 +17,9 @@ class ItemMenu extends StatefulWidget {
     this.pathImage,
     this.isSelect = false,
     this.isLogout = false,
-    this.listItemDrop = const [],
-    this.isDropDownItem = false,
     this.titleSize = 13,
+    this.isOnlyIcon = false,
+    this.iconData,
   }) : super(key: key);
 
   @override
@@ -43,6 +43,29 @@ class _ItemMenuState extends State<ItemMenu> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isOnlyIcon) {
+      return InkWell(
+        onTap: () {
+          widget.onTap();
+        },
+        child: Tooltip(
+          message: widget.title,
+          child: Container(
+              color: widget.isSelect
+                  ? AppColor.ITEM_MENU_SELECTED
+                  : Colors.transparent,
+              width: 50,
+              height: 46,
+              child: Icon(
+                widget.iconData,
+                size: 20,
+                color: widget.isSelect
+                    ? AppColor.BLUE_TEXT
+                    : AppColor.BLACK.withOpacity(0.6),
+              )),
+        ),
+      );
+    }
     return MouseRegion(
       onEnter: (PointerEvent details) => setState(() => amIHovering = true),
       onExit: (PointerEvent details) => setState(() {

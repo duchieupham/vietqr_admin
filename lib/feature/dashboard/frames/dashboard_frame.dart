@@ -39,8 +39,12 @@ class DashboardFrame extends StatelessWidget {
                             Consumer<MenuProvider>(
                               builder: (context, provider, child) {
                                 double width = 0;
+                                if (provider.showMenu) {
+                                  width = 220;
+                                } else {
+                                  width = 50;
+                                }
 
-                                width = 220;
                                 return AnimatedContainer(
                                   duration: const Duration(milliseconds: 400),
                                   curve: Curves.easeInOut,
@@ -53,7 +57,7 @@ class DashboardFrame extends StatelessWidget {
                                           const NeverScrollableScrollPhysics(),
                                       children: [
                                         BoxLayout(
-                                          width: 220,
+                                          width: width,
                                           height: height,
                                           borderRadius: 0,
                                           padding: EdgeInsets.zero,

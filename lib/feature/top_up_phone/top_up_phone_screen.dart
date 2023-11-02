@@ -64,6 +64,7 @@ class _TopUpPhoneScreenState extends State<_TopUpPhoneScreen> {
     return BlocProvider<TopUpPhoneBloc>(
         create: (context) => _bloc,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildTitle(),
             Expanded(child: _buildListServicePack()),
@@ -103,13 +104,13 @@ class _TopUpPhoneScreenState extends State<_TopUpPhoneScreen> {
           if (state is TopUpPhoneLoadingGetListState) {
             return const Padding(
               padding: EdgeInsets.only(top: 40),
-              child: Text('Đang tải...'),
+              child: Center(child: Text('Đang tải...')),
             );
           } else {
             if (listTransactionVNPTDTO.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.only(top: 40),
-                child: Text('Không có dữ liệu'),
+                child: Center(child: Text('Không có dữ liệu')),
               );
             }
             return SingleChildScrollView(
@@ -117,19 +118,21 @@ class _TopUpPhoneScreenState extends State<_TopUpPhoneScreen> {
               behavior: MyCustomScrollBehavior(),
               child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                      width: constraints.maxWidth > 1440
-                          ? constraints.maxWidth
-                          : 1440,
-                      child: Column(
-                        children: [
-                          _buildTitleItem(),
-                          ...listTransactionVNPTDTO.map((e) {
-                            int index = listTransactionVNPTDTO.indexOf(e);
-                            return _buildItem(e, index + 1);
-                          }).toList(),
-                        ],
-                      ))),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: SizedBox(
+                        width: 1294,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildTitleItem(),
+                            ...listTransactionVNPTDTO.map((e) {
+                              int index = listTransactionVNPTDTO.indexOf(e);
+                              return _buildItem(e, index + 1);
+                            }).toList(),
+                          ],
+                        )),
+                  )),
             ));
           }
         },
@@ -138,250 +141,231 @@ class _TopUpPhoneScreenState extends State<_TopUpPhoneScreen> {
   }
 
   Widget _buildTitleItem() {
-    return Row(
-      children: const [
-        SizedBox(
-          width: 50,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'No.',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 130,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Số tiền',
+    return Container(
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(color: AppColor.BLUE_DARK),
+      child: Row(
+        children: [
+          _buildItemTitle('No.',
+              width: 50,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 150,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Mã đơn hàng',
+              alignment: Alignment.center),
+          _buildItemTitle('Số tiền',
+              width: 130,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 170,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Khách hàng',
+              alignment: Alignment.center),
+          _buildItemTitle('Mã đơn hàng',
+              width: 150,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'SĐT người tạo',
+              alignment: Alignment.center),
+          _buildItemTitle('Khách hàng',
+              width: 170,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Nạp vàp SĐT',
+              alignment: Alignment.center),
+          _buildItemTitle('SĐT người tạo',
+              width: 140,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 130,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Phương thức TT',
+              alignment: Alignment.center),
+          _buildItemTitle('Nạp vàp SĐT',
+              width: 140,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 120,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Thời gian tạo',
+              alignment: Alignment.center),
+          _buildItemTitle('Phương thức TT',
+              width: 130,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Thời gian TT',
+              alignment: Alignment.center),
+          _buildItemTitle('Thời gian tạo',
+              width: 130,
+              height: 45,
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 12, left: 20, right: 20),
-          child: Text(
-            'Trạng thái',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-        ),
-      ],
+              alignment: Alignment.center),
+          _buildItemTitle('Thời gian TT',
+              width: 140,
+              height: 45,
+              textAlign: TextAlign.center,
+              alignment: Alignment.center),
+          _buildItemTitle('Trạng thái',
+              width: 80,
+              height: 45,
+              textAlign: TextAlign.center,
+              alignment: Alignment.centerRight),
+        ],
+      ),
     );
   }
 
   Widget _buildItem(TransactionVNPTDTO dto, int index) {
-    return SizedBox(
-      height: 50,
+    return Container(
+      color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
+      alignment: Alignment.center,
       child: Row(
         children: [
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 50,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  '$index',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            height: 50,
+            child: SelectionArea(
+              child: Text(
+                '$index',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 130,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  StringUtils.formatNumber(dto.amount),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            height: 50,
+            child: SelectionArea(
+              child: Text(
+                StringUtils.formatNumber(dto.amount),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 150,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.billNumber,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.billNumber,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 170,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.fullName,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.fullName,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 140,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.phoneNo.isEmpty ? '-' : dto.phoneNo,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.phoneNo.isEmpty ? '-' : dto.phoneNo,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 140,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.phoneNorc.isEmpty ? '-' : dto.phoneNorc,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.phoneNorc.isEmpty ? '-' : dto.phoneNorc,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 130,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.paymentMethod == 0 ? 'VietQR' : 'Mã VietQR',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.paymentMethod == 0 ? 'VietQR' : 'Mã VietQR',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
-            width: 120,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.timeCreated == 0
-                      ? '-'
-                      : TimeUtils.instance
-                          .formatTimeDateFromInt(dto.timeCreated),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
+            width: 130,
+            child: SelectionArea(
+              child: Text(
+                dto.timeCreated == 0
+                    ? '-'
+                    : TimeUtils.instance.formatTimeDateFromInt(dto.timeCreated),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 140,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.timePaid == 0
-                      ? '-'
-                      : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.timePaid == 0
+                    ? '-'
+                    : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
+            width: 114,
             child: Text(
               dto.getStatusText(),
               textAlign: TextAlign.center,
@@ -599,6 +583,27 @@ class _TopUpPhoneScreenState extends State<_TopUpPhoneScreen> {
             ],
           );
         }),
+      ),
+    );
+  }
+
+  Widget _buildItemTitle(String title,
+      {TextAlign? textAlign,
+      EdgeInsets? padding,
+      double? width,
+      double? height,
+      Alignment? alignment}) {
+    return Container(
+      width: width,
+      height: height,
+      padding: padding,
+      alignment: alignment,
+      decoration: const BoxDecoration(
+          border: Border(left: BorderSide(color: AppColor.WHITE, width: 0.5))),
+      child: Text(
+        title,
+        textAlign: textAlign,
+        style: const TextStyle(fontSize: 12, color: AppColor.WHITE),
       ),
     );
   }

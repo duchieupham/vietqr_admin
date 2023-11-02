@@ -25,7 +25,8 @@ class ListConnectScreen extends StatelessWidget {
     return ChangeNotifierProvider<ListConnectProvider>(
       create: (context) => ListConnectProvider(),
       child: BlocProvider<ListConnectBloc>(
-          create: (_) => ListConnectBloc()..add(ListConnectGetListEvent()),
+          create: (_) =>
+              ListConnectBloc()..add(const ListConnectGetListEvent(type: 9)),
           child: const _ListConnectScreen()),
     );
   }
@@ -51,7 +52,10 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
     super.initState();
     _bloc = BlocProvider.of(context);
     _subscription = eventBus.on<GetListConnect>().listen((data) {
-      _bloc.add(ListConnectGetListEvent());
+      _bloc.add(const ListConnectGetListEvent(type: 9));
+      context
+          .read<ListConnectProvider>()
+          .changeFilter(const FilterTransaction(id: 9, title: 'Tất cả'));
     });
   }
 
@@ -135,7 +139,59 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                             decoration: TextDecoration.underline),
                       ),
                     ),
-                  ]
+                  ] else
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColor.GREY_BG,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        children: [
+                          const Text(
+                            'Lọc theo',
+                            style: TextStyle(
+                                fontSize: 11, color: AppColor.GREY_TEXT),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          DropdownButton<FilterTransaction>(
+                            value: provider.valueFilter,
+                            icon: const RotatedBox(
+                              quarterTurns: 5,
+                              child: Icon(
+                                Icons.arrow_forward_ios,
+                                size: 12,
+                              ),
+                            ),
+                            underline: const SizedBox.shrink(),
+                            onChanged: (FilterTransaction? value) {
+                              provider.changeFilter(value!);
+                              _bloc
+                                  .add(ListConnectGetListEvent(type: value.id));
+                            },
+                            items: provider.listFilter
+                                .map<DropdownMenuItem<FilterTransaction>>(
+                                    (FilterTransaction value) {
+                              return DropdownMenuItem<FilterTransaction>(
+                                value: value,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: Text(
+                                    value.title,
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             );
@@ -177,41 +233,25 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               );
             }
             return LayoutBuilder(builder: (context, constraints) {
-              if (constraints.maxWidth < 900) {
-                return ScrollConfiguration(
-                  behavior: MyCustomScrollBehavior(),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
+              return ScrollConfiguration(
+                behavior: MyCustomScrollBehavior(),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SizedBox(
+                    width: constraints.maxWidth > 1040
+                        ? constraints.maxWidth
+                        : 1040,
+                    child: Column(
                       children: [
-                        _buildStt(result),
-                        _buildMerchant(result),
-                        SizedBox(width: 280, child: _buildURL(result)),
-                        _buildIp(result),
-                        _buildPort(result),
-                        _buildStatus(result),
-                        _buildPlatform(result),
-                        _buildAction(result, context),
-                        const SizedBox(width: 12),
+                        _buildTitleItem(),
+                        ...result.map((e) {
+                          int index = result.indexOf(e) + 1;
+
+                          return _buildItem(e, index);
+                        }).toList(),
                       ],
                     ),
                   ),
-                );
-              }
-              return IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildStt(result),
-                    _buildMerchant(result),
-                    Expanded(child: _buildURL(result)),
-                    _buildIp(result),
-                    _buildPort(result),
-                    _buildStatus(result),
-                    _buildPlatform(result),
-                    _buildAction(result, context),
-                    const SizedBox(width: 12),
-                  ],
                 ),
               );
             });
@@ -222,270 +262,278 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
     );
   }
 
-  Widget _buildStt(List<ConnectDTO> list) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, left: 20),
-      child: Column(
+  Widget _buildItem(ConnectDTO dto, int index) {
+    return Container(
+      color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
+      alignment: Alignment.center,
+      child: Row(
         children: [
-          const Text(
-            'No.',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Container(
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            width: 50,
+            height: 50,
+            alignment: Alignment.center,
+            child: Text(
+              '$index ',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
+            ),
           ),
-          ...list.map((e) {
-            int index = list.indexOf(e);
-            return Padding(
-              padding: const EdgeInsets.only(top: 24),
+          Container(
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            padding: const EdgeInsets.only(left: 12),
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 120,
+            child: Text(
+              dto.merchant.isNotEmpty ? dto.merchant : '-',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              height: 50,
+              padding: const EdgeInsets.only(left: 12),
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
               child: Text(
-                '${index + 1}',
+                dto.url.isNotEmpty ? dto.url : '-',
                 style: const TextStyle(fontSize: 12),
               ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMerchant(List<ConnectDTO> list) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, left: 20),
-      child: Column(
-        children: [
-          const Text(
-            'Merchant',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          ...list.map((e) {
-            int index = list.indexOf(e);
-            return Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: Text(
-                e.merchant.isNotEmpty ? e.merchant : '-',
-                style: const TextStyle(fontSize: 12),
-              ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildURL(List<ConnectDTO> list) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Column(
-        children: [
-          const Text(
-            'URL',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          ...list.map((e) {
-            int index = list.indexOf(e);
-            return Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: SelectionArea(
-                child: Text(
-                  e.url.isNotEmpty ? e.url : '-',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIp(List<ConnectDTO> list) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 12, left: 16),
-        child: Column(
-          children: [
-            const Text(
-              'IP',
-              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            ...list.map((e) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: SelectionArea(
-                  child: Text(
-                    e.ip.isNotEmpty ? e.ip : '-',
-                    style: const TextStyle(fontSize: 12),
+          ),
+          Container(
+            width: 120,
+            height: 50,
+            padding: const EdgeInsets.only(left: 12),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            child: Text(
+              dto.ip.isNotEmpty ? dto.ip : '-',
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Container(
+            width: 120,
+            height: 50,
+            padding: const EdgeInsets.only(left: 12),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            child: Text(
+              dto.port.isNotEmpty ? dto.port : '-',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Container(
+            width: 130,
+            height: 50,
+            padding: const EdgeInsets.only(left: 12),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            child: Text(
+              dto.active == 1 ? 'Hoạt động' : 'Không hoạt động',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Container(
+            width: 150,
+            height: 50,
+            padding: const EdgeInsets.only(left: 12),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            child: Text(
+              dto.platform.isNotEmpty ? dto.platform : '-',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
+            ),
+          ),
+          Container(
+            width: 200,
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            child: Row(
+              children: [
+                const Text('', style: TextStyle(fontSize: 12)),
+                InkWell(
+                  onTap: () {
+                    Session.instance.updateConnectDTO(dto);
+
+                    Provider.of<ListConnectProvider>(context, listen: false)
+                        .changePage(1);
+
+                    pageViewController.nextPage(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeIn);
+                  },
+                  child: const Text(
+                    'Chi tiết',
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: AppColor.BLUE_TEXT,
+                        decoration: TextDecoration.underline),
                   ),
                 ),
-              );
-            }).toList(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPort(List<ConnectDTO> list) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, left: 28),
-      child: Column(
-        children: [
-          const Text(
-            'Port',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          ...list.map((e) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: SelectionArea(
-                child: Text(
-                  e.port.isNotEmpty ? e.port : '-',
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatus(List<ConnectDTO> list) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, left: 28),
-      child: Column(
-        children: [
-          const Text(
-            'Trạng thái',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          ...list.map((e) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 24),
-              child: SelectionArea(
-                child: Text(
-                  e.active == 1 ? 'Hoạt động' : 'Không hoạt động',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color:
-                          e.active == 1 ? AppColor.BLUE_TEXT : AppColor.BLACK),
-                ),
-              ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPlatform(List<ConnectDTO> list) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, left: 28),
-      child: Column(
-        children: [
-          const Text(
-            'Nền tảng kết nối',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          ...list.map((e) {
-            return Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: SelectionArea(
-                  child: Text(
-                    e.platform.isNotEmpty ? e.platform : '-',
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
+                const SizedBox(width: 16),
+                InkWell(
+                  onTap: () {
+                    DialogWidget.instance.openPopupCenter(
+                      child: UpdateMerchantPopup(
+                        dto: dto,
+                        uploadSuccess: () {
+                          BlocProvider.of<ListConnectBloc>(context).add(
+                              ListConnectGetListEvent(
+                                  type: context
+                                      .read<ListConnectProvider>()
+                                      .valueFilter
+                                      .id));
+                        },
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Chỉnh sửa',
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: AppColor.BLUE_TEXT,
+                        decoration: TextDecoration.underline),
                   ),
-                ));
-          }).toList(),
+                ),
+                const SizedBox(width: 16),
+                InkWell(
+                  onTap: () {
+                    Map<String, dynamic> param = {};
+                    param['customerSyncId'] = dto.id;
+                    param['status'] = dto.active == 1 ? 0 : 1;
+                    BlocProvider.of<ListConnectBloc>(context).add(
+                        ListConnectUpdateStatusEvent(
+                            param: param,
+                            type: context
+                                .read<ListConnectProvider>()
+                                .valueFilter
+                                .id));
+                  },
+                  child: Text(
+                    dto.active == 1 ? 'Tắt kết nối' : 'Bật kết nối',
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: dto.active == 1
+                            ? AppColor.RED_TEXT
+                            : AppColor.BLUE_TEXT,
+                        decoration: TextDecoration.underline),
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildAction(List<ConnectDTO> list, BuildContext context) {
-    return SizedBox(
-      width: 220,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 12),
-        child: Column(
-          children: [
-            const Text(
-              'Action',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            ...list.map((e) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: Row(
-                  children: [
-                    const Text('', style: TextStyle(fontSize: 12)),
-                    InkWell(
-                      onTap: () {
-                        Session.instance.updateConnectDTO(e);
+  Widget _buildTitleItem() {
+    return Container(
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(color: AppColor.BLUE_DARK),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _buildItemTitle('No.',
+              height: 50,
+              width: 50,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Merchant',
+              height: 50,
+              width: 120,
+              padding: const EdgeInsets.only(left: 12),
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          Expanded(
+            child: _buildItemTitle('URL',
+                height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                alignment: Alignment.center,
+                textAlign: TextAlign.center),
+          ),
+          _buildItemTitle('IP',
+              height: 50,
+              width: 120,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Port',
+              height: 50,
+              width: 120,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Trạng thái',
+              height: 50,
+              width: 130,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              alignment: Alignment.center),
+          _buildItemTitle('Nền tảng kết nối',
+              height: 50,
+              width: 150,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              alignment: Alignment.center),
+          _buildItemTitle('Action',
+              height: 50,
+              width: 200,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              alignment: Alignment.center),
+        ],
+      ),
+    );
+  }
 
-                        Provider.of<ListConnectProvider>(context, listen: false)
-                            .changePage(1);
-
-                        pageViewController.nextPage(
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeIn);
-                      },
-                      child: const Text(
-                        'Chi tiết',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: AppColor.BLUE_TEXT,
-                            decoration: TextDecoration.underline),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    InkWell(
-                      onTap: () {
-                        DialogWidget.instance.openPopupCenter(
-                          child: UpdateMerchantPopup(
-                            dto: e,
-                            uploadSuccess: () {
-                              BlocProvider.of<ListConnectBloc>(context)
-                                  .add(ListConnectGetListEvent());
-                            },
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Chỉnh sửa',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: AppColor.BLUE_TEXT,
-                            decoration: TextDecoration.underline),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    InkWell(
-                      onTap: () {
-                        Map<String, dynamic> param = {};
-                        param['customerSyncId'] = e.id;
-                        param['status'] = e.active == 1 ? 0 : 1;
-                        BlocProvider.of<ListConnectBloc>(context)
-                            .add(ListConnectUpdateStatusEvent(param: param));
-                      },
-                      child: Text(
-                        e.active == 1 ? 'Tắt kết nối' : 'Bật kết nối',
-                        style: TextStyle(
-                            fontSize: 11,
-                            color: e.active == 1
-                                ? AppColor.RED_TEXT
-                                : AppColor.BLUE_TEXT,
-                            decoration: TextDecoration.underline),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            }).toList(),
-          ],
-        ),
+  Widget _buildItemTitle(String title,
+      {TextAlign? textAlign,
+      EdgeInsets? padding,
+      double? width,
+      double? height,
+      Alignment? alignment}) {
+    return Container(
+      width: width,
+      height: height,
+      padding: padding,
+      alignment: alignment,
+      decoration: const BoxDecoration(
+          border: Border(left: BorderSide(color: AppColor.WHITE, width: 0.5))),
+      child: Text(
+        title,
+        textAlign: textAlign,
+        style: const TextStyle(fontSize: 12, color: AppColor.WHITE),
       ),
     );
   }

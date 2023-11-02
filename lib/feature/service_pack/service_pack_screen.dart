@@ -111,7 +111,9 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                           children: [
                             _buildTitleItem(),
                             ...listServicePack.map((e) {
-                              return _buildItem(e, provider);
+                              int index = listServicePack.indexOf(e);
+
+                              return _buildItem(e, provider, index);
                             }).toList(),
                           ],
                         ))),
@@ -124,137 +126,77 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
   }
 
   Widget _buildTitleItem() {
-    return Row(
-      children: const [
-        SizedBox(
-          width: 40,
-        ),
-        SizedBox(
-          width: 90,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12),
-            child: Text(
-              'Mã gói',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
+    return Container(
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(color: AppColor.BLUE_DARK),
+      child: Row(
+        children: [
+          _buildItemTitle('',
+              height: 50, width: 40, alignment: Alignment.center),
+          _buildItemTitle('Mã gói',
+              height: 50,
+              width: 90,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Mô tả ngắn',
+              height: 50,
+              width: 140,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Phí kích hoạt',
+              height: 50,
+              width: 120,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Phí thuê bao',
+              height: 50,
+              width: 120,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Thời hạn',
+              height: 50,
+              width: 100,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Phí/GD',
+              height: 50,
+              width: 100,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Phần trăm phí/Tổng tiền',
+              height: 50,
+              width: 150,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Thuế(VAT)',
+              height: 50,
+              width: 100,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Ghi nhận GD',
+              height: 50,
+              width: 135,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          Expanded(
+            flex: 2,
+            child: _buildItemTitle('Mô tả',
+                height: 50,
+                alignment: Alignment.center,
+                textAlign: TextAlign.center),
           ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Mô tả ngắn',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 120,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Phí kích hoạt',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 120,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Phí thuê bao',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Thời hạn',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Phí/GD',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 150,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Phần trăm phí/Tổng tiền',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Thuế(VAT)',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 135,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Ghi nhận GD',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Mô tả',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 200,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20, right: 20),
-            child: Text(
-              'Action',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-      ],
+          _buildItemTitle('Action',
+              height: 50,
+              width: 200,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+        ],
+      ),
     );
   }
 
-  Widget _buildItem(ServicePackDTO dto, ServicePackProvider provider) {
+  Widget _buildItem(
+      ServicePackDTO dto, ServicePackProvider provider, int index) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -268,7 +210,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                 child: Container(
                   width: 30,
                   height: 30,
-                  margin: const EdgeInsets.only(left: 10, top: 10),
+                  margin: const EdgeInsets.only(left: 5, right: 5),
                   decoration: BoxDecoration(
                       color: AppColor.GREY_TEXT.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(30)),
@@ -287,20 +229,20 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                 width: 40,
               ),
             Expanded(
-                child: _buildInfoServicePack(dto.item!, provider: provider)),
+                child: _buildInfoServicePack(dto.item!, index,
+                    provider: provider)),
           ],
         ),
         if (provider.checkShowFromInsert(dto.item!))
           _buildFormInsert(dto.item!),
         if (provider.showListSubItem(dto.item!))
-          Container(
-            padding: const EdgeInsets.only(bottom: 12),
-            margin: const EdgeInsets.only(left: 40),
-            color: AppColor.GREY_TEXT.withOpacity(0.1),
+          Padding(
+            padding: const EdgeInsets.only(left: 40),
             child: Column(
-              children: dto.subItems!
-                  .map((e) => _buildInfoServicePack(e, isSubItem: true))
-                  .toList(),
+              children: dto.subItems!.map((e) {
+                int indexSub = dto.subItems!.indexOf(e);
+                return _buildInfoServicePack(e, indexSub, isSubItem: true);
+              }).toList(),
             ),
           )
       ],
@@ -524,115 +466,139 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
     );
   }
 
-  Widget _buildInfoServicePack(SubServicePackDTO dto,
+  Widget _buildInfoServicePack(SubServicePackDTO dto, int index,
       {bool isSubItem = false, ServicePackProvider? provider}) {
-    return SizedBox(
-      height: 60,
+    return Container(
+      color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
+      alignment: Alignment.center,
+      height: 50,
       child: Row(
         children: [
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 90,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: SelectableText(
-                dto.shortName.isNotEmpty ? dto.shortName : '-',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              dto.shortName.isNotEmpty ? dto.shortName : '-',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 140,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 12),
-              child: SelectableText(
-                dto.name.isNotEmpty ? dto.name : '-',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              dto.name.isNotEmpty ? dto.name : '-',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 120,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectableText(
-                StringUtils.formatNumber(dto.activeFee.toString()),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              StringUtils.formatNumber(dto.activeFee.toString()),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 120,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectableText(
-                StringUtils.formatNumber(dto.annualFee.toString()),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              StringUtils.formatNumber(dto.annualFee.toString()),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 100,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectableText(
-                dto.monthlyCycle.toString() ?? '-',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              dto.monthlyCycle.toString() ?? '-',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 100,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectableText(
-                StringUtils.formatNumber(dto.transFee.toString() ?? '0'),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              StringUtils.formatNumber(dto.transFee.toString() ?? '0'),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 150,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectableText(
-                '${dto.percentFee}%',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              '${dto.percentFee}%',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 100,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectableText(
-                '${dto.vat}%',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              '${dto.vat}%',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 135,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectableText(
-                dto.countingTransType == 0 ? 'Tất cả' : 'Chỉ GD có đối soát',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+            child: SelectableText(
+              dto.countingTransType == 0 ? 'Tất cả' : 'Chỉ GD có đối soát',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
           ),
           Expanded(
             flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 12),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
               child: SelectableText(
                 dto.description.isNotEmpty ? dto.description : '-',
                 textAlign: TextAlign.center,
@@ -640,72 +606,77 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
             width: 200,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 11, left: 20, right: 20),
-              child: isSubItem
-                  ? InkWell(
-                      onTap: () {
-                        DialogWidget.instance.openPopupCenter(
-                            child: InsertBankAccountFeePopup(
-                          servicePackBloc: _bloc,
-                          merchantName: dto.shortName,
-                          serviceFeeId: dto.id,
-                        ));
-                      },
-                      child: const Text(
-                        'Áp dụng cho Merchant',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            decoration: TextDecoration.underline,
-                            color: AppColor.BLUE_TEXT),
+            child: isSubItem
+                ? InkWell(
+                    onTap: () {
+                      DialogWidget.instance.openPopupCenter(
+                          child: InsertBankAccountFeePopup(
+                        servicePackBloc: _bloc,
+                        merchantName: dto.shortName,
+                        serviceFeeId: dto.id,
+                      ));
+                    },
+                    child: const Text(
+                      'Áp dụng cho Merchant',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 12,
+                          decoration: TextDecoration.underline,
+                          color: AppColor.BLUE_TEXT),
+                    ),
+                  )
+                : Row(
+                    children: [
+                      const SizedBox(
+                        width: 12,
                       ),
-                    )
-                  : Row(
-                      children: [
-                        InkWell(
+                      InkWell(
+                        onTap: () {
+                          provider.showFromInsert(dto.id);
+                        },
+                        child: Text(
+                          provider!.checkShowFromInsert(dto)
+                              ? 'Đóng'
+                              : 'Tạo gói nhỏ',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 12,
+                              decoration: TextDecoration.underline,
+                              color: AppColor.BLUE_TEXT),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: InkWell(
                           onTap: () {
-                            provider.showFromInsert(dto.id);
+                            DialogWidget.instance.openPopupCenter(
+                                child: InsertBankAccountFeePopup(
+                              servicePackBloc: _bloc,
+                              merchantName: dto.shortName,
+                              serviceFeeId: dto.id,
+                            ));
                           },
-                          child: Text(
-                            provider!.checkShowFromInsert(dto)
-                                ? 'Đóng'
-                                : 'Tạo gói nhỏ',
+                          child: const Text(
+                            'Áp dụng cho Merchant',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 12,
                                 decoration: TextDecoration.underline,
                                 color: AppColor.BLUE_TEXT),
                           ),
                         ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              DialogWidget.instance.openPopupCenter(
-                                  child: InsertBankAccountFeePopup(
-                                servicePackBloc: _bloc,
-                                merchantName: dto.shortName,
-                                serviceFeeId: dto.id,
-                              ));
-                            },
-                            child: const Text(
-                              'Áp dụng cho Merchant',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  decoration: TextDecoration.underline,
-                                  color: AppColor.BLUE_TEXT),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-            ),
+                      )
+                    ],
+                  ),
           ),
         ],
       ),
@@ -755,6 +726,27 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildItemTitle(String title,
+      {TextAlign? textAlign,
+      EdgeInsets? padding,
+      double? width,
+      double? height,
+      Alignment? alignment}) {
+    return Container(
+      width: width,
+      height: height,
+      padding: padding,
+      alignment: alignment,
+      decoration: const BoxDecoration(
+          border: Border(left: BorderSide(color: AppColor.WHITE, width: 0.5))),
+      child: Text(
+        title,
+        textAlign: textAlign,
+        style: const TextStyle(fontSize: 12, color: AppColor.WHITE),
       ),
     );
   }

@@ -17,6 +17,10 @@ class MenuProvider with ChangeNotifier {
 
   bool get showMenuLink => _isShowMenuLink;
 
+  bool _isShowMenu = true;
+
+  bool get showMenu => _isShowMenu;
+
   MenuType _menuHomeType = MenuType.VNPT_EPAY;
 
   MenuType get menuHomeType => _menuHomeType;
@@ -27,6 +31,11 @@ class MenuProvider with ChangeNotifier {
 
   void updateENV(int value) {
     _environment = value;
+    notifyListeners();
+  }
+
+  void updateShowMenu(bool value) {
+    _isShowMenu = value;
     notifyListeners();
   }
 

@@ -26,10 +26,10 @@ void _getListActiveFee(ActiveFeeEvent event, Emitter emit) async {
       }
 
       result = await activeFeeRepository.getListActiveFee(event.month);
-      if (event.initPage) {
-        activeFeeStaticDto =
-            await activeFeeRepository.getTotalStatic(event.month);
-      }
+      // if (event.initPage) {
+      //   activeFeeStaticDto =
+      //       await activeFeeRepository.getTotalStatic(event.month);
+      // }
       emit(ActiveFeeGetListSuccessState(
           result: result,
           initPage: event.initPage,

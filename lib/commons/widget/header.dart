@@ -5,6 +5,7 @@ import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/mixin/events.dart';
+import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
@@ -22,6 +23,33 @@ class Header extends StatelessWidget {
       width: width,
       child: Row(
         children: [
+          Tooltip(
+            message: 'Menu',
+            child: Consumer<MenuProvider>(
+              builder: (context, provider, child) {
+                return InkWell(
+                  onTap: () {
+                    provider.updateShowMenu(!provider.showMenu);
+                  },
+                  child: BoxLayout(
+                    width: 35,
+                    height: 35,
+                    borderRadius: 35,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(0),
+                    bgColor: Theme.of(context).cardColor.withOpacity(0.3),
+                    child: Icon(
+                      (provider.showMenu)
+                          ? Icons.close_rounded
+                          : Icons.menu_rounded,
+                      size: 20,
+                      color: Theme.of(context).hintColor,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           Image.asset(
             AppImages.icVietQrAdmin,
             height: 40,

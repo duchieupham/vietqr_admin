@@ -542,179 +542,150 @@ class _TransactionScreenState extends State<_TransactionScreen> {
   }
 
   Widget _buildTitleItem() {
-    return Row(
-      children: const [
-        SizedBox(
-          width: 50,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'No.',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
+    return Container(
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(color: AppColor.BLUE_DARK),
+      child: Row(
+        children: [
+          _buildItemTitle('No.',
+              height: 50,
+              width: 50,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Số TK',
+              height: 50,
+              width: 130,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Số tiền',
+              height: 50,
+              width: 150,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Order ID',
+              height: 50,
+              width: 110,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          Expanded(
+            child: _buildItemTitle('Mã GD (FT Code)',
+                height: 50,
+                alignment: Alignment.center,
+                textAlign: TextAlign.center),
           ),
-        ),
-        SizedBox(
-          width: 130,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Số TK',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
+          _buildItemTitle('Trạng thái',
+              height: 50,
+              width: 100,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          Expanded(
+            flex: 2,
+            child: _buildItemTitle('Nội dung',
+                height: 50,
+                width: 100,
+                alignment: Alignment.center,
+                textAlign: TextAlign.center),
           ),
-        ),
-        SizedBox(
-          width: 150,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Số tiền',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 110,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Order ID',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Mã GD (FT Code)',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Trạng thái',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'Nội dung',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 120,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'TG tạo GD',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 140,
-          child: Padding(
-            padding: EdgeInsets.only(top: 12, left: 20),
-            child: Text(
-              'TG thanh toán',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 12, left: 20, right: 20),
-          child: Text(
-            'Action',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          ),
-        ),
-      ],
+          _buildItemTitle('TG tạo GD',
+              height: 50,
+              width: 120,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('TG thanh toán',
+              height: 50,
+              width: 140,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Action',
+              height: 50,
+              width: 80,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
+        ],
+      ),
     );
   }
 
   Widget _buildItem(TransactionDTO dto, int index) {
-    return SizedBox(
-      height: 50,
+    return Container(
+      color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
+      alignment: Alignment.center,
       child: Row(
         children: [
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 50,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  '$index',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                '$index',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 130,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.bankAccount,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.bankAccount,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 150,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.transType == 'D'
-                      ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
-                      : '+ ${StringUtils.formatNumber(dto.amount.toString())}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: dto.getAmountColor()),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.transType == 'D'
+                    ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
+                    : '+ ${StringUtils.formatNumber(dto.amount.toString())}',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, color: dto.getAmountColor()),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 110,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.orderId.isNotEmpty ? dto.orderId : '-',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.orderId.isNotEmpty ? dto.orderId : '-',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
+              height: 50,
               child: SelectionArea(
                 child: Text(
                   dto.referenceNumber.isNotEmpty ? dto.referenceNumber : '-',
@@ -726,23 +697,31 @@ class _TransactionScreenState extends State<_TransactionScreen> {
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 110,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.getStatus(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: dto.getStatusColor()),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.getStatus(),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12, color: dto.getStatusColor()),
               ),
             ),
           ),
           Expanded(
             flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
+              height: 50,
               child: SelectionArea(
                 child: Text(
                   dto.content,
@@ -754,39 +733,50 @@ class _TransactionScreenState extends State<_TransactionScreen> {
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 120,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.timeCreated == 0
-                      ? '-'
-                      : TimeUtils.instance
-                          .formatTimeDateFromInt(dto.timeCreated),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.timeCreated == 0
+                    ? '-'
+                    : TimeUtils.instance.formatTimeDateFromInt(dto.timeCreated),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          SizedBox(
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
             width: 140,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 12, left: 20),
-              child: SelectionArea(
-                child: Text(
-                  dto.timePaid == 0
-                      ? '-'
-                      : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
+            child: SelectionArea(
+              child: Text(
+                dto.timePaid == 0
+                    ? '-'
+                    : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
+            width: 80,
             child: InkWell(
               onTap: () {
                 Session.instance.updateTransactionId(dto.id);
@@ -809,6 +799,27 @@ class _TransactionScreenState extends State<_TransactionScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildItemTitle(String title,
+      {TextAlign? textAlign,
+      EdgeInsets? padding,
+      double? width,
+      double? height,
+      Alignment? alignment}) {
+    return Container(
+      width: width,
+      height: height,
+      padding: padding,
+      alignment: alignment,
+      decoration: const BoxDecoration(
+          border: Border(left: BorderSide(color: AppColor.WHITE, width: 0.5))),
+      child: Text(
+        title,
+        textAlign: textAlign,
+        style: const TextStyle(fontSize: 12, color: AppColor.WHITE),
       ),
     );
   }

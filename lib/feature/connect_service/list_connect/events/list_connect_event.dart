@@ -7,12 +7,19 @@ class ListConnectEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ListConnectGetListEvent extends ListConnectEvent {}
+class ListConnectGetListEvent extends ListConnectEvent {
+  final int type;
+  const ListConnectGetListEvent({required this.type});
+
+  @override
+  List<Object?> get props => [type];
+}
 
 class ListConnectUpdateStatusEvent extends ListConnectEvent {
   final Map<String, dynamic> param;
-  const ListConnectUpdateStatusEvent({required this.param});
+  final int type;
+  const ListConnectUpdateStatusEvent({required this.param, required this.type});
 
   @override
-  List<Object?> get props => [param];
+  List<Object?> get props => [param, type];
 }
