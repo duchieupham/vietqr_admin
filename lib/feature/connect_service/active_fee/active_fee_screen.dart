@@ -35,13 +35,15 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
   @override
   void initState() {
     nowMonth = TimeUtils.instance.getFormatMonth(DateTime.now());
-    _activeFeeBloc = ActiveFeeBloc()
-      ..add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
+
+    _activeFeeBloc = ActiveFeeBloc();
     _activeFeeBloc.add(ActiveFeeGetTotalEvent(month: nowMonth));
+    _activeFeeBloc.add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
+
     _subscription = eventBus.on<RefreshListActiveFee>().listen((data) {
+      _activeFeeBloc.add(ActiveFeeGetTotalEvent(month: nowMonth));
       _activeFeeBloc
           .add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
-      _activeFeeBloc.add(ActiveFeeGetTotalEvent(month: nowMonth));
     });
     super.initState();
   }
@@ -79,13 +81,11 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
         }
 
         if (state is ActiveFeeGetListSuccessState) {
+          listActiveFeeDTO = state.result;
+          context.read<ActiveFeeProvider>().updateListData(state.result);
           if (!state.initPage) {
             Navigator.pop(context);
-          } else {
-            activeFeeStaticDto = state.activeFeeStaticDto;
           }
-          context.read<ActiveFeeProvider>().updateListData(state.result);
-          listActiveFeeDTO = state.result;
         }
       }, builder: (context, state) {
         if (state is ActiveFeeLoadingInitState) {
@@ -108,7 +108,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SizedBox(
-                      width: provider.valueFilterType.id == 0 ? 800 : 1350,
+                      width: provider.valueFilterType.id == 0 ? 660 : 1350,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal:
@@ -160,10 +160,10 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
               height: 50, width: 160, alignment: Alignment.center),
           _buildItemTitle('Trạng thái',
               height: 50, width: 140, alignment: Alignment.center),
-          Expanded(
-            child: _buildItemTitle('TK kết nối',
-                height: 50, alignment: Alignment.center),
-          ),
+          // Expanded(
+          //   child: _buildItemTitle('TK kết nối',
+          //       height: 50, alignment: Alignment.center),
+          // ),
           _buildItemTitle('Action',
               height: 50, width: 120, alignment: Alignment.center),
         ],
@@ -245,23 +245,23 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
-              child: SelectableText(
-                '${dto.bankAccounts?.length ?? 0}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ),
+          // Expanded(
+          //   child: Container(
+          //     alignment: Alignment.center,
+          //     decoration: const BoxDecoration(
+          //         border: Border(
+          //             bottom: BorderSide(color: AppColor.GREY_BUTTON),
+          //             right: BorderSide(color: AppColor.GREY_BUTTON))),
+          //     height: 50,
+          //     child: SelectableText(
+          //       '${dto.bankAccounts?.length ?? 0}',
+          //       textAlign: TextAlign.center,
+          //       style: const TextStyle(
+          //         fontSize: 12,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Container(
             alignment: Alignment.center,
             decoration: const BoxDecoration(
@@ -466,11 +466,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           child: SelectableText(
             StringUtils.formatNumber(dto.totalAmount.toString()),
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 12,
-                color: dto.countingTransType == 1
-                    ? AppColor.GREEN
-                    : AppColor.BLACK),
+            style: const TextStyle(
+              fontSize: 12,
+            ),
           ),
         ),
         Container(
@@ -484,11 +482,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
           child: SelectableText(
             dto.countingTransType == 0 ? 'Tất cả' : 'Chỉ GD có đối soát',
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 12,
-                color: dto.countingTransType == 1
-                    ? AppColor.GREEN
-                    : AppColor.BLACK),
+            style: const TextStyle(
+              fontSize: 12,
+            ),
           ),
         ),
         Container(

@@ -13,7 +13,7 @@ class ListConnectRepository {
     List<ConnectDTO> result = [];
     try {
       String url =
-          '${EnvConfig.instance.getBaseUrl()}admin/customer-sync?type=$type';
+          '${EnvConfig.instance.getBaseUrl()}admin/customer-sync/sorted?type=$type';
 
       final response = await BaseAPIClient.getAPI(
         url: url,

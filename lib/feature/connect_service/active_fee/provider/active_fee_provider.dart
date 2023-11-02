@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
+import 'package:vietqr_admin/feature/connect_service/active_fee/responsitory/active_fee_repository.dart';
 import 'package:vietqr_admin/models/active_fee_dto.dart';
 
 class ActiveFeeProvider with ChangeNotifier {
@@ -13,7 +14,7 @@ class ActiveFeeProvider with ChangeNotifier {
 
   List<FilterActiveFee> listFilterType = [
     const FilterActiveFee(id: 0, title: 'Merchant'),
-    const FilterActiveFee(id: 1, title: 'BankAccount'),
+    const FilterActiveFee(id: 1, title: 'Số tài khoản'),
   ];
   FilterActiveFee _valueFilterType =
       const FilterActiveFee(id: 0, title: 'Merchant');
@@ -32,6 +33,9 @@ class ActiveFeeProvider with ChangeNotifier {
 
   List<ActiveFeeBankDTO> _bankAccounts = [];
   List<ActiveFeeBankDTO> get bankAccounts => _bankAccounts;
+
+  ActiveFeeRepository activeFeeRepository = const ActiveFeeRepository();
+  String nowMonth = '';
 
   void updateCurrentPage(int page) {
     _currentPage = page;
