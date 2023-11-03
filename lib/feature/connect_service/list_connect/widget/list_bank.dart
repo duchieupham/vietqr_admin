@@ -40,24 +40,9 @@ class ListBank extends StatelessWidget {
           'Danh sách tài khoản đồng bộ',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        const SizedBox(
-          height: 8,
-        ),
-        if (isVertical)
-          ...listBank.map((e) {
-            return _buildItemBank(e, context);
-          }).toList()
-        else
-          Expanded(
-              child: ListView(
-            padding: EdgeInsets.zero,
-            children: listBank.map((e) {
-              return _buildItemBank(e, context);
-            }).toList(),
-          )),
         if (showButtonAddBank) ...[
           const SizedBox(
-            height: 16,
+            height: 8,
           ),
           ButtonWidget(
             height: 40,
@@ -77,7 +62,22 @@ class ListBank extends StatelessWidget {
               ));
             },
           ),
-        ]
+        ],
+        const SizedBox(
+          height: 8,
+        ),
+        if (isVertical)
+          ...listBank.map((e) {
+            return _buildItemBank(e, context);
+          }).toList()
+        else
+          Expanded(
+              child: ListView(
+            padding: EdgeInsets.zero,
+            children: listBank.map((e) {
+              return _buildItemBank(e, context);
+            }).toList(),
+          )),
       ],
     );
   }

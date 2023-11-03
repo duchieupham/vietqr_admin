@@ -341,8 +341,7 @@ class _InformationPopupState extends State<InformationPopup> {
         }, builder: (context, state) {
           return ListBank(
             listBank: result,
-            showButtonAddBank:
-                Session.instance.connectDTO.platform == 'API service',
+            showButtonAddBank: apiServiceDTO.platform == 'API service',
             apiServiceDTO: apiServiceDTO,
             customerSyncId: Session.instance.connectDTO.id,
             bloc: BlocProvider.of<InfoConnectBloc>(context),
