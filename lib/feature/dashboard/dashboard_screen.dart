@@ -67,13 +67,17 @@ class _DashBroadScreenState extends State<DashboardScreen> {
         create: (context) => _bloc,
         child: BlocListener<TokenBloc, TokenState>(
           listener: (context, state) {
-            if (state.typeToken == TokenType.Expired) {
+            if (state.typeToken == TokenType.Internet ||
+                state.typeToken == TokenType.InValid ||
+                state.typeToken == TokenType.Expired ||
+                state.typeToken == TokenType.MainSystem) {
               DialogWidget.instance.openMsgDialog(
                   title: 'Phiên đăng nhập hết hạn',
                   msg: 'Vui lòng đăng nhập lại ứng dụng',
                   function: () {
                     Navigator.pop(context);
-                    _bloc.add(TokenEventLogout());
+                    // _bloc.add(TokenEventLogout());
+                    context.go('/login');
                   });
             } else if (state.typeToken == TokenType.Logout) {
               context.go('/login');

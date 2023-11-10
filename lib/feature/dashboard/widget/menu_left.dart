@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
+import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
 import '../provider/menu_provider.dart';
 import 'item_menu_home.dart';
@@ -34,6 +36,7 @@ class MenuLeft extends StatelessWidget {
           Expanded(
             child: provider.showMenu
                 ? _buildListItem(
+                    context,
                     provider,
                     () {
                       provider.selectSubMenu(SubMenuType.OTHER);
@@ -58,8 +61,8 @@ class MenuLeft extends StatelessWidget {
     });
   }
 
-  Widget _buildListItem(
-      MenuProvider provider, Function closeMenuLink, Function(MenuType) onTab) {
+  Widget _buildListItem(BuildContext context, MenuProvider provider,
+      Function closeMenuLink, Function(MenuType) onTab) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -152,6 +155,8 @@ class MenuLeft extends StatelessWidget {
           isLogout: true,
           isSelect: provider.menuHomeType == MenuType.LOGOUT,
           onTap: () {
+            UserInformationHelper.instance.setAdminId('');
+            context.go('/login');
             onTab(MenuType.LOGOUT);
           },
         ),
