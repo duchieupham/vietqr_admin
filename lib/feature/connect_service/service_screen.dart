@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
-import 'package:vietqr_admin/feature/connect_service/active_fee/active_fee_screen.dart';
-import 'package:vietqr_admin/feature/connect_service/annual_fee/annual_fee_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 
@@ -28,8 +26,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
       const ListConnectScreen(),
       const NewConnectScreen(),
       const RunCallBackScreen(),
-      const ActiveFeeScreen(),
-      const AnnualFeeScreen(),
     ];
   }
 
@@ -48,7 +44,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
             child: Row(
               children: [
                 const Text(
-                  'Merchant',
+                  'Đại lý',
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -59,7 +55,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ItemMenuTop(
-                        title: 'Danh sách Merchant',
+                        title: 'Danh sách Đại lý',
                         isSelect: provider.initPage ==
                             SubMenuType.LIST_CONNECT.pageNumber,
                         onTap: () {
@@ -82,24 +78,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
                             SubMenuType.RUN_CALLBACK.pageNumber,
                         onTap: () {
                           provider.selectSubMenu(SubMenuType.RUN_CALLBACK);
-                          // provider.updateShowMenuLink(false);
-                        },
-                      ),
-                      ItemMenuTop(
-                        title: 'Phí dịch vụ',
-                        isSelect: provider.initPage ==
-                            SubMenuType.ACTIVE_FEE.pageNumber,
-                        onTap: () {
-                          provider.selectSubMenu(SubMenuType.ACTIVE_FEE);
-                          // provider.updateShowMenuLink(false);
-                        },
-                      ),
-                      ItemMenuTop(
-                        title: 'Phí thuê bao',
-                        isSelect: provider.initPage ==
-                            SubMenuType.ANNUAL_FEE.pageNumber,
-                        onTap: () {
-                          provider.selectSubMenu(SubMenuType.ANNUAL_FEE);
                           // provider.updateShowMenuLink(false);
                         },
                       ),

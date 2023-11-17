@@ -90,7 +90,7 @@ class StringUtils {
   }
 
   static String formatNumber(dynamic value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value == '') {
       return '0 VND';
     }
 
@@ -99,7 +99,6 @@ class StringUtils {
         value = int.parse(value);
       }
     }
-
     var numberFormat = NumberFormat.decimalPattern('vi-VI');
     return '${numberFormat.format(value).replaceAll('.', ',')} VND';
   }

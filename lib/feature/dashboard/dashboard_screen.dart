@@ -49,9 +49,9 @@ class _DashBroadScreenState extends State<DashboardScreen> {
     pages = [
       const EPayScreen(),
       const ServiceScreen(),
+      const ServicePackScreen(),
       const TransactionScreen(),
       const LogScreen(),
-      const ServicePackScreen(),
       const ConfigScreen(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),

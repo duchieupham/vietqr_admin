@@ -97,12 +97,14 @@ class MenuProvider with ChangeNotifier {
       initMenuPage = 0;
     } else if (value == MenuType.SERVICE_CONNECT) {
       initMenuPage = 1;
-    } else if (value == MenuType.TRANSACTION) {
-      initMenuPage = 2;
-    } else if (value == MenuType.LOG) {
-      initMenuPage = 3;
     } else if (value == MenuType.SERVICE_PACK) {
+      initMenuPage = 2;
+    } else if (value == MenuType.TRANSACTION) {
+      initMenuPage = 3;
+    } else if (value == MenuType.LOG) {
       initMenuPage = 4;
+    } else if (value == MenuType.SERVICE_PACK) {
+      initMenuPage = 2;
     } else if (value == MenuType.CONFIG) {
       initMenuPage = 5;
     } else if (value == MenuType.ACCOUNT_BANK) {

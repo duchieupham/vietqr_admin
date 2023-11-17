@@ -10,7 +10,7 @@ class ButtonWidget extends StatelessWidget {
   final double? height;
   final double? borderRadius;
   final double sizeTitle;
-
+  final EdgeInsets padding;
   const ButtonWidget({
     Key? key,
     this.width,
@@ -20,6 +20,7 @@ class ButtonWidget extends StatelessWidget {
     required this.function,
     this.height,
     this.borderRadius,
+    this.padding = EdgeInsets.zero,
     this.sizeTitle = 14,
   }) : super(key: key);
 
@@ -29,6 +30,7 @@ class ButtonWidget extends StatelessWidget {
       onTap: function,
       child: Container(
         width: width,
+        padding: padding,
         height: (height != null) ? height : 40,
         alignment: Alignment.center,
         decoration: BoxDecoration(

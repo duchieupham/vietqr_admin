@@ -78,10 +78,18 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                title: 'Merchant',
+                title: 'Đại lý',
                 isSelect: provider.menuHomeType == MenuType.SERVICE_CONNECT,
                 onTap: () {
                   onTab(MenuType.SERVICE_CONNECT);
+                },
+              ),
+              ItemMenu(
+                title: 'Phí dịch vụ',
+                isSelect: provider.menuHomeType == MenuType.SERVICE_PACK,
+                onTap: () {
+                  onTab(MenuType.SERVICE_PACK);
+                  closeMenuLink();
                 },
               ),
               ItemMenu(
@@ -97,14 +105,6 @@ class MenuLeft extends StatelessWidget {
                 isSelect: provider.menuHomeType == MenuType.LOG,
                 onTap: () {
                   onTab(MenuType.LOG);
-                  closeMenuLink();
-                },
-              ),
-              ItemMenu(
-                title: 'Thiết lập bảng giá',
-                isSelect: provider.menuHomeType == MenuType.SERVICE_PACK,
-                onTap: () {
-                  onTab(MenuType.SERVICE_PACK);
                   closeMenuLink();
                 },
               ),

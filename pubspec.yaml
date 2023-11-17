@@ -54,6 +54,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   month_year_picker: ^0.2.0+2
   qr_flutter: ^4.0.0
+  jiffy:
 
 dev_dependencies:
   flutter_test:

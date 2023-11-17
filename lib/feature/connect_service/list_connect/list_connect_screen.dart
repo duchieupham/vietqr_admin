@@ -7,6 +7,7 @@ import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/mixin/events.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/connect_service/list_connect/provider/list_connect_provider.dart';
+import 'package:vietqr_admin/feature/merchant/views/merchant.dart';
 import 'package:vietqr_admin/models/connect.dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
@@ -14,7 +15,6 @@ import '../../../commons/constants/utils/custom_scroll.dart';
 import 'blocs/list_connect_bloc.dart';
 import 'events/list_connect_event.dart';
 import 'states/list_connect_state.dart';
-import 'widget/infomation_popup.dart';
 import 'widget/update_merchant_info_popup.dart';
 
 class ListConnectScreen extends StatelessWidget {
@@ -201,7 +201,8 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               controller: pageViewController,
               children: [
                 _buildListConnect(),
-                const InformationPopup(),
+                const MerchantView(),
+                // const InformationPopup(),
               ],
             ),
           ),
@@ -288,7 +289,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             padding: const EdgeInsets.only(left: 12),
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             height: 50,
             width: 120,
             child: Text(
@@ -472,7 +473,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               width: 50,
               alignment: Alignment.center,
               textAlign: TextAlign.center),
-          _buildItemTitle('Merchant',
+          _buildItemTitle('Tên đại lý',
               height: 50,
               width: 120,
               padding: const EdgeInsets.only(left: 12),

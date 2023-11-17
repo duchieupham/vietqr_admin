@@ -72,9 +72,15 @@ class TimeUtils {
     return result;
   }
 
-  String formatDateToString(DateTime? now) {
+  String formatDateToString(DateTime? now, {bool isExport = false}) {
     now ??= DateTime.now();
-    DateFormat format = DateFormat('dd/MM/yyyy');
+    DateFormat format;
+    if (isExport) {
+      format = DateFormat('yyyy-MM-dd HH:mm:ss');
+    } else {
+      format = DateFormat('dd/MM/yyyy HH:mm:ss');
+    }
+
     String formatted = format.format(now);
     return formatted;
   }
@@ -84,6 +90,18 @@ class TimeUtils {
     DateFormat format = DateFormat('MM/yyyy');
     String formatted = format.format(now);
     return formatted;
+  }
+
+  String formatMonthYear(String date) {
+    if (!date.contains('-')) {
+      return date;
+    }
+
+    String result = '';
+    List<String> splitDate = date.split('-');
+
+    result = '${splitDate[1]}/${splitDate[0]}';
+    return result;
   }
 
   String getCurrentDate(DateTime? now) {
