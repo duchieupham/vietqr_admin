@@ -101,14 +101,6 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                title: 'Log',
-                isSelect: provider.menuHomeType == MenuType.LOG,
-                onTap: () {
-                  onTab(MenuType.LOG);
-                  closeMenuLink();
-                },
-              ),
-              ItemMenu(
                 title: 'Cấu hình',
                 isSelect: provider.menuHomeType == MenuType.CONFIG,
                 onTap: () {
@@ -124,23 +116,7 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                title: 'Tài khoản ngân hàng',
-                isSelect: provider.menuHomeType == MenuType.ACCOUNT_BANK,
-                onTap: () {
-                  onTab(MenuType.ACCOUNT_BANK);
-                  closeMenuLink();
-                },
-              ),
-              ItemMenu(
-                title: 'Thông báo đẩy',
-                isSelect: provider.menuHomeType == MenuType.PUSH_NOTIFICATION,
-                onTap: () {
-                  onTab(MenuType.PUSH_NOTIFICATION);
-                  closeMenuLink();
-                },
-              ),
-              ItemMenu(
-                title: 'Bài Post',
+                title: 'Bảng tin',
                 isSelect: provider.menuHomeType == MenuType.POST,
                 onTap: () {
                   onTab(MenuType.POST);

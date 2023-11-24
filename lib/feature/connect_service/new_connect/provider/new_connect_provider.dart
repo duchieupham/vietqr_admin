@@ -241,10 +241,4 @@ class NewConnectProvider with ChangeNotifier {
     }
     return url;
   }
-
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    super.dispose();
-  }
 }

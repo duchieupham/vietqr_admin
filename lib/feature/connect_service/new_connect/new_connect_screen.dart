@@ -523,32 +523,49 @@ class NewConnectScreen extends StatelessWidget {
                   );
                 }
                 if (state is GetTokenFailedState) {
-                  return Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: AppColor.RED_TEXT.withOpacity(0.3)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Thất bại!',
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.RED_TEXT),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            errorText(state.dto.message),
-                            style: const TextStyle(
-                                fontSize: 12, color: AppColor.RED_TEXT),
-                          )
-                        ],
-                      ));
+                  return InkWell(
+                    onTap: () async {
+                      await FlutterClipboard.copy(state.dto.message).then(
+                        (value) => Fluttertoast.showToast(
+                          msg: 'Đã sao chép',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: AppColor.WHITE,
+                          textColor: AppColor.BLACK,
+                          fontSize: 15,
+                          webBgColor: 'rgba(255, 255, 255)',
+                          webPosition: 'center',
+                        ),
+                      );
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: AppColor.RED_TEXT.withOpacity(0.3)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Thất bại!',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.RED_TEXT),
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              errorText(state.dto.message),
+                              style: const TextStyle(
+                                  fontSize: 12, color: AppColor.RED_TEXT),
+                            )
+                          ],
+                        )),
+                  );
                 }
                 return const SizedBox.shrink();
               },
