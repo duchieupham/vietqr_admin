@@ -172,7 +172,7 @@ class _BillState extends State<Bill> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SizedBox(
-            width: 360,
+            width: 400,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
