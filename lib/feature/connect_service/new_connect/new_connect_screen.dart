@@ -133,7 +133,7 @@ class NewConnectScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
             const Text(
-              'Địa chỉ kết nối(Nhập URL hoặc nhập IP + PORT)',
+              'Thông tin đại lý',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
@@ -169,23 +169,115 @@ class NewConnectScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            BorderLayout(
-              height: 50,
-              isError: false,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText: 'URL kết nối',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updateUrlConnect(value as String);
-                },
-              ),
+            Row(
+              children: [
+                const Text(
+                  'Địa chỉ kết nối',
+                  style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Transform.scale(
+                  scale: 0.9,
+                  child: Radio<int>(
+                      value: 0,
+                      activeColor: AppColor.BLUE_TEXT,
+                      groupValue: provider.valueTypeConnect,
+                      onChanged: (value) {
+                        provider.changeTypeConnect(value ?? 0);
+                      }),
+                ),
+                const Text(
+                  'URL',
+                  style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                ),
+                const SizedBox(
+                  width: 28,
+                ),
+                Transform.scale(
+                  scale: 0.9,
+                  child: Radio<int>(
+                      value: 1,
+                      activeColor: AppColor.BLUE_TEXT,
+                      groupValue: provider.valueTypeConnect,
+                      onChanged: (value) {
+                        provider.changeTypeConnect(value ?? 0);
+                      }),
+                ),
+                const Text(
+                  'IP + PORT',
+                  style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                ),
+              ],
             ),
+            const SizedBox(
+              height: 16,
+            ),
+            if (provider.valueTypeConnect == 0)
+              BorderLayout(
+                height: 50,
+                isError: false,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: TextFieldWidget(
+                  isObscureText: false,
+                  maxLines: 1,
+                  disableBorder: true,
+                  hintText: 'URL kết nối',
+                  inputType: TextInputType.text,
+                  keyboardAction: TextInputAction.next,
+                  onTapOutside: (value) {},
+                  onChange: (value) {
+                    provider.updateUrlConnect(value as String);
+                  },
+                ),
+              )
+            else
+              Row(
+                children: [
+                  Expanded(
+                    child: BorderLayout(
+                      height: 50,
+                      isError: false,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: TextFieldWidget(
+                        isObscureText: false,
+                        maxLines: 1,
+                        disableBorder: true,
+                        hintText: 'IP',
+                        inputType: TextInputType.text,
+                        keyboardAction: TextInputAction.next,
+                        onTapOutside: (value) {},
+                        onChange: (value) {
+                          provider.updateIpConnect(value as String);
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: BorderLayout(
+                      height: 50,
+                      isError: false,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: TextFieldWidget(
+                        isObscureText: false,
+                        maxLines: 1,
+                        disableBorder: true,
+                        hintText: 'PORT',
+                        inputType: TextInputType.text,
+                        keyboardAction: TextInputAction.next,
+                        onTapOutside: (value) {},
+                        onChange: (value) {
+                          provider.updatePortConnect(value as String);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             const SizedBox(
               height: 16,
             ),
@@ -197,47 +289,7 @@ class NewConnectScreen extends StatelessWidget {
                 isObscureText: false,
                 maxLines: 1,
                 disableBorder: true,
-                hintText: 'IP',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updateIpConnect(value as String);
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BorderLayout(
-              height: 50,
-              isError: false,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText: 'PORT',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updatePortConnect(value as String);
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BorderLayout(
-              height: 50,
-              isError: false,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText: 'Suffix URL',
+                hintText: 'URL Path',
                 inputType: TextInputType.text,
                 keyboardAction: TextInputAction.next,
                 onTapOutside: (value) {},
@@ -623,6 +675,36 @@ class NewConnectScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
+            const SizedBox(
+              height: 16,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: UnconstrainedBox(
+                child: ButtonWidget(
+                  height: 32,
+                  width: 150,
+                  text: 'Lấy mật khẩu',
+                  borderRadius: 5,
+                  sizeTitle: 12,
+                  textColor: AppColor.WHITE,
+                  bgColor: AppColor.BLUE_TEXT,
+                  function: () {
+                    if (provider.customerName.isEmpty) {
+                      DialogWidget.instance.openMsgDialog(
+                          title: 'Thông tin không hợp lệ',
+                          msg: 'Vui lòng nhập thông tin Username');
+                    } else {
+                      BlocProvider.of<NewConnectBloc>(context).add(
+                          GetPassSystemEvent(userName: provider.customerName));
+                    }
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
             BlocConsumer<NewConnectBloc, NewConnectState>(
               listener: (context, state) {},
               builder: (context, state) {
@@ -732,36 +814,6 @@ class NewConnectScreen extends StatelessWidget {
                       ],
                     ));
               },
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: UnconstrainedBox(
-                child: ButtonWidget(
-                  height: 32,
-                  width: 150,
-                  text: 'Lấy mật khẩu',
-                  borderRadius: 5,
-                  sizeTitle: 12,
-                  textColor: AppColor.WHITE,
-                  bgColor: AppColor.BLUE_TEXT,
-                  function: () {
-                    if (provider.customerName.isEmpty) {
-                      DialogWidget.instance.openMsgDialog(
-                          title: 'Thông tin không hợp lệ',
-                          msg: 'Vui lòng nhập thông tin Username');
-                    } else {
-                      BlocProvider.of<NewConnectBloc>(context).add(
-                          GetPassSystemEvent(userName: provider.customerName));
-                    }
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 16,
             ),
           ],
         );

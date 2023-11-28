@@ -70,6 +70,13 @@ class NewConnectProvider with ChangeNotifier {
 
   TextEditingController accountName = TextEditingController();
 
+  int valueTypeConnect = 0;
+
+  changeTypeConnect(int type) {
+    valueTypeConnect = type;
+    notifyListeners();
+  }
+
   void updateMerchant(String value) {
     _merchant = value;
     if (_merchant.isNotEmpty) {
