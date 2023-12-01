@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 
 class TextFieldWidget extends StatelessWidget {
@@ -26,6 +27,7 @@ class TextFieldWidget extends StatelessWidget {
   final Function(PointerDownEvent)? onTapOutside;
   final EdgeInsets contentPadding;
   final TextStyle? textStyle;
+  final List<TextInputFormatter>? inputFormatter;
   final bool disableBorder;
 
   const TextFieldWidget({
@@ -54,6 +56,7 @@ class TextFieldWidget extends StatelessWidget {
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 10),
     this.textStyle,
     this.required = false,
+    this.inputFormatter,
     this.disableBorder = false,
   }) : super(key: key);
 
@@ -79,8 +82,8 @@ class TextFieldWidget extends StatelessWidget {
                       if (required)
                         const Text(
                           '*',
-                          style: TextStyle(
-                              fontSize: 16, color: AppColor.RED_TEXT),
+                          style:
+                              TextStyle(fontSize: 16, color: AppColor.RED_TEXT),
                         )
                     ],
                   ),
@@ -104,6 +107,7 @@ class TextFieldWidget extends StatelessWidget {
                     keyboardType: inputType,
                     maxLines: (maxLines == null) ? 1 : maxLines,
                     textInputAction: keyboardAction,
+                    inputFormatters: inputFormatter,
                     decoration: InputDecoration(
                       hintText: hintText,
                       counterText: '',
@@ -141,6 +145,7 @@ class TextFieldWidget extends StatelessWidget {
               autofocus: false,
               focusNode: focusNode,
               onTapOutside: onTapOutside,
+              inputFormatters: inputFormatter,
               decoration: InputDecoration(
                 hintText: hintText,
                 counterText: '',

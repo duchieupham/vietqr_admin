@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vietqr_admin/models/generate_username_pass_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
 
 import '../event/new_connect_event.dart';
@@ -34,15 +35,11 @@ void _getToken(NewConnectEvent event, Emitter emit) async {
 }
 
 void _getPassSystem(NewConnectEvent event, Emitter emit) async {
-  ResponseMessageDTO result = const ResponseMessageDTO();
+  GenerateUserNamePassDto result = const GenerateUserNamePassDto();
   try {
     if (event is GetPassSystemEvent) {
-      result = await newConnectRepository.getPassSystem(event.userName);
-      if (result.status == "SUCCESS") {
-        emit(GetPassSystemSuccessfulState(dto: result));
-      } else {
-        emit(GetPassSystemFailedState(dto: result));
-      }
+      result = await newConnectRepository.getPassSystem(event.param);
+      emit(GetPassSystemSuccessfulState(dto: result));
     }
   } catch (e) {
     print('Error at new connect- _getPassSystem: $e');

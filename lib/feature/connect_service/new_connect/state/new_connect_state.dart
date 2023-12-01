@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:vietqr_admin/models/generate_username_pass_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
 
 class NewConnectState extends Equatable {
@@ -35,7 +36,7 @@ class GetTokenFailedState extends NewConnectState {
 }
 
 class GetPassSystemSuccessfulState extends NewConnectState {
-  final ResponseMessageDTO dto;
+  final GenerateUserNamePassDto dto;
   const GetPassSystemSuccessfulState({required this.dto});
 
   @override
@@ -43,7 +44,7 @@ class GetPassSystemSuccessfulState extends NewConnectState {
 }
 
 class GetPassSystemFailedState extends NewConnectState {
-  final ResponseMessageDTO dto;
+  final GenerateUserNamePassDto dto;
   const GetPassSystemFailedState({required this.dto});
 
   @override

@@ -16,11 +16,11 @@ class GetTokenEvent extends NewConnectEvent {
 }
 
 class GetPassSystemEvent extends NewConnectEvent {
-  final String userName;
-  const GetPassSystemEvent({required this.userName});
+  final Map<String, dynamic> param;
+  const GetPassSystemEvent({required this.param});
 
   @override
-  List<Object?> get props => [userName];
+  List<Object?> get props => [param];
 }
 
 class AddCustomerSyncEvent extends NewConnectEvent {

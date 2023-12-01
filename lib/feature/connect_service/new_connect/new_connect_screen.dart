@@ -1,5 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +95,12 @@ class NewConnectScreen extends StatelessWidget {
                             bgColor: AppColor.BLUE_TEXT,
                             function: () {
                               provider.checkValidate();
-                              if (provider.isValidate()) {
+
+                              if (provider.customerName.isEmpty) {
+                                DialogWidget.instance.openMsgDialog(
+                                    title: 'Thông tin không hợp lệ',
+                                    msg: 'Vui lòng lấy thông tin kết nối');
+                              } else if (provider.isValidate()) {
                                 Map<String, dynamic> param = {};
                                 param['merchantName'] = provider.merchant;
                                 param['url'] = provider.urlConnect;
@@ -151,6 +157,10 @@ class NewConnectScreen extends StatelessWidget {
                 // controller: TextEditingController(),
                 inputType: TextInputType.text,
                 keyboardAction: TextInputAction.next,
+                inputFormatter: [
+                  UpperCaseTextFormatter(),
+                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                ],
                 onTapOutside: (value) {},
                 onChange: (value) {
                   provider.updateMerchant(value as String);
@@ -645,58 +655,27 @@ class NewConnectScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            BorderLayout(
-              height: 50,
-              isError: provider.errorCustomerName,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText:
-                    'System username\u002A (đặt theo format customer-tenkhachang-user23XX)',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updateCustomerName(value as String);
-                },
-              ),
-            ),
-            if (provider.errorCustomerName) ...[
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
-                ),
-              )
-            ],
-            const SizedBox(
-              height: 16,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
             Align(
               alignment: Alignment.centerLeft,
               child: UnconstrainedBox(
                 child: ButtonWidget(
                   height: 32,
                   width: 150,
-                  text: 'Lấy mật khẩu',
+                  text: 'Lấy thông tin kết nối',
                   borderRadius: 5,
                   sizeTitle: 12,
                   textColor: AppColor.WHITE,
                   bgColor: AppColor.BLUE_TEXT,
                   function: () {
-                    if (provider.customerName.isEmpty) {
+                    if (provider.merchant.isEmpty) {
                       DialogWidget.instance.openMsgDialog(
                           title: 'Thông tin không hợp lệ',
-                          msg: 'Vui lòng nhập thông tin Username');
+                          msg: 'Vui lòng nhập tên Merchant');
                     } else {
-                      BlocProvider.of<NewConnectBloc>(context).add(
-                          GetPassSystemEvent(userName: provider.customerName));
+                      Map<String, dynamic> param = {};
+                      param['merchantName'] = provider.merchant;
+                      BlocProvider.of<NewConnectBloc>(context)
+                          .add(GetPassSystemEvent(param: param));
                     }
                   },
                 ),
@@ -716,52 +695,108 @@ class NewConnectScreen extends StatelessWidget {
                   );
                 }
                 if (state is GetPassSystemSuccessfulState) {
-                  return Container(
-                      height: 50,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: AppColor.GREY_BUTTON),
-                      child: Row(
-                        children: [
-                          const SelectableText(
-                            'Mật khẩu: ',
-                            style: TextStyle(
-                                fontSize: 12, color: AppColor.GREY_TEXT),
-                          ),
-                          Expanded(
-                            child: Text(
-                              state.dto.message,
-                              style: const TextStyle(
-                                  fontSize: 12, color: AppColor.GREY_TEXT),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              await FlutterClipboard.copy(state.dto.message)
-                                  .then(
-                                (value) => Fluttertoast.showToast(
-                                  msg: 'Đã sao chép',
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: AppColor.WHITE,
-                                  textColor: AppColor.BLACK,
-                                  fontSize: 15,
-                                  webBgColor: 'rgba(255, 255, 255)',
-                                  webPosition: 'center',
+                  provider.updateCustomerName(state.dto.username);
+                  return Column(
+                    children: [
+                      Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: AppColor.GREY_BUTTON),
+                          child: Row(
+                            children: [
+                              const SelectableText(
+                                'Username: ',
+                                style: TextStyle(
+                                    fontSize: 12, color: AppColor.GREY_TEXT),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  state.dto.username,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: AppColor.GREY_TEXT),
                                 ),
-                              );
-                            },
-                            child: const Text(
-                              'Sao chép',
-                              style: TextStyle(
-                                  fontSize: 12, color: AppColor.BLUE_TEXT),
-                            ),
-                          )
-                        ],
-                      ));
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  await FlutterClipboard.copy(
+                                          state.dto.username)
+                                      .then(
+                                    (value) => Fluttertoast.showToast(
+                                      msg: 'Đã sao chép',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: AppColor.WHITE,
+                                      textColor: AppColor.BLACK,
+                                      fontSize: 15,
+                                      webBgColor: 'rgba(255, 255, 255)',
+                                      webPosition: 'center',
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Sao chép',
+                                  style: TextStyle(
+                                      fontSize: 12, color: AppColor.BLUE_TEXT),
+                                ),
+                              )
+                            ],
+                          )),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: AppColor.GREY_BUTTON),
+                          child: Row(
+                            children: [
+                              const SelectableText(
+                                'Mật khẩu: ',
+                                style: TextStyle(
+                                    fontSize: 12, color: AppColor.GREY_TEXT),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  state.dto.password,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: AppColor.GREY_TEXT),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  await FlutterClipboard.copy(
+                                          state.dto.password)
+                                      .then(
+                                    (value) => Fluttertoast.showToast(
+                                      msg: 'Đã sao chép',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: AppColor.WHITE,
+                                      textColor: AppColor.BLACK,
+                                      fontSize: 15,
+                                      webBgColor: 'rgba(255, 255, 255)',
+                                      webPosition: 'center',
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Sao chép',
+                                  style: TextStyle(
+                                      fontSize: 12, color: AppColor.BLUE_TEXT),
+                                ),
+                              )
+                            ],
+                          ))
+                    ],
+                  );
                 }
                 if (state is GetPassSystemFailedState) {
                   return Column(
@@ -788,31 +823,55 @@ class NewConnectScreen extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        state.dto.message,
-                        style: const TextStyle(
-                            fontSize: 12, color: AppColor.RED_TEXT),
+                      const Text(
+                        'Đã có lỗi xảy ra',
+                        style:
+                            TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
                       )
                     ],
                   );
                 }
-                return Container(
-                    height: 50,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: AppColor.GREY_BUTTON),
-                    child: Row(
-                      children: const [
-                        Text(
-                          'Mật khẩu: ',
-                          style: TextStyle(
-                              fontSize: 12, color: AppColor.GREY_TEXT),
-                        ),
-                        Spacer()
-                      ],
-                    ));
+                return Column(
+                  children: [
+                    Container(
+                        height: 50,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: AppColor.GREY_BUTTON),
+                        child: Row(
+                          children: const [
+                            Text(
+                              'Username: ',
+                              style: TextStyle(
+                                  fontSize: 12, color: AppColor.GREY_TEXT),
+                            ),
+                            Spacer()
+                          ],
+                        )),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                        height: 50,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: AppColor.GREY_BUTTON),
+                        child: Row(
+                          children: const [
+                            Text(
+                              'Mật khẩu: ',
+                              style: TextStyle(
+                                  fontSize: 12, color: AppColor.GREY_TEXT),
+                            ),
+                            Spacer()
+                          ],
+                        )),
+                  ],
+                );
               },
             ),
           ],
@@ -827,5 +886,16 @@ class NewConnectScreen extends StatelessWidget {
     } else {
       return 'Lỗi không xác định $message';
     }
+  }
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toUpperCase(),
+      selection: newValue.selection,
+    );
   }
 }

@@ -185,7 +185,6 @@ class NewConnectProvider with ChangeNotifier {
     } else {
       _errorCustomerName = true;
     }
-    notifyListeners();
   }
 
   checkValidate() {
