@@ -184,36 +184,39 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
             ),
           ),
           if (list.isNotEmpty)
-            ...List.generate(list.length, (index) {
-              final CustomerDTO data = list[index];
-              final dataSelect =
-                  Provider.of<CallbackProvider>(context, listen: false)
-                      .customerDTO;
-              return GestureDetector(
-                onTap: () {
-                  Provider.of<CallbackProvider>(context, listen: false)
-                      .updateCustomer(data);
+            Expanded(
+                child: ListView(
+              children: List.generate(list.length, (index) {
+                final CustomerDTO data = list[index];
+                final dataSelect =
+                    Provider.of<CallbackProvider>(context, listen: false)
+                        .customerDTO;
+                return GestureDetector(
+                  onTap: () {
+                    Provider.of<CallbackProvider>(context, listen: false)
+                        .updateCustomer(data);
 
-                  _bloc.add(GetListBankEvent(customerId: data.id));
-                },
-                child: Container(
-                  height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  color: dataSelect.id == data.id
-                      ? AppColor.BLUE_TEXT.withOpacity(0.3)
-                      : AppColor.TRANSPARENT,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    data.merchant,
-                    style: TextStyle(
-                      color: dataSelect.id == data.id
-                          ? AppColor.BLUE_TEXT
-                          : AppColor.BLACK,
+                    _bloc.add(GetListBankEvent(customerId: data.id));
+                  },
+                  child: Container(
+                    height: 40,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    color: dataSelect.id == data.id
+                        ? AppColor.BLUE_TEXT.withOpacity(0.3)
+                        : AppColor.TRANSPARENT,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      data.merchant,
+                      style: TextStyle(
+                        color: dataSelect.id == data.id
+                            ? AppColor.BLUE_TEXT
+                            : AppColor.BLACK,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }).toList()
+                );
+              }).toList(),
+            )),
         ],
       ),
     );

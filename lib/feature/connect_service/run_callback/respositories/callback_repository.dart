@@ -139,6 +139,9 @@ class CallBackRepository {
       Map<String, String>? result = {};
       result['Authorization'] =
           'Basic ${StringUtils.instance.authBase64(userName, password)}';
+
+      print(
+          '-------------------------------------------------- ${StringUtils.instance.authBase64(userName, password)}');
       result['Content-Type'] = 'application/json';
       result['Accept'] = '*/*';
 
