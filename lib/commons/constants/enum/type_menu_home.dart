@@ -6,6 +6,7 @@ enum MenuType {
   SERVICE_CONNECT,
   PUSH_NOTIFICATION,
   POST,
+  INTEGRATION_CONNECTIVITY,
   TRANSACTION,
   LOG,
   VNPT_EPAY,
@@ -32,13 +33,12 @@ extension PageSubMenu on SubMenuType {
     switch (this) {
       case SubMenuType.LIST_CONNECT:
       case SubMenuType.LARK_WEB_HOOK:
+      case SubMenuType.NEW_CONNECT:
       case SubMenuType.SURPLUS:
         return 0;
       case SubMenuType.TOP_UP_PHONE:
-      case SubMenuType.NEW_CONNECT:
-        return 1;
       case SubMenuType.RUN_CALLBACK:
-        return 2;
+        return 1;
       case SubMenuType.ACTIVE_FEE:
         return 3;
       case SubMenuType.ANNUAL_FEE:

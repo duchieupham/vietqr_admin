@@ -5,11 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/config/config_screen.dart';
-import 'package:vietqr_admin/feature/connect_service/service_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/bloc/token_bloc.dart';
 import 'package:vietqr_admin/feature/dashboard/event/token_event.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
+import 'package:vietqr_admin/feature/integration_connectivity/integration_connectivity_screen.dart';
+import 'package:vietqr_admin/feature/list_merchant/list_connect/list_connect_screen.dart';
 import 'package:vietqr_admin/feature/log/log_screen.dart';
 import 'package:vietqr_admin/feature/service_pack/service_pack_screen.dart';
 import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
@@ -44,11 +45,13 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
+      const SizedBox.shrink(),
     ];
 
     pages = [
       const EPayScreen(),
-      const ServiceScreen(),
+      const ListConnectScreen(),
+      const IntegrationConnectivityScreen(),
       const ServicePackScreen(),
       const TransactionScreen(),
       const LogScreen(),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
-import 'package:vietqr_admin/feature/connect_service/list_connect/widget/infomation_popup.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
+import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/infomation_popup.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/page/list_transaction.dart';

@@ -78,14 +78,22 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
-                title: 'Đại lý',
+                title: 'Danh sách đại lý',
                 isSelect: provider.menuHomeType == MenuType.SERVICE_CONNECT,
                 onTap: () {
                   onTab(MenuType.SERVICE_CONNECT);
                 },
               ),
               ItemMenu(
-                title: 'Phí dịch vụ',
+                title: 'Tích hợp và kết nối',
+                isSelect:
+                    provider.menuHomeType == MenuType.INTEGRATION_CONNECTIVITY,
+                onTap: () {
+                  onTab(MenuType.INTEGRATION_CONNECTIVITY);
+                },
+              ),
+              ItemMenu(
+                title: 'Cài đặt và thiết lập',
                 isSelect: provider.menuHomeType == MenuType.SERVICE_PACK,
                 onTap: () {
                   onTab(MenuType.SERVICE_PACK);

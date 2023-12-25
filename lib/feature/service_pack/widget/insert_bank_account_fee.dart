@@ -6,6 +6,7 @@ import 'package:vietqr_admin/commons/constants/utils/error_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/image_utils.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
+import 'package:vietqr_admin/commons/widget/textfield_widget.dart';
 import 'package:vietqr_admin/feature/service_pack/bloc/service_pack_bloc.dart';
 import 'package:vietqr_admin/feature/service_pack/event/service_pack_event.dart';
 import 'package:vietqr_admin/feature/service_pack/provider/insert_bank_account_fee_provider.dart';
@@ -31,7 +32,7 @@ class InsertBankAccountFeePopup extends StatefulWidget {
 class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
   late ServicePackBloc bloc;
   List<MerchantFee> listMerchantFee = [];
-
+  List<MerchantFee> listMerchantValue = [];
   @override
   void initState() {
     bloc = ServicePackBloc()..add(GetListMerchantBankAccountEvent());
@@ -48,6 +49,7 @@ class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
             listener: (context, state) {
           if (state is GetListMerchantBankAccountSuccessState) {
             listMerchantFee = state.result;
+            listMerchantValue = state.result;
           }
           if (state is ServicePackLoadingState) {
             DialogWidget.instance.openLoadingDialog();
@@ -64,21 +66,6 @@ class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
                 msg: ErrorUtils.instance.getErrorMessage(state.dto.message));
           }
         }, builder: (context, state) {
-          if (listMerchantFee.isEmpty) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                children: [
-                  _buildTitle(context),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Không có dữ liệu')
-                ],
-              ),
-            );
-          }
-
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Consumer<InsertBankAccountFeeProvider>(
@@ -86,36 +73,87 @@ class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
               return Column(
                 children: [
                   _buildTitle(context),
-                  Expanded(
-                    child: ListView(
-                      children: listMerchantFee.map((e) {
-                        return _buildListItem(e, provider);
-                      }).toList(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppColor.GREY_BUTTON),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFieldWidget(
+                            hintText: 'Tìm kiếm bằng tên Merchant',
+                            keyboardAction: TextInputAction.done,
+                            disableBorder: true,
+                            onChange: (Object value) {
+                              setState(() {
+                                if (value.toString().isNotEmpty) {
+                                  listMerchantValue = listMerchantFee
+                                      .where((dto) => dto.merchant
+                                          .toUpperCase()
+                                          .contains(
+                                              value.toString().toUpperCase()))
+                                      .toList();
+                                } else {
+                                  listMerchantValue = listMerchantFee;
+                                }
+                              });
+                            },
+                            inputType: TextInputType.text,
+                            isObscureText: false,
+                          ),
+                        ),
+                        const Icon(Icons.search)
+                      ],
                     ),
                   ),
-                  ButtonWidget(
-                    height: 40,
-                    text: 'Hoàn tất',
-                    borderRadius: 5,
-                    sizeTitle: 12,
-                    textColor: AppColor.WHITE,
-                    bgColor: AppColor.BLUE_TEXT,
-                    function: () {
-                      Map<String, dynamic> param = {};
-                      if (provider.valueRadio.merchant.isNotEmpty) {
-                        param['insertType'] = 0;
-                        param['bankId'] = '';
-                        param['customerSyncId'] =
-                            provider.valueRadio.customerSyncId;
-                      } else {
-                        param['insertType'] = 1;
-                        param['bankId'] = provider.valueSubItem.bankId;
-                        param['customerSyncId'] = '';
-                      }
-                      param['serviceFeeId'] = widget.serviceFeeId;
-                      bloc.add(InsertBankAccountFeeEvent(param: param));
-                    },
-                  ),
+                  if (listMerchantValue.isEmpty) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Column(
+                        children: const [
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Text('Không có dữ liệu')
+                        ],
+                      ),
+                    ),
+                    const Spacer()
+                  ] else ...[
+                    Expanded(
+                      child: ListView(
+                        children: listMerchantValue.map((e) {
+                          return _buildListItem(e, provider);
+                        }).toList(),
+                      ),
+                    ),
+                    ButtonWidget(
+                      height: 40,
+                      text: 'Hoàn tất',
+                      borderRadius: 5,
+                      sizeTitle: 12,
+                      textColor: AppColor.WHITE,
+                      bgColor: AppColor.BLUE_TEXT,
+                      function: () {
+                        Map<String, dynamic> param = {};
+                        if (provider.valueRadio.merchant.isNotEmpty) {
+                          param['insertType'] = 0;
+                          param['bankId'] = '';
+                          param['customerSyncId'] =
+                              provider.valueRadio.customerSyncId;
+                        } else {
+                          param['insertType'] = 1;
+                          param['bankId'] = provider.valueSubItem.bankId;
+                          param['customerSyncId'] = '';
+                        }
+                        param['serviceFeeId'] = widget.serviceFeeId;
+                        bloc.add(InsertBankAccountFeeEvent(param: param));
+                      },
+                    ),
+                  ]
                 ],
               );
             }),

@@ -11,9 +11,9 @@ import 'package:vietqr_admin/commons/constants/utils/error_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
-import 'package:vietqr_admin/feature/connect_service/active_fee/active_fee_screen.dart';
-import 'package:vietqr_admin/feature/connect_service/annual_fee/annual_fee_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
+import 'package:vietqr_admin/feature/list_merchant/active_fee/active_fee_screen.dart';
+import 'package:vietqr_admin/feature/list_merchant/annual_fee/annual_fee_screen.dart';
 import 'package:vietqr_admin/feature/service_pack/bloc/service_pack_bloc.dart';
 import 'package:vietqr_admin/feature/service_pack/event/service_pack_event.dart';
 import 'package:vietqr_admin/feature/service_pack/provider/form_create_provider.dart';
@@ -171,6 +171,11 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                     }
                     if (state is ServicePackGetListSuccessState) {
                       listServicePack = state.result;
+                      listServicePack.sort((a, b) {
+                        return a.item!.shortName
+                            .toLowerCase()
+                            .compareTo(b.item!.shortName.toLowerCase());
+                      });
                       if (state.initPage) {
                         provider.init(listServicePack);
                       } else {
