@@ -9,8 +9,6 @@ import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/blocs/info_connect_bloc.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/statistic_provider.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_connect_state.dart';
-import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/api_service_info.dart';
-import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/ecomerce_info.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/list_bank.dart';
 import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
@@ -52,7 +50,6 @@ class _InformationPopupState extends State<InformationPopup> {
         if (constraints.maxWidth < 1000) {
           return Row(
             children: [
-              Expanded(child: _buildInfo()),
               const SizedBox(
                 width: 32,
               ),
@@ -66,12 +63,12 @@ class _InformationPopupState extends State<InformationPopup> {
                   Expanded(child: _buildListCard())
                 ],
               )),
+              const Expanded(child: SizedBox.shrink()),
             ],
           );
         }
         return Row(
           children: [
-            Expanded(child: _buildInfo()),
             const SizedBox(
               width: 32,
             ),
@@ -80,65 +77,9 @@ class _InformationPopupState extends State<InformationPopup> {
               width: 32,
             ),
             Expanded(child: _buildListCard()),
+            const Expanded(child: SizedBox.shrink()),
           ],
         );
-      }),
-    );
-  }
-
-  Widget _buildInfo() {
-    return BlocProvider<InfoConnectBloc>(
-      create: (BuildContext context) => InfoConnectBloc()
-        ..add(GetInfoConnectEvent(
-            id: Session.instance.connectDTO.id,
-            platform: Session.instance.connectDTO.platform)),
-      child: BlocConsumer<InfoConnectBloc, InfoConnectState>(
-          listener: (context, state) {
-        if (state is InfoApiServiceConnectSuccessfulState) {
-          apiServiceDTO = state.dto;
-        }
-      }, builder: (context, state) {
-        if (state is InfoApiServiceConnectSuccessfulState) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Thông tin kết nối của khách hàng',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Expanded(
-                child: ApiServiceInfo(
-                  dto: state.dto,
-                ),
-              ),
-            ],
-          );
-        }
-        if (state is InfoEcomerceDTOConnectSuccessfulState) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Thông tin kết nối của khách hàng',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Expanded(
-                child: EcomerceInfo(
-                  dto: state.dto,
-                ),
-              ),
-            ],
-          );
-        }
-
-        return const Text('Không có thông tin');
       }),
     );
   }

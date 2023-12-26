@@ -5,6 +5,7 @@ import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/infomation_popup.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
+import 'package:vietqr_admin/feature/merchant/page/info_service_port.dart';
 import 'package:vietqr_admin/feature/merchant/page/list_transaction.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
@@ -127,8 +128,15 @@ class _MerchantViewState extends State<MerchantView> {
                     },
                   ),
                   ItemMenuTop(
-                    title: 'Bảng giá',
+                    title: 'API Service Port',
                     isSelect: currentType == 5,
+                    onTap: () {
+                      changePage(5);
+                    },
+                  ),
+                  ItemMenuTop(
+                    title: 'Bảng giá',
+                    isSelect: currentType == 6,
                     onTap: () {},
                   ),
                 ],
@@ -141,6 +149,7 @@ class _MerchantViewState extends State<MerchantView> {
               const SynthesisReport(),
               const ServiceFee(),
               const Bill(),
+              const InfoServicePort(),
             ][currentType])
           ],
         ),
