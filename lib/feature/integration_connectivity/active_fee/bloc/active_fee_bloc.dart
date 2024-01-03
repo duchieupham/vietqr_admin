@@ -15,7 +15,7 @@ class ActiveFeeBloc extends Bloc<ActiveFeeEvent, ActiveFeeState> {
 const ActiveFeeRepository activeFeeRepository = ActiveFeeRepository();
 
 void _getListActiveFee(ActiveFeeEvent event, Emitter emit) async {
-  List<ActiveFeeDTO> result = [];
+  ActiveFeeDTO dto = ActiveFeeDTO();
   ActiveFeeStaticDto activeFeeStaticDto = const ActiveFeeStaticDto();
   try {
     if (event is ActiveFeeGetListEvent) {
@@ -25,21 +25,22 @@ void _getListActiveFee(ActiveFeeEvent event, Emitter emit) async {
         emit(ActiveFeeLoadingState());
       }
 
-      result = await activeFeeRepository.getListActiveFee(event.month);
+      dto = await activeFeeRepository.getListActiveFee(event.month);
       // if (event.initPage) {
       //   activeFeeStaticDto =
       //       await activeFeeRepository.getTotalStatic(event.month);
       // }
       emit(ActiveFeeGetListSuccessState(
-          result: result,
+          result: dto,
           initPage: event.initPage,
           isLoadMore: event.isLoadMore,
           activeFeeStaticDto: activeFeeStaticDto));
     }
   } catch (e) {
     print('Error at get list active fee- _getListActiveFee: $e');
-    emit(const ActiveFeeGetListSuccessState(
-        result: [], activeFeeStaticDto: ActiveFeeStaticDto()));
+    emit(ActiveFeeGetListSuccessState(
+        result: ActiveFeeDTO(),
+        activeFeeStaticDto: const ActiveFeeStaticDto()));
   }
 }
 

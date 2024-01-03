@@ -16,7 +16,6 @@ import 'package:vietqr_admin/feature/list_merchant/active_fee/provider/active_fe
 import 'package:vietqr_admin/feature/list_merchant/active_fee/state/active_fee_state.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/widget/active_fee_detail.dart';
 import 'package:vietqr_admin/models/active_fee_dto.dart';
-import 'package:vietqr_admin/models/active_fee_total_static.dart';
 
 class ActiveFeeScreen extends StatefulWidget {
   const ActiveFeeScreen({Key? key}) : super(key: key);
@@ -29,19 +28,16 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
   final PageController pageViewController = PageController();
   late ActiveFeeBloc _activeFeeBloc;
   StreamSubscription? _subscription;
-  List<ActiveFeeDTO> listActiveFeeDTO = [];
-  ActiveFeeStaticDto activeFeeStaticDto = const ActiveFeeStaticDto();
+  ActiveFeeDTO activeFeeDTO = ActiveFeeDTO();
   String nowMonth = '';
   @override
   void initState() {
     nowMonth = TimeUtils.instance.getFormatMonth(DateTime.now());
 
     _activeFeeBloc = ActiveFeeBloc();
-    _activeFeeBloc.add(ActiveFeeGetTotalEvent(month: nowMonth));
     _activeFeeBloc.add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
 
     _subscription = eventBus.on<RefreshListActiveFee>().listen((data) {
-      _activeFeeBloc.add(ActiveFeeGetTotalEvent(month: nowMonth));
       _activeFeeBloc
           .add(ActiveFeeGetListEvent(month: nowMonth, initPage: true));
     });
@@ -81,7 +77,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
         }
 
         if (state is ActiveFeeGetListSuccessState) {
-          listActiveFeeDTO = state.result;
+          activeFeeDTO = state.result;
           context.read<ActiveFeeProvider>().updateListData(state.result);
           if (!state.initPage) {
             Navigator.pop(context);
@@ -89,12 +85,18 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
         }
       }, builder: (context, state) {
         if (state is ActiveFeeLoadingInitState) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Center(child: Text('Đang tải...')),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 16,
+              ),
+              Text('Đang tải ...'),
+            ],
           );
         } else {
-          if (listActiveFeeDTO.isEmpty) {
+          if (activeFeeDTO.list?.isEmpty ?? true) {
             return const Padding(
               padding: EdgeInsets.only(top: 40),
               child: Center(child: Text('Không có dữ liệu')),
@@ -171,7 +173,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
     );
   }
 
-  Widget _buildItem(int index, ActiveFeeDTO dto) {
+  Widget _buildItem(int index, ActiveFeeItemDTO dto) {
     return Container(
       color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,
@@ -658,47 +660,36 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                 ),
               ),
             ),
-            BlocConsumer<ActiveFeeBloc, ActiveFeeState>(
-              listener: (context, state) {
-                if (state is ActiveFeeGetTotalSuccessState) {
-                  activeFeeStaticDto = state.activeFeeStaticDto;
-                }
-              },
-              builder: (context, state) {
-                return Row(
-                  children: [
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    _buildTemplateTotal(
-                        'Tổng GD', activeFeeStaticDto.totalTrans.toString()),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    _buildTemplateTotal(
-                        'Tổng số tiền',
-                        StringUtils.formatNumber(
-                            activeFeeStaticDto.totalPayment.toString())),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    _buildTemplateTotal(
-                        'Chưa TT',
-                        StringUtils.formatNumber(
-                            activeFeeStaticDto.totalPaymentUnpaid.toString()),
-                        valueColor: AppColor.RED_TEXT),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    _buildTemplateTotal(
-                        'Đã TT',
-                        StringUtils.formatNumber(
-                            activeFeeStaticDto.totalPaymentPaid.toString()),
-                        valueColor: AppColor.BLUE_TEXT),
-                  ],
-                );
-              },
-            ),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 12,
+                ),
+                _buildTemplateTotal(
+                    'Tổng GD', activeFeeDTO.totalTrans.toString()),
+                const SizedBox(
+                  width: 12,
+                ),
+                _buildTemplateTotal(
+                    'Tổng số tiền',
+                    StringUtils.formatNumber(
+                        activeFeeDTO.totalAmount.toString())),
+                const SizedBox(
+                  width: 12,
+                ),
+                _buildTemplateTotal(
+                    'Chưa TT',
+                    StringUtils.formatNumber(
+                        activeFeeDTO.totalUnpaid.toString()),
+                    valueColor: AppColor.RED_TEXT),
+                const SizedBox(
+                  width: 12,
+                ),
+                _buildTemplateTotal('Đã TT',
+                    StringUtils.formatNumber(activeFeeDTO.totalPaid.toString()),
+                    valueColor: AppColor.BLUE_TEXT),
+              ],
+            )
           ],
         ),
       );

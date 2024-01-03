@@ -1,11 +1,39 @@
 class ActiveFeeDTO {
+  final int totalTrans;
+  final int totalAmount;
+  final int totalUnpaid;
+  final int totalPaid;
+  late List<ActiveFeeItemDTO>? list;
+
+  ActiveFeeDTO({
+    this.totalTrans = 0,
+    this.totalAmount = 0,
+    this.totalUnpaid = 0,
+    this.totalPaid = 0,
+    this.list,
+  });
+
+  factory ActiveFeeDTO.fromJson(Map<String, dynamic> data) {
+    return ActiveFeeDTO(
+      totalTrans: data['totalTrans'] ?? 0,
+      totalAmount: data['totalAmount'] ?? 0,
+      totalUnpaid: data['totalUnpaid'] ?? 0,
+      totalPaid: data['totalPaid'] ?? 0,
+      list: data['list']
+          .map<ActiveFeeItemDTO>((json) => ActiveFeeItemDTO.fromJson(json))
+          .toList(),
+    );
+  }
+}
+
+class ActiveFeeItemDTO {
   final String customerSyncId;
   final String merchant;
   final int totalPayment;
   final int status;
   late List<ActiveFeeBankDTO>? bankAccounts;
 
-  ActiveFeeDTO({
+  ActiveFeeItemDTO({
     this.customerSyncId = '',
     this.merchant = '',
     this.totalPayment = 0,
@@ -13,8 +41,8 @@ class ActiveFeeDTO {
     this.bankAccounts,
   });
 
-  factory ActiveFeeDTO.fromJson(Map<String, dynamic> data) {
-    return ActiveFeeDTO(
+  factory ActiveFeeItemDTO.fromJson(Map<String, dynamic> data) {
+    return ActiveFeeItemDTO(
       customerSyncId: data['customerSyncId'] ?? '',
       merchant: data['merchant'] ?? '',
       status: data['status'] ?? 0,

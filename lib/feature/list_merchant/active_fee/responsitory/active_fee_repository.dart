@@ -9,8 +9,8 @@ import 'package:vietqr_admin/models/active_fee_total_static.dart';
 class ActiveFeeRepository {
   const ActiveFeeRepository();
 
-  Future<List<ActiveFeeDTO>> getListActiveFee(String month) async {
-    List<ActiveFeeDTO> result = [];
+  Future<ActiveFeeDTO> getListActiveFee(String month) async {
+    ActiveFeeDTO dto = ActiveFeeDTO();
     try {
       String url =
           '${EnvConfig.instance.getBaseUrl()}admin/merchant/service-fee/transaction?month=$month';
@@ -20,15 +20,13 @@ class ActiveFeeRepository {
       );
       var data = jsonDecode(response.body);
       if (data != null) {
-        result = data
-            .map<ActiveFeeDTO>((json) => ActiveFeeDTO.fromJson(json))
-            .toList();
-        return result;
+        dto = ActiveFeeDTO.fromJson(data);
+        return dto;
       }
-      return result;
+      return dto;
     } catch (e) {
       LOG.error(e.toString());
-      return result;
+      return dto;
     }
   }
 

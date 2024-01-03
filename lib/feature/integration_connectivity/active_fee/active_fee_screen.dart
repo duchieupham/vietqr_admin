@@ -29,7 +29,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
   final PageController pageViewController = PageController();
   late ActiveFeeBloc _activeFeeBloc;
   StreamSubscription? _subscription;
-  List<ActiveFeeDTO> listActiveFeeDTO = [];
+  ActiveFeeDTO activeFeeDTO = ActiveFeeDTO();
   ActiveFeeStaticDto activeFeeStaticDto = const ActiveFeeStaticDto();
   String nowMonth = '';
   @override
@@ -81,7 +81,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
         }
 
         if (state is ActiveFeeGetListSuccessState) {
-          listActiveFeeDTO = state.result;
+          activeFeeDTO = state.result;
           context.read<ActiveFeeProvider>().updateListData(state.result);
           if (!state.initPage) {
             Navigator.pop(context);
@@ -89,12 +89,18 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
         }
       }, builder: (context, state) {
         if (state is ActiveFeeLoadingInitState) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Center(child: Text('Đang tải...')),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 16,
+              ),
+              Text('Đang tải ...'),
+            ],
           );
         } else {
-          if (listActiveFeeDTO.isEmpty) {
+          if (activeFeeDTO.list?.isEmpty ?? true) {
             return const Padding(
               padding: EdgeInsets.only(top: 40),
               child: Center(child: Text('Không có dữ liệu')),
@@ -171,7 +177,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
     );
   }
 
-  Widget _buildItem(int index, ActiveFeeDTO dto) {
+  Widget _buildItem(int index, ActiveFeeItemDTO dto) {
     return Container(
       color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,

@@ -16,7 +16,7 @@ class ActiveFeeLoadingInitState extends ActiveFeeState {}
 class ActiveFeeLoadingState extends ActiveFeeState {}
 
 class ActiveFeeGetListSuccessState extends ActiveFeeState {
-  final List<ActiveFeeDTO> result;
+  final ActiveFeeDTO result;
   final bool initPage;
   final bool isLoadMore;
   final ActiveFeeStaticDto activeFeeStaticDto;

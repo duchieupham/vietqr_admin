@@ -60,19 +60,12 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                 return Container(
                   width: MediaQuery.of(context).size.width,
                   height: 45,
-                  padding: EdgeInsets.only(left: 16),
+                  padding: const EdgeInsets.only(left: 16),
                   decoration: BoxDecoration(
                     color: AppColor.BLUE_TEXT.withOpacity(0.2),
                   ),
                   child: Row(
                     children: [
-                      const Text(
-                        'Phí dịch vụ',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline),
-                      ),
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

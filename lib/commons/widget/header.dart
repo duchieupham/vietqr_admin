@@ -89,7 +89,8 @@ class Header extends StatelessWidget {
                         if (initPage == SubMenuType.ANNUAL_FEE.pageNumber) {
                           eventBus.fire(RefreshListAnnualFee());
                         }
-                        if (initPage == SubMenuType.ACTIVE_FEE.pageNumber) {
+
+                        if (initPage == 0) {
                           eventBus.fire(RefreshListActiveFee());
                         }
 
@@ -150,7 +151,7 @@ class Header extends StatelessWidget {
                           if (initPage == SubMenuType.ANNUAL_FEE.pageNumber) {
                             eventBus.fire(RefreshListAnnualFee());
                           }
-                          if (initPage == SubMenuType.ACTIVE_FEE.pageNumber) {
+                          if (initPage == 0) {
                             eventBus.fire(RefreshListActiveFee());
                           }
                         }

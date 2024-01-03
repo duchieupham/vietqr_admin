@@ -28,8 +28,8 @@ class ActiveFeeProvider with ChangeNotifier {
   DateTime get currentDate => _dateTime;
   String get dateTime => TimeUtils.instance.formatDateToString(_dateTime);
 
-  List<ActiveFeeDTO> _listActiveFeeDTO = [];
-  List<ActiveFeeDTO> get listActiveFeeDTO => _listActiveFeeDTO;
+  List<ActiveFeeItemDTO> _listActiveFeeDTO = [];
+  List<ActiveFeeItemDTO> get listActiveFeeDTO => _listActiveFeeDTO;
 
   List<ActiveFeeBankDTO> _bankAccounts = [];
   List<ActiveFeeBankDTO> get bankAccounts => _bankAccounts;
@@ -42,12 +42,12 @@ class ActiveFeeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  updateListData(List<ActiveFeeDTO> list) {
-    _listActiveFeeDTO = list;
+  updateListData(ActiveFeeDTO dto) {
+    _listActiveFeeDTO = dto.list ?? [];
     notifyListeners();
 
     List<ActiveFeeBankDTO> listBank = [];
-    for (var element in list) {
+    for (var element in _listActiveFeeDTO) {
       listBank.addAll(element.bankAccounts!);
       _bankAccounts = listBank;
     }
