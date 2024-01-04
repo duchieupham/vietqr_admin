@@ -62,9 +62,6 @@ void _addBankConnect(InfoConnectEvent event, Emitter emit) async {
     if (event is AddBankConnectEvent) {
       await infoConnectRepository.addBankConnect(event.param);
       emit(AddBankConnectSuccessState());
-      result = await infoConnectRepository
-          .getListBank(event.param['customerSyncId']);
-      emit(GetListBankSuccessfulState(list: result));
     }
   } catch (e) {
     debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');
@@ -80,9 +77,6 @@ void _removeBankConnect(InfoConnectEvent event, Emitter emit) async {
 
       await infoConnectRepository.removeBankConnect(event.param);
       emit(RemoveBankConnectSuccessState());
-      result = await infoConnectRepository
-          .getListBank(event.param['customerSyncId']);
-      emit(GetListBankSuccessfulState(list: result));
     }
   } catch (e) {
     debugPrint('Error at _getListBank- _getListBank ConnectBloc: $e');

@@ -103,7 +103,7 @@ class _InformationPopupState extends State<InfoServicePort> {
           );
         }
 
-        return const Text('Không có thông tin');
+        return const Center(child: Text('Không có thông tin'));
       }),
     );
   }

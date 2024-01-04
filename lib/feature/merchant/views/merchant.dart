@@ -5,6 +5,7 @@ import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/infomation_popup.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
+import 'package:vietqr_admin/feature/merchant/page/bank_account_synchronized.dart';
 import 'package:vietqr_admin/feature/merchant/page/info_service_port.dart';
 import 'package:vietqr_admin/feature/merchant/page/list_transaction.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
@@ -65,17 +66,24 @@ class _MerchantViewState extends State<MerchantView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ItemMenuTop(
-                    title: 'Thống tin đại lý',
+                    title: 'Thông tin đại lý',
                     isSelect: currentType == 0,
                     onTap: () {
                       changePage(0);
                     },
                   ),
                   ItemMenuTop(
-                    title: 'Thống kê giao dịch',
+                    title: 'Tài khoản đồng bộ',
                     isSelect: currentType == 1,
                     onTap: () {
                       changePage(1);
+                    },
+                  ),
+                  ItemMenuTop(
+                    title: 'Thống kê giao dịch',
+                    isSelect: currentType == 2,
+                    onTap: () {
+                      changePage(2);
                       Map<String, dynamic> param = {};
                       param['merchantId'] = Session.instance.connectDTO.id;
                       param['type'] = 9;
@@ -89,9 +97,9 @@ class _MerchantViewState extends State<MerchantView> {
                   ),
                   ItemMenuTop(
                     title: 'Báo cáo tổng hợp',
-                    isSelect: currentType == 2,
+                    isSelect: currentType == 3,
                     onTap: () {
-                      changePage(2);
+                      changePage(3);
                       merchantBloc.add(GetSynthesisReportEvent(
                           customerSyncId: Session.instance.connectDTO.id,
                           type: 0,
@@ -101,20 +109,6 @@ class _MerchantViewState extends State<MerchantView> {
                   ),
                   ItemMenuTop(
                     title: 'Phí dịch vụ',
-                    isSelect: currentType == 3,
-                    onTap: () {
-                      changePage(3);
-                      if (currentType == 3) {
-                        merchantBloc.add(GetMerchantFeeEvent(
-                            customerSyncId: Session.instance.connectDTO.id,
-                            year: DateTime.now().year.toString(),
-                            status: 0,
-                            isLoadingPage: true));
-                      }
-                    },
-                  ),
-                  ItemMenuTop(
-                    title: 'Hóa đơn',
                     isSelect: currentType == 4,
                     onTap: () {
                       changePage(4);
@@ -128,15 +122,29 @@ class _MerchantViewState extends State<MerchantView> {
                     },
                   ),
                   ItemMenuTop(
-                    title: 'API Service Port',
+                    title: 'Hóa đơn',
                     isSelect: currentType == 5,
                     onTap: () {
                       changePage(5);
+                      if (currentType == 5) {
+                        merchantBloc.add(GetMerchantFeeEvent(
+                            customerSyncId: Session.instance.connectDTO.id,
+                            year: DateTime.now().year.toString(),
+                            status: 0,
+                            isLoadingPage: true));
+                      }
+                    },
+                  ),
+                  ItemMenuTop(
+                    title: 'API Service Port',
+                    isSelect: currentType == 6,
+                    onTap: () {
+                      changePage(6);
                     },
                   ),
                   ItemMenuTop(
                     title: 'Bảng giá',
-                    isSelect: currentType == 6,
+                    isSelect: currentType == 7,
                     onTap: () {},
                   ),
                 ],
@@ -145,6 +153,7 @@ class _MerchantViewState extends State<MerchantView> {
             Expanded(
                 child: [
               const InformationPopup(),
+              const ListBankAccountSync(),
               const ListTransaction(),
               const SynthesisReport(),
               const ServiceFee(),

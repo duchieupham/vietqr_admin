@@ -4,6 +4,7 @@ import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
+import 'package:vietqr_admin/models/bank_account_sync_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
 import 'package:vietqr_admin/models/service_charge_dto.dart';
 import 'package:vietqr_admin/models/synthesis_report_dto.dart';
@@ -100,11 +101,34 @@ class MerchantRepository {
     return result;
   }
 
+  Future<List<SynthesisReportDTO>> getListSynthesisReport(
+      int type, String time, String id) async {
+    List<SynthesisReportDTO> result = [];
+    try {
+      final String url =
+          '${EnvConfig.instance.getBaseUrl()}transactions/merchant/statistic?type=$type&id=$id&time=$time';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        result = data
+            .map<SynthesisReportDTO>(
+                (json) => SynthesisReportDTO.fromJson(json))
+            .toList();
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return result;
+  }
+
   Future<List<BankAccountDTO>> getListBank(String id) async {
     List<BankAccountDTO> result = [];
     try {
       String url =
-          '${EnvConfig.instance.getBaseUrl()}admin/account-bank/list?customerSyncId=$id';
+          '${EnvConfig.instance.getBaseUrl()}admin/account-bank/list?customerSyncId=$id&offset=0';
 
       final response = await BaseAPIClient.getAPI(
         url: url,
@@ -125,12 +149,11 @@ class MerchantRepository {
     return result;
   }
 
-  Future<List<SynthesisReportDTO>> getListSynthesisReport(
-      int type, String time, String id) async {
-    List<SynthesisReportDTO> result = [];
+  Future<List<BankAccountSync>> getListBankSync(String customerSyncId) async {
+    List<BankAccountSync> result = [];
     try {
       final String url =
-          '${EnvConfig.instance.getBaseUrl()}transactions/merchant/statistic?type=$type&id=$id&time=$time';
+          '${EnvConfig.instance.getBaseUrl()}admin/account-bank/list?customerSyncId=$customerSyncId&offset=0';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -138,8 +161,7 @@ class MerchantRepository {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         result = data
-            .map<SynthesisReportDTO>(
-                (json) => SynthesisReportDTO.fromJson(json))
+            .map<BankAccountSync>((json) => BankAccountSync.fromJsonApi(json))
             .toList();
       }
     } catch (e) {

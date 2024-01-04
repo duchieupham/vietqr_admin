@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:vietqr_admin/models/account_is_merchant.dart';
+import 'package:vietqr_admin/models/bank_account_sync_dto.dart';
 import 'package:vietqr_admin/models/service_charge_dto.dart';
 import 'package:vietqr_admin/models/synthesis_report_dto.dart';
 import 'package:vietqr_admin/models/transaction_merchant_dto.dart';
@@ -92,3 +93,17 @@ class UpdateNoteMerchantFailedState extends MerchantState {
   @override
   List<Object?> get props => [msg];
 }
+
+class MerchantGetSyncBankLoadingState extends MerchantState {}
+
+class MerchantGetSyncBankSuccessfulState extends MerchantState {
+  final List<BankAccountSync> list;
+  const MerchantGetSyncBankSuccessfulState({
+    required this.list,
+  });
+
+  @override
+  List<Object?> get props => [list];
+}
+
+class MerchantGetSyncBankFailedState extends MerchantState {}

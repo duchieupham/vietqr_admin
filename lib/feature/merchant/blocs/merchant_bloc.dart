@@ -5,6 +5,7 @@ import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/repositories/merchant_repository.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
+import 'package:vietqr_admin/models/bank_account_sync_dto.dart';
 import 'package:vietqr_admin/models/response_message_dto.dart';
 import 'package:vietqr_admin/models/service_charge_dto.dart';
 import 'package:vietqr_admin/models/synthesis_report_dto.dart';
@@ -16,6 +17,7 @@ class MerchantBloc extends Bloc<MerchantEvent, MerchantState> {
     on<GetListTransactionByUserEvent>(_getListTransactionByUser);
     on<GetListTransactionByMerchantEvent>(_getListTransactionByMerchant);
     on<GetSynthesisReportEvent>(_getListSynthesisReport);
+    on<GetListBankSyncEvent>(_getListBankSync);
     on<UpdateNoteMerchantEvent>(_updateNote);
   }
 }
@@ -131,5 +133,19 @@ void _getListSynthesisReport(MerchantEvent event, Emitter emit) async {
   } catch (e) {
     LOG.error(e.toString());
     emit(MerchantGetSynthesisReportSuccessfulState(list: list));
+  }
+}
+
+void _getListBankSync(MerchantEvent event, Emitter emit) async {
+  List<BankAccountSync> list = [];
+  try {
+    if (event is GetListBankSyncEvent) {
+      emit(MerchantGetSyncBankLoadingState());
+      list = await merchantRepository.getListBankSync(event.customerSyncId);
+      emit(MerchantGetSyncBankSuccessfulState(list: list));
+    }
+  } catch (e) {
+    LOG.error(e.toString());
+    emit(MerchantGetSyncBankFailedState());
   }
 }

@@ -59,7 +59,7 @@ class InfoConnectRepository {
     List<BankAccountDTO> result = [];
     try {
       String url =
-          '${EnvConfig.instance.getBaseUrl()}admin/account-bank/list?customerSyncId=$id';
+          '${EnvConfig.instance.getBaseUrl()}admin/account-bank/list?customerSyncId=$id&offset=0';
 
       final response = await BaseAPIClient.getAPI(
         url: url,

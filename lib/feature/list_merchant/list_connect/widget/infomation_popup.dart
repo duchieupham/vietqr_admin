@@ -5,11 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
-import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/blocs/info_connect_bloc.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/statistic_provider.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_connect_state.dart';
-import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/list_bank.dart';
 import 'package:vietqr_admin/models/api_service_dto.dart';
 import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/models/statistic_dto.dart';
@@ -46,37 +44,18 @@ class _InformationPopupState extends State<InformationPopup> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: LayoutBuilder(builder: (context, constraints) {
-        print(constraints.maxWidth);
-        if (constraints.maxWidth < 1000) {
-          return Row(
-            children: [
-              const SizedBox(
-                width: 32,
-              ),
-              Expanded(
-                  child: Column(
-                children: [
-                  _buildStatistic(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Expanded(child: _buildListCard())
-                ],
-              )),
-              const Expanded(child: SizedBox.shrink()),
-            ],
-          );
-        }
         return Row(
           children: [
             const SizedBox(
               width: 32,
             ),
-            Expanded(child: _buildStatistic()),
+            SizedBox(
+              width: 600,
+              child: _buildStatistic(),
+            ),
             const SizedBox(
               width: 32,
             ),
-            Expanded(child: _buildListCard()),
             const Expanded(child: SizedBox.shrink()),
           ],
         );
@@ -258,83 +237,6 @@ class _InformationPopupState extends State<InformationPopup> {
           }),
         );
       }),
-    );
-  }
-
-  Widget _buildListCard({bool isVertical = false}) {
-    return BlocProvider<InfoConnectBloc>(
-        create: (BuildContext context) => InfoConnectBloc()
-          ..add(GetListBankEvent(id: Session.instance.connectDTO.id)),
-        child: BlocConsumer<InfoConnectBloc, InfoConnectState>(
-            listener: (context, state) {
-          if (state is GetListBankSuccessfulState) {
-            result = state.list;
-          }
-          if (state is RemoveBankConnectLoadingState) {
-            DialogWidget.instance.openLoadingDialog();
-          }
-          if (state is AddBankConnectSuccessState) {
-            Navigator.pop(context);
-          }
-          if (state is RemoveBankConnectSuccessState) {
-            Navigator.pop(context);
-          }
-        }, builder: (context, state) {
-          return ListBank(
-            listBank: result,
-            showButtonAddBank: apiServiceDTO.platform == 'API service',
-            apiServiceDTO: apiServiceDTO,
-            customerSyncId: Session.instance.connectDTO.id,
-            bloc: BlocProvider.of<InfoConnectBloc>(context),
-          );
-        }));
-  }
-
-  Widget _buildTitle(BuildContext context) {
-    return Row(
-      children: [
-        const Text(
-          'Thông tin khách hàng',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 16),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: AppColor.BANK_CARD_COLOR_3.withOpacity(0.15),
-          ),
-          child: Text(
-            Session.instance.connectDTO.platform,
-            style: const TextStyle(fontSize: 12),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Session.instance.connectDTO.active == 1
-                ? AppColor.BLUE_TEXT
-                : AppColor.RED_TEXT,
-          ),
-          child: Text(
-            Session.instance.connectDTO.active == 1
-                ? 'Hoạt động'
-                : 'Không hoạt đông',
-            style: const TextStyle(color: AppColor.WHITE, fontSize: 12),
-          ),
-        ),
-        const Spacer(),
-        IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.close,
-              size: 24,
-            ))
-      ],
     );
   }
 

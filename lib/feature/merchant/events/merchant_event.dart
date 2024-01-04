@@ -80,3 +80,10 @@ class UpdateNoteMerchantEvent extends MerchantEvent {
   @override
   List<Object?> get props => [param];
 }
+
+class GetListBankSyncEvent extends MerchantEvent {
+  final String customerSyncId;
+  const GetListBankSyncEvent(this.customerSyncId);
+  @override
+  List<Object?> get props => [customerSyncId];
+}
