@@ -149,11 +149,12 @@ class MerchantRepository {
     return result;
   }
 
-  Future<List<BankAccountSync>> getListBankSync(String customerSyncId) async {
+  Future<List<BankAccountSync>> getListBankSync(
+      String customerSyncId, int offset) async {
     List<BankAccountSync> result = [];
     try {
       final String url =
-          '${EnvConfig.instance.getBaseUrl()}admin/account-bank/list?customerSyncId=$customerSyncId&offset=0';
+          '${EnvConfig.instance.getBaseUrl()}admin/account-bank/list?customerSyncId=$customerSyncId&offset=$offset';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

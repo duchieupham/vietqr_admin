@@ -140,9 +140,15 @@ void _getListBankSync(MerchantEvent event, Emitter emit) async {
   List<BankAccountSync> list = [];
   try {
     if (event is GetListBankSyncEvent) {
-      emit(MerchantGetSyncBankLoadingState());
-      list = await merchantRepository.getListBankSync(event.customerSyncId);
-      emit(MerchantGetSyncBankSuccessfulState(list: list));
+      if (event.isLoadMore) {
+        emit(MerchantGetSyncBankLoadMoreState());
+      } else {
+        emit(MerchantGetSyncBankLoadingState());
+      }
+      list = await merchantRepository.getListBankSync(
+          event.customerSyncId, event.offset);
+      emit(MerchantGetSyncBankSuccessfulState(
+          list: list, isLoadMoreLoading: event.isLoadMore));
     }
   } catch (e) {
     LOG.error(e.toString());

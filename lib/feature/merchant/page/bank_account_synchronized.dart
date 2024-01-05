@@ -33,6 +33,10 @@ class _ListTransactionState extends State<ListBankAccountSync> {
   ApiServiceDTO apiServiceDTO = const ApiServiceDTO();
   late MerchantBloc merchantBloc;
   late InfoConnectBloc infoBloc;
+  ScrollController scrollControllerList = ScrollController();
+  int offset = 0;
+  bool isLoadMoreCalling = true;
+
   @override
   initState() {
     super.initState();
@@ -45,7 +49,20 @@ class _ListTransactionState extends State<ListBankAccountSync> {
   }
 
   init() {
-    merchantBloc.add(GetListBankSyncEvent(Session.instance.connectDTO.id));
+    merchantBloc
+        .add(GetListBankSyncEvent(Session.instance.connectDTO.id, offset));
+    scrollControllerList.addListener(() {
+      if (isLoadMoreCalling && listBankSync.length >= 20) {
+        if (scrollControllerList.offset ==
+            scrollControllerList.position.maxScrollExtent) {
+          offset = offset + 20;
+          merchantBloc.add(GetListBankSyncEvent(
+              Session.instance.connectDTO.id, offset,
+              isLoadMore: true));
+          isLoadMoreCalling = false;
+        }
+      }
+    });
   }
 
   @override
@@ -59,12 +76,12 @@ class _ListTransactionState extends State<ListBankAccountSync> {
         }
         if (stateInfo is AddBankConnectSuccessState) {
           merchantBloc
-              .add(GetListBankSyncEvent(Session.instance.connectDTO.id));
+              .add(GetListBankSyncEvent(Session.instance.connectDTO.id, 0));
           Navigator.pop(context);
         }
         if (stateInfo is RemoveBankConnectSuccessState) {
           merchantBloc
-              .add(GetListBankSyncEvent(Session.instance.connectDTO.id));
+              .add(GetListBankSyncEvent(Session.instance.connectDTO.id, 0));
           Navigator.pop(context);
         }
         if (stateInfo is InfoApiServiceConnectSuccessfulState) {
@@ -84,7 +101,12 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                     return BlocConsumer<MerchantBloc, MerchantState>(
                       listener: (context, state) {
                         if (state is MerchantGetSyncBankSuccessfulState) {
-                          listBankSync = state.list;
+                          if (state.isLoadMoreLoading) {
+                            listBankSync.addAll(state.list);
+                            isLoadMoreCalling = true;
+                          } else {
+                            listBankSync = state.list;
+                          }
                         }
                       },
                       builder: (context, state) {
@@ -131,16 +153,13 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                             ),
                             Expanded(
                               child: SingleChildScrollView(
-                                controller: Provider.of<MerchantProvider>(
-                                        context,
-                                        listen: false)
-                                    .scrollControllerList,
+                                controller: scrollControllerList,
                                 child: ScrollConfiguration(
                                   behavior: MyCustomScrollBehavior(),
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: SizedBox(
-                                      width: 1380,
+                                      width: 1240,
                                       child: SelectionArea(
                                         child: Column(
                                           crossAxisAlignment:
@@ -162,7 +181,7 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                                 ),
                               ),
                             ),
-                            if (state is MerchantLoadMoreListState)
+                            if (state is MerchantGetSyncBankLoadMoreState)
                               const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 16),
                                 child: SizedBox(
@@ -213,7 +232,7 @@ class _ListTransactionState extends State<ListBankAccountSync> {
             height: 50,
             width: 130,
             child: Text(
-              dto.bankAccount,
+              '${dto.bankAccount}\n${dto.bankShortName}',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
@@ -233,7 +252,7 @@ class _ListTransactionState extends State<ListBankAccountSync> {
             ),
           ),
           Container(
-            width: 140,
+            width: 160,
             height: 50,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
@@ -241,10 +260,8 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             child: Text(
-              dto.bankShortName,
-              textAlign: TextAlign.left,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+              dto.phoneAuthenticated,
+              textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
           ),
@@ -271,7 +288,7 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             child: Text(
-              dto.flow == 2 ? 'Có' : '-',
+              dto.serviceFeeId.isNotEmpty ? 'Có' : '-',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
@@ -300,20 +317,6 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             child: Text(
               dto.nationalId,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
-          Container(
-            width: 160,
-            height: 50,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                    right: BorderSide(color: AppColor.GREY_BUTTON))),
-            child: Text(
-              dto.phoneAuthenticated,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
             ),
@@ -397,7 +400,7 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                                     bankID: dto.bankId,
                                     onSuccess: () {
                                       merchantBloc.add(GetListBankSyncEvent(
-                                          Session.instance.connectDTO.id));
+                                          Session.instance.connectDTO.id, 0));
                                     },
                                   ));
                             },
@@ -439,9 +442,9 @@ class _ListTransactionState extends State<ListBankAccountSync> {
               width: 160,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               alignment: Alignment.center),
-          _buildItemTitle('Ngân hàng',
+          _buildItemTitle('SĐT Xác thực',
               height: 50,
-              width: 140,
+              width: 160,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               alignment: Alignment.center),
           _buildItemTitle('Luồng',
@@ -460,11 +463,6 @@ class _ListTransactionState extends State<ListBankAccountSync> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               alignment: Alignment.center),
           _buildItemTitle('CCCD/MST',
-              height: 50,
-              width: 160,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              alignment: Alignment.center),
-          _buildItemTitle('SĐT Xác thực',
               height: 50,
               width: 160,
               padding: const EdgeInsets.symmetric(horizontal: 12),

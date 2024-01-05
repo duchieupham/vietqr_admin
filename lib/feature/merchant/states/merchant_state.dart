@@ -96,14 +96,18 @@ class UpdateNoteMerchantFailedState extends MerchantState {
 
 class MerchantGetSyncBankLoadingState extends MerchantState {}
 
+class MerchantGetSyncBankLoadMoreState extends MerchantState {}
+
 class MerchantGetSyncBankSuccessfulState extends MerchantState {
   final List<BankAccountSync> list;
+  final bool isLoadMoreLoading;
   const MerchantGetSyncBankSuccessfulState({
     required this.list,
+    this.isLoadMoreLoading = false,
   });
 
   @override
-  List<Object?> get props => [list];
+  List<Object?> get props => [list, isLoadMoreLoading];
 }
 
 class MerchantGetSyncBankFailedState extends MerchantState {}

@@ -83,7 +83,10 @@ class UpdateNoteMerchantEvent extends MerchantEvent {
 
 class GetListBankSyncEvent extends MerchantEvent {
   final String customerSyncId;
-  const GetListBankSyncEvent(this.customerSyncId);
+  final int offset;
+  final bool isLoadMore;
+  const GetListBankSyncEvent(this.customerSyncId, this.offset,
+      {this.isLoadMore = false});
   @override
-  List<Object?> get props => [customerSyncId];
+  List<Object?> get props => [customerSyncId, isLoadMore, offset];
 }
