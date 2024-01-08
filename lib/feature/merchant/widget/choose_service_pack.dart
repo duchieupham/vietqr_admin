@@ -105,114 +105,119 @@ class _ServicePackScreenState extends State<ChooseServicePackPopup> {
                         child: Text('Không có dữ liệu'),
                       );
                     }
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: SingleChildScrollView(
-                              child: ScrollConfiguration(
-                            behavior: MyCustomScrollBehavior(),
-                            child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                    width: 1095,
-                                    child: Column(
-                                      children: [
-                                        _buildTitleItem(),
-                                        ...listServicePack.map((e) {
-                                          int index =
-                                              listServicePack.indexOf(e);
+                    return Expanded(
+                      child: SingleChildScrollView(
+                          child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: ScrollConfiguration(
+                              behavior: MyCustomScrollBehavior(),
+                              child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: SizedBox(
+                                      width: 1095,
+                                      child: Column(
+                                        children: [
+                                          _buildTitleItem(),
+                                          ...listServicePack.map((e) {
+                                            int index =
+                                                listServicePack.indexOf(e);
 
-                                          return _buildItem(e, provider, index);
-                                        }).toList(),
-                                      ],
-                                    ))),
-                          )),
-                        ),
-                        SizedBox(
-                          width: 60,
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                    color: AppColor.BLUE_DARK),
-                                child: _buildItemTitle('Chọn',
-                                    height: 50,
-                                    width: 60,
-                                    alignment: Alignment.center),
-                              ),
-                              ...listServicePack.map((e) {
-                                int index = listServicePack.indexOf(e);
-
-                                return Column(
-                                  children: [
-                                    Container(
-                                      width: 60,
-                                      decoration: BoxDecoration(
-                                          color: index % 2 == 0
-                                              ? AppColor.GREY_BG
-                                              : AppColor.WHITE,
-                                          border: Border(
-                                            bottom: const BorderSide(
-                                                color: AppColor.GREY_BUTTON),
-                                            left: BorderSide(
-                                                color: AppColor.BLUE_DARK
-                                                    .withOpacity(0.5)),
-                                          )),
-                                      height: 50,
-                                      child: Radio<ServicePackDTO>(
-                                          value: e,
-                                          activeColor: AppColor.BLUE_TEXT,
-                                          groupValue: _valueRadio,
-                                          onChanged: (dto) {
-                                            setState(() {
-                                              _valueRadio = dto!;
-                                              _valueSubRadio =
-                                                  const SubServicePackDTO();
-                                            });
-                                          }),
-                                    ),
-                                    if (provider.showListSubItem(e.item!))
-                                      Column(
-                                        children: e.subItems!.map((subItem) {
-                                          int indexSub =
-                                              e.subItems!.indexOf(subItem);
-                                          return Container(
-                                            width: 60,
-                                            decoration: BoxDecoration(
-                                                color: indexSub % 2 == 0
-                                                    ? AppColor.GREY_BG
-                                                    : AppColor.WHITE,
-                                                border: Border(
-                                                  bottom: const BorderSide(
-                                                      color:
-                                                          AppColor.GREY_BUTTON),
-                                                  left: BorderSide(
-                                                      color: AppColor.BLUE_DARK
-                                                          .withOpacity(0.5)),
-                                                )),
-                                            height: 50,
-                                            child: Radio<SubServicePackDTO>(
-                                                value: subItem,
-                                                activeColor: AppColor.BLUE_TEXT,
-                                                groupValue: _valueSubRadio,
-                                                onChanged: (dto) {
-                                                  setState(() {
-                                                    _valueRadio =
-                                                        const ServicePackDTO();
-                                                    _valueSubRadio = dto!;
-                                                  });
-                                                }),
-                                          );
-                                        }).toList(),
-                                      )
-                                  ],
-                                );
-                              }).toList(),
-                            ],
+                                            return _buildItem(
+                                                e, provider, index);
+                                          }).toList(),
+                                        ],
+                                      ))),
+                            ),
                           ),
-                        )
-                      ],
+                          SizedBox(
+                            width: 60,
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                      color: AppColor.BLUE_DARK),
+                                  child: _buildItemTitle('Chọn',
+                                      height: 50,
+                                      width: 60,
+                                      alignment: Alignment.center),
+                                ),
+                                ...listServicePack.map((e) {
+                                  int index = listServicePack.indexOf(e);
+
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                            color: index % 2 == 0
+                                                ? AppColor.GREY_BG
+                                                : AppColor.WHITE,
+                                            border: Border(
+                                              bottom: const BorderSide(
+                                                  color: AppColor.GREY_BUTTON),
+                                              left: BorderSide(
+                                                  color: AppColor.BLUE_DARK
+                                                      .withOpacity(0.5)),
+                                            )),
+                                        height: 50,
+                                        child: Radio<ServicePackDTO>(
+                                            value: e,
+                                            activeColor: AppColor.BLUE_TEXT,
+                                            groupValue: _valueRadio,
+                                            onChanged: (dto) {
+                                              setState(() {
+                                                _valueRadio = dto!;
+                                                _valueSubRadio =
+                                                    const SubServicePackDTO();
+                                              });
+                                            }),
+                                      ),
+                                      if (provider.showListSubItem(e.item!))
+                                        Column(
+                                          children: e.subItems!.map((subItem) {
+                                            int indexSub =
+                                                e.subItems!.indexOf(subItem);
+                                            return Container(
+                                              width: 60,
+                                              decoration: BoxDecoration(
+                                                  color: indexSub % 2 == 0
+                                                      ? AppColor.GREY_BG
+                                                      : AppColor.WHITE,
+                                                  border: Border(
+                                                    bottom: const BorderSide(
+                                                        color: AppColor
+                                                            .GREY_BUTTON),
+                                                    left: BorderSide(
+                                                        color: AppColor
+                                                            .BLUE_DARK
+                                                            .withOpacity(0.5)),
+                                                  )),
+                                              height: 50,
+                                              child: Radio<SubServicePackDTO>(
+                                                  value: subItem,
+                                                  activeColor:
+                                                      AppColor.BLUE_TEXT,
+                                                  groupValue: _valueSubRadio,
+                                                  onChanged: (dto) {
+                                                    setState(() {
+                                                      _valueRadio =
+                                                          const ServicePackDTO();
+                                                      _valueSubRadio = dto!;
+                                                    });
+                                                  }),
+                                            );
+                                          }).toList(),
+                                        )
+                                    ],
+                                  );
+                                }).toList(),
+                              ],
+                            ),
+                          )
+                        ],
+                      )),
                     );
                   },
                 );
