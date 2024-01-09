@@ -390,6 +390,8 @@ class _RunCallBackScreenState extends State<_RunCallBackScreen> {
                                         index: 6,
                                         isRunCallback: model.status == 0,
                                         onTap: () {
+                                          print(
+                                              '------------------------------${model.toJson()}');
                                           if (model.status == 0) {
                                             Provider.of<CallbackProvider>(
                                                     context,

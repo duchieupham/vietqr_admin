@@ -101,6 +101,14 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
+                title: 'Phí dịch vụ',
+                isSelect: provider.menuHomeType == MenuType.SERVICE_FEE,
+                onTap: () {
+                  onTab(MenuType.SERVICE_FEE);
+                  closeMenuLink();
+                },
+              ),
+              ItemMenu(
                 title: 'Giao dịch',
                 isSelect: provider.menuHomeType == MenuType.TRANSACTION,
                 onTap: () {

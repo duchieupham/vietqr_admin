@@ -164,6 +164,8 @@ class CallBackRepository {
   Future<ResponseMessageDTO> runCallback(Map<String, dynamic> body) async {
     ResponseMessageDTO dto = const ResponseMessageDTO();
 
+    print('----------------------------------- $body');
+
     try {
       String url =
           'https://dev.vietqr.org/vqr/bank/api/test/transaction-callback';

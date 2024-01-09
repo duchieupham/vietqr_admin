@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:vietqr_admin/commons/constants/configurations/numeral.dart';
 import 'package:vietqr_admin/service/shared_references/account_helper.dart';
@@ -137,6 +138,7 @@ class BaseAPIClient {
     type ??= AuthenticationType.NONE;
     final String token = AccountHelper.instance.getToken();
     final String tokenFree = AccountHelper.instance.getTokenFree();
+    debugPrint('----------------tokenFree-----------------$tokenFree');
     switch (type) {
       case AuthenticationType.SYSTEM:
         result['Authorization'] =

@@ -12,6 +12,7 @@ import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/integration_connectivity/integration_connectivity_screen.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/list_connect_screen.dart';
 import 'package:vietqr_admin/feature/log/log_screen.dart';
+import 'package:vietqr_admin/feature/service_fee.dart';
 import 'package:vietqr_admin/feature/service_pack/service_pack_screen.dart';
 import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
 import 'package:vietqr_admin/feature/transaction/transaction_screen.dart';
@@ -46,6 +47,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
+      const SizedBox.shrink(),
     ];
 
     pages = [
@@ -53,6 +55,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const ListConnectScreen(),
       const IntegrationConnectivityScreen(),
       const ServicePackScreen(),
+      const ServiceFeeScreen(),
       const TransactionScreen(),
       const LogScreen(),
       const ConfigScreen(),

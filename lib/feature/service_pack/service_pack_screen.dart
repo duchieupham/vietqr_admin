@@ -11,13 +11,9 @@ import 'package:vietqr_admin/commons/constants/utils/error_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
-import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
-import 'package:vietqr_admin/feature/list_merchant/active_fee/active_fee_screen.dart';
-import 'package:vietqr_admin/feature/list_merchant/annual_fee/annual_fee_screen.dart';
 import 'package:vietqr_admin/feature/service_pack/bloc/service_pack_bloc.dart';
 import 'package:vietqr_admin/feature/service_pack/event/service_pack_event.dart';
 import 'package:vietqr_admin/feature/service_pack/provider/form_create_provider.dart';
-import 'package:vietqr_admin/feature/service_pack/provider/menu_top_provider.dart';
 import 'package:vietqr_admin/feature/service_pack/provider/service_pack_provider.dart';
 import 'package:vietqr_admin/feature/service_pack/state/service_pack_state.dart';
 import 'package:vietqr_admin/feature/service_pack/widget/create_service_pack_popup.dart';
@@ -50,84 +46,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ServicePackBloc>(
-        create: (context) => _bloc,
-        child: Column(
-          children: [
-            ChangeNotifierProvider<MenuTopProvider>(
-              create: (context) => MenuTopProvider(),
-              child: Consumer<MenuTopProvider>(
-                  builder: (context, provider, child) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 45,
-                  padding: const EdgeInsets.only(left: 16),
-                  decoration: BoxDecoration(
-                    color: AppColor.BLUE_TEXT.withOpacity(0.2),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ItemMenuTop(
-                              title: 'Thiết lập bảng giá',
-                              isSelect: provider.page == 0,
-                              onTap: () {
-                                provider.changePage(0);
-                                pageViewController.animateToPage(
-                                  0,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOutQuart,
-                                );
-                              },
-                            ),
-                            ItemMenuTop(
-                              title: 'Phí giao dịch',
-                              isSelect: provider.page == 1,
-                              onTap: () {
-                                provider.changePage(1);
-                                pageViewController.animateToPage(
-                                  1,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOutQuart,
-                                );
-                              },
-                            ),
-                            ItemMenuTop(
-                              title: 'Phí thuê bao',
-                              isSelect: provider.page == 2,
-                              onTap: () {
-                                provider.changePage(2);
-                                pageViewController.animateToPage(
-                                  2,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOutQuart,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
-                  ),
-                );
-              }),
-            ),
-            Expanded(
-                child: PageView(
-              controller: pageViewController,
-              children: [
-                _buildListServicePack(),
-                const ActiveFeeScreen(),
-                const AnnualFeeScreen(),
-              ],
-            )),
-          ],
-        ));
+        create: (context) => _bloc, child: _buildListServicePack());
   }
 
   Widget _buildListServicePack() {

@@ -17,7 +17,7 @@ class ActiveFeeProvider with ChangeNotifier {
     const FilterActiveFee(id: 1, title: 'Số tài khoản'),
   ];
   FilterActiveFee _valueFilterType =
-      const FilterActiveFee(id: 0, title: 'Merchant');
+      const FilterActiveFee(id: 1, title: 'Số tài khoản');
 
   FilterActiveFee get valueFilterType => _valueFilterType;
 

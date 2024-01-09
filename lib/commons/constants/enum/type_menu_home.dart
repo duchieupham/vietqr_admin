@@ -11,6 +11,7 @@ enum MenuType {
   LOG,
   VNPT_EPAY,
   SERVICE_PACK,
+  SERVICE_FEE,
   CONFIG,
   LOGOUT,
   OTHER,
