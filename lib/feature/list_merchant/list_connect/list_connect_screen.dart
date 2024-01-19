@@ -343,7 +343,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
             alignment: Alignment.center,
             height: 50,
             width: 120,
-            child: Text(
+            child: SelectableText(
               dto.merchant.isNotEmpty ? dto.merchant : '-',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
@@ -358,7 +358,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
-              child: Text(
+              child: SelectableText(
                 dto.url.isNotEmpty ? dto.url : '-',
                 style: const TextStyle(fontSize: 12),
               ),
@@ -373,10 +373,12 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
-            child: Text(
-              dto.ip.isNotEmpty ? dto.ip : '-',
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12),
+            child: SelectionArea(
+              child: Text(
+                dto.ip.isNotEmpty ? dto.ip : '-',
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
+              ),
             ),
           ),
           Container(
@@ -388,7 +390,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
-            child: Text(
+            child: SelectableText(
               dto.port.isNotEmpty ? dto.port : '-',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
@@ -403,7 +405,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
-            child: Text(
+            child: SelectableText(
               dto.active == 1 ? 'Hoạt động' : 'Không hoạt động',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
@@ -418,7 +420,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
-            child: Text(
+            child: SelectableText(
               dto.platform.isNotEmpty ? dto.platform : '-',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12),
