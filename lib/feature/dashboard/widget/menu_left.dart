@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
@@ -152,6 +153,13 @@ class MenuLeft extends StatelessWidget {
             onTab(MenuType.LOGOUT);
           },
         ),
+        const Padding(
+          padding: EdgeInsets.only(left: 16, bottom: 8, top: 4),
+          child: Text(
+            'version web 1.0.0',
+            style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+          ),
+        )
       ],
     );
   }
