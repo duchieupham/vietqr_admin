@@ -174,7 +174,7 @@ class MenuLeft extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.only(left: 16, bottom: 8, top: 4),
           child: Text(
-            'version web 1.0.0',
+            'version web 1.0.1',
             style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
           ),
         )
