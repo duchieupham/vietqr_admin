@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
 import '../provider/menu_provider.dart';
@@ -105,16 +106,24 @@ class MenuLeft extends StatelessWidget {
                 title: 'Phí dịch vụ',
                 isSelect: provider.menuHomeType == MenuType.SERVICE_FEE,
                 onTap: () {
-                  onTab(MenuType.SERVICE_FEE);
-                  closeMenuLink();
+                  DialogWidget.instance.openMsgDialog(
+                      title: 'Bảo trì',
+                      msg:
+                          'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                  // onTab(MenuType.SERVICE_FEE);
+                  // closeMenuLink();
                 },
               ),
               ItemMenu(
                 title: 'Giao dịch',
                 isSelect: provider.menuHomeType == MenuType.TRANSACTION,
                 onTap: () {
-                  onTab(MenuType.TRANSACTION);
-                  closeMenuLink();
+                  DialogWidget.instance.openMsgDialog(
+                      title: 'Bảo trì',
+                      msg:
+                          'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                  // onTab(MenuType.TRANSACTION);
+                  // closeMenuLink();
                 },
               ),
               ItemMenu(
@@ -122,6 +131,15 @@ class MenuLeft extends StatelessWidget {
                 isSelect: provider.menuHomeType == MenuType.CONFIG,
                 onTap: () {
                   onTab(MenuType.CONFIG);
+                },
+              ),
+              ItemMenu(
+                title: 'Tài khoản ngân hàng',
+                isSelect: provider.menuHomeType == MenuType.ACCOUNT_BANK,
+                iconData: Icons.payment_outlined,
+                onTap: () {
+                  onTab(MenuType.ACCOUNT_BANK);
+                  closeMenuLink();
                 },
               ),
               ItemMenu(
@@ -193,8 +211,12 @@ class MenuLeft extends StatelessWidget {
           iconData: Icons.currency_exchange,
           isSelect: provider.menuHomeType == MenuType.TRANSACTION,
           onTap: () {
-            onTab(MenuType.TRANSACTION);
-            closeMenuLink();
+            DialogWidget.instance.openMsgDialog(
+                title: 'Bảo trì',
+                msg:
+                    'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+            // onTab(MenuType.TRANSACTION);
+            // closeMenuLink();
           },
         ),
         ItemMenu(
@@ -227,22 +249,22 @@ class MenuLeft extends StatelessWidget {
           },
         ),
         ItemMenu(
-          title: 'Người dùng',
-          isSelect: provider.menuHomeType == MenuType.USER,
-          isOnlyIcon: true,
-          iconData: Icons.supervised_user_circle_outlined,
-          onTap: () {
-            onTab(MenuType.USER);
-            closeMenuLink();
-          },
-        ),
-        ItemMenu(
           title: 'Tài khoản ngân hàng',
           isSelect: provider.menuHomeType == MenuType.ACCOUNT_BANK,
           isOnlyIcon: true,
           iconData: Icons.payment_outlined,
           onTap: () {
             onTab(MenuType.ACCOUNT_BANK);
+            closeMenuLink();
+          },
+        ),
+        ItemMenu(
+          title: 'Người dùng',
+          isSelect: provider.menuHomeType == MenuType.USER,
+          isOnlyIcon: true,
+          iconData: Icons.supervised_user_circle_outlined,
+          onTap: () {
+            onTab(MenuType.USER);
             closeMenuLink();
           },
         ),

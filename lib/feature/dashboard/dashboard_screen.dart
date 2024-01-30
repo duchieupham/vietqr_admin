@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
+import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/request_bank_account.dart';
 import 'package:vietqr_admin/feature/config/config_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/bloc/token_bloc.dart';
 import 'package:vietqr_admin/feature/dashboard/event/token_event.dart';
@@ -48,6 +49,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
+      const SizedBox.shrink(),
     ];
 
     pages = [
@@ -59,6 +61,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const TransactionScreen(),
       const LogScreen(),
       const ConfigScreen(),
+      const RequestBankAccountScreen(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),
       const SizedBox.shrink(),

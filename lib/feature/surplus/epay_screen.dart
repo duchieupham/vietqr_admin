@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 import 'package:vietqr_admin/feature/top_up_phone/top_up_phone_screen.dart';
@@ -64,8 +65,12 @@ class _EPayScreenState extends State<EPayScreen> {
                         isSelect: provider.initPage ==
                             SubMenuType.TOP_UP_PHONE.pageNumber,
                         onTap: () {
-                          provider.selectSubMenu(SubMenuType.TOP_UP_PHONE);
-                          // provider.updateShowMenuLink(false);
+                          DialogWidget.instance.openMsgDialog(
+                              title: 'Bảo trì',
+                              msg:
+                                  'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+
+                          // provider.selectSubMenu(SubMenuType.TOP_UP_PHONE);
                         },
                       ),
                       const SizedBox(

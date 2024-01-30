@@ -208,7 +208,7 @@ class DialogWidget {
                     child: Text(
                       msg,
                       textAlign: TextAlign.center,
-                      maxLines: 3,
+                      maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 13,

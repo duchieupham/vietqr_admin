@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/infomation_popup.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
-import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/page/bank_account_synchronized.dart';
 import 'package:vietqr_admin/feature/merchant/page/info_service_port.dart';
 import 'package:vietqr_admin/feature/merchant/page/list_transaction.dart';
-import 'package:vietqr_admin/service/shared_references/session.dart';
 
 import '../page/bill.dart';
 import '../page/service_charge.dart';
@@ -83,56 +82,72 @@ class _MerchantViewState extends State<MerchantView> {
                     title: 'Thống kê giao dịch',
                     isSelect: currentType == 2,
                     onTap: () {
-                      changePage(2);
-                      Map<String, dynamic> param = {};
-                      param['merchantId'] = Session.instance.connectDTO.id;
-                      param['type'] = 9;
-                      param['value'] = '';
-                      param['from'] = '0';
-                      param['to'] = '0';
-                      param['offset'] = 0;
-                      merchantBloc.add(GetListTransactionByMerchantEvent(
-                          param: param, isLoadingPage: true));
+                      DialogWidget.instance.openMsgDialog(
+                          title: 'Bảo trì',
+                          msg:
+                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      // changePage(2);
+                      // Map<String, dynamic> param = {};
+                      // param['merchantId'] = Session.instance.connectDTO.id;
+                      // param['type'] = 9;
+                      // param['value'] = '';
+                      // param['from'] = '0';
+                      // param['to'] = '0';
+                      // param['offset'] = 0;
+                      // merchantBloc.add(GetListTransactionByMerchantEvent(
+                      //     param: param, isLoadingPage: true));
                     },
                   ),
                   ItemMenuTop(
                     title: 'Báo cáo tổng hợp',
                     isSelect: currentType == 3,
                     onTap: () {
-                      changePage(3);
-                      merchantBloc.add(GetSynthesisReportEvent(
-                          customerSyncId: Session.instance.connectDTO.id,
-                          type: 0,
-                          time: DateTime.now().year.toString(),
-                          isLoadingPage: true));
+                      DialogWidget.instance.openMsgDialog(
+                          title: 'Bảo trì',
+                          msg:
+                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      // changePage(3);
+                      // merchantBloc.add(GetSynthesisReportEvent(
+                      //     customerSyncId: Session.instance.connectDTO.id,
+                      //     type: 0,
+                      //     time: DateTime.now().year.toString(),
+                      //     isLoadingPage: true));
                     },
                   ),
                   ItemMenuTop(
                     title: 'Phí dịch vụ',
                     isSelect: currentType == 4,
                     onTap: () {
-                      changePage(4);
-                      if (currentType == 4) {
-                        merchantBloc.add(GetMerchantFeeEvent(
-                            customerSyncId: Session.instance.connectDTO.id,
-                            year: DateTime.now().year.toString(),
-                            status: 0,
-                            isLoadingPage: true));
-                      }
+                      DialogWidget.instance.openMsgDialog(
+                          title: 'Bảo trì',
+                          msg:
+                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      // changePage(4);
+                      // if (currentType == 4) {
+                      //   merchantBloc.add(GetMerchantFeeEvent(
+                      //       customerSyncId: Session.instance.connectDTO.id,
+                      //       year: DateTime.now().year.toString(),
+                      //       status: 0,
+                      //       isLoadingPage: true));
+                      // }
                     },
                   ),
                   ItemMenuTop(
                     title: 'Hóa đơn',
                     isSelect: currentType == 5,
                     onTap: () {
-                      changePage(5);
-                      if (currentType == 5) {
-                        merchantBloc.add(GetMerchantFeeEvent(
-                            customerSyncId: Session.instance.connectDTO.id,
-                            year: DateTime.now().year.toString(),
-                            status: 0,
-                            isLoadingPage: true));
-                      }
+                      DialogWidget.instance.openMsgDialog(
+                          title: 'Bảo trì',
+                          msg:
+                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      // changePage(5);
+                      // if (currentType == 5) {
+                      //   merchantBloc.add(GetMerchantFeeEvent(
+                      //       customerSyncId: Session.instance.connectDTO.id,
+                      //       year: DateTime.now().year.toString(),
+                      //       status: 0,
+                      //       isLoadingPage: true));
+                      // }
                     },
                   ),
                   ItemMenuTop(
