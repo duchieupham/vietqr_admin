@@ -840,6 +840,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
     if (provider.fromDate.millisecondsSinceEpoch <=
         provider.toDate.millisecondsSinceEpoch) {
       Map<String, dynamic> param = {};
+      isCalling = true;
       param['type'] = provider.valueFilter.id;
       // if (provider.valueTimeFilter.id == TypeTimeFilter.ALL.id ||
       //     (provider.valueFilter.id.type != TypeFilter.BANK_NUMBER &&

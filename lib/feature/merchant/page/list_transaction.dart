@@ -930,6 +930,7 @@ class _ListTransactionState extends State<ListTransaction> {
     if (provider.fromDate.millisecondsSinceEpoch <=
         provider.toDate.millisecondsSinceEpoch) {
       Map<String, dynamic> param = {};
+      provider.updateCallLoadMore(true);
       param['type'] = provider.valueFilter.id;
       // if (provider.valueTimeFilter.id == TypeTimeFilter.ALL.id ||
       //     (provider.valueFilter.id.type != TypeFilter.BANK_NUMBER &&
