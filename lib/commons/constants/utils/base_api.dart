@@ -137,6 +137,7 @@ class BaseAPIClient {
     Map<String, String>? result = {};
     type ??= AuthenticationType.NONE;
     final String token = AccountHelper.instance.getToken();
+    debugPrint('----------------token-----------------$token');
     final String tokenFree = AccountHelper.instance.getTokenFree();
     debugPrint('----------------tokenFree-----------------$tokenFree');
     switch (type) {

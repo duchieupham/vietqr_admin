@@ -106,7 +106,7 @@ class TimeUtils {
 
   String getCurrentDate(DateTime? now) {
     now ??= DateTime.now();
-    DateFormat format = DateFormat('yyyy-MM-dd');
+    DateFormat format = DateFormat('yyyy-MM-dd HH:mm:ss');
     String formatted = format.format(now);
     return formatted;
   }

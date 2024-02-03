@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/infomation_popup.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
+import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/page/bank_account_synchronized.dart';
 import 'package:vietqr_admin/feature/merchant/page/info_service_port.dart';
 import 'package:vietqr_admin/feature/merchant/page/list_transaction.dart';
+import 'package:vietqr_admin/service/shared_references/session.dart';
 
 import '../page/bill.dart';
 import '../page/service_charge.dart';
@@ -82,20 +85,31 @@ class _MerchantViewState extends State<MerchantView> {
                     title: 'Thống kê giao dịch',
                     isSelect: currentType == 2,
                     onTap: () {
-                      DialogWidget.instance.openMsgDialog(
-                          title: 'Bảo trì',
-                          msg:
-                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                      // changePage(2);
-                      // Map<String, dynamic> param = {};
-                      // param['merchantId'] = Session.instance.connectDTO.id;
-                      // param['type'] = 9;
-                      // param['value'] = '';
-                      // param['from'] = '0';
-                      // param['to'] = '0';
-                      // param['offset'] = 0;
-                      // merchantBloc.add(GetListTransactionByMerchantEvent(
-                      //     param: param, isLoadingPage: true));
+                      // DialogWidget.instance.openMsgDialog(
+                      //     title: 'Bảo trì',
+                      //     msg:
+                      //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      changePage(2);
+                      DateTime now = DateTime.now();
+                      DateTime fromDate =
+                          DateTime(now.year, now.month, now.day);
+                      DateTime endDate =
+                          fromDate.subtract(const Duration(days: 7));
+
+                      fromDate = fromDate
+                          .add(const Duration(days: 1))
+                          .subtract(const Duration(seconds: 1));
+
+                      Map<String, dynamic> param = {};
+                      param['merchantId'] = Session.instance.connectDTO.id;
+                      param['type'] = 9;
+                      param['value'] = '';
+                      param['from'] =
+                          TimeUtils.instance.getCurrentDate(endDate);
+                      param['to'] = TimeUtils.instance.getCurrentDate(fromDate);
+                      param['offset'] = 0;
+                      merchantBloc.add(GetListTransactionByMerchantEvent(
+                          param: param, isLoadingPage: true));
                     },
                   ),
                   ItemMenuTop(

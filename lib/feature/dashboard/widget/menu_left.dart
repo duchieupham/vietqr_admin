@@ -118,11 +118,11 @@ class MenuLeft extends StatelessWidget {
                 title: 'Giao dịch',
                 isSelect: provider.menuHomeType == MenuType.TRANSACTION,
                 onTap: () {
-                  DialogWidget.instance.openMsgDialog(
-                      title: 'Bảo trì',
-                      msg:
-                          'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                  // onTab(MenuType.TRANSACTION);
+                  // DialogWidget.instance.openMsgDialog(
+                  //     title: 'Bảo trì',
+                  //     msg:
+                  //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                  onTab(MenuType.TRANSACTION);
                   // closeMenuLink();
                 },
               ),
@@ -211,11 +211,11 @@ class MenuLeft extends StatelessWidget {
           iconData: Icons.currency_exchange,
           isSelect: provider.menuHomeType == MenuType.TRANSACTION,
           onTap: () {
-            DialogWidget.instance.openMsgDialog(
-                title: 'Bảo trì',
-                msg:
-                    'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-            // onTab(MenuType.TRANSACTION);
+            // DialogWidget.instance.openMsgDialog(
+            //     title: 'Bảo trì',
+            //     msg:
+            //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+            onTab(MenuType.TRANSACTION);
             // closeMenuLink();
           },
         ),
