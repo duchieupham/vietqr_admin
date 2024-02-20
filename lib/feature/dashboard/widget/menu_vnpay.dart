@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 
 import '../provider/menu_provider.dart';
 import 'item_menu_home.dart';
@@ -49,7 +50,13 @@ class MenuEPay extends StatelessWidget {
               isSelect:
                   provider.initPage == SubMenuType.TOP_UP_PHONE.pageNumber,
               onTap: () {
-                provider.selectSubMenu(SubMenuType.TOP_UP_PHONE);
+                // provider.selectSubMenu(SubMenuType.TOP_UP_PHONE);
+
+                DialogWidget.instance.openMsgDialog(
+                    title: 'Bảo trì',
+                    msg:
+                        'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+
                 // provider.updateShowMenuLink(false);
               },
             ),
