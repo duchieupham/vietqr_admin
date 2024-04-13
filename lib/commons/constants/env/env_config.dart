@@ -14,7 +14,7 @@ class EnvConfig {
   static EnvType get currentEnv => _currentEnv;
 
   String getBaseUrl() {
-    if (_currentEnv == EnvType.GOLIVE) {
+    if (_currentEnv == EnvType.DEV) {
       return GoLiveEnv().getBaseUrl();
     } else {
       return DevEnv().getBaseUrl();
