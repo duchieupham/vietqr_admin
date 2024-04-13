@@ -3,9 +3,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/image_utils.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
-import 'package:vietqr_admin/models/qr_code_dto.dart';
 
 import '../../../commons/constants/utils/string_utils.dart';
+import '../../../models/DTO/qr_code_dto.dart';
 
 class QRTopUp extends StatelessWidget {
   final QRCodeTDTO qrCodeTDTO;

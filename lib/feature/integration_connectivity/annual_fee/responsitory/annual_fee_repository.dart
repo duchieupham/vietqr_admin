@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
-import 'package:vietqr_admin/models/annual_fee_dto.dart';
+
+import '../../../../models/DTO/annual_fee_dto.dart';
 
 class AnnualFeeRepository {
   const AnnualFeeRepository();

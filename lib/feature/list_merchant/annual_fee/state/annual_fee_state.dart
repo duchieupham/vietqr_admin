@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/annual_fee_dto.dart';
+
+import '../../../../models/DTO/annual_fee_dto.dart';
 
 class AnnualFeeState extends Equatable {
   const AnnualFeeState();

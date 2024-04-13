@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/bank_name_information_dto.dart';
-import 'package:vietqr_admin/models/ecomerce_dto.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
-import 'package:vietqr_admin/models/statistic_dto.dart';
+
+import '../../../../models/DTO/api_service_dto.dart';
+import '../../../../models/DTO/bank_account_dto.dart';
+import '../../../../models/DTO/bank_name_information_dto.dart';
+import '../../../../models/DTO/ecomerce_dto.dart';
+import '../../../../models/DTO/response_message_dto.dart';
+import '../../../../models/DTO/statistic_dto.dart';
 
 class InfoConnectRepository {
   const InfoConnectRepository();

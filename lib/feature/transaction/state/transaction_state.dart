@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/transaction_detail_dto.dart';
-import 'package:vietqr_admin/models/transaction_dto.dart';
-import 'package:vietqr_admin/models/transaction_log_dto.dart';
+
+import '../../../models/DTO/transaction_detail_dto.dart';
+import '../../../models/DTO/transaction_dto.dart';
+import '../../../models/DTO/transaction_log_dto.dart';
 
 class TransactionState extends Equatable {
   const TransactionState();

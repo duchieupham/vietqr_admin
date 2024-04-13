@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/connect_info_provider.dart';
-import 'package:vietqr_admin/models/ecomerce_dto.dart';
+
+import '../../../../models/DTO/ecomerce_dto.dart';
 
 class EcomerceInfo extends StatelessWidget {
   final EcomerceDTO dto;

@@ -2,9 +2,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/feature/top_up_phone/event/top_up_phone_event.dart';
 import 'package:vietqr_admin/feature/top_up_phone/responsitory/top_up_phone_provider.dart';
 import 'package:vietqr_admin/feature/top_up_phone/state/top_up_phone_state.dart';
-import 'package:vietqr_admin/models/qr_code_dto.dart';
-import 'package:vietqr_admin/models/transaction_vnpt_dto.dart';
-import 'package:vietqr_admin/models/vnpt_transaction_static.dart';
+
+import '../../../models/DTO/qr_code_dto.dart';
+import '../../../models/DTO/transaction_vnpt_dto.dart';
+import '../../../models/DTO/vnpt_transaction_static.dart';
 
 class TopUpPhoneBloc extends Bloc<TopUpPhoneEvent, TopUpPhoneState> {
   TopUpPhoneBloc() : super(TopUpPhoneInitialState()) {

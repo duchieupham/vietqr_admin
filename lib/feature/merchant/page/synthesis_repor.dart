@@ -11,9 +11,10 @@ import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/provider/synthesis_repor_provider.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/synthesis_report_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
+
+import '../../../models/DTO/bank_account_dto.dart';
+import '../../../models/DTO/synthesis_report_dto.dart';
 
 class SynthesisReport extends StatefulWidget {
   const SynthesisReport({super.key});

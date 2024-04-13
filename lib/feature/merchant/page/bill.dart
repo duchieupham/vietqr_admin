@@ -7,7 +7,8 @@ import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
-import 'package:vietqr_admin/models/service_charge_dto.dart';
+
+import '../../../models/DTO/service_charge_dto.dart';
 
 class Bill extends StatefulWidget {
   const Bill({super.key});

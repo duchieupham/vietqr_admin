@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
-import 'package:vietqr_admin/models/balance_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
+
+import '../../models/DTO/balance_dto.dart';
 
 class SurplusScreen extends StatefulWidget {
   const SurplusScreen({super.key});

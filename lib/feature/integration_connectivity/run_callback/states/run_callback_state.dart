@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/callback_dto.dart';
-import 'package:vietqr_admin/models/customer_dto.dart';
+
+import '../../../../models/DTO/api_service_dto.dart';
+import '../../../../models/DTO/bank_account_dto.dart';
+import '../../../../models/DTO/callback_dto.dart';
+import '../../../../models/DTO/customer_dto.dart';
 
 class RunCallbackState extends Equatable {
   final BlocStatus status;

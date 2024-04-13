@@ -2,8 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/events/lark_event.dart';
 import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/repositories/lark_repository.dart';
 import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/states/lark_state.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
-import 'package:vietqr_admin/models/web_hook_dto.dart';
+
+import '../../../../../models/DTO/response_message_dto.dart';
+import '../../../../../models/DTO/web_hook_dto.dart';
 
 class LarkBloc extends Bloc<LarkEvent, LarkState> {
   LarkBloc() : super(LarkInitialState()) {

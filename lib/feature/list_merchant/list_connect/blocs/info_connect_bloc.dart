@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/events/info_connect_event.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/repositories/info_connect_repository.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_connect_state.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/ecomerce_dto.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
-import 'package:vietqr_admin/models/statistic_dto.dart';
+
+import '../../../../models/DTO/api_service_dto.dart';
+import '../../../../models/DTO/bank_account_dto.dart';
+import '../../../../models/DTO/ecomerce_dto.dart';
+import '../../../../models/DTO/response_message_dto.dart';
+import '../../../../models/DTO/statistic_dto.dart';
 
 class InfoConnectBloc extends Bloc<InfoConnectEvent, InfoConnectState> {
   InfoConnectBloc() : super(InfoConnectInitialState()) {

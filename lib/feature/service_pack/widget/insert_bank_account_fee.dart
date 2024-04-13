@@ -11,7 +11,8 @@ import 'package:vietqr_admin/feature/service_pack/bloc/service_pack_bloc.dart';
 import 'package:vietqr_admin/feature/service_pack/event/service_pack_event.dart';
 import 'package:vietqr_admin/feature/service_pack/provider/insert_bank_account_fee_provider.dart';
 import 'package:vietqr_admin/feature/service_pack/state/service_pack_state.dart';
-import 'package:vietqr_admin/models/service_fee_dto.dart';
+
+import '../../../models/DTO/service_fee_dto.dart';
 
 class InsertBankAccountFeePopup extends StatefulWidget {
   final ServicePackBloc servicePackBloc;

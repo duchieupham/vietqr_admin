@@ -2,7 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/feature/list_merchant/annual_fee/event/annual_fee_event.dart';
 import 'package:vietqr_admin/feature/list_merchant/annual_fee/responsitory/annual_fee_repository.dart';
 import 'package:vietqr_admin/feature/list_merchant/annual_fee/state/annual_fee_state.dart';
-import 'package:vietqr_admin/models/annual_fee_dto.dart';
+
+import '../../../../models/DTO/annual_fee_dto.dart';
 
 class AnnualFeeBloc extends Bloc<AnnualFeeEvent, AnnualFeeState> {
   AnnualFeeBloc() : super(AnnualFeeInitialState()) {

@@ -2,8 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/event/active_fee_event.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/responsitory/active_fee_repository.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/state/active_fee_state.dart';
-import 'package:vietqr_admin/models/active_fee_dto.dart';
-import 'package:vietqr_admin/models/active_fee_total_static.dart';
+
+import '../../../../models/DTO/active_fee_dto.dart';
+import '../../../../models/DTO/active_fee_total_static.dart';
 
 class ActiveFeeBloc extends Bloc<ActiveFeeEvent, ActiveFeeState> {
   ActiveFeeBloc() : super(ActiveFeeInitialState()) {

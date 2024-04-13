@@ -7,9 +7,9 @@ import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/blocs/info_connect_bloc.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/add_bank_provider.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/add_bank_popup.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
 
+import '../../../../models/DTO/api_service_dto.dart';
+import '../../../../models/DTO/bank_account_dto.dart';
 import '../events/info_connect_event.dart';
 
 class ListBank extends StatelessWidget {

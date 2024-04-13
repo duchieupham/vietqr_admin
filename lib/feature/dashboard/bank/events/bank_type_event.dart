@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/bank_type_dto.dart';
+
+import '../../../../models/DTO/bank_type_dto.dart';
 
 class BankTypeEvent extends Equatable {
   const BankTypeEvent();

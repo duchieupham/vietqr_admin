@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vietqr_admin/feature/top_up_phone/responsitory/top_up_phone_provider.dart';
-import 'package:vietqr_admin/models/balance_dto.dart';
-import 'package:vietqr_admin/models/connect.dto.dart';
+
+import '../../models/DTO/balance_dto.dart';
+import '../../models/DTO/connect.dto.dart';
 
 class Session {
   static final Session _singleton = Session._privateConstructor();

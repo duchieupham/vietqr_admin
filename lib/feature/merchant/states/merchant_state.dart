@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/account_is_merchant.dart';
-import 'package:vietqr_admin/models/bank_account_sync_dto.dart';
-import 'package:vietqr_admin/models/service_charge_dto.dart';
-import 'package:vietqr_admin/models/synthesis_report_dto.dart';
-import 'package:vietqr_admin/models/transaction_merchant_dto.dart';
+
+import '../../../models/DTO/account_is_merchant.dart';
+import '../../../models/DTO/bank_account_sync_dto.dart';
+import '../../../models/DTO/service_charge_dto.dart';
+import '../../../models/DTO/synthesis_report_dto.dart';
+import '../../../models/DTO/transaction_merchant_dto.dart';
 
 class MerchantState extends Equatable {
   const MerchantState();

@@ -15,11 +15,11 @@ import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/provider/merchant_provider.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
 import 'package:vietqr_admin/feature/merchant/widget/choose_service_pack.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/bank_account_sync_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
 import '../../../commons/constants/configurations/theme.dart';
+import '../../../models/DTO/api_service_dto.dart';
+import '../../../models/DTO/bank_account_sync_dto.dart';
 
 class ListBankAccountSync extends StatefulWidget {
   const ListBankAccountSync({super.key});

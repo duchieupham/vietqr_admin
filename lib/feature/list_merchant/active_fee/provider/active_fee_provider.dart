@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/responsitory/active_fee_repository.dart';
-import 'package:vietqr_admin/models/active_fee_dto.dart';
+
+import '../../../../models/DTO/active_fee_dto.dart';
 
 class ActiveFeeProvider with ChangeNotifier {
   List<FilterActiveFee> listFilter = [

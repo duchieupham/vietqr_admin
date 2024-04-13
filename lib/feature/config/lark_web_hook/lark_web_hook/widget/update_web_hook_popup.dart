@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
-import 'package:vietqr_admin/models/web_hook_dto.dart';
+
+import '../../../../../models/DTO/web_hook_dto.dart';
 
 class UpdateWebhookPopup extends StatefulWidget {
   final WebHookDTO dto;

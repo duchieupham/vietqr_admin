@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
-import 'package:vietqr_admin/models/service_fee_dto.dart';
-import 'package:vietqr_admin/models/service_pack_dto.dart';
+
+import '../../../models/DTO/response_message_dto.dart';
+import '../../../models/DTO/service_fee_dto.dart';
+import '../../../models/DTO/service_pack_dto.dart';
 
 class ServicePackState extends Equatable {
   const ServicePackState();

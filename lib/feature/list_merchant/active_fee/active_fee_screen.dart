@@ -15,7 +15,8 @@ import 'package:vietqr_admin/feature/list_merchant/active_fee/event/active_fee_e
 import 'package:vietqr_admin/feature/list_merchant/active_fee/provider/active_fee_provider.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/state/active_fee_state.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/widget/active_fee_detail.dart';
-import 'package:vietqr_admin/models/active_fee_dto.dart';
+
+import '../../../models/DTO/active_fee_dto.dart';
 
 class ActiveFeeScreen extends StatefulWidget {
   const ActiveFeeScreen({Key? key}) : super(key: key);

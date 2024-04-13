@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
-import 'package:vietqr_admin/models/bank_type_dto.dart';
+
+import '../../../../models/DTO/bank_type_dto.dart';
 
 class BankTypeProvider with ChangeNotifier {
   String _money = '';

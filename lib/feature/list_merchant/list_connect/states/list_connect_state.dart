@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/connect.dto.dart';
+
+import '../../../../models/DTO/connect.dto.dart';
 
 class ListConnectState extends Equatable {
   const ListConnectState();

@@ -4,7 +4,8 @@ import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/events/bank_type_event.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/repositories/bank_type_repository.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/states/bank_type_state.dart';
-import 'package:vietqr_admin/models/bank_type_dto.dart';
+
+import '../../../../models/DTO/bank_type_dto.dart';
 
 class BankTypeBloc extends Bloc<BankTypeEvent, BankTypeState> {
   BankTypeBloc() : super(BankTypeInitialState()) {

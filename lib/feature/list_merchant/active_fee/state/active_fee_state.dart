@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/active_fee_dto.dart';
-import 'package:vietqr_admin/models/active_fee_total_static.dart';
+
+import '../../../../models/DTO/active_fee_dto.dart';
+import '../../../../models/DTO/active_fee_total_static.dart';
 
 class ActiveFeeState extends Equatable {
   const ActiveFeeState();

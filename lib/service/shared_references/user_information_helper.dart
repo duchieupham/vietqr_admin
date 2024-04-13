@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:vietqr_admin/main.dart';
-import 'package:vietqr_admin/models/account_information_dto.dart';
+
+import '../../models/DTO/account_information_dto.dart';
 
 class UserInformationHelper {
   const UserInformationHelper._privateConsrtructor();

@@ -7,7 +7,8 @@ import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/bloc/service_pack_bloc.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/event/service_pack_event.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/state/rq_bank_account_state.dart';
-import 'package:vietqr_admin/models/account_bank_rq_dto.dart';
+
+import '../../../models/DTO/account_bank_rq_dto.dart';
 
 class RequestBankAccountScreen extends StatefulWidget {
   const RequestBankAccountScreen({super.key});

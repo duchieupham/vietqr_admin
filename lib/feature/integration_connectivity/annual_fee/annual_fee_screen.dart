@@ -12,7 +12,8 @@ import 'package:vietqr_admin/feature/list_merchant/annual_fee/bloc/annual_fee_bl
 import 'package:vietqr_admin/feature/list_merchant/annual_fee/event/annual_fee_event.dart';
 import 'package:vietqr_admin/feature/list_merchant/annual_fee/provider/annual_fee_provider.dart';
 import 'package:vietqr_admin/feature/list_merchant/annual_fee/state/annual_fee_state.dart';
-import 'package:vietqr_admin/models/annual_fee_dto.dart';
+
+import '../../../models/DTO/annual_fee_dto.dart';
 
 class AnnualFeeScreen extends StatefulWidget {
   const AnnualFeeScreen({Key? key}) : super(key: key);

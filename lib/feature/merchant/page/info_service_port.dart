@@ -5,10 +5,11 @@ import 'package:vietqr_admin/feature/list_merchant/list_connect/events/info_conn
 import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_connect_state.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/api_service_info.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/ecomerce_info.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/statistic_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
+
+import '../../../models/DTO/api_service_dto.dart';
+import '../../../models/DTO/bank_account_dto.dart';
+import '../../../models/DTO/statistic_dto.dart';
 
 class InfoServicePort extends StatefulWidget {
   const InfoServicePort({Key? key}) : super(key: key);

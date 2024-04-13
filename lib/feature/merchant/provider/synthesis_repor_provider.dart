@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/feature/merchant/repositories/merchant_repository.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
+
+import '../../../models/DTO/bank_account_dto.dart';
 
 class SynthesisReportProvider with ChangeNotifier {
   List<FilterTransaction> listFilter = [

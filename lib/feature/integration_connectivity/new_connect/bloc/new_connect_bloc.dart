@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vietqr_admin/models/generate_username_pass_dto.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
 
+import '../../../../models/DTO/generate_username_pass_dto.dart';
+import '../../../../models/DTO/response_message_dto.dart';
 import '../event/new_connect_event.dart';
 import '../respository/new_connect_repository.dart';
 import '../state/new_connect_state.dart';

@@ -9,9 +9,10 @@ import 'package:vietqr_admin/feature/list_merchant/list_connect/blocs/info_conne
 import 'package:vietqr_admin/feature/list_merchant/list_connect/events/info_connect_event.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/connect_info_provider.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_connect_state.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/connect.dto.dart';
-import 'package:vietqr_admin/models/ecomerce_dto.dart';
+
+import '../../../../models/DTO/api_service_dto.dart';
+import '../../../../models/DTO/connect.dto.dart';
+import '../../../../models/DTO/ecomerce_dto.dart';
 
 class UpdateMerchantPopup extends StatefulWidget {
   final ConnectDTO dto;

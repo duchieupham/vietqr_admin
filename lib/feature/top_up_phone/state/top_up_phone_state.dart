@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/qr_code_dto.dart';
-import 'package:vietqr_admin/models/transaction_vnpt_dto.dart';
-import 'package:vietqr_admin/models/vnpt_transaction_static.dart';
+
+import '../../../models/DTO/qr_code_dto.dart';
+import '../../../models/DTO/transaction_vnpt_dto.dart';
+import '../../../models/DTO/vnpt_transaction_static.dart';
 
 class TopUpPhoneState extends Equatable {
   const TopUpPhoneState();

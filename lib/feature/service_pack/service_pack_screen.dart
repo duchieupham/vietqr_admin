@@ -18,7 +18,8 @@ import 'package:vietqr_admin/feature/service_pack/provider/service_pack_provider
 import 'package:vietqr_admin/feature/service_pack/state/service_pack_state.dart';
 import 'package:vietqr_admin/feature/service_pack/widget/create_service_pack_popup.dart';
 import 'package:vietqr_admin/feature/service_pack/widget/insert_bank_account_fee.dart';
-import 'package:vietqr_admin/models/service_pack_dto.dart';
+
+import '../../models/DTO/service_pack_dto.dart';
 
 class ServicePackScreen extends StatefulWidget {
   const ServicePackScreen({Key? key}) : super(key: key);

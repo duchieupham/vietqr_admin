@@ -13,11 +13,11 @@ import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/provider/merchant_provider.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/transaction_merchant_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
 import '../../../commons/constants/configurations/theme.dart';
+import '../../../models/DTO/bank_account_dto.dart';
+import '../../../models/DTO/transaction_merchant_dto.dart';
 
 class ListTransaction extends StatefulWidget {
   const ListTransaction({super.key});

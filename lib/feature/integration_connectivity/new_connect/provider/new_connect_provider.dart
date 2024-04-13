@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/repositories/info_connect_repository.dart';
-import 'package:vietqr_admin/models/bank_name_information_dto.dart';
+
+import '../../../../models/DTO/bank_name_information_dto.dart';
 
 class NewConnectProvider with ChangeNotifier {
   String _urlConnect = '';

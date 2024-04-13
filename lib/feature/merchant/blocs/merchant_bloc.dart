@@ -5,11 +5,12 @@ import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/repositories/merchant_repository.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
-import 'package:vietqr_admin/models/bank_account_sync_dto.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
-import 'package:vietqr_admin/models/service_charge_dto.dart';
-import 'package:vietqr_admin/models/synthesis_report_dto.dart';
-import 'package:vietqr_admin/models/transaction_merchant_dto.dart';
+
+import '../../../models/DTO/bank_account_sync_dto.dart';
+import '../../../models/DTO/response_message_dto.dart';
+import '../../../models/DTO/service_charge_dto.dart';
+import '../../../models/DTO/synthesis_report_dto.dart';
+import '../../../models/DTO/transaction_merchant_dto.dart';
 
 class MerchantBloc extends Bloc<MerchantEvent, MerchantState> {
   MerchantBloc() : super(MerchantInitialState()) {

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/utils/setup.dart';
 import 'package:vietqr_admin/feature/dashboard/dashboard_screen.dart';
 import 'package:vietqr_admin/feature/login/views/login.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
@@ -18,6 +19,7 @@ void main() async {
   await sharedPrefs.setString('TOKEN_FREE', '');
   setUrlStrategy(PathUrlStrategy());
   Session.load;
+  createRouteBindings();
   // LOG.verbose('Config Environment: ${EnvConfig.getEnv()}');
   runApp(const VietQRAdmin());
 }

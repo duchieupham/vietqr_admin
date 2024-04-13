@@ -10,8 +10,10 @@ import 'package:vietqr_admin/feature/dashboard/bank/blocs/bank_type_bloc.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/events/bank_type_event.dart';
 import 'package:vietqr_admin/feature/dashboard/bank/states/bank_type_state.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/bank_type_provider.dart';
-import 'package:vietqr_admin/models/bank_type_dto.dart';
+
 import 'package:vietqr_admin/service/shared_references/provider/search_clear_provider.dart';
+
+import '../../models/DTO/bank_type_dto.dart';
 
 class SelectBankTypeWidget extends StatelessWidget {
   static final TextEditingController searchController = TextEditingController();

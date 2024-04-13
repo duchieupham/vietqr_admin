@@ -15,9 +15,10 @@ import 'package:vietqr_admin/feature/top_up_phone/event/top_up_phone_event.dart'
 import 'package:vietqr_admin/feature/top_up_phone/provider/top_up_phone_provider.dart';
 import 'package:vietqr_admin/feature/top_up_phone/state/top_up_phone_state.dart';
 import 'package:vietqr_admin/feature/top_up_phone/widget/qr_top_up.dart';
-import 'package:vietqr_admin/models/transaction_vnpt_dto.dart';
-import 'package:vietqr_admin/models/vnpt_transaction_static.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
+
+import '../../models/DTO/transaction_vnpt_dto.dart';
+import '../../models/DTO/vnpt_transaction_static.dart';
 
 class TopUpPhoneScreen extends StatelessWidget {
   const TopUpPhoneScreen({Key? key}) : super(key: key);

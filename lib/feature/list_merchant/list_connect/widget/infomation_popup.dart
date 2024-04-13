@@ -8,11 +8,11 @@ import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/blocs/info_connect_bloc.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/statistic_provider.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_connect_state.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/statistic_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
+import '../../../../models/DTO/api_service_dto.dart';
+import '../../../../models/DTO/bank_account_dto.dart';
+import '../../../../models/DTO/statistic_dto.dart';
 import '../events/info_connect_event.dart';
 
 class InformationPopup extends StatefulWidget {

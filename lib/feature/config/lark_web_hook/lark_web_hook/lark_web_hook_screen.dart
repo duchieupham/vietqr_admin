@@ -14,7 +14,8 @@ import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/events/l
 import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/provider/list_connect_provider.dart';
 import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/states/lark_state.dart';
 import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/widget/update_web_hook_popup.dart';
-import 'package:vietqr_admin/models/web_hook_dto.dart';
+
+import '../../../../models/DTO/web_hook_dto.dart';
 
 class LarkHook extends StatefulWidget {
   const LarkHook({Key? key}) : super(key: key);

@@ -14,9 +14,9 @@ import 'package:vietqr_admin/feature/transaction/bloc/transaction_bloc.dart';
 import 'package:vietqr_admin/feature/transaction/event/transaction_event.dart';
 import 'package:vietqr_admin/feature/transaction/state/transaction_state.dart';
 import 'package:vietqr_admin/feature/transaction/widget/transaction_detail.dart';
-import 'package:vietqr_admin/models/transaction_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
+import '../../models/DTO/transaction_dto.dart';
 import 'provider/transaction_provider.dart';
 
 class TransactionScreen extends StatelessWidget {

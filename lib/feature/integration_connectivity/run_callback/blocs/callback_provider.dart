@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/callback_dto.dart';
-import 'package:vietqr_admin/models/customer_dto.dart';
+
+import '../../../../models/DTO/bank_account_dto.dart';
+import '../../../../models/DTO/callback_dto.dart';
+import '../../../../models/DTO/customer_dto.dart';
 
 class CallbackProvider with ChangeNotifier {
   CustomerDTO customerDTO = const CustomerDTO();

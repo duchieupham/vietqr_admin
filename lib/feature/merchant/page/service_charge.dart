@@ -10,9 +10,9 @@ import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
-import 'package:vietqr_admin/models/service_charge_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
+import '../../../models/DTO/service_charge_dto.dart';
 import '../provider/active_fee_provider.dart';
 
 class ServiceFee extends StatefulWidget {

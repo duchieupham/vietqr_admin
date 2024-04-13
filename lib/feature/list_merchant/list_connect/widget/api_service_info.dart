@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/connect_info_provider.dart';
-import 'package:vietqr_admin/models/api_service_dto.dart';
+
+import '../../../../models/DTO/api_service_dto.dart';
 
 class ApiServiceInfo extends StatelessWidget {
   final ApiServiceDTO dto;

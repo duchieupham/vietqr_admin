@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/image_utils.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
+
+import '../../../../models/DTO/bank_account_dto.dart';
 
 class DialogSelectBank extends StatelessWidget {
   final List<BankAccountDTO> list;

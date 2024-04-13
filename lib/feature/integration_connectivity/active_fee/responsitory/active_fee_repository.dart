@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
-import 'package:vietqr_admin/models/active_fee_dto.dart';
-import 'package:vietqr_admin/models/active_fee_total_static.dart';
+
+import '../../../../models/DTO/active_fee_dto.dart';
+import '../../../../models/DTO/active_fee_total_static.dart';
 
 class ActiveFeeRepository {
   const ActiveFeeRepository();

@@ -7,9 +7,10 @@ import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/feature/transaction/bloc/transaction_bloc.dart';
 import 'package:vietqr_admin/feature/transaction/event/transaction_event.dart';
 import 'package:vietqr_admin/feature/transaction/state/transaction_state.dart';
-import 'package:vietqr_admin/models/transaction_detail_dto.dart';
-import 'package:vietqr_admin/models/transaction_log_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
+
+import '../../../models/DTO/transaction_detail_dto.dart';
+import '../../../models/DTO/transaction_log_dto.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
   TransactionDetailScreen({Key? key}) : super(key: key);

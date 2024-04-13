@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
-import 'package:vietqr_admin/models/bank_account_dto.dart';
-import 'package:vietqr_admin/models/bank_account_sync_dto.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
-import 'package:vietqr_admin/models/service_charge_dto.dart';
-import 'package:vietqr_admin/models/synthesis_report_dto.dart';
-import 'package:vietqr_admin/models/transaction_merchant_dto.dart';
+
+import '../../../models/DTO/bank_account_dto.dart';
+import '../../../models/DTO/bank_account_sync_dto.dart';
+import '../../../models/DTO/response_message_dto.dart';
+import '../../../models/DTO/service_charge_dto.dart';
+import '../../../models/DTO/synthesis_report_dto.dart';
+import '../../../models/DTO/transaction_merchant_dto.dart';
 
 class MerchantRepository {
   const MerchantRepository();

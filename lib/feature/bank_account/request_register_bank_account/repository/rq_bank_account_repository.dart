@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
-import 'package:vietqr_admin/models/account_bank_rq_dto.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
+
+import '../../../../models/DTO/account_bank_rq_dto.dart';
+import '../../../../models/DTO/response_message_dto.dart';
 
 class RQBankAccountRepository {
   const RQBankAccountRepository();

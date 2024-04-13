@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:vietqr_admin/models/bank_name_information_dto.dart';
 import 'package:flutter/foundation.dart';
+import '../../../../models/DTO/bank_name_information_dto.dart';
 import '../repositories/info_connect_repository.dart';
 
 class AddBankProvider with ChangeNotifier {

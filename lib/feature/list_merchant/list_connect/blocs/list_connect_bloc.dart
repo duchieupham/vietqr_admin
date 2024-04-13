@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vietqr_admin/models/connect.dto.dart';
 
+import '../../../../models/DTO/connect.dto.dart';
 import '../events/list_connect_event.dart';
 import '../repositories/list_connect_repository.dart';
 import '../states/list_connect_state.dart';

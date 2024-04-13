@@ -55,6 +55,8 @@ dependencies:
   month_year_picker: ^0.2.0+2
   qr_flutter: ^4.0.0
   jiffy:
+  get: ^4.6.5
+  scoped_model: ^2.0.0
 
 dev_dependencies:
   flutter_test:

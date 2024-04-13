@@ -9,10 +9,10 @@ import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/list_connect_provider.dart';
 import 'package:vietqr_admin/feature/merchant/views/merchant.dart';
-import 'package:vietqr_admin/models/connect.dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
 import '../../../commons/constants/utils/custom_scroll.dart';
+import '../../../models/DTO/connect.dto.dart';
 import 'blocs/list_connect_bloc.dart';
 import 'events/list_connect_event.dart';
 import 'states/list_connect_state.dart';

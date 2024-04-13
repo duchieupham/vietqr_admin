@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:vietqr_admin/models/response_message_dto.dart';
-import 'package:vietqr_admin/models/web_hook_dto.dart';
+
+import '../../../../../models/DTO/response_message_dto.dart';
+import '../../../../../models/DTO/web_hook_dto.dart';
 
 class LarkState extends Equatable {
   const LarkState();
