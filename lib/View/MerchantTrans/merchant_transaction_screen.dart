@@ -8,6 +8,7 @@ import 'package:vietqr_admin/View/MerchantTrans/widgets/title_item_widget.dart';
 import 'package:vietqr_admin/ViewModel/merchant_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/merchant_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 
@@ -135,15 +136,64 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       _filterWidget(),
+                      const SizedBox(height: 20),
+                      const MySeparator(
+                        color: AppColor.GREY_DADADA,
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Thống kê giao dịch đại lý",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "GD đại lý ngày 13/04/2024",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(width: 60),
+                          SizedBox(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text("Tổng GD:      "),
+                                    Text(
+                                      "1,000 ",
+                                      style: TextStyle(
+                                          color: AppColor.BLUE_TEXT,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text("GD - "),
+                                    Text(
+                                      "500,000,000",
+                                      style: TextStyle(
+                                          color: AppColor.BLUE_TEXT,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(" VND "),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
                 _buildListMerchant(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 _pagingWidget(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
               ],
             ),
           )),
@@ -152,7 +202,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
 
   Widget _headerWidget() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(30, 25, 30, 10),
+      padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -421,49 +471,51 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
   Widget _buildListMerchant() {
     return ScopedModelDescendant<MerchantViewModel>(
       builder: (context, child, model) {
-        List<MerchantData>? list = model.merchantDTO?.data;
-
         if (model.status == ViewStatus.Loading) {
           return const Expanded(child: Center(child: Text('Đang tải...')));
         }
         if (model.status == ViewStatus.Error) {
           return const SizedBox.shrink();
         }
+        List<MerchantData>? list = model.merchantDTO?.data;
         MetaDataDTO metadata = model.metadata!;
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            child: SingleChildScrollView(
-              controller: scrollControllerList,
-              child: ScrollConfiguration(
-                behavior: MyCustomScrollBehavior(),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    // width: 1200,
-                    child: Column(
-                      children: [
-                        const TitleItemWidget(),
-                        ...list!.map((e) {
-                          int index = 0;
-                          if (metadata.page! > 1) {
-                            index = list.indexOf(e) + (metadata.page! * 10);
-                          } else {
-                            index = list.indexOf(e);
-                          }
-                          return ItemWidget(
-                            dto: e,
-                            index: index,
-                          );
-                        }).toList(),
-                      ],
+        return list != null
+            ? Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                  child: SingleChildScrollView(
+                    controller: scrollControllerList,
+                    child: ScrollConfiguration(
+                      behavior: MyCustomScrollBehavior(),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SizedBox(
+                          // width: 1200,
+                          child: Column(
+                            children: [
+                              const TitleItemWidget(),
+                              ...list.map((e) {
+                                int index = 0;
+                                if (metadata.page! > 1) {
+                                  index =
+                                      list.indexOf(e) + (metadata.page! * 10);
+                                } else {
+                                  index = list.indexOf(e);
+                                }
+                                return ItemWidget(
+                                  dto: e,
+                                  index: index,
+                                );
+                              }).toList(),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ),
-        );
+              )
+            : const SizedBox.shrink();
       },
     );
   }

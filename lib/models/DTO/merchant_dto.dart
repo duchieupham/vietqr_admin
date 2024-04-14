@@ -14,7 +14,7 @@ class MerchantDTO {
 }
 
 class MerchantData {
-  int mid;
+  String mid;
   String name;
   String vso;
   String nationalId;
