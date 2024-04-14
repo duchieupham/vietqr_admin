@@ -6,23 +6,31 @@ import 'package:http/http.dart' as http;
 import '../../commons/constants/env/env_config.dart';
 import '../../commons/constants/utils/base_api.dart';
 import '../DTO/merchant_dto.dart';
+import '../DTO/metadata_dto.dart';
 
 class MerchantDAO extends BaseDAO {
-  Future<MerchantDTO?> filterMerchantList(
-      {required String time,
-      required int type,
-      required String page,
-      required String size}) async {
+  Future<List<MerchantDTO>?> filterMerchantList({
+    required String time,
+    required int type,
+    required int page,
+    int? size,
+    required int filterBy,
+    required String value,
+  }) async {
+    // List<MerchantDTO> list = [];
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/mid/statistic?time=$time&type=$type&page=$page&size=$size';
+          'https://dev.vietqr.org/vqr/mock/api/mid/statistic?time=$time&type=$type&page=$page&size=${size ?? 20}&filterBy=$filterBy&value=$value';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
       );
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        return MerchantDTO.fromJson(data);
+        metaDataDTO = MetaDataDTO.fromJson(data["metadata"]);
+        return data
+            .map<MerchantDTO>((json) => MerchantDTO.fromJson(json))
+            .toList();
       }
     } catch (e) {
       LOG.error(e.toString());

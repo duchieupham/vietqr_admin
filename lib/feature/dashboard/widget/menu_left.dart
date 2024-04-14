@@ -127,6 +127,18 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
+                title: 'Giao dịch đại lý',
+                isSelect: provider.menuHomeType == MenuType.MERCHANT_FEE,
+                onTap: () {
+                  // DialogWidget.instance.openMsgDialog(
+                  //     title: 'Bảo trì',
+                  //     msg:
+                  //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                  onTab(MenuType.MERCHANT_FEE);
+                  // closeMenuLink();
+                },
+              ),
+              ItemMenu(
                 title: 'Cấu hình',
                 isSelect: provider.menuHomeType == MenuType.CONFIG,
                 onTap: () {
