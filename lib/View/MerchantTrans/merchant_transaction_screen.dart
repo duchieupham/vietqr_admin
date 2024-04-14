@@ -422,9 +422,14 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     return ScopedModelDescendant<MerchantViewModel>(
       builder: (context, child, model) {
         List<MerchantData>? list = model.merchantDTO?.data;
+
         if (model.status == ViewStatus.Loading) {
           return const Expanded(child: Center(child: Text('Đang tải...')));
         }
+        if (model.status == ViewStatus.Error) {
+          return const SizedBox.shrink();
+        }
+        MetaDataDTO metadata = model.metadata!;
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -440,7 +445,12 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                       children: [
                         const TitleItemWidget(),
                         ...list!.map((e) {
-                          int index = list.indexOf(e);
+                          int index = 0;
+                          if (metadata.page! > 1) {
+                            index = list.indexOf(e) + (metadata.page! * 10);
+                          } else {
+                            index = list.indexOf(e);
+                          }
                           return ItemWidget(
                             dto: e,
                             index: index,
@@ -461,10 +471,16 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
   Widget _pagingWidget() {
     return ScopedModelDescendant<MerchantViewModel>(
       builder: (context, child, model) {
-        if (model.status == ViewStatus.Loading) {
+        bool isPaging = false;
+        if (model.status == ViewStatus.Loading ||
+            model.status == ViewStatus.Error) {
           return const SizedBox.shrink();
         }
+
         MetaDataDTO paging = model.metadata!;
+        if (paging.page! <= paging.totalPage!) {
+          isPaging = true;
+        }
 
         return paging != null
             ? Padding(
@@ -481,16 +497,28 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                     ),
                     const SizedBox(width: 30),
                     InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        if (paging.page != 1) {
+                          await model.filterListMerchant(
+                              time: selectDate!,
+                              page: paging.page! - 1,
+                              value: searchValue ?? '');
+                        }
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            border: Border.all(color: AppColor.GREY_DADADA)),
-                        child: const Center(
+                            border: Border.all(
+                                color: paging.page != 1
+                                    ? AppColor.BLACK
+                                    : AppColor.GREY_DADADA)),
+                        child: Center(
                           child: Icon(
                             Icons.chevron_left_rounded,
-                            color: AppColor.GREY_DADADA,
+                            color: paging.page != 1
+                                ? AppColor.BLACK
+                                : AppColor.GREY_DADADA,
                             size: 20,
                           ),
                         ),
@@ -498,16 +526,28 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                     ),
                     const SizedBox(width: 15),
                     InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        if (isPaging) {
+                          await model.filterListMerchant(
+                              time: selectDate!,
+                              page: paging.page! + 1,
+                              value: searchValue ?? '');
+                        }
+                      },
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            border: Border.all(color: AppColor.GREY_DADADA)),
-                        child: const Center(
+                            border: Border.all(
+                                color: isPaging
+                                    ? AppColor.BLACK
+                                    : AppColor.GREY_DADADA)),
+                        child: Center(
                           child: Icon(
                             Icons.chevron_right_rounded,
-                            color: AppColor.GREY_DADADA,
+                            color: isPaging
+                                ? AppColor.BLACK
+                                : AppColor.GREY_DADADA,
                             size: 20,
                           ),
                         ),
