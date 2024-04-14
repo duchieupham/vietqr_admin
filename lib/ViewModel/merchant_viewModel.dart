@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/models/DTO/merchant_dto.dart';
@@ -7,8 +8,9 @@ import '../models/DAO/MerchantDAO.dart';
 
 class MerchantViewModel extends BaseModel {
   late MerchantDAO _dao;
-  List<MerchantDTO>? listMerchant;
+  MerchantDTO? listMerchant;
   int? type = 0;
+  int? filterByDate = 0;
 
   MerchantViewModel() {
     _dao = MerchantDAO();
@@ -19,18 +21,58 @@ class MerchantViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void changeTime(int? selectTime) {
+    filterByDate = selectTime;
+    notifyListeners();
+  }
+
+  DateTime getPreviousDay() {
+    DateTime now = DateTime.now();
+    int newMonth = now.month;
+    int newYear = now.year;
+    int newDay = now.day - 1;
+
+    if (newMonth < 1) {
+      newMonth = 12; // Set month to December
+      newYear--; // Decrement year
+    }
+
+    return DateTime(newYear, newMonth, newDay);
+  }
+
+  DateTime getPreviousMonth() {
+    DateTime now = DateTime.now();
+    int newMonth = now.month - 1;
+    int newYear = now.year;
+
+    if (newMonth < 1) {
+      newMonth = 12; // Set month to December
+      newYear--; // Decrement year
+    }
+
+    return DateTime(newYear, newMonth);
+  }
+
   Future<void> filterListMerchant({
-    required String time,
-    required int type,
+    required DateTime time,
     required int page,
     int? size,
-    required int filterBy,
     required String value,
   }) async {
     try {
+      String formattedDate = '';
+      if (filterByDate == 0) {
+        formattedDate = DateFormat('yyyy-MM-dd').format(time);
+      } else {
+        formattedDate = DateFormat('yyyy-MM').format(time);
+      }
       setState(ViewStatus.Loading);
       listMerchant = await _dao.filterMerchantList(
-          time: time, type: type, page: page, filterBy: filterBy, value: value);
+          time: formattedDate,
+          type: type!,
+          page: page,
+          filterBy: filterByDate!,
+          value: value);
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

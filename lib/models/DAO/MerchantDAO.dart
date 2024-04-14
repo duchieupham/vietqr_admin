@@ -9,7 +9,7 @@ import '../DTO/merchant_dto.dart';
 import '../DTO/metadata_dto.dart';
 
 class MerchantDAO extends BaseDAO {
-  Future<List<MerchantDTO>?> filterMerchantList({
+  Future<MerchantDTO?> filterMerchantList({
     required String time,
     required int type,
     required int page,
@@ -28,9 +28,10 @@ class MerchantDAO extends BaseDAO {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         metaDataDTO = MetaDataDTO.fromJson(data["metadata"]);
-        return data
-            .map<MerchantDTO>((json) => MerchantDTO.fromJson(json))
-            .toList();
+        // return data['data']
+        //     .map<MerchantDTO>((json) => MerchantDTO.fromJson(json))
+        //     .toList();
+        return MerchantDTO.fromJson(data['data']);
       }
     } catch (e) {
       LOG.error(e.toString());
