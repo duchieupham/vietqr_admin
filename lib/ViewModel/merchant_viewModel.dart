@@ -2,15 +2,17 @@ import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/models/DTO/merchant_dto.dart';
+import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 
 import '../commons/constants/utils/log.dart';
 import '../models/DAO/MerchantDAO.dart';
 
 class MerchantViewModel extends BaseModel {
   late MerchantDAO _dao;
-  MerchantDTO? listMerchant;
+  MerchantDTO? merchantDTO;
   int? type = 0;
   int? filterByDate = 0;
+  MetaDataDTO? metadata;
 
   MerchantViewModel() {
     _dao = MerchantDAO();
@@ -67,12 +69,13 @@ class MerchantViewModel extends BaseModel {
         formattedDate = DateFormat('yyyy-MM').format(time);
       }
       setState(ViewStatus.Loading);
-      listMerchant = await _dao.filterMerchantList(
+      merchantDTO = await _dao.filterMerchantList(
           time: formattedDate,
           type: type!,
           page: page,
           filterBy: filterByDate!,
           value: value);
+      metadata = _dao.metaDataDTO;
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

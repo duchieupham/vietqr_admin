@@ -1,17 +1,17 @@
 class MetaDataDTO {
   int? page;
   int? size;
+  int? totalPage;
   int? total;
-  int? totalElement;
 
-  MetaDataDTO({this.page, this.size, this.total, this.totalElement});
+  MetaDataDTO({this.page, this.size, this.totalPage, this.total});
 
   factory MetaDataDTO.fromJson(dynamic json) {
     return MetaDataDTO(
       page: json['page'],
       size: json['size'],
-      total: json['totalPage'],
-      totalElement: json['totalElement'],
+      totalPage: json['totalPage'],
+      total: json['totalElement'],
     );
   }
 }
