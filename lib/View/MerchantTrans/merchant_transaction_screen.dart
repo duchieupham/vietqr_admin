@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/instance_manager.dart';
+import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/MerchantTrans/widgets/item_widget.dart';
 import 'package:vietqr_admin/View/MerchantTrans/widgets/title_item_widget.dart';
@@ -13,6 +14,7 @@ import 'package:vietqr_admin/models/DTO/merchant_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 
 import '../../commons/constants/utils/custom_scroll.dart';
+import '../../commons/constants/utils/string_utils.dart';
 import '../../commons/widget/dialog_pick_month.dart';
 import '../../main.dart';
 
@@ -149,43 +151,138 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 30),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "GD đại lý ngày 13/04/2024",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(width: 60),
-                          SizedBox(
-                            height: 100,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
+                      ScopedModelDescendant<MerchantViewModel>(
+                        builder: (context, child, model) {
+                          return model.merchantDTO != null
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Tổng GD:      "),
                                     Text(
-                                      "1,000 ",
-                                      style: TextStyle(
-                                          color: AppColor.BLUE_TEXT,
+                                      "GD đại lý ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}",
+                                      style: const TextStyle(
+                                          fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Text("GD - "),
-                                    Text(
-                                      "500,000,000",
-                                      style: TextStyle(
-                                          color: AppColor.BLUE_TEXT,
-                                          fontWeight: FontWeight.bold),
+                                    const SizedBox(width: 60),
+                                    SizedBox(
+                                      height: 100,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("Tổng GD:      "),
+                                              Text(
+                                                "${model.merchantDTO?.extraData.totalCount} ",
+                                                style: const TextStyle(
+                                                    color: AppColor.BLUE_TEXT,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text("GD - "),
+                                              Text(
+                                                StringUtils.formatNumber(model
+                                                    .merchantDTO
+                                                    ?.extraData
+                                                    .totalTrans),
+                                                style: const TextStyle(
+                                                    color: AppColor.BLUE_TEXT,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text(" VND "),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text("Có đối soát: "),
+                                              Text(
+                                                "${model.merchantDTO?.extraData.recCountTotal} ",
+                                                style: const TextStyle(
+                                                    color: AppColor.GREEN,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text("GD - "),
+                                              Text(
+                                                StringUtils.formatNumber(model
+                                                    .merchantDTO
+                                                    ?.extraData
+                                                    .recTotal),
+                                                style: const TextStyle(
+                                                    color: AppColor.GREEN,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text(" VND "),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    Text(" VND "),
+                                    const SizedBox(width: 40),
+                                    SizedBox(
+                                      height: 100,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("Đến: "),
+                                              Text(
+                                                "${model.merchantDTO?.extraData.creCountTotal} ",
+                                                style: const TextStyle(
+                                                    color: AppColor.BLUE_TEXT,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text("GD - "),
+                                              Text(
+                                                StringUtils.formatNumber(model
+                                                    .merchantDTO
+                                                    ?.extraData
+                                                    .creditTotal),
+                                                style: const TextStyle(
+                                                    color: AppColor.BLUE_TEXT,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text(" VND "),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text("Đi:    "),
+                                              Text(
+                                                "${model.merchantDTO?.extraData.deCountTotal} ",
+                                                style: const TextStyle(
+                                                    color: AppColor.RED_TEXT,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text("GD - "),
+                                              Text(
+                                                StringUtils.formatNumber(model
+                                                    .merchantDTO
+                                                    ?.extraData
+                                                    .debitTotal),
+                                                style: const TextStyle(
+                                                    color: AppColor.RED_TEXT,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              const Text(" VND "),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                                )
+                              : const SizedBox.shrink();
+                        },
                       ),
                     ],
                   ),
