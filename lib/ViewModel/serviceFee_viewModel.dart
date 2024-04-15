@@ -10,15 +10,15 @@ import '../models/DTO/metadata_dto.dart';
 class ServiceFeeViewModel extends BaseModel {
   late ServiceDAO _dao;
   ServiceFeeDTO? serviceFeeDTO;
-  String? value = 'Tất cả';
-  int? filterByDate = 0;
+  int? value = 0;
+  int? filterByDate = 1;
   MetaDataDTO? metadata;
 
   ServiceFeeViewModel() {
     _dao = ServiceDAO();
   }
 
-  void changeType(String? selectType) {
+  void changeType(int? selectType) {
     value = selectType;
     notifyListeners();
   }
@@ -62,11 +62,7 @@ class ServiceFeeViewModel extends BaseModel {
   }) async {
     try {
       String formattedDate = '';
-      if (filterByDate == 0) {
-        formattedDate = DateFormat('yyyy-MM-dd').format(time);
-      } else {
-        formattedDate = DateFormat('yyyy-MM').format(time);
-      }
+      formattedDate = DateFormat('yyyy-MM').format(time);
       setState(ViewStatus.Loading);
       serviceFeeDTO = await _dao.filterServiceList(
           time: formattedDate,
