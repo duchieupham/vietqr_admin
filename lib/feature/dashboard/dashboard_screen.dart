@@ -18,6 +18,7 @@ import 'package:vietqr_admin/feature/service_pack/service_pack_screen.dart';
 import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
 import 'package:vietqr_admin/feature/transaction/transaction_screen.dart';
 
+import '../../View/AnnualFeeAfter/annual_fee_after_screen.dart';
 import '../../View/ServiceFee/service_fee_screen.dart';
 import '../../View/MerchantTrans/merchant_transaction_screen.dart';
 import 'frames/dashboard_frame.dart';
@@ -60,6 +61,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const IntegrationConnectivityScreen(),
       const ServicePackScreen(),
       const ServiceFeeScreen(),
+      const AnnualFeeAfterScreen(),
       const TransactionScreen(),
       const MerchantTransactionScreen(),
       const SystemTransactionScreen(),
