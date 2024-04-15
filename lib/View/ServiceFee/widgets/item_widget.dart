@@ -85,7 +85,7 @@ class ItemWidget extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.centerRight,
+            alignment: Alignment.center,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -183,6 +183,7 @@ class ItemWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 12,
+                    fontWeight: FontWeight.bold,
                     color: dto.status == 0
                         ? AppColor.ORANGE_DARK
                         : AppColor.GREEN),
