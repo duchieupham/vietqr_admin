@@ -145,145 +145,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                         color: AppColor.GREY_DADADA,
                       ),
                       const SizedBox(height: 20),
-                      const Text(
-                        "Thống kê giao dịch đại lý",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 30),
-                      ScopedModelDescendant<MerchantViewModel>(
-                        builder: (context, child, model) {
-                          return model.merchantDTO != null
-                              ? Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "GD đại lý ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}",
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(width: 60),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              const Text("Tổng GD:      "),
-                                              Text(
-                                                "${model.merchantDTO?.extraData.totalCount} ",
-                                                style: const TextStyle(
-                                                    color: AppColor.BLUE_TEXT,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text("GD - "),
-                                              Text(
-                                                StringUtils.formatNumber(model
-                                                    .merchantDTO
-                                                    ?.extraData
-                                                    .totalTrans),
-                                                style: const TextStyle(
-                                                    color: AppColor.BLUE_TEXT,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text(" VND "),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text("Có đối soát: "),
-                                              Text(
-                                                "${model.merchantDTO?.extraData.recCountTotal} ",
-                                                style: const TextStyle(
-                                                    color: AppColor.GREEN,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text("GD - "),
-                                              Text(
-                                                StringUtils.formatNumber(model
-                                                    .merchantDTO
-                                                    ?.extraData
-                                                    .recTotal),
-                                                style: const TextStyle(
-                                                    color: AppColor.GREEN,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text(" VND "),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 40),
-                                    SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              const Text("Đến: "),
-                                              Text(
-                                                "${model.merchantDTO?.extraData.creCountTotal} ",
-                                                style: const TextStyle(
-                                                    color: AppColor.BLUE_TEXT,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text("GD - "),
-                                              Text(
-                                                StringUtils.formatNumber(model
-                                                    .merchantDTO
-                                                    ?.extraData
-                                                    .creditTotal),
-                                                style: const TextStyle(
-                                                    color: AppColor.BLUE_TEXT,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text(" VND "),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text("Đi:    "),
-                                              Text(
-                                                "${model.merchantDTO?.extraData.deCountTotal} ",
-                                                style: const TextStyle(
-                                                    color: AppColor.RED_TEXT,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text("GD - "),
-                                              Text(
-                                                StringUtils.formatNumber(model
-                                                    .merchantDTO
-                                                    ?.extraData
-                                                    .debitTotal),
-                                                style: const TextStyle(
-                                                    color: AppColor.RED_TEXT,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              const Text(" VND "),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox.shrink();
-                        },
-                      ),
+                      _statisticMerchant(),
                     ],
                   ),
                 ),
@@ -565,6 +427,135 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     );
   }
 
+  Widget _statisticMerchant() {
+    return ScopedModelDescendant<MerchantViewModel>(
+      builder: (context, child, model) {
+        return model.merchantDTO != null
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Thống kê giao dịch đại lý",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "GD đại lý ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}",
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 60),
+                      SizedBox(
+                        height: 60,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Text("Tổng GD:      "),
+                                Text(
+                                  "${model.merchantDTO?.extraData.totalCount} ",
+                                  style: const TextStyle(
+                                      color: AppColor.BLUE_TEXT,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text("GD - "),
+                                Text(
+                                  StringUtils.formatNumber(
+                                      model.merchantDTO?.extraData.totalTrans),
+                                  style: const TextStyle(
+                                      color: AppColor.BLUE_TEXT,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text(" VND "),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Có đối soát: "),
+                                Text(
+                                  "${model.merchantDTO?.extraData.recCountTotal} ",
+                                  style: const TextStyle(
+                                      color: AppColor.GREEN,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text("GD - "),
+                                Text(
+                                  StringUtils.formatNumber(
+                                      model.merchantDTO?.extraData.recTotal),
+                                  style: const TextStyle(
+                                      color: AppColor.GREEN,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text(" VND "),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 40),
+                      SizedBox(
+                        height: 60,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Text("Đến: "),
+                                Text(
+                                  "${model.merchantDTO?.extraData.creCountTotal} ",
+                                  style: const TextStyle(
+                                      color: AppColor.BLUE_TEXT,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text("GD - "),
+                                Text(
+                                  StringUtils.formatNumber(
+                                      model.merchantDTO?.extraData.creditTotal),
+                                  style: const TextStyle(
+                                      color: AppColor.BLUE_TEXT,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text(" VND "),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Đi:    "),
+                                Text(
+                                  "${model.merchantDTO?.extraData.deCountTotal} ",
+                                  style: const TextStyle(
+                                      color: AppColor.RED_TEXT,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text("GD - "),
+                                Text(
+                                  StringUtils.formatNumber(
+                                      model.merchantDTO?.extraData.debitTotal),
+                                  style: const TextStyle(
+                                      color: AppColor.RED_TEXT,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const Text(" VND "),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            : const SizedBox.shrink();
+      },
+    );
+  }
+
   Widget _buildListMerchant() {
     return ScopedModelDescendant<MerchantViewModel>(
       builder: (context, child, model) {
@@ -575,6 +566,29 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
           return const SizedBox.shrink();
         }
         List<MerchantData>? list = model.merchantDTO?.data;
+        List<Widget> buildItemList(
+            List<MerchantData>? list, MetaDataDTO metadata) {
+          if (list == null || list.isEmpty) {
+            return [];
+          }
+
+          int itemsPerPage = 20;
+          return list
+              .asMap()
+              .map((index, e) {
+                int calculatedIndex =
+                    index + ((metadata.page! - 1) * itemsPerPage);
+                return MapEntry(
+                    index,
+                    ItemWidget(
+                      dto: e,
+                      index: calculatedIndex,
+                    ));
+              })
+              .values
+              .toList();
+        }
+
         MetaDataDTO metadata = model.metadata!;
         return list != null
             ? Expanded(
@@ -591,19 +605,20 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                           child: Column(
                             children: [
                               const TitleItemWidget(),
-                              ...list.map((e) {
-                                int index = 0;
-                                if (metadata.page! > 1) {
-                                  index =
-                                      list.indexOf(e) + (metadata.page! * 10);
-                                } else {
-                                  index = list.indexOf(e);
-                                }
-                                return ItemWidget(
-                                  dto: e,
-                                  index: index,
-                                );
-                              }).toList(),
+                              // ...list.map((e) {
+                              //   int index = 0;
+                              //   if (metadata.page! > 1) {
+                              //     index =
+                              //         list.indexOf(e) + (metadata.page! * 10);
+                              //   } else {
+                              //     index = list.indexOf(e);
+                              //   }
+                              //   return ItemWidget(
+                              //     dto: e,
+                              //     index: index,
+                              //   );
+                              // }).toList(),
+                              ...buildItemList(list, metadata),
                             ],
                           ),
                         ),
@@ -627,7 +642,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
         }
 
         MetaDataDTO paging = model.metadata!;
-        if (paging.page! <= paging.totalPage!) {
+        if (paging.page! != paging.totalPage!) {
           isPaging = true;
         }
 
