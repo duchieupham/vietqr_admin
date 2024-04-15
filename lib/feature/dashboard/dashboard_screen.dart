@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:vietqr_admin/View/MerchantTrans/merchant_transaction_screen.dart';
+import 'package:vietqr_admin/View/system_transaction_screen.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/request_bank_account.dart';
@@ -19,6 +19,7 @@ import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
 import 'package:vietqr_admin/feature/transaction/transaction_screen.dart';
 
 import '../../View/ServiceFee/service_fee_screen.dart';
+import '../../View/MerchantTrans/merchant_transaction_screen.dart';
 import 'frames/dashboard_frame.dart';
 import 'state/token_state.dart';
 
@@ -61,6 +62,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const ServiceFeeScreen(),
       const TransactionScreen(),
       const MerchantTransactionScreen(),
+      const SystemTransactionScreen(),
       const LogScreen(),
       const ConfigScreen(),
       const RequestBankAccountScreen(),
