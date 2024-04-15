@@ -27,7 +27,10 @@ class ServiceFeeScreen extends StatefulWidget {
 
 class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
   TextEditingController controller = TextEditingController(text: '');
-  ScrollController scrollControllerList = ScrollController();
+  late ScrollController controller1;
+  late ScrollController controller2;
+  bool isScrollingDown1 = false;
+  bool isScrollingDown2 = false;
 
   late ServiceFeeViewModel _model;
   DateTime? selectDate;
@@ -39,6 +42,31 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     _model = Get.find<ServiceFeeViewModel>();
     selectDate = _model.getPreviousDay();
     _model.filterListServiceFee(time: selectDate!, page: 1);
+
+    controller1 = ScrollController();
+    controller2 = ScrollController();
+    controller1.addListener(() {
+      if (!isScrollingDown2) {
+        isScrollingDown1 = true;
+        controller2.jumpTo(controller1.offset);
+      }
+      isScrollingDown1 = false;
+    });
+
+    controller2.addListener(() {
+      if (!isScrollingDown1) {
+        isScrollingDown2 = true;
+        controller1.jumpTo(controller2.offset);
+      }
+      isScrollingDown2 = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    controller1.dispose();
+    controller2.dispose();
+    super.dispose();
   }
 
   void _onPickDay(DateTime dateTime) async {
@@ -146,9 +174,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                   ],
                 ),
               ),
-              _buildListMerchant(),
+              _buildListServiceFee(),
               const SizedBox(height: 10),
-              // _pagingWidget(),
+              _pagingWidget(),
               const SizedBox(height: 10),
             ],
           ),
@@ -200,7 +228,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppColor.GREY_DADADA)),
-                  child: DropdownButton<String>(
+                  child: DropdownButton<int>(
                     isExpanded: true,
                     value: model.value,
                     underline: const SizedBox.shrink(),
@@ -212,13 +240,13 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                       ),
                     ),
                     items: const [
-                      DropdownMenuItem<String>(
-                          value: 'Tất cả',
+                      DropdownMenuItem<int>(
+                          value: 0,
                           child: Text(
                             "Tất cả (mặc định)",
                           )),
-                      DropdownMenuItem<String>(
-                          value: 'Phần mềm VietQR',
+                      DropdownMenuItem<int>(
+                          value: 1,
                           child: Text(
                             "Phần mềm VietQR",
                           )),
@@ -247,35 +275,38 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                       border: Border.all(color: AppColor.GREY_DADADA)),
                   child: Row(
                     children: [
-                      SizedBox(
-                        width: 80,
-                        child: DropdownButton<int>(
-                          isExpanded: true,
-                          value: model.filterByDate,
-                          underline: const SizedBox.shrink(),
-                          icon: const RotatedBox(
-                            quarterTurns: 5,
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 12,
-                            ),
-                          ),
-                          items: const [
-                            DropdownMenuItem<int>(
-                                value: 0,
-                                child: Text(
-                                  "Ngày",
-                                )),
-                            DropdownMenuItem<int>(
-                                value: 1,
-                                child: Text(
-                                  "Tháng",
-                                )),
-                          ],
-                          onChanged: (value) {
-                            model.changeTime(value);
-                          },
+                      const SizedBox(
+                        width: 50,
+                        child: Center(
+                          child: Text('Tháng'),
                         ),
+                        // child: DropdownButton<int>(
+                        //   isExpanded: true,
+                        //   value: model.filterByDate,
+                        //   underline: const SizedBox.shrink(),
+                        //   // icon: const RotatedBox(
+                        //   //   quarterTurns: 5,
+                        //   //   child: Icon(
+                        //   //     Icons.arrow_forward_ios,
+                        //   //     size: 12,
+                        //   //   ),
+                        //   // ),
+                        //   items: const [
+                        //     // DropdownMenuItem<int>(
+                        //     //     value: 0,
+                        //     //     child: Text(
+                        //     //       "Ngày",
+                        //     //     )),
+                        //     DropdownMenuItem<int>(
+                        //         value: 1,
+                        //         child: Text(
+                        //           "Tháng",
+                        //         )),
+                        //   ],
+                        //   onChanged: (value) {
+                        //     // model.changeTime(value);
+                        //   },
+                        // ),
                       ),
                       const SizedBox(width: 8),
                       const SizedBox(
@@ -288,11 +319,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            if (model.filterByDate == 1) {
-                              _onPickMonth(model.getPreviousMonth());
-                            } else {
-                              _onPickDay(model.getPreviousDay());
-                            }
+                            _onPickMonth(model.getPreviousMonth());
                           },
                           child: Container(
                             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -456,7 +483,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     );
   }
 
-  Widget _buildListMerchant() {
+  Widget _buildListServiceFee() {
     return ScopedModelDescendant<ServiceFeeViewModel>(
       builder: (context, child, model) {
         if (model.status == ViewStatus.Loading) {
@@ -494,24 +521,225 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
             ? Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                  child: SingleChildScrollView(
-                    controller: scrollControllerList,
-                    child: ScrollConfiguration(
-                      behavior: MyCustomScrollBehavior(),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          // width: 1200,
-                          child: Column(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width - 220,
+                    child: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          controller: controller1,
+                          child: ScrollConfiguration(
+                            behavior: MyCustomScrollBehavior(),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                width: 1400,
+                                child: Column(
+                                  children: [
+                                    const TitleItemWidget(),
+                                    ...buildItemList(list, metadata),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 1400,
+                          child: Row(
                             children: [
-                              const TitleItemWidget(),
-                              ...buildItemList(list, metadata),
+                              Expanded(child: Container()),
+                              SingleChildScrollView(
+                                controller: controller2,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColor.WHITE,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: AppColor.GREY_BORDER
+                                                .withOpacity(0.8),
+                                            blurRadius: 5,
+                                            spreadRadius: 1,
+                                            offset: const Offset(0, 0)),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: AppColor.BLUE_TEXT
+                                                  .withOpacity(0.3)),
+                                          child: Container(
+                                              height: 50,
+                                              width: 130,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: AppColor.GREY_TEXT
+                                                          .withOpacity(0.3))),
+                                              child: const Text(
+                                                'Trạng thái',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: AppColor.BLACK,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                        ),
+                                        ...list.map(
+                                          (e) {
+                                            return Container(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    border: Border(
+                                                        left: BorderSide(
+                                                            color: AppColor
+                                                                .GREY_TEXT
+                                                                .withOpacity(
+                                                                    0.3)),
+                                                        bottom: BorderSide(
+                                                            color: AppColor
+                                                                .GREY_TEXT
+                                                                .withOpacity(
+                                                                    0.3)),
+                                                        right: BorderSide(
+                                                            color: AppColor
+                                                                .GREY_TEXT
+                                                                .withOpacity(
+                                                                    0.3)))),
+                                                height: 60,
+                                                width: 130,
+                                                child: SelectionArea(
+                                                  child: Text(
+                                                    e.status == 0
+                                                        ? 'Chưa TT'
+                                                        : 'Đã TT',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: e.status == 0
+                                                            ? AppColor
+                                                                .ORANGE_DARK
+                                                            : AppColor.GREEN),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _pagingWidget() {
+    return ScopedModelDescendant<ServiceFeeViewModel>(
+      builder: (context, child, model) {
+        bool isPaging = false;
+        if (model.status == ViewStatus.Loading ||
+            model.status == ViewStatus.Error) {
+          return const SizedBox.shrink();
+        }
+
+        MetaDataDTO paging = model.metadata!;
+        if (paging.page! != paging.totalPage!) {
+          isPaging = true;
+        }
+
+        return paging != null
+            ? Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      child: Text(
+                        "Trang ${paging.page}/${paging.totalPage}",
+                        style: const TextStyle(fontSize: 15),
+                      ),
+                    ),
+                    const SizedBox(width: 30),
+                    InkWell(
+                      onTap: () async {
+                        if (paging.page != 1) {
+                          await model.filterListServiceFee(
+                            time: selectDate!,
+                            page: paging.page! - 1,
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(
+                                color: paging.page != 1
+                                    ? AppColor.BLACK
+                                    : AppColor.GREY_DADADA)),
+                        child: Center(
+                          child: Icon(
+                            Icons.chevron_left_rounded,
+                            color: paging.page != 1
+                                ? AppColor.BLACK
+                                : AppColor.GREY_DADADA,
+                            size: 20,
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 15),
+                    InkWell(
+                      onTap: () async {
+                        if (isPaging) {
+                          await model.filterListServiceFee(
+                            time: selectDate!,
+                            page: paging.page! + 1,
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(
+                                color: isPaging
+                                    ? AppColor.BLACK
+                                    : AppColor.GREY_DADADA)),
+                        child: Center(
+                          child: Icon(
+                            Icons.chevron_right_rounded,
+                            color: isPaging
+                                ? AppColor.BLACK
+                                : AppColor.GREY_DADADA,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )
             : const SizedBox.shrink();

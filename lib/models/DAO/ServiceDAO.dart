@@ -13,12 +13,12 @@ class ServiceDAO extends BaseDAO {
     required int page,
     int? size,
     required int filterBy,
-    required String value,
+    required int value,
   }) async {
     // List<MerchantDTO> list = [];
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/service-fee/statistic?page=$page&size=${size ?? 20}&filterBy=$filterBy&value=$value';
+          'https://dev.vietqr.org/vqr/mock/api/service-fee/statistic?page=$page&size=${size ?? 20}&filterBy=$filterBy&value=$value&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

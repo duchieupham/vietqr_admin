@@ -15,7 +15,7 @@ class ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
+      // color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,
       child: Row(
         children: [
@@ -63,7 +63,12 @@ class ItemWidget extends StatelessWidget {
               child: Text(
                 StringUtils.formatNumber(dto.fee.toString()),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: dto.status == 1
+                        ? AppColor.GREEN
+                        : AppColor.ORANGE_DARK),
               ),
             ),
           ),
@@ -85,7 +90,7 @@ class ItemWidget extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.centerRight,
+            alignment: Alignment.center,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -168,27 +173,28 @@ class ItemWidget extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                    right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 60,
-            width: 130,
-            child: SelectionArea(
-              child: Text(
-                dto.status == 0 ? 'Chưa TT' : 'Đã TT',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 12,
-                    color: dto.status == 0
-                        ? AppColor.ORANGE_DARK
-                        : AppColor.GREEN),
-              ),
-            ),
-          ),
+          // Container(
+          //   padding: const EdgeInsets.only(right: 10),
+          //   alignment: Alignment.center,
+          //   decoration: const BoxDecoration(
+          //       border: Border(
+          //           bottom: BorderSide(color: AppColor.GREY_BUTTON),
+          //           right: BorderSide(color: AppColor.GREY_BUTTON))),
+          //   height: 60,
+          //   width: 130,
+          //   child: SelectionArea(
+          //     child: Text(
+          //       dto.status == 0 ? 'Chưa TT' : 'Đã TT',
+          //       textAlign: TextAlign.center,
+          //       style: TextStyle(
+          //           fontSize: 12,
+          //           fontWeight: FontWeight.bold,
+          //           color: dto.status == 0
+          //               ? AppColor.ORANGE_DARK
+          //               : AppColor.GREEN),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

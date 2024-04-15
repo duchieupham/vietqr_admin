@@ -607,19 +607,6 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                           child: Column(
                             children: [
                               const TitleItemWidget(),
-                              // ...list.map((e) {
-                              //   int index = 0;
-                              //   if (metadata.page! > 1) {
-                              //     index =
-                              //         list.indexOf(e) + (metadata.page! * 10);
-                              //   } else {
-                              //     index = list.indexOf(e);
-                              //   }
-                              //   return ItemWidget(
-                              //     dto: e,
-                              //     index: index,
-                              //   );
-                              // }).toList(),
                               ...buildItemList(list, metadata),
                             ],
                           ),
