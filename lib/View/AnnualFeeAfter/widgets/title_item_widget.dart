@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+
 import '../../../commons/constants/configurations/theme.dart';
 
 class TitleItemAnnualWidget extends StatelessWidget {
@@ -42,7 +44,7 @@ class TitleItemAnnualWidget extends StatelessWidget {
               width: 130,
               alignment: Alignment.center,
               textAlign: TextAlign.center),
-          _buildItemTitle('Dịch vụ đăng ký',
+          _buildItemTitle('Dịch vụ \nđăng ký',
               height: 50,
               width: 200,
               alignment: Alignment.center,
@@ -57,11 +59,11 @@ class TitleItemAnnualWidget extends StatelessWidget {
               width: 200,
               alignment: Alignment.center,
               textAlign: TextAlign.center),
-          _buildItemTitle('Trạng thái',
-              height: 50,
-              width: 130,
-              alignment: Alignment.center,
-              textAlign: TextAlign.center),
+          // _buildItemTitle('Trạng thái',
+          //     height: 50,
+          //     width: 130,
+          //     alignment: Alignment.center,
+          //     textAlign: TextAlign.center),
         ],
       ),
     );

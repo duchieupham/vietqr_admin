@@ -12,7 +12,7 @@ import '../models/DTO/metadata_dto.dart';
 class AnnualFeeAfterViewModel extends BaseModel {
   late AnnualDAO _dao;
   AnnualFeeAfterDTO? annualFeeAfterDTO;
-  String? value = 'Tất cả';
+  int? value = 0;
   int? filterByDate = 0;
   MetaDataDTO? metadata;
 
@@ -20,7 +20,7 @@ class AnnualFeeAfterViewModel extends BaseModel {
     _dao = AnnualDAO();
   }
 
-  void changeType(String? selectType) {
+  void changeType(int? selectType) {
     value = selectType;
     notifyListeners();
   }
@@ -64,11 +64,7 @@ class AnnualFeeAfterViewModel extends BaseModel {
   }) async {
     try {
       String formattedDate = '';
-      if (filterByDate == 0) {
-        formattedDate = DateFormat('yyyy-MM-dd').format(time);
-      } else {
-        formattedDate = DateFormat('yyyy-MM').format(time);
-      }
+      formattedDate = DateFormat('yyyy-MM').format(time);
       setState(ViewStatus.Loading);
       annualFeeAfterDTO = await _dao.filterAnnualFeeAfterList(
           time: formattedDate,

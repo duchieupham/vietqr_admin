@@ -14,7 +14,7 @@ class AnnualDAO extends BaseDAO {
     required int page,
     int? size,
     required int filterBy,
-    required String value,
+    required int value,
   }) async {
     // List<MerchantDTO> list = [];
     try {
