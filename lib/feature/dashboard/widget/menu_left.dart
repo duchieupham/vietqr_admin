@@ -106,12 +106,12 @@ class MenuLeft extends StatelessWidget {
                 title: 'Phí dịch vụ',
                 isSelect: provider.menuHomeType == MenuType.SERVICE_FEE,
                 onTap: () {
-                  DialogWidget.instance.openMsgDialog(
-                      title: 'Bảo trì',
-                      msg:
-                          'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                  // onTab(MenuType.SERVICE_FEE);
-                  // closeMenuLink();
+                  // DialogWidget.instance.openMsgDialog(
+                  //     title: 'Bảo trì',
+                  //     msg:
+                  //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                  onTab(MenuType.SERVICE_FEE);
+                  closeMenuLink();
                 },
               ),
               ItemMenu(

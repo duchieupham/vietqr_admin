@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/DTO/service_fee_dto.dart';
+import '../../../models/DTO/merchant_fee_dto.dart';
 
 class InsertBankAccountFeeProvider with ChangeNotifier {
   MerchantFee _valueRadio = const MerchantFee();

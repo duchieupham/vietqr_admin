@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../../models/DTO/response_message_dto.dart';
-import '../../../models/DTO/service_fee_dto.dart';
+import '../../../models/DTO/merchant_fee_dto.dart';
 import '../../../models/DTO/service_pack_dto.dart';
 
 class ServicePackState extends Equatable {

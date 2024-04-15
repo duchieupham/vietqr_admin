@@ -5,7 +5,7 @@ import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 
 import '../../../commons/utils/log.dart';
 import '../../../models/DTO/response_message_dto.dart';
-import '../../../models/DTO/service_fee_dto.dart';
+import '../../../models/DTO/merchant_fee_dto.dart';
 import '../../../models/DTO/service_pack_dto.dart';
 
 class ServicePackRepository {

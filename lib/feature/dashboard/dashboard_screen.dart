@@ -14,11 +14,11 @@ import 'package:vietqr_admin/feature/dashboard/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/integration_connectivity/integration_connectivity_screen.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/list_connect_screen.dart';
 import 'package:vietqr_admin/feature/log/log_screen.dart';
-import 'package:vietqr_admin/feature/service_fee.dart';
 import 'package:vietqr_admin/feature/service_pack/service_pack_screen.dart';
 import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
 import 'package:vietqr_admin/feature/transaction/transaction_screen.dart';
 
+import '../../View/ServiceFee/service_fee_screen.dart';
 import 'frames/dashboard_frame.dart';
 import 'state/token_state.dart';
 
