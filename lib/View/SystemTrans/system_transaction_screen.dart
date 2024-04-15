@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/ViewModel/merchant_viewModel.dart';
+import 'package:vietqr_admin/View/SystemTrans/widgets/item_system_transaction_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_transaction_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/models/DTO/system_transaction_dto.dart';
 
-import '../commons/constants/enum/view_status.dart';
-import '../commons/constants/utils/custom_scroll.dart';
-import '../commons/constants/utils/string_utils.dart';
-import '../commons/widget/dialog_pick_month.dart';
-import '../commons/widget/dialog_pick_year.dart';
-import '../commons/widget/separator_widget.dart';
-import '../main.dart';
-import '../models/DTO/metadata_dto.dart';
-import 'MerchantTrans/widgets/item_system_transaction_widget.dart';
-import 'MerchantTrans/widgets/item_widget.dart';
-import 'MerchantTrans/widgets/title_item_system_widget.dart';
-import 'MerchantTrans/widgets/title_item_widget.dart';
+import '../../commons/constants/enum/view_status.dart';
+import '../../commons/constants/utils/custom_scroll.dart';
+import '../../commons/constants/utils/string_utils.dart';
+import '../../commons/widget/dialog_pick_month.dart';
+import '../../commons/widget/dialog_pick_year.dart';
+import '../../commons/widget/separator_widget.dart';
+import '../../main.dart';
+import '../../models/DTO/metadata_dto.dart';
+import 'widgets/title_item_system_widget.dart';
 
 class SystemTransactionScreen extends StatefulWidget {
   const SystemTransactionScreen({super.key});
