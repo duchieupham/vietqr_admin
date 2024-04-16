@@ -507,7 +507,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: SizedBox(
-                                // width: 1200,
+                                width: 1400,
                                 child: Column(
                                   children: [
                                     const TitleItemAnnualWidget(),
