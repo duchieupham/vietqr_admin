@@ -95,7 +95,7 @@ class ItemAnnualWidget extends StatelessWidget {
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 50,
+            height: 60,
             width: 150,
             child: SelectionArea(
               child: Text(
