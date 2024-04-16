@@ -39,21 +39,21 @@ class _DashBroadScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     _bloc = TokenBloc()..add(const TokenEventCheckValid());
-    menus = [
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-      const SizedBox.shrink(),
-    ];
+    // menus = [
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    //   const SizedBox.shrink(),
+    // ];
 
     pages = [
       const EPayScreen(),
