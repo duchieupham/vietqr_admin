@@ -36,6 +36,10 @@ class UserInformationHelper {
         'ACCOUNT_INFORMATION', dto.toDataString().toString());
   }
 
+  Future<void> removeAdmin() async {
+    await sharedPrefs.remove("ADMIN_ID");
+  }
+
   AccountInformationDTO getAccountInformation() {
     return AccountInformationDTO.fromJson(
         json.decode(sharedPrefs.getString('ACCOUNT_INFORMATION')!));

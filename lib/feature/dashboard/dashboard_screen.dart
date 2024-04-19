@@ -17,6 +17,7 @@ import 'package:vietqr_admin/feature/log/log_screen.dart';
 import 'package:vietqr_admin/feature/service_pack/service_pack_screen.dart';
 import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
 import 'package:vietqr_admin/feature/transaction/transaction_screen.dart';
+import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
 import '../../View/AnnualFeeAfter/annual_fee_after_screen.dart';
 import '../../View/ServiceFee/service_fee_screen.dart';
@@ -89,9 +90,9 @@ class _DashBroadScreenState extends State<DashboardScreen> {
               DialogWidget.instance.openMsgDialog(
                   title: 'Phiên đăng nhập hết hạn',
                   msg: 'Vui lòng đăng nhập lại ứng dụng',
-                  function: () {
+                  function: () async {
                     Navigator.pop(context);
-                    // _bloc.add(TokenEventLogout());
+                    UserInformationHelper.instance.removeAdmin();
                     context.go('/login');
                   });
             } else if (state.typeToken == TokenType.Logout) {
