@@ -20,7 +20,7 @@ class MerchantDAO extends BaseDAO {
     // List<MerchantDTO> list = [];
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/mid/statistic?time=$time&type=$type&page=$page&size=${size ?? 20}&filterBy=$filterBy&value=$value';
+          'https://dev.vietqr.org/vqr/stt/api/mid/statistic?time=$time&type=$type&page=$page&size=${size ?? 20}&filterBy=$filterBy&value=$value';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
