@@ -82,9 +82,10 @@ class ItemWidget extends StatelessWidget {
             width: 130,
             child: SelectionArea(
               child: Text(
-                dto.vso,
+                dto.vso.isNotEmpty ? dto.vso : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(
+                    fontSize: dto.vso.isEmpty ? 20 : 12, color: AppColor.BLACK),
               ),
             ),
           ),
@@ -107,7 +108,9 @@ class ItemWidget extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.centerRight,
+            alignment: dto.nationalId.toString().isEmpty
+                ? Alignment.center
+                : Alignment.centerRight,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -116,9 +119,13 @@ class ItemWidget extends StatelessWidget {
             width: 130,
             child: SelectionArea(
               child: Text(
-                dto.nationalId.toString(),
+                dto.nationalId.toString().isNotEmpty
+                    ? dto.nationalId.toString()
+                    : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(
+                    fontSize: dto.nationalId.toString().isEmpty ? 20 : 12,
+                    color: AppColor.BLACK),
               ),
             ),
           ),

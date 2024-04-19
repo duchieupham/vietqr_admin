@@ -44,9 +44,9 @@ class ItemWidget extends StatelessWidget {
             width: 130,
             child: SelectionArea(
               child: Text(
-                dto.vso,
+                dto.vso!.isNotEmpty ? dto.vso! : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: dto.vso!.isEmpty ? 20 : 12),
               ),
             ),
           ),
@@ -60,7 +60,7 @@ class ItemWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.name,
+                dto.name!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -76,9 +76,11 @@ class ItemWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.nationalId,
+                dto.nationalId!.isNotEmpty ? dto.nationalId! : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(
+                    fontSize: dto.nationalId!.isEmpty ? 20 : 12,
+                    color: AppColor.BLACK),
               ),
             ),
           ),

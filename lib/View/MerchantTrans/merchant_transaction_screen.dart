@@ -197,6 +197,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                 ),
                 const SizedBox(height: 10),
                 Container(
+                  height: 40,
                   width: 480,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
@@ -241,7 +242,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                       ),
                       const SizedBox(width: 8),
                       const SizedBox(
-                        height: 50,
+                        height: 40,
                         child: VerticalDivider(
                           thickness: 1,
                           color: AppColor.GREY_DADADA,
@@ -263,6 +264,8 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                             });
                           },
                           decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.only(top: 5, bottom: 5),
                               hintText: 'Nhập mã ở đây',
                               hintStyle: TextStyle(
                                   fontSize: 20,
@@ -301,6 +304,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                 ),
                 const SizedBox(height: 10),
                 Container(
+                  height: 40,
                   width: 300,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
@@ -396,7 +400,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                         time: selectDate!, page: 1, value: searchValue ?? '');
                   },
                   child: Container(
-                    height: 50,
+                    height: 40,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppColor.BLUE_TEXT,

@@ -40,7 +40,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
   void initState() {
     super.initState();
     _model = Get.find<ServiceFeeViewModel>();
-    selectDate = _model.getPreviousDay();
+    selectDate = _model.getPreviousMonth();
     _model.filterListServiceFee(time: selectDate!, page: 1);
 
     controller1 = ScrollController();
@@ -67,24 +67,6 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     controller1.dispose();
     controller2.dispose();
     super.dispose();
-  }
-
-  void _onPickDay(DateTime dateTime) async {
-    DateTime? date = await showDateTimePicker(
-      context: context,
-      initialDate: dateTime,
-      firstDate: DateTime(2021, 6),
-      lastDate: dateTime,
-    );
-    if (date != null) {
-      setState(() {
-        selectDate = date;
-      });
-    } else {
-      selectDate = _model.getPreviousDay();
-    }
-
-    print(selectDate);
   }
 
   Future<DateTime?> showDateTimePicker({
@@ -327,13 +309,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  model.filterByDate == 1
-                                      ? (selectDate == null
-                                          ? '${model.getPreviousMonth().month}/${model.getPreviousMonth().year}'
-                                          : '${selectDate?.month}/${selectDate?.year}')
-                                      : (selectDate == null
-                                          ? '${model.getPreviousDay().day}/${model.getPreviousDay().month}/${model.getPreviousDay().year}'
-                                          : '${selectDate?.day}/${selectDate?.month}/${selectDate?.year}'),
+                                  (selectDate == null
+                                      ? '${model.getPreviousMonth().month}/${model.getPreviousMonth().year}'
+                                      : '${selectDate?.month}/${selectDate?.year}'),
                                   style: const TextStyle(fontSize: 15),
                                 ),
                                 const Icon(Icons.calendar_month_outlined)
@@ -520,7 +498,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
         return list != null
             ? Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width - 220,
                     child: Stack(
@@ -547,7 +525,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                           width: 1400,
                           child: Row(
                             children: [
-                              Expanded(child: Container()),
+                            const  Expanded(child: SizedBox()),
                               SingleChildScrollView(
                                 controller: controller2,
                                 child: SingleChildScrollView(
