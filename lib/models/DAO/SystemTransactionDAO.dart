@@ -19,7 +19,7 @@ class SysTemTransactionDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/stt/api/trans-admin/statistic?time=$time&filterBy=$filterBy&page=$page&size=${size ?? 20}';
+          'https://dev.vietqr.org/stt/api/trans-admin/statistic?time=$time&filterBy=$filterBy&page=$page&size=${size ?? 20}';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

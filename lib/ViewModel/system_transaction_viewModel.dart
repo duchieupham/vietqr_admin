@@ -11,7 +11,7 @@ class SystemTransactionViewModel extends BaseModel {
   late SysTemTransactionDAO _dao;
   SystemTransactionDTO? systemTransactionDTO;
   int? type = 0;
-  int? filterByDate = 0;
+  int? filterByDate = 1;
   MetaDataDTO? metadata;
 
   SystemTransactionViewModel() {
@@ -69,7 +69,7 @@ class SystemTransactionViewModel extends BaseModel {
   }) async {
     try {
       String formattedDate = '';
-      if (filterByDate == 0) {
+      if (filterByDate == 1) {
         formattedDate = DateFormat('yyyy-MM').format(time);
       } else {
         formattedDate = DateFormat('yyyy').format(time);

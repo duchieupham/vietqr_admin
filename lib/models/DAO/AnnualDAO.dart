@@ -19,7 +19,7 @@ class AnnualDAO extends BaseDAO {
     // List<MerchantDTO> list = [];
     try {
       String url =
-          'https://dev.vietqr.org/vqr/stt/api/annual-fee/statistic?page=$page&size=${size ?? 20}&filterBy=$filterBy&value=$value&time=$time';
+          'https://dev.vietqr.org/vqr/mock/api/annual-fee/statistic?page=$page&size=${size ?? 20}&filterBy=$filterBy&value=$value&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

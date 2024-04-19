@@ -225,12 +225,12 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                           ),
                           items: const [
                             DropdownMenuItem<int>(
-                                value: 0,
+                                value: 1,
                                 child: Text(
                                   "Tháng",
                                 )),
                             DropdownMenuItem<int>(
-                                value: 1,
+                                value: 2,
                                 child: Text(
                                   "Năm",
                                 )),
@@ -251,7 +251,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            if (model.filterByDate == 0) {
+                            if (model.filterByDate == 1) {
                               _onPickMonth(model.getPreviousMonth());
                             } else {
                               _onPickYear(model.getPreviousYear());
@@ -263,7 +263,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  model.filterByDate == 1
+                                  model.filterByDate == 2
                                       ? (selectDate == null
                                           ? '${model.getPreviousYear().year}'
                                           : '${selectDate?.year}')
@@ -343,7 +343,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                   model.filterByDate == 0
+                   model.filterByDate == 1
                         ? "GD hệ thống tháng ${DateFormat('MM-yyyy').format(selectDate!)}"
                         : "GD hệ thống năm ${DateFormat('yyyy').format(selectDate!)}",
                     style: const TextStyle(
