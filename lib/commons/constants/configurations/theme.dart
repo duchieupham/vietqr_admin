@@ -21,6 +21,7 @@ class AppColor {
   static const Color GREY_DADADA = Color(0xFFDADADA);
   static const Color GREY_HIGHLIGHT = Color(0xFF222222);
   static const Color GREY_979797 = Color(0xff979797);
+  static const Color BLUE_BGR = Color(0xFFF0F4FA);
 
   static const Color RED_TEXT = Color(0xFFFF0A0A);
   static const Color BLUE_TEXT = Color(0xFF0A7AFF);

@@ -223,12 +223,12 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                     ),
                     items: const [
                       DropdownMenuItem<int>(
-                          value: 0,
+                          value: 9,
                           child: Text(
                             "Tất cả (mặc định)",
                           )),
                       DropdownMenuItem<int>(
-                          value: 1,
+                          value: 0,
                           child: Text(
                             "Phần mềm VietQR",
                           )),
@@ -262,33 +262,6 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                         child: Center(
                           child: Text('Tháng'),
                         ),
-                        // child: DropdownButton<int>(
-                        //   isExpanded: true,
-                        //   value: model.filterByDate,
-                        //   underline: const SizedBox.shrink(),
-                        //   // icon: const RotatedBox(
-                        //   //   quarterTurns: 5,
-                        //   //   child: Icon(
-                        //   //     Icons.arrow_forward_ios,
-                        //   //     size: 12,
-                        //   //   ),
-                        //   // ),
-                        //   items: const [
-                        //     // DropdownMenuItem<int>(
-                        //     //     value: 0,
-                        //     //     child: Text(
-                        //     //       "Ngày",
-                        //     //     )),
-                        //     DropdownMenuItem<int>(
-                        //         value: 1,
-                        //         child: Text(
-                        //           "Tháng",
-                        //         )),
-                        //   ],
-                        //   onChanged: (value) {
-                        //     // model.changeTime(value);
-                        //   },
-                        // ),
                       ),
                       const SizedBox(width: 8),
                       const SizedBox(
@@ -525,7 +498,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                           width: 1400,
                           child: Row(
                             children: [
-                            const  Expanded(child: SizedBox()),
+                              const Expanded(child: SizedBox()),
                               SingleChildScrollView(
                                 controller: controller2,
                                 child: SingleChildScrollView(
