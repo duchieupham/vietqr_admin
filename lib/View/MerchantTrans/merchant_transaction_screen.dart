@@ -95,11 +95,11 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
       setState(() {
         selectDate = date;
       });
+      _model.filterListMerchant(
+          time: selectDate!, page: 1, value: searchValue ?? '');
     } else {
       selectDate = _model.getPreviousDay();
     }
-    _model.filterListMerchant(
-        time: selectDate!, page: 1, value: searchValue ?? '');
   }
 
   Future<DateTime?> showDateTimePicker({
@@ -145,17 +145,17 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
       setState(() {
         selectDate = result;
       });
+      _model.filterListMerchant(
+          time: selectDate!, page: 1, value: searchValue ?? '');
     } else {
       selectDate = _model.getPreviousMonth();
     }
-    _model.filterListMerchant(
-        time: selectDate!, page: 1, value: searchValue ?? '');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+      backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
         model: _model,
         child: Container(
@@ -186,11 +186,16 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                       color: AppColor.GREY_DADADA,
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      "Thống kê giao dịch đại lý",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text(
+                        "Thống kê giao dịch đại lý",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
                     ),
+                    const SizedBox(height: 10),
+
                     // _statisticMerchant(),
                   ],
                 ),
@@ -716,8 +721,13 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                   ),
                 ),
               ),
-              expandedTable: SizedBox(
+              expandedTable: Container(
                 height: 500,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                    border: Border(
+                        right: BorderSide(color: AppColor.GREY_BUTTON),
+                        bottom: BorderSide(color: AppColor.GREY_BUTTON))),
                 child: SingleChildScrollView(
                   controller: controller2,
                   scrollDirection: Axis.vertical,

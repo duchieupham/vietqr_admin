@@ -29,7 +29,7 @@ class ItemWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.nationalId!,
+                dto.nationalId!.isNotEmpty ? dto.nationalId! : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20, color: AppColor.BLACK),
               ),

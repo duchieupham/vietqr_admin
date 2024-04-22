@@ -112,16 +112,16 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
       setState(() {
         selectDate = result;
       });
+      _model.filterListServiceFee(time: selectDate!, page: 1);
     } else {
       selectDate = _model.getPreviousMonth();
     }
-    print(selectDate);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+      backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
         model: _model,
         child: Container(
@@ -152,7 +152,14 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                       color: AppColor.GREY_DADADA,
                     ),
                     const SizedBox(height: 20),
+                    const Text(
+                      "Thống kê phí dịch vụ",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
                     _statisticServiceFee(),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -353,93 +360,164 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        color: AppColor.WHITE,
+                        // color: AppColor.WHITE,
                         border: Border.all(
-                            color: AppColor.GREY_TEXT.withOpacity(0.3),
-                            width: 0.5)),
+                            color: AppColor.GREY_DADADA, width: 0.5)),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          decoration: BoxDecoration(),
-                          child: Text(
-                            model.filterByDate == 0
-                                ? "Phí dịch vụ ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
-                                : 'Phí dịch vụ tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                          height: 50,
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: Center(
+                            child: Text(
+                              model.filterByDate == 0
+                                  ? "Ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
+                                  : 'Tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 50,
+                          color: AppColor.GREY_DADADA,
+                        ),
+                        Container(
+                          height: 50,
+                          color: AppColor.WHITE,
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    model.serviceFeeDTO!.extraData.transFee),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.BLUE_TEXT),
+                              ),
+                              const Text(
+                                ' VND',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.BLACK),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  // Text(
-                  //   model.filterByDate == 0
-                  //       ? "Phí dịch vụ ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
-                  //       : 'Phí dịch vụ tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
-                  //   style: const TextStyle(
-                  //       fontSize: 15, fontWeight: FontWeight.bold),
-                  // ),
-                  // const SizedBox(width: 60),
-                  // SizedBox(
-                  //   height: 60,
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Row(
-                  //         children: [
-                  //           const Text("Phí giao dịch:     "),
-                  //           Text(
-                  //             StringUtils.formatNumber(
-                  //                 model.serviceFeeDTO?.extraData.transFee),
-                  //             style: const TextStyle(
-                  //                 color: AppColor.BLUE_TEXT,
-                  //                 fontWeight: FontWeight.bold),
-                  //           ),
-                  //           const Text(" VND"),
-                  //         ],
-                  //       ),
-                  //       Row(
-                  //         children: [
-                  //           const Text("Đã TT:                 "),
-                  //           Text(
-                  //             StringUtils.formatNumber(model
-                  //                 .serviceFeeDTO?.extraData.completeFee),
-                  //             style: const TextStyle(
-                  //                 color: AppColor.GREEN,
-                  //                 fontWeight: FontWeight.bold),
-                  //           ),
-                  //           const Text(" VND"),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // const SizedBox(width: 40),
-                  // SizedBox(
-                  //   height: 60,
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children: [
-                  //       Row(
-                  //         children: [
-                  //           const Text("Chưa TT:            "),
-                  //           Text(
-                  //             StringUtils.formatNumber(model
-                  //                 .serviceFeeDTO?.extraData.pendingFee),
-                  //             style: const TextStyle(
-                  //                 color: AppColor.RED_TEXT,
-                  //                 fontWeight: FontWeight.bold),
-                  //           ),
-                  //           const Text(" VND "),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  const SizedBox(width: 30),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppColor.WHITE,
+                        border: Border.all(
+                            color: AppColor.GREY_DADADA, width: 0.5)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          child: const Center(
+                            child: Text(
+                              'Chưa TT',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 50,
+                          color: AppColor.GREY_DADADA,
+                        ),
+                        Container(
+                          height: 50,
+                          color: AppColor.WHITE,
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    model.serviceFeeDTO!.extraData.pendingFee),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.ORANGE_DARK),
+                              ),
+                              const Text(
+                                ' VND',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.BLACK),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 30),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppColor.WHITE,
+                        border: Border.all(
+                            color: AppColor.GREY_DADADA, width: 0.5)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          child: const Center(
+                            child: Text(
+                              'Đã TT',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 50,
+                          color: AppColor.GREY_DADADA,
+                        ),
+                        Container(
+                          height: 50,
+                          color: AppColor.WHITE,
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    model.serviceFeeDTO!.extraData.completeFee),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.GREEN),
+                              ),
+                              const Text(
+                                ' VND',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.BLACK),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               )
             : const SizedBox.shrink();

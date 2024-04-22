@@ -25,21 +25,13 @@ class TableWidget extends StatefulWidget {
 class _TableWidgetState extends State<TableWidget> {
   @override
   Widget build(BuildContext context) {
-    double widthTable = 1652;
-    double withEmpty = 0;
+    double widthTable = 1400;
+
     return Consumer<MenuProvider>(
       builder: (context, value, child) {
-        double width = MediaQuery.of(context).size.width;
-        if (value.showMenu) {
-          width = width - 220;
-        } else {
-          width = width - 50;
-        }
-
-        withEmpty = width - widthTable;
         return SizedBox(
           height: 600,
-          // width: width,
+          width: widthTable,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
