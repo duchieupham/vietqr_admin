@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -5,7 +7,8 @@ import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/MerchantTrans/widgets/item_widget.dart';
-import 'package:vietqr_admin/View/MerchantTrans/widgets/title_item_widget.dart';
+import 'package:vietqr_admin/View/MerchantTrans/widgets/title_column_item_widget.dart';
+import 'package:vietqr_admin/View/MerchantTrans/widgets/title_row_item_widget.dart';
 import 'package:vietqr_admin/ViewModel/merchant_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -16,6 +19,7 @@ import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import '../../commons/constants/utils/custom_scroll.dart';
 import '../../commons/constants/utils/string_utils.dart';
 import '../../commons/widget/dialog_pick_month.dart';
+import '../../commons/widget/table_widget.dart';
 import '../../main.dart';
 
 class MerchantTransactionScreen extends StatefulWidget {
@@ -28,7 +32,15 @@ class MerchantTransactionScreen extends StatefulWidget {
 
 class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
   TextEditingController controller = TextEditingController(text: '');
-  ScrollController scrollControllerList = ScrollController();
+
+  late ScrollController controller1;
+  late ScrollController controller2;
+  late ScrollController horizonController1;
+  late ScrollController horizonController2;
+
+  bool isScrollingDown1 = false;
+  bool isScrollingDown2 = false;
+  bool isScrollingHorizon = false;
 
   late MerchantViewModel _model;
   DateTime? selectDate;
@@ -41,6 +53,35 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     selectDate = _model.getPreviousDay();
     _model.filterListMerchant(
         time: selectDate!, page: 1, value: searchValue ?? '');
+
+    controller1 = ScrollController();
+    controller2 = ScrollController();
+    horizonController2 = ScrollController();
+    horizonController1 = ScrollController();
+
+    controller1.addListener(() {
+      if (!isScrollingDown2) {
+        isScrollingDown1 = true;
+        controller2.jumpTo(controller1.offset);
+      }
+      isScrollingDown1 = false;
+    });
+
+    controller2.addListener(() {
+      if (!isScrollingDown1) {
+        isScrollingDown2 = true;
+        controller1.jumpTo(controller2.offset);
+      }
+      isScrollingDown2 = false;
+    });
+
+    horizonController2.addListener(() {
+      if (!isScrollingHorizon) {
+        isScrollingHorizon = true;
+        horizonController1.jumpTo(horizonController2.offset);
+      }
+      isScrollingHorizon = false;
+    });
   }
 
   void _onPickDay(DateTime dateTime) async {
@@ -57,8 +98,8 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     } else {
       selectDate = _model.getPreviousDay();
     }
-
-    print(selectDate);
+    _model.filterListMerchant(
+        time: selectDate!, page: 1, value: searchValue ?? '');
   }
 
   Future<DateTime?> showDateTimePicker({
@@ -107,7 +148,8 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     } else {
       selectDate = _model.getPreviousMonth();
     }
-    print(selectDate);
+    _model.filterListMerchant(
+        time: selectDate!, page: 1, value: searchValue ?? '');
   }
 
   @override
@@ -144,11 +186,18 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                       color: AppColor.GREY_DADADA,
                     ),
                     const SizedBox(height: 20),
-                    _statisticMerchant(),
+                    const Text(
+                      "Thống kê giao dịch đại lý",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    // _statisticMerchant(),
                   ],
                 ),
               ),
-              _buildListMerchant(),
+              // _buildListMerchant(),
+              _buildList(),
+              // FixedColumnTable(),
               const SizedBox(height: 10),
               _pagingWidget(),
               const SizedBox(height: 10),
@@ -562,7 +611,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     );
   }
 
-  Widget _buildListMerchant() {
+  Widget _buildList() {
     return ScopedModelDescendant<MerchantViewModel>(
       builder: (context, child, model) {
         if (model.status == ViewStatus.Loading) {
@@ -571,9 +620,31 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
         if (model.status == ViewStatus.Error) {
           return const SizedBox.shrink();
         }
-        List<MerchantData>? list = model.merchantDTO?.data;
-        List<Widget> buildItemList(
-            List<MerchantData>? list, MetaDataDTO metadata) {
+
+        List<MerchantData>? list;
+        MerchantExtra? extra;
+        if (model.merchantDTO != null) {
+          list = model.merchantDTO?.data;
+          extra = model.merchantDTO!.extraData;
+        }
+        List<Widget> buildItemRight() {
+          if (list == null || list.isEmpty) {
+            return [];
+          }
+          return list
+              .asMap()
+              .map((index, e) {
+                return MapEntry(
+                    index,
+                    ItemWidget(
+                      dto: e,
+                    ));
+              })
+              .values
+              .toList();
+        }
+
+        List<Widget> buildItemLeft(MetaDataDTO metadata) {
           if (list == null || list.isEmpty) {
             return [];
           }
@@ -586,7 +657,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                     index + ((metadata.page! - 1) * itemsPerPage);
                 return MapEntry(
                     index,
-                    ItemWidget(
+                    TitleColumnItemWidget(
                       dto: e,
                       index: calculatedIndex,
                     ));
@@ -596,31 +667,73 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
         }
 
         MetaDataDTO metadata = model.metadata!;
-        return list != null
-            ? Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+
+        return Container(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: TableWidget(
+              hasData: list!.isNotEmpty ? true : false,
+              header: TitleRowItemWidget(
+                  extra: extra, controller: horizonController1),
+              columnWidget: Container(
+                height: 500,
+                decoration: BoxDecoration(
+                  color:
+                      Colors.white, // Set the background color of the container
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(
+                          0.3), // Shadow color with some transparency
+                      spreadRadius: 0, // No spread radius
+                      blurRadius: 2, // Blur radius to create the blur effect
+                      offset: const Offset(
+                          2, 0), // Horizontal offset for right side shadow
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 0,
+                      blurRadius: 2,
+                      offset: const Offset(0, 2),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(
+                          0.3), // Shadow color with some transparency
+                      spreadRadius: 0, // No spread radius
+                      blurRadius: 2, // Blur radius to create the blur effect
+                      offset: const Offset(
+                          -2, 0), // Horizontal offset for right side shadow
+                    ),
+                  ],
+                ),
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context)
+                      .copyWith(scrollbars: false),
                   child: SingleChildScrollView(
-                    controller: scrollControllerList,
-                    child: ScrollConfiguration(
-                      behavior: MyCustomScrollBehavior(),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          // width: 1200,
-                          child: Column(
-                            children: [
-                              const TitleItemWidget(),
-                              ...buildItemList(list, metadata),
-                            ],
-                          ),
-                        ),
+                    controller: controller1,
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [...buildItemLeft(metadata)],
+                    ),
+                  ),
+                ),
+              ),
+              expandedTable: SizedBox(
+                height: 500,
+                child: SingleChildScrollView(
+                  controller: controller2,
+                  scrollDirection: Axis.vertical,
+                  child: ScrollConfiguration(
+                    behavior: MyCustomScrollBehavior(),
+                    child: SingleChildScrollView(
+                      controller: horizonController2,
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [...buildItemRight()],
                       ),
                     ),
                   ),
                 ),
-              )
-            : const SizedBox.shrink();
+              )),
+        );
       },
     );
   }

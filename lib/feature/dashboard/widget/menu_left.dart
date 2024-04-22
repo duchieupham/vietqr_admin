@@ -20,16 +20,7 @@ class MenuLeft extends StatelessWidget {
         children: [
           const Padding(padding: EdgeInsets.only(top: 15)),
           if (provider.showMenu)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline),
-              ),
-            )
+            const SizedBox(height: 40)
           else
             const SizedBox(
               height: 20,

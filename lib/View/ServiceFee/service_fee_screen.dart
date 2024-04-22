@@ -348,85 +348,98 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     return ScopedModelDescendant<ServiceFeeViewModel>(
       builder: (context, child, model) {
         return model.serviceFeeDTO != null
-            ? Column(
+            ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Thống kê phí dịch vụ",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        model.filterByDate == 0
-                            ? "Phí dịch vụ ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
-                            : 'Phí dịch vụ tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 60),
-                      SizedBox(
-                        height: 60,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Text("Phí giao dịch:     "),
-                                Text(
-                                  StringUtils.formatNumber(
-                                      model.serviceFeeDTO?.extraData.transFee),
-                                  style: const TextStyle(
-                                      color: AppColor.BLUE_TEXT,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Text(" VND"),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text("Đã TT:                 "),
-                                Text(
-                                  StringUtils.formatNumber(model
-                                      .serviceFeeDTO?.extraData.completeFee),
-                                  style: const TextStyle(
-                                      color: AppColor.GREEN,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Text(" VND"),
-                              ],
-                            ),
-                          ],
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppColor.WHITE,
+                        border: Border.all(
+                            color: AppColor.GREY_TEXT.withOpacity(0.3),
+                            width: 0.5)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(),
+                          child: Text(
+                            model.filterByDate == 0
+                                ? "Phí dịch vụ ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
+                                : 'Phí dịch vụ tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 40),
-                      SizedBox(
-                        height: 60,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                const Text("Chưa TT:            "),
-                                Text(
-                                  StringUtils.formatNumber(model
-                                      .serviceFeeDTO?.extraData.pendingFee),
-                                  style: const TextStyle(
-                                      color: AppColor.RED_TEXT,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Text(" VND "),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  // Text(
+                  //   model.filterByDate == 0
+                  //       ? "Phí dịch vụ ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
+                  //       : 'Phí dịch vụ tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
+                  //   style: const TextStyle(
+                  //       fontSize: 15, fontWeight: FontWeight.bold),
+                  // ),
+                  // const SizedBox(width: 60),
+                  // SizedBox(
+                  //   height: 60,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Row(
+                  //         children: [
+                  //           const Text("Phí giao dịch:     "),
+                  //           Text(
+                  //             StringUtils.formatNumber(
+                  //                 model.serviceFeeDTO?.extraData.transFee),
+                  //             style: const TextStyle(
+                  //                 color: AppColor.BLUE_TEXT,
+                  //                 fontWeight: FontWeight.bold),
+                  //           ),
+                  //           const Text(" VND"),
+                  //         ],
+                  //       ),
+                  //       Row(
+                  //         children: [
+                  //           const Text("Đã TT:                 "),
+                  //           Text(
+                  //             StringUtils.formatNumber(model
+                  //                 .serviceFeeDTO?.extraData.completeFee),
+                  //             style: const TextStyle(
+                  //                 color: AppColor.GREEN,
+                  //                 fontWeight: FontWeight.bold),
+                  //           ),
+                  //           const Text(" VND"),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(width: 40),
+                  // SizedBox(
+                  //   height: 60,
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     mainAxisAlignment: MainAxisAlignment.end,
+                  //     children: [
+                  //       Row(
+                  //         children: [
+                  //           const Text("Chưa TT:            "),
+                  //           Text(
+                  //             StringUtils.formatNumber(model
+                  //                 .serviceFeeDTO?.extraData.pendingFee),
+                  //             style: const TextStyle(
+                  //                 color: AppColor.RED_TEXT,
+                  //                 fontWeight: FontWeight.bold),
+                  //           ),
+                  //           const Text(" VND "),
+                  //         ],
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               )
             : const SizedBox.shrink();

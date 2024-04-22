@@ -62,8 +62,7 @@ class DashboardFrame extends StatelessWidget {
                                           borderRadius: 0,
                                           padding: EdgeInsets.zero,
                                           alignment: Alignment.centerLeft,
-                                          bgColor: AppColor.BLUE_TEXT
-                                              .withOpacity(0.3),
+                                          bgColor: AppColor.BLUE_BGR,
                                           child: menu,
                                         ),
                                       ],

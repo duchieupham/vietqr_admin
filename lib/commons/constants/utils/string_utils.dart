@@ -103,6 +103,20 @@ class StringUtils {
     return '${numberFormat.format(value).replaceAll('.', ',')} VND';
   }
 
+  static String formatNumberWithOutVND(dynamic value) {
+    if (value == null || value == '') {
+      return '0 VND';
+    }
+
+    if (value is String) {
+      if (value.isNotEmpty) {
+        value = int.parse(value);
+      }
+    }
+    var numberFormat = NumberFormat.decimalPattern('vi-VI');
+    return numberFormat.format(value).replaceAll('.', ',');
+  }
+
   static String formatAmount(int value) {
     if (value == 0) {
       return '0';

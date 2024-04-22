@@ -1,6 +1,6 @@
 class MerchantDTO {
   final List<MerchantData> data;
-  final ExtraData extraData;
+  final MerchantExtra extraData;
 
   MerchantDTO({required this.data, required this.extraData});
 
@@ -13,7 +13,7 @@ class MerchantDTO {
 
     return MerchantDTO(
       data: merchantDataList,
-      extraData: ExtraData.fromJson(json['extraData']),
+      extraData: MerchantExtra.fromJson(json['extraData']),
     );
   }
 }
@@ -65,7 +65,7 @@ class MerchantData {
   }
 }
 
-class ExtraData {
+class MerchantExtra {
   int creCountTotal;
   int creditTotal;
   int deCountTotal;
@@ -75,7 +75,7 @@ class ExtraData {
   int totalCount;
   int totalTrans;
 
-  ExtraData({
+  MerchantExtra({
     required this.creCountTotal,
     required this.creditTotal,
     required this.deCountTotal,
@@ -86,16 +86,16 @@ class ExtraData {
     required this.totalTrans,
   });
 
-  factory ExtraData.fromJson(Map<String, dynamic> json) {
-    return ExtraData(
-      creCountTotal: json['creCountTotal'] ?? 0,
-      creditTotal: json['creditTotal'] ?? 0,
-      deCountTotal: json['deCountTotal'] ?? 0,
-      debitTotal: json['debitTotal'] ?? 0,
-      recCountTotal: json['recCountTotal'] ?? 0,
-      recTotal: json['recTotal'] ?? 0,
-      totalCount: json['totalCount'] ?? 0,
-      totalTrans: json['totalTrans'] ?? 0,
+  factory MerchantExtra.fromJson(Map<String, dynamic> json) {
+    return MerchantExtra(
+      creCountTotal: json['creCount'] ?? 0,
+      creditTotal: json['credit'] ?? 0,
+      deCountTotal: json['deCount'] ?? 0,
+      debitTotal: json['debit'] ?? 0,
+      recCountTotal: json['recCount'] ?? 0,
+      recTotal: json['recon'] ?? 0,
+      totalCount: json['toCount'] ?? 0,
+      totalTrans: json['total'] ?? 0,
     );
   }
 }
