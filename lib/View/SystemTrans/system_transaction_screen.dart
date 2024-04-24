@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/SystemTrans/widgets/item_right_widget.dart';
 import 'package:vietqr_admin/View/SystemTrans/widgets/item_system_transaction_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_transaction_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/widget/table_widget.dart';
 import 'package:vietqr_admin/models/DTO/system_transaction_dto.dart';
 
 import '../../commons/constants/enum/view_status.dart';
@@ -29,6 +31,15 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
   TextEditingController controller = TextEditingController(text: '');
   ScrollController scrollControllerList = ScrollController();
   late SystemTransactionViewModel _model;
+
+  late ScrollController controller1;
+  late ScrollController controller2;
+  late ScrollController horizonController1;
+  late ScrollController horizonController2;
+
+  bool isScrollingDown1 = false;
+  bool isScrollingDown2 = false;
+  bool isScrollingHorizon = false;
   DateTime? selectDate;
   String? searchValue = '';
 
@@ -36,8 +47,46 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
   void initState() {
     super.initState();
     _model = Get.find<SystemTransactionViewModel>();
-    selectDate = _model.getPreviousMonth();
+    _initData();
+  }
+
+  void _initData() {
+    if (_model.filterByDate == 2) {
+      selectDate = _model.getPreviousYear();
+    } else {
+      selectDate = _model.getPreviousMonth();
+    }
+
     _model.filterListSystemTransaction(time: selectDate!, page: 1);
+
+    controller1 = ScrollController();
+    controller2 = ScrollController();
+    horizonController2 = ScrollController();
+    horizonController1 = ScrollController();
+
+    controller1.addListener(() {
+      if (!isScrollingDown2) {
+        isScrollingDown1 = true;
+        controller2.jumpTo(controller1.offset);
+      }
+      isScrollingDown1 = false;
+    });
+
+    controller2.addListener(() {
+      if (!isScrollingDown1) {
+        isScrollingDown2 = true;
+        controller1.jumpTo(controller2.offset);
+      }
+      isScrollingDown2 = false;
+    });
+
+    horizonController2.addListener(() {
+      if (!isScrollingHorizon) {
+        isScrollingHorizon = true;
+        horizonController1.jumpTo(horizonController2.offset);
+      }
+      isScrollingHorizon = false;
+    });
   }
 
   Future<DateTime?> showDateTimePicker({
@@ -79,9 +128,14 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
         );
       },
     );
-    setState(() {
-      selectDate = result;
-    });
+    if (result != null) {
+      setState(() {
+        selectDate = result;
+      });
+      _model.filterListSystemTransaction(time: selectDate!, page: 1);
+    } else {
+      selectDate = _model.getPreviousYear();
+    }
   }
 
   void _onPickYear(DateTime dateTime) async {
@@ -100,9 +154,14 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
         );
       },
     );
-    setState(() {
-      selectDate = result;
-    });
+    if (result != null) {
+      setState(() {
+        selectDate = result;
+      });
+      _model.filterListSystemTransaction(time: selectDate!, page: 1);
+    } else {
+      selectDate = _model.getPreviousYear();
+    }
   }
 
   @override
@@ -147,12 +206,13 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 20),
-                          _showTotalSystemTransaction(),
+
+                          // _showTotalSystemTransaction(),
                         ],
                       ),
                     ),
-                    _buildListSystemTransaction(),
+                    // _buildListSystemTransaction(),
+                    _buildList(),
                     const SizedBox(height: 10),
                     _pagingWidget(),
                     const SizedBox(height: 10),
@@ -237,6 +297,10 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                           ],
                           onChanged: (value) {
                             model.changeTime(value);
+                            if (value == 1)
+                              selectDate = model.getPreviousMonth();
+                            else
+                              selectDate = model.getPreviousYear();
                           },
                         ),
                       ),
@@ -335,15 +399,12 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
   Widget _showTotalSystemTransaction() {
     return ScopedModelDescendant<SystemTransactionViewModel>(
       builder: (context, child, model) {
-
-
-
         return model.systemTransactionDTO != null
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                   model.filterByDate == 1
+                    model.filterByDate == 1
                         ? "GD hệ thống tháng ${DateFormat('MM-yyyy').format(selectDate!)}"
                         : "GD hệ thống năm ${DateFormat('yyyy').format(selectDate!)}",
                     style: const TextStyle(
@@ -456,7 +517,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
     );
   }
 
-  Widget _buildListSystemTransaction() {
+  Widget _buildList() {
     return ScopedModelDescendant<SystemTransactionViewModel>(
       builder: (context, child, model) {
         if (model.status == ViewStatus.Loading) {
@@ -465,13 +526,37 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
         if (model.status == ViewStatus.Error) {
           return const SizedBox.shrink();
         }
-        List<SystemTransactionData>? list = model.systemTransactionDTO?.data;
-        List<Widget> buildItemList(
-            List<SystemTransactionData>? list, MetaDataDTO metadata) {
+        List<SystemTransactionData>? list;
+        SysTransExtraData? extra;
+        if (model.systemTransactionDTO != null) {
+          list = model.systemTransactionDTO?.data;
+          extra = model.systemTransactionDTO!.extraData;
+        }
+        bool hasData = true;
+        if (list == null || list.isEmpty) {
+          hasData = false;
+        }
+        List<Widget> buildItemRight() {
           if (list == null || list.isEmpty) {
             return [];
           }
+          return list
+              .asMap()
+              .map((index, e) {
+                return MapEntry(
+                    index,
+                    ItemSysWidget(
+                      dto: e,
+                    ));
+              })
+              .values
+              .toList();
+        }
 
+        List<Widget> buildItemLeft(MetaDataDTO metadata) {
+          if (list == null || list.isEmpty) {
+            return [];
+          }
           int itemsPerPage = 20;
           return list
               .asMap()
@@ -480,7 +565,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                     index + ((metadata.page! - 1) * itemsPerPage);
                 return MapEntry(
                     index,
-                    ItemSystemTransactionWidget(
+                    TitleColumnItemWidget(
                       dto: e,
                       index: calculatedIndex,
                     ));
@@ -490,44 +575,80 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
         }
 
         MetaDataDTO metadata = model.metadata!;
-        return list != null
-            ? Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+        return Container(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: TableWidget(
+              width: 1100,
+              header: TitleItemSystemTransactionWidget(
+                  controller: horizonController1,
+                  extra: extra!,
+                  time: selectDate!),
+              columnWidget: Container(
+                height: 450,
+                decoration: BoxDecoration(
+                  color:
+                      Colors.white, // Set the background color of the container
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(
+                          0.3), // Shadow color with some transparency
+                      spreadRadius: 0, // No spread radius
+                      blurRadius: 2, // Blur radius to create the blur effect
+                      offset: const Offset(
+                          2, 0), // Horizontal offset for right side shadow
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 0,
+                      blurRadius: 2,
+                      offset: const Offset(0, 2),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(
+                          0.3), // Shadow color with some transparency
+                      spreadRadius: 0, // No spread radius
+                      blurRadius: 2, // Blur radius to create the blur effect
+                      offset: const Offset(
+                          -2, 0), // Horizontal offset for right side shadow
+                    ),
+                  ],
+                ),
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context)
+                      .copyWith(scrollbars: false),
                   child: SingleChildScrollView(
-                    controller: scrollControllerList,
-                    child: ScrollConfiguration(
-                      behavior: MyCustomScrollBehavior(),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          // width: 1200,
-                          child: Column(
-                            children: [
-                              const TitleItemSystemTransactionWidget(),
-                              ...buildItemList(list, metadata),
-                              // ...list.map((e) {
-                              //   int index = 0;
-                              //   if (metadata.page! > 1) {
-                              //     index =
-                              //         list.indexOf(e) + (metadata.page! * 10);
-                              //   } else {
-                              //     index = list.indexOf(e);
-                              //   }
-                              //   return ItemSystemTransactionWidget(
-                              //     dto: e,
-                              //     index: index,
-                              //   );
-                              // }).toList(),
-                            ],
-                          ),
-                        ),
+                    controller: controller1,
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [...buildItemLeft(metadata)],
+                    ),
+                  ),
+                ),
+              ),
+              hasData: hasData,
+              expandedTable: Container(
+                height: 450,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                    border: Border(
+                        right: BorderSide(color: AppColor.GREY_BUTTON),
+                        bottom: BorderSide(color: AppColor.GREY_BUTTON))),
+                child: SingleChildScrollView(
+                  controller: controller2,
+                  scrollDirection: Axis.vertical,
+                  child: ScrollConfiguration(
+                    behavior: MyCustomScrollBehavior(),
+                    child: SingleChildScrollView(
+                      controller: horizonController2,
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [...buildItemRight()],
                       ),
                     ),
                   ),
                 ),
-              )
-            : const SizedBox.shrink();
+              )),
+        );
       },
     );
   }

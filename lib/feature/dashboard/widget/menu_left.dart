@@ -118,6 +118,18 @@ class MenuLeft extends StatelessWidget {
                 },
               ),
               ItemMenu(
+                title: 'Giao dịch VQR',
+                isSelect: provider.menuHomeType == MenuType.USER_RECHARGE,
+                onTap: () {
+                  // DialogWidget.instance.openMsgDialog(
+                  //     title: 'Bảo trì',
+                  //     msg:
+                  //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                  onTab(MenuType.USER_RECHARGE);
+                  // closeMenuLink();
+                },
+              ),
+              ItemMenu(
                 title: 'Giao dịch',
                 isSelect: provider.menuHomeType == MenuType.TRANSACTION,
                 onTap: () {

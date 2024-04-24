@@ -50,7 +50,16 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
   void initState() {
     super.initState();
     _model = Get.find<MerchantViewModel>();
-    selectDate = _model.getPreviousDay();
+    _initData();
+  }
+
+  void _initData() {
+    if (_model.filterByDate == 0) {
+      selectDate = _model.getPreviousDay();
+    } else {
+      selectDate = _model.getPreviousMonth();
+    }
+
     _model.filterListMerchant(
         time: selectDate!, page: 1, value: searchValue ?? '');
 
@@ -393,6 +402,10 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                           ],
                           onChanged: (value) {
                             model.changeTime(value);
+                            if (value == 1)
+                              selectDate = model.getPreviousMonth();
+                            else
+                              selectDate = model.getPreviousDay();
                           },
                         ),
                       ),
@@ -632,6 +645,11 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
           list = model.merchantDTO?.data;
           extra = model.merchantDTO!.extraData;
         }
+
+        bool hasData = true;
+        if (list == null || list.isEmpty) {
+          hasData = false;
+        }
         List<Widget> buildItemRight() {
           if (list == null || list.isEmpty) {
             return [];
@@ -676,7 +694,8 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
         return Container(
           padding: const EdgeInsets.only(left: 40, right: 40),
           child: TableWidget(
-              hasData: list!.isNotEmpty ? true : false,
+              width: 1400,
+              hasData: hasData ? true : false,
               header: TitleRowItemWidget(
                   extra: extra, controller: horizonController1),
               columnWidget: Container(

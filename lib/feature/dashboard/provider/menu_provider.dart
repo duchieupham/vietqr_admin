@@ -105,24 +105,26 @@ class MenuProvider with ChangeNotifier {
       initMenuPage = 4;
     } else if (value == MenuType.ANNUAL_FEE_AFTER) {
       initMenuPage = 5;
-    } else if (value == MenuType.TRANSACTION) {
+    } else if (value == MenuType.USER_RECHARGE) {
       initMenuPage = 6;
-    } else if (value == MenuType.MERCHANT_FEE) {
+    } else if (value == MenuType.TRANSACTION) {
       initMenuPage = 7;
-    } else if (value == MenuType.SYSTEM_TRANSACTION) {
+    } else if (value == MenuType.MERCHANT_FEE) {
       initMenuPage = 8;
-    } else if (value == MenuType.LOG) {
+    } else if (value == MenuType.SYSTEM_TRANSACTION) {
       initMenuPage = 9;
-    } else if (value == MenuType.CONFIG) {
+    } else if (value == MenuType.LOG) {
       initMenuPage = 10;
-    } else if (value == MenuType.ACCOUNT_BANK) {
-      initMenuPage = 11;
-    } else if (value == MenuType.POST) {
+    } else if (value == MenuType.CONFIG) {
       initMenuPage = 12;
-    } else if (value == MenuType.PUSH_NOTIFICATION) {
+    } else if (value == MenuType.ACCOUNT_BANK) {
+      initMenuPage = 12;
+    } else if (value == MenuType.POST) {
       initMenuPage = 13;
-    } else if (value == MenuType.USER) {
+    } else if (value == MenuType.PUSH_NOTIFICATION) {
       initMenuPage = 14;
+    } else if (value == MenuType.USER) {
+      initMenuPage = 15;
     }
   }
 }

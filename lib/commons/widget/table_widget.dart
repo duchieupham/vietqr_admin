@@ -11,11 +11,13 @@ class TableWidget extends StatefulWidget {
   final Widget expandedTable;
   final bool hasData;
   final Widget header;
+  final double width;
   const TableWidget(
       {super.key,
       required this.header,
       required this.columnWidget,
       required this.hasData,
+      required this.width,
       required this.expandedTable});
 
   @override
@@ -25,13 +27,11 @@ class TableWidget extends StatefulWidget {
 class _TableWidgetState extends State<TableWidget> {
   @override
   Widget build(BuildContext context) {
-    double widthTable = 1400;
-
     return Consumer<MenuProvider>(
       builder: (context, value, child) {
         return SizedBox(
           height: 600,
-          width: widthTable,
+          width: widget.width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,7 +45,7 @@ class _TableWidgetState extends State<TableWidget> {
                     )
                   : Expanded(
                       child: Container(
-                        width: 1400,
+                        width: widget.width,
                         color: AppColor.BLUE_TEXT.withOpacity(0.3),
                         child: const Center(
                           child: Text(
