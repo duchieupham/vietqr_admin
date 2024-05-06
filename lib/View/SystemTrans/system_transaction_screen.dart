@@ -82,6 +82,11 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
     setState(() {
       selectDate = result;
     });
+
+    _model.filterListSystemTransaction(
+      time: selectDate!,
+      page: 1,
+    );
   }
 
   void _onPickYear(DateTime dateTime) async {
@@ -103,6 +108,11 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
     setState(() {
       selectDate = result;
     });
+
+    _model.filterListSystemTransaction(
+      time: selectDate!,
+      page: 1,
+    );
   }
 
   @override
@@ -335,15 +345,12 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
   Widget _showTotalSystemTransaction() {
     return ScopedModelDescendant<SystemTransactionViewModel>(
       builder: (context, child, model) {
-
-
-
         return model.systemTransactionDTO != null
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                   model.filterByDate == 1
+                    model.filterByDate == 1
                         ? "GD hệ thống tháng ${DateFormat('MM-yyyy').format(selectDate!)}"
                         : "GD hệ thống năm ${DateFormat('yyyy').format(selectDate!)}",
                     style: const TextStyle(
