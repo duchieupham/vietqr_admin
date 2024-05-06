@@ -143,7 +143,7 @@ class TitleRowItemWidget extends StatelessWidget {
                     width: 150,
                     child: const SelectionArea(
                       child: Text(
-                        'Tổng cộng',
+                        '',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 12, color: AppColor.BLACK),
                       ),

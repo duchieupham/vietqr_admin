@@ -71,7 +71,7 @@ class MerchantViewModel extends BaseModel {
       setState(ViewStatus.Loading);
       merchantDTO = await _dao.filterMerchantList(
           time: formattedDate,
-          type: type!,
+          type: value.isEmpty ? 9 : type!,
           page: page,
           filterBy: filterByDate!,
           value: value);

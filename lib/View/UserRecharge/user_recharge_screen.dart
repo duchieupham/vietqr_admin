@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/View/ServiceFee/widgets/item_widget.dart';
-import 'package:vietqr_admin/View/ServiceFee/widgets/title_item_widget.dart';
-import 'package:vietqr_admin/ViewModel/serviceFee_viewModel.dart';
-import 'package:vietqr_admin/models/DTO/service_fee_dto.dart';
+import 'package:vietqr_admin/View/UserRecharge/widgets/item_widget.dart';
+import 'package:vietqr_admin/View/UserRecharge/widgets/title_item_widget.dart';
 
+import '../../ViewModel/userRecharge_viewModel.dart';
 import '../../commons/constants/configurations/theme.dart';
 import '../../commons/constants/enum/view_status.dart';
 import '../../commons/constants/utils/custom_scroll.dart';
@@ -16,32 +14,34 @@ import '../../commons/constants/utils/string_utils.dart';
 import '../../commons/widget/dialog_pick_month.dart';
 import '../../commons/widget/separator_widget.dart';
 import '../../main.dart';
+import '../../models/DTO/data_filter_dto.dart';
 import '../../models/DTO/metadata_dto.dart';
+import '../../models/DTO/user_recharge_dto.dart';
 
-class ServiceFeeScreen extends StatefulWidget {
-  const ServiceFeeScreen({super.key});
+class UserRechargeScreen extends StatefulWidget {
+  const UserRechargeScreen({super.key});
 
   @override
-  State<ServiceFeeScreen> createState() => _ServiceFeeScreenState();
+  State<UserRechargeScreen> createState() => _UserRechargeScreenState();
 }
 
-class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
+class _UserRechargeScreenState extends State<UserRechargeScreen> {
   TextEditingController controller = TextEditingController(text: '');
   late ScrollController controller1;
   late ScrollController controller2;
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
 
-  late ServiceFeeViewModel _model;
+  late UserRechargeViewModel _model;
   DateTime? selectDate;
   String? searchValue = '';
 
   @override
   void initState() {
     super.initState();
-    _model = Get.find<ServiceFeeViewModel>();
-    selectDate = _model.getPreviousMonth();
-    _model.filterListServiceFee(time: selectDate!, page: 1);
+    _model = Get.find<UserRechargeViewModel>();
+    _model.filterUserRecharge(
+        page: 1, value: searchValue!.isEmpty ? searchValue! : '');
 
     controller1 = ScrollController();
     controller2 = ScrollController();
@@ -62,37 +62,6 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    controller1.dispose();
-    controller2.dispose();
-    super.dispose();
-  }
-
-  Future<DateTime?> showDateTimePicker({
-    required BuildContext context,
-    DateTime? initialDate,
-    DateTime? firstDate,
-    DateTime? lastDate,
-  }) async {
-    initialDate ??= DateTime.now();
-    firstDate ??= initialDate.subtract(const Duration(days: 365 * 100));
-    lastDate ??= firstDate.add(const Duration(days: 365 * 200));
-
-    final DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
-
-    if (selectedDate == null) return null;
-
-    if (!context.mounted) return selectedDate;
-
-    return selectedDate;
-  }
-
   void _onPickMonth(DateTime dateTime) async {
     DateTime result = await showDialog(
       barrierDismissible: false,
@@ -109,20 +78,29 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
       },
     );
     if (result != null) {
+      _model.getSelectMoth(dateTime);
       setState(() {
         selectDate = result;
       });
-      _model.filterListServiceFee(time: selectDate!, page: 1);
+      _model.filterUserRecharge(
+          page: 1, value: searchValue!.isEmpty ? searchValue! : '');
     } else {
       selectDate = _model.getPreviousMonth();
     }
   }
 
   @override
+  void dispose() {
+    controller1.dispose();
+    controller2.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
-      body: ScopedModel(
+      body: ScopedModel<UserRechargeViewModel>(
         model: _model,
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -145,7 +123,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
                     _filterWidget(),
                     const SizedBox(height: 20),
                     const MySeparator(
@@ -158,12 +136,12 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
-                    _statisticServiceFee(),
+                    _statisticUserRecharge(),
                     const SizedBox(height: 20),
                   ],
                 ),
               ),
-              _buildListServiceFee(),
+              _buildListSUserRecharge(),
               const SizedBox(height: 10),
               _pagingWidget(),
               const SizedBox(height: 10),
@@ -190,7 +168,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
             style: TextStyle(fontSize: 15),
           ),
           Text(
-            "Phí dịch vụ",
+            "Nạp dịch vụ",
             style: TextStyle(fontSize: 15),
           ),
         ],
@@ -199,7 +177,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
   }
 
   Widget _filterWidget() {
-    return ScopedModelDescendant<ServiceFeeViewModel>(
+    return ScopedModelDescendant<UserRechargeViewModel>(
       builder: (context, child, model) {
         return Row(
           children: [
@@ -207,19 +185,20 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Chọn dịch vụ",
+                  "Chọn dịch vụ nạp tiền",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
                 ),
                 const SizedBox(height: 10),
                 Container(
                   width: 250,
+                  height: 40,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppColor.GREY_DADADA)),
                   child: DropdownButton<int>(
                     isExpanded: true,
-                    value: model.value,
+                    value: model.filterBy,
                     underline: const SizedBox.shrink(),
                     icon: const RotatedBox(
                       quarterTurns: 5,
@@ -234,14 +213,19 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                           child: Text(
                             "Tất cả (mặc định)",
                           )),
+                      // DropdownMenuItem<int>(
+                      //     value: 1,
+                      //     child: Text(
+                      //       "Nạp tiền điện thoại",
+                      //     )),
                       DropdownMenuItem<int>(
-                          value: 0,
+                          value: 2,
                           child: Text(
-                            "Phần mềm VietQR",
+                            "Phần mềm VietQR",
                           )),
                     ],
                     onChanged: (value) {
-                      model.changeType(value);
+                      model.changeFilterBy(selectFilterBy: value);
                     },
                   ),
                 ),
@@ -252,52 +236,101 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Tìm kiếm theo",
+                  "Tìm kiếm theo ",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  width: 300,
+                  height: 40,
+                  width: 480,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppColor.GREY_DADADA)),
                   child: Row(
                     children: [
-                      const SizedBox(
-                        width: 50,
-                        child: Center(
-                          child: Text('Tháng'),
+                      SizedBox(
+                        width: 150,
+                        child: DropdownButton<int>(
+                          isExpanded: true,
+                          value: model.type,
+                          underline: const SizedBox.shrink(),
+                          icon: const RotatedBox(
+                            quarterTurns: 5,
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              size: 12,
+                            ),
+                          ),
+                          items: const [
+                            DropdownMenuItem<int>(
+                                value: 9,
+                                child: Text(
+                                  "Tất cả",
+                                )),
+                            DropdownMenuItem<int>(
+                                value: 0,
+                                child: Text(
+                                  "Số điện thoại",
+                                )),
+                            DropdownMenuItem<int>(
+                                value: 1,
+                                child: Text(
+                                  "Mã hóa đơn",
+                                )),
+                          ],
+                          onChanged: (value) {
+                            model.changeType(selectType: value);
+                          },
                         ),
                       ),
                       const SizedBox(width: 8),
                       const SizedBox(
-                        height: 50,
+                        height: 40,
                         child: VerticalDivider(
                           thickness: 1,
                           color: AppColor.GREY_DADADA,
                         ),
                       ),
                       Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            _onPickMonth(model.getPreviousMonth());
+                        child: TextFormField(
+                          textInputAction: TextInputAction.done,
+                          keyboardType: TextInputType.multiline,
+                          controller: controller,
+                          onChanged: (value) {
+                            setState(() {
+                              searchValue = value;
+                            });
                           },
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  (selectDate == null
-                                      ? '${model.getPreviousMonth().month}/${model.getPreviousMonth().year}'
-                                      : '${selectDate?.month}/${selectDate?.year}'),
-                                  style: const TextStyle(fontSize: 15),
+                          onFieldSubmitted: (value) {
+                            setState(() {
+                              searchValue = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.only(top: 5, bottom: 5),
+                              hintText: 'Nhập mã ở đây',
+                              hintStyle: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColor.BLACK.withOpacity(0.5)),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                size: 15,
+                              ),
+                              prefixIconColor: AppColor.GREY_TEXT,
+                              suffixIcon: IconButton(
+                                icon: const Icon(
+                                  Icons.clear,
+                                  size: 16,
+                                  color: AppColor.GREY_TEXT,
                                 ),
-                                const Icon(Icons.calendar_month_outlined)
-                              ],
-                            ),
-                          ),
+                                onPressed: () {
+                                  controller.clear();
+                                },
+                              )),
                         ),
                       ),
                     ],
@@ -311,16 +344,108 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
               children: [
                 const Text(
                   "Thời gian",
+                  style: TextStyle(fontSize: 15),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 40,
+                      width: 150,
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColor.GREY_DADADA)),
+                      child: DropdownButton<DataFilter>(
+                        isExpanded: true,
+                        value: model.filterByTime,
+                        underline: const SizedBox.shrink(),
+                        icon: const RotatedBox(
+                          quarterTurns: 5,
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12,
+                          ),
+                        ),
+                        items: model.listFilterByTime
+                            .map<DropdownMenuItem<DataFilter>>(
+                          (item) {
+                            return DropdownMenuItem<DataFilter>(
+                              value: item,
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  item.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (value) {
+                          model.changeFilterByTime(filter: value);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    model.filterByTime.id == 3
+                        ? InkWell(
+                            onTap: () {
+                              _onPickMonth(model.getPreviousMonth());
+                            },
+                            child: Container(
+                              height: 40,
+                              padding:
+                                  const EdgeInsets.only(left: 16, right: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border:
+                                      Border.all(color: AppColor.GREY_DADADA)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    (selectDate == null
+                                        ? '${model.getPreviousMonth().month}/${model.getPreviousMonth().year}'
+                                        : '${selectDate?.month}/${selectDate?.year}'),
+                                    style: const TextStyle(
+                                        fontSize: 15, color: AppColor.BLACK),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  const Icon(
+                                    Icons.calendar_month_outlined,
+                                    color: AppColor.BLACK,
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink()
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Thời gian",
                   style: TextStyle(fontSize: 15, color: AppColor.WHITE),
                 ),
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () async {
-                    await model.filterListServiceFee(
-                        time: selectDate!, page: 1);
+                    await model.filterUserRecharge(
+                        page: 1, value: searchValue!);
                   },
                   child: Container(
-                    height: 50,
+                    height: 40,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppColor.BLUE_TEXT,
@@ -351,68 +476,13 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     );
   }
 
-  Widget _statisticServiceFee() {
-    return ScopedModelDescendant<ServiceFeeViewModel>(
+  Widget _statisticUserRecharge() {
+    return ScopedModelDescendant<UserRechargeViewModel>(
       builder: (context, child, model) {
-        return model.serviceFeeDTO != null
+        return model.dto != null
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        // color: AppColor.WHITE,
-                        border: Border.all(
-                            color: AppColor.GREY_DADADA, width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 50,
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Center(
-                            child: Text(
-                              model.filterByDate == 0
-                                  ? "Ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
-                                  : 'Tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 50,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                        Container(
-                          height: 50,
-                          color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                StringUtils.formatNumberWithOutVND(
-                                    model.serviceFeeDTO!.extraData.transFee),
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.BLUE_TEXT),
-                              ),
-                              const Text(
-                                ' VND',
-                                style: TextStyle(
-                                    fontSize: 15, color: AppColor.BLACK),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 30),
                   Container(
                     decoration: BoxDecoration(
                         color: AppColor.WHITE,
@@ -428,7 +498,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                           padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                           child: const Center(
                             child: Text(
-                              'Chưa TT',
+                              'Thời gian',
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             ),
@@ -442,24 +512,11 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                         Container(
                           height: 50,
                           color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                StringUtils.formatNumberWithOutVND(
-                                    model.serviceFeeDTO!.extraData.pendingFee),
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.ORANGE_DARK),
-                              ),
-                              const Text(
-                                ' VND',
-                                style: TextStyle(
-                                    fontSize: 15, color: AppColor.BLACK),
-                              ),
-                            ],
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          child: Text(
+                            model.dto!.extraData.time ?? '-',
+                            style: const TextStyle(
+                                fontSize: 15, color: AppColor.BLACK),
                           ),
                         ),
                       ],
@@ -501,7 +558,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                             children: [
                               Text(
                                 StringUtils.formatNumberWithOutVND(
-                                    model.serviceFeeDTO!.extraData.completeFee),
+                                    model.dto?.extraData.total),
                                 style: const TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -525,8 +582,8 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     );
   }
 
-  Widget _buildListServiceFee() {
-    return ScopedModelDescendant<ServiceFeeViewModel>(
+  Widget _buildListSUserRecharge() {
+    return ScopedModelDescendant<UserRechargeViewModel>(
       builder: (context, child, model) {
         if (model.status == ViewStatus.Loading) {
           return const Expanded(child: Center(child: Text('Đang tải...')));
@@ -534,9 +591,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
         if (model.status == ViewStatus.Error) {
           return const SizedBox.shrink();
         }
-        List<ServiceItems>? list = model.serviceFeeDTO?.items;
+        List<RechargeItem>? list = model.dto?.items;
         List<Widget> buildItemList(
-            List<ServiceItems>? list, MetaDataDTO metadata) {
+            List<RechargeItem>? list, MetaDataDTO metadata) {
           if (list == null || list.isEmpty) {
             return [];
           }
@@ -574,7 +631,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: SizedBox(
-                                width: 1400,
+                                width: 1360,
                                 child: Column(
                                   children: [
                                     const TitleItemWidget(),
@@ -586,7 +643,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                           ),
                         ),
                         SizedBox(
-                          width: 1400,
+                          width: 1360,
                           child: Row(
                             children: [
                               const Expanded(child: SizedBox()),
@@ -656,7 +713,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                                                                 .GREY_TEXT
                                                                 .withOpacity(
                                                                     0.3)))),
-                                                height: 60,
+                                                height: 50,
                                                 width: 130,
                                                 child: SelectionArea(
                                                   child: Text(
@@ -697,7 +754,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
   }
 
   Widget _pagingWidget() {
-    return ScopedModelDescendant<ServiceFeeViewModel>(
+    return ScopedModelDescendant<UserRechargeViewModel>(
       builder: (context, child, model) {
         bool isPaging = false;
         if (model.status == ViewStatus.Loading ||
@@ -727,10 +784,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                     InkWell(
                       onTap: () async {
                         if (paging.page != 1) {
-                          await model.filterListServiceFee(
-                            time: selectDate!,
-                            page: paging.page! - 1,
-                          );
+                          await model.filterUserRecharge(
+                              page: paging.page! - 1,
+                              value: searchValue! ?? '');
                         }
                       },
                       child: Container(
@@ -756,10 +812,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                     InkWell(
                       onTap: () async {
                         if (isPaging) {
-                          await model.filterListServiceFee(
-                            time: selectDate!,
-                            page: paging.page! + 1,
-                          );
+                          await model.filterUserRecharge(
+                              page: paging.page! + 1,
+                              value: searchValue! ?? '');
                         }
                       },
                       child: Container(

@@ -1,6 +1,6 @@
 class SystemTransactionDTO {
   final List<SystemTransactionData> data;
-  final ExtraData extraData;
+  final SysTransExtraData extraData;
 
   SystemTransactionDTO({required this.data, required this.extraData});
 
@@ -8,11 +8,10 @@ class SystemTransactionDTO {
     return SystemTransactionDTO(
       data: List<SystemTransactionData>.from(
           json['items'].map((x) => SystemTransactionData.fromJson(x))),
-      extraData: ExtraData.fromJson(json['extraData']),
+      extraData: SysTransExtraData.fromJson(json['extraData']),
     );
   }
 }
-
 
 class SystemTransactionData {
   final String time;
@@ -52,7 +51,7 @@ class SystemTransactionData {
   }
 }
 
-class ExtraData {
+class SysTransExtraData {
   final int creCountTotal;
   final int creditTotal;
   final int deCountTotal;
@@ -62,7 +61,7 @@ class ExtraData {
   final int totalCount;
   final int totalTrans;
 
-  ExtraData({
+  SysTransExtraData({
     required this.creCountTotal,
     required this.creditTotal,
     required this.deCountTotal,
@@ -73,8 +72,8 @@ class ExtraData {
     required this.totalTrans,
   });
 
-  factory ExtraData.fromJson(Map<String, dynamic> json) {
-    return ExtraData(
+  factory SysTransExtraData.fromJson(Map<String, dynamic> json) {
+    return SysTransExtraData(
       creCountTotal: json['creCountTotal'],
       creditTotal: json['creditTotal'],
       deCountTotal: json['deCountTotal'],
