@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
@@ -81,15 +82,64 @@ class InfoConnectRepository {
     return result;
   }
 
-  Future<BankNameInformationDTO> searchBankName(String accountNumber) async {
-    BankNameInformationDTO result = const BankNameInformationDTO();
-    try {
-      String url =
-          'https://api.vietqr.org/vqr/bank/api/account/info/970422/$accountNumber/ACCOUNT/INHOUSE';
+  // Future<BankNameInformationDTO> searchBankName(String accountNumber) async {
+  //   BankNameInformationDTO result = const BankNameInformationDTO();
+  //   try {
+  //     String url =
+  //         'https://api.vietqr.org/vqr/bank/api/account/info/970422/$accountNumber/ACCOUNT/INHOUSE';
 
-      final response = await BaseAPIClient.getAPI(
+  //     final response = await BaseAPIClient.getAPI(
+  //       url: url,
+  //       type: AuthenticationType.SYSTEM,
+  //     );
+  //     if (response.statusCode == 200) {
+  //       var data = jsonDecode(response.body);
+  //       if (data != null) {
+  //         result = BankNameInformationDTO.fromJson(data);
+  //         return result;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     LOG.error(e.toString());
+  //   }
+  //   return result;
+  // }
+
+  Future<BankNameInformationDTO> searchBankName(String accountNumber) async {
+    String transferType = 'INHOUSE';
+    String accountType = 'ACCOUNT';
+    String bankCode = '970422';
+    String generateCheckSum(
+        String bankCode, String accountType, String accountNumber) {
+      String key = "VietQRAccesskey";
+      String toHash = bankCode + accountType + accountNumber + key;
+      // Tạo hash MD5
+      var bytes = utf8.encode(toHash);
+      var digest = md5.convert(bytes);
+      return digest.toString();
+    }
+
+    String checkSum = generateCheckSum(bankCode, accountType, accountNumber);
+
+    BankNameInformationDTO result = const BankNameInformationDTO(
+      accountName: '',
+      customerName: '',
+      customerShortName: '',
+    );
+
+    // BankNameInformationDTO result = const BankNameInformationDTO();
+    try {
+      String url = 'https://api.vietqr.org/vqr/bank/api/account/info';
+      final response = await BaseAPIClient.postAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
+        body: {
+          'bankCode': bankCode,
+          'accountNumber': accountNumber,
+          'accountType': accountType,
+          'transferType': transferType,
+          'checkSum': checkSum,
+        },
       );
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
