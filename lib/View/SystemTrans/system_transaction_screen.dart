@@ -167,7 +167,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+      backgroundColor: AppColor.WHITE,
       body: ScopedModel(
           model: _model,
           child: ScopedModelDescendant<SystemTransactionViewModel>(
@@ -185,7 +185,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                     _headerWidget(),
                     const Divider(),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(30, 25, 30, 25),
+                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -194,7 +194,7 @@ class _SystemTransactionScreenState extends State<SystemTransactionScreen> {
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 10),
                           _filterWidget(),
                           const SizedBox(height: 20),
                           const MySeparator(

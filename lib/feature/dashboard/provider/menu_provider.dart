@@ -101,30 +101,32 @@ class MenuProvider with ChangeNotifier {
       initMenuPage = 2;
     } else if (value == MenuType.SERVICE_PACK) {
       initMenuPage = 3;
-    } else if (value == MenuType.SERVICE_FEE) {
+    } else if (value == MenuType.ENVIRONMENT_SETTING) {
       initMenuPage = 4;
-    } else if (value == MenuType.ANNUAL_FEE_AFTER) {
+    } else if (value == MenuType.SERVICE_FEE) {
       initMenuPage = 5;
-    } else if (value == MenuType.USER_RECHARGE) {
+    } else if (value == MenuType.ANNUAL_FEE_AFTER) {
       initMenuPage = 6;
-    } else if (value == MenuType.TRANSACTION) {
+    } else if (value == MenuType.USER_RECHARGE) {
       initMenuPage = 7;
-    } else if (value == MenuType.MERCHANT_FEE) {
+    } else if (value == MenuType.TRANSACTION) {
       initMenuPage = 8;
-    } else if (value == MenuType.SYSTEM_TRANSACTION) {
+    } else if (value == MenuType.MERCHANT_FEE) {
       initMenuPage = 9;
-    } else if (value == MenuType.LOG) {
+    } else if (value == MenuType.SYSTEM_TRANSACTION) {
       initMenuPage = 10;
+    } else if (value == MenuType.LOG) {
+      initMenuPage = 11;
     } else if (value == MenuType.CONFIG) {
       initMenuPage = 12;
     } else if (value == MenuType.ACCOUNT_BANK) {
-      initMenuPage = 12;
-    } else if (value == MenuType.POST) {
       initMenuPage = 13;
-    } else if (value == MenuType.PUSH_NOTIFICATION) {
+    } else if (value == MenuType.POST) {
       initMenuPage = 14;
-    } else if (value == MenuType.USER) {
+    } else if (value == MenuType.PUSH_NOTIFICATION) {
       initMenuPage = 15;
+    } else if (value == MenuType.USER) {
+      initMenuPage = 16;
     }
   }
 }
