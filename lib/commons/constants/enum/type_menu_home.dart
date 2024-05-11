@@ -20,6 +20,7 @@ enum MenuType {
   CONFIG,
   LOGOUT,
   OTHER,
+  INVOICE,
 }
 
 enum SubMenuType {

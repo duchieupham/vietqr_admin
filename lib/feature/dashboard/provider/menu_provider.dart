@@ -115,18 +115,20 @@ class MenuProvider with ChangeNotifier {
       initMenuPage = 9;
     } else if (value == MenuType.SYSTEM_TRANSACTION) {
       initMenuPage = 10;
-    } else if (value == MenuType.LOG) {
+    } else if (value == MenuType.INVOICE) {
       initMenuPage = 11;
-    } else if (value == MenuType.CONFIG) {
+    } else if (value == MenuType.LOG) {
       initMenuPage = 12;
-    } else if (value == MenuType.ACCOUNT_BANK) {
+    } else if (value == MenuType.CONFIG) {
       initMenuPage = 13;
-    } else if (value == MenuType.POST) {
+    } else if (value == MenuType.ACCOUNT_BANK) {
       initMenuPage = 14;
-    } else if (value == MenuType.PUSH_NOTIFICATION) {
+    } else if (value == MenuType.POST) {
       initMenuPage = 15;
-    } else if (value == MenuType.USER) {
+    } else if (value == MenuType.PUSH_NOTIFICATION) {
       initMenuPage = 16;
+    } else if (value == MenuType.USER) {
+      initMenuPage = 17;
     }
   }
 }

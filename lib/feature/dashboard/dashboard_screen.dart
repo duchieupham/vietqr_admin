@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:vietqr_admin/View/Invoice/invoice_create_screen.dart';
 import 'package:vietqr_admin/View/SystemTrans/system_transaction_screen.dart';
 import 'package:vietqr_admin/View/UserRecharge/user_recharge_screen.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
@@ -70,6 +71,7 @@ class _DashBroadScreenState extends State<DashboardScreen> {
       const TransactionScreen(),
       const MerchantTransactionScreen(),
       const SystemTransactionScreen(),
+      const CreateInvoiceScreen(),
       const LogScreen(),
       const ConfigScreen(),
       const RequestBankAccountScreen(),
