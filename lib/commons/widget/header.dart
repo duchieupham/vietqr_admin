@@ -232,7 +232,7 @@ class Header extends StatelessWidget {
               builder: (context, provider, child) {
                 return InkWell(
                   onTap: () {
-                    provider.selectMenu(MenuType.ENVIRONMENT_SETTING);
+                    // provider.selectMenu(MenuType.ENVIRONMENT_SETTING);
                   },
                   child: BoxLayout(
                     width: 40,

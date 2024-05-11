@@ -9,7 +9,9 @@ import 'new_connect/new_connect_screen.dart';
 import 'run_callback/run_callback_screen.dart';
 
 class IntegrationConnectivityScreen extends StatefulWidget {
-  const IntegrationConnectivityScreen({super.key});
+  final bool isTestCallBack;
+  const IntegrationConnectivityScreen(
+      {super.key, required this.isTestCallBack});
 
   @override
   State<IntegrationConnectivityScreen> createState() => _ServiceScreenState();
@@ -17,7 +19,6 @@ class IntegrationConnectivityScreen extends StatefulWidget {
 
 class _ServiceScreenState extends State<IntegrationConnectivityScreen> {
   List<Widget> pages = [];
-
   @override
   void initState() {
     super.initState();
@@ -55,24 +56,25 @@ class _ServiceScreenState extends State<IntegrationConnectivityScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ItemMenuTop(
-                          title: 'Kết nối mới',
-                          isSelect: provider.initPage ==
-                              SubMenuType.NEW_CONNECT.pageNumber,
-                          onTap: () {
-                            provider.changeSubPage(SubMenuType.NEW_CONNECT);
-                            // provider.updateShowMenuLink(false);
-                          },
-                        ),
-                        ItemMenuTop(
-                          title: 'Chạy callback',
-                          isSelect: provider.initPage ==
-                              SubMenuType.RUN_CALLBACK.pageNumber,
-                          onTap: () {
-                            provider.changeSubPage(SubMenuType.RUN_CALLBACK);
-                            // provider.updateShowMenuLink(false);
-                          },
-                        ),
+                        widget.isTestCallBack == false
+                            ? ItemMenuTop(
+                                title: 'Kết nối mới',
+                                isSelect: provider.initPage ==
+                                    SubMenuType.NEW_CONNECT.pageNumber,
+                                onTap: () {
+                                  // provider.changeSubPage(SubMenuType.NEW_CONNECT);
+                                  // provider.updateShowMenuLink(false);
+                                },
+                              )
+                            : ItemMenuTop(
+                                title: 'Chạy callback',
+                                isSelect: provider.initPage ==
+                                    SubMenuType.RUN_CALLBACK.pageNumber,
+                                onTap: () {
+                                  // provider.changeSubPage(SubMenuType.RUN_CALLBACK);
+                                  // provider.updateShowMenuLink(false);
+                                },
+                              ),
                       ],
                     ),
                   ),
@@ -83,7 +85,7 @@ class _ServiceScreenState extends State<IntegrationConnectivityScreen> {
           Expanded(
             child: Consumer<MenuConnectivityProvider>(
               builder: (context, provider, child) {
-                return pages[provider.initPage];
+                return pages[widget.isTestCallBack == false ? 0 : 1];
               },
             ),
           ),
