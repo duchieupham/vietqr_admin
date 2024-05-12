@@ -98,15 +98,18 @@ class _TransactionScreenState extends State<_TransactionScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<TransactionBloc>(
       create: (context) => _bloc,
-      child: Column(
-        children: [
-          _buildTitle(),
-          Expanded(
-              child: PageView(
-            controller: pageViewController,
-            children: [_buildListTransaction(), TransactionDetailScreen()],
-          ))
-        ],
+      child: Container(
+        color: AppColor.WHITE,
+        child: Column(
+          children: [
+            _buildTitle(),
+            Expanded(
+                child: PageView(
+              controller: pageViewController,
+              children: [_buildListTransaction(), TransactionDetailScreen()],
+            ))
+          ],
+        ),
       ),
     );
   }

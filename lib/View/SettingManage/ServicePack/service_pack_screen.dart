@@ -51,85 +51,88 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
   }
 
   Widget _buildListServicePack() {
-    return Column(
-      children: [
-        _buildTitle(),
-        Expanded(
-          child: LayoutBuilder(builder: (context, constraints) {
-            return ChangeNotifierProvider<ServicePackProvider>(
-              create: (context) => ServicePackProvider(),
-              child: Consumer<ServicePackProvider>(
-                  builder: (context, provider, child) {
-                return BlocConsumer<ServicePackBloc, ServicePackState>(
-                  listener: (context, state) {
-                    if (state is ServicePackLoadingState) {
-                      DialogWidget.instance.openLoadingDialog();
-                    }
-                    if (state is ServicePackInsertSuccessState) {
-                      Navigator.pop(context);
-
-                      provider.showFromInsert(state.servicePackId);
-                      _bloc.add(const ServicePackGetListEvent());
-                      DialogWidget.instance.openMsgDialog(
-                          title: 'Thành công',
-                          msg: 'Tạo gói nhỏ thành công',
-                          isSuccess: true);
-                    }
-                    if (state is ServicePackInsertFailsState) {
-                      Navigator.pop(context);
-                      DialogWidget.instance.openMsgDialog(
-                          title: 'Không thể thêm',
-                          msg: ErrorUtils.instance
-                              .getErrorMessage(state.dto.message));
-                    }
-                    if (state is ServicePackGetListSuccessState) {
-                      listServicePack = state.result;
-                      listServicePack.sort((a, b) {
-                        return a.item!.shortName
-                            .toLowerCase()
-                            .compareTo(b.item!.shortName.toLowerCase());
-                      });
-                      if (state.initPage) {
-                        provider.init(listServicePack);
-                      } else {
-                        provider.updateListServicePack(listServicePack);
+    return Container(
+      color: AppColor.WHITE,
+      child: Column(
+        children: [
+          _buildTitle(),
+          Expanded(
+            child: LayoutBuilder(builder: (context, constraints) {
+              return ChangeNotifierProvider<ServicePackProvider>(
+                create: (context) => ServicePackProvider(),
+                child: Consumer<ServicePackProvider>(
+                    builder: (context, provider, child) {
+                  return BlocConsumer<ServicePackBloc, ServicePackState>(
+                    listener: (context, state) {
+                      if (state is ServicePackLoadingState) {
+                        DialogWidget.instance.openLoadingDialog();
                       }
-                    }
-                  },
-                  builder: (context, state) {
-                    if (listServicePack.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 40),
-                        child: Text('Không có dữ liệu'),
-                      );
-                    }
-                    return SingleChildScrollView(
-                        child: ScrollConfiguration(
-                      behavior: MyCustomScrollBehavior(),
-                      child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SizedBox(
-                              width: constraints.maxWidth > 1440
-                                  ? constraints.maxWidth
-                                  : 1440,
-                              child: Column(
-                                children: [
-                                  _buildTitleItem(),
-                                  ...listServicePack.map((e) {
-                                    int index = listServicePack.indexOf(e);
+                      if (state is ServicePackInsertSuccessState) {
+                        Navigator.pop(context);
 
-                                    return _buildItem(e, provider, index);
-                                  }).toList(),
-                                ],
-                              ))),
-                    ));
-                  },
-                );
-              }),
-            );
-          }),
-        ),
-      ],
+                        provider.showFromInsert(state.servicePackId);
+                        _bloc.add(const ServicePackGetListEvent());
+                        DialogWidget.instance.openMsgDialog(
+                            title: 'Thành công',
+                            msg: 'Tạo gói nhỏ thành công',
+                            isSuccess: true);
+                      }
+                      if (state is ServicePackInsertFailsState) {
+                        Navigator.pop(context);
+                        DialogWidget.instance.openMsgDialog(
+                            title: 'Không thể thêm',
+                            msg: ErrorUtils.instance
+                                .getErrorMessage(state.dto.message));
+                      }
+                      if (state is ServicePackGetListSuccessState) {
+                        listServicePack = state.result;
+                        listServicePack.sort((a, b) {
+                          return a.item!.shortName
+                              .toLowerCase()
+                              .compareTo(b.item!.shortName.toLowerCase());
+                        });
+                        if (state.initPage) {
+                          provider.init(listServicePack);
+                        } else {
+                          provider.updateListServicePack(listServicePack);
+                        }
+                      }
+                    },
+                    builder: (context, state) {
+                      if (listServicePack.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Text('Không có dữ liệu'),
+                        );
+                      }
+                      return SingleChildScrollView(
+                          child: ScrollConfiguration(
+                        behavior: MyCustomScrollBehavior(),
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                                width: constraints.maxWidth > 1440
+                                    ? constraints.maxWidth
+                                    : 1440,
+                                child: Column(
+                                  children: [
+                                    _buildTitleItem(),
+                                    ...listServicePack.map((e) {
+                                      int index = listServicePack.indexOf(e);
+
+                                      return _buildItem(e, provider, index);
+                                    }).toList(),
+                                  ],
+                                ))),
+                      ));
+                    },
+                  );
+                }),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 

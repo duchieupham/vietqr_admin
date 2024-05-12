@@ -32,64 +32,67 @@ class _ServiceScreenState extends State<IntegrationConnectivityScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MenuConnectivityProvider>(
       create: (context) => MenuConnectivityProvider(),
-      child: Column(
-        children: [
-          Consumer<MenuConnectivityProvider>(
-              builder: (context, provider, child) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              height: 45,
-              decoration: BoxDecoration(
-                color: AppColor.BLUE_TEXT.withOpacity(0.2),
-              ),
-              padding: const EdgeInsets.only(left: 16),
-              child: Row(
-                children: [
-                  const Text(
-                    'Tích hợp và kết nối',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        widget.isTestCallBack == false
-                            ? ItemMenuTop(
-                                title: 'Kết nối mới',
-                                isSelect: provider.initPage ==
-                                    SubMenuType.NEW_CONNECT.pageNumber,
-                                onTap: () {
-                                  // provider.changeSubPage(SubMenuType.NEW_CONNECT);
-                                  // provider.updateShowMenuLink(false);
-                                },
-                              )
-                            : ItemMenuTop(
-                                title: 'Chạy callback',
-                                isSelect: provider.initPage ==
-                                    SubMenuType.RUN_CALLBACK.pageNumber,
-                                onTap: () {
-                                  // provider.changeSubPage(SubMenuType.RUN_CALLBACK);
-                                  // provider.updateShowMenuLink(false);
-                                },
-                              ),
-                      ],
+      child: Container(
+        color: AppColor.WHITE,
+        child: Column(
+          children: [
+            Consumer<MenuConnectivityProvider>(
+                builder: (context, provider, child) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: AppColor.BLUE_TEXT.withOpacity(0.2),
+                ),
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Tích hợp và kết nối',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          widget.isTestCallBack == false
+                              ? ItemMenuTop(
+                                  title: 'Kết nối mới',
+                                  isSelect: provider.initPage ==
+                                      SubMenuType.NEW_CONNECT.pageNumber,
+                                  onTap: () {
+                                    // provider.changeSubPage(SubMenuType.NEW_CONNECT);
+                                    // provider.updateShowMenuLink(false);
+                                  },
+                                )
+                              : ItemMenuTop(
+                                  title: 'Chạy callback',
+                                  isSelect: provider.initPage ==
+                                      SubMenuType.RUN_CALLBACK.pageNumber,
+                                  onTap: () {
+                                    // provider.changeSubPage(SubMenuType.RUN_CALLBACK);
+                                    // provider.updateShowMenuLink(false);
+                                  },
+                                ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+            Expanded(
+              child: Consumer<MenuConnectivityProvider>(
+                builder: (context, provider, child) {
+                  return pages[widget.isTestCallBack == false ? 0 : 1];
+                },
               ),
-            );
-          }),
-          Expanded(
-            child: Consumer<MenuConnectivityProvider>(
-              builder: (context, provider, child) {
-                return pages[widget.isTestCallBack == false ? 0 : 1];
-              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

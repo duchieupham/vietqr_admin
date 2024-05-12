@@ -193,7 +193,6 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               children: [
                 SizedBox(
                   width: 350,
-                  height: 80,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +210,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                       ),
                       Container(
                         width: 350,
-                        height: 50,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
@@ -223,6 +222,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: const TextField(
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(bottom: 8),
                             border: InputBorder.none,
                             hintText: 'Nhập tên hoá đơn tại đây',
                             hintStyle: TextStyle(
@@ -236,7 +236,6 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 const SizedBox(width: 20),
                 SizedBox(
                   width: 350,
-                  height: 80,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,7 +253,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                       ),
                       Container(
                         width: 350,
-                        height: 50,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
@@ -266,6 +265,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: const TextField(
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(bottom: 8),
                             border: InputBorder.none,
                             hintText: 'Nhập thông tin mô tả hoá đơn ở đây',
                             hintStyle: TextStyle(
@@ -317,7 +317,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                       ),
                       Container(
                         width: 400,
-                        height: 50,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
@@ -332,7 +332,6 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               width: 150,
-                              height: 50,
                               child: DropdownButton<int>(
                                 isExpanded: true,
                                 value: type,
@@ -360,7 +359,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               ),
                             ),
                             const SizedBox(
-                              height: 50,
+                              height: 40,
                               child: VerticalDivider(
                                 thickness: 1,
                                 color: AppColor.GREY_DADADA,
@@ -416,7 +415,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                       ),
                       Container(
                         width: 350,
-                        height: 50,
+                        height: 40,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(
