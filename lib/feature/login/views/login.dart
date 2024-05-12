@@ -56,7 +56,7 @@ class _Login extends State<Login> {
               //pop loading dialog
               Navigator.of(context).pop();
 
-              context.push('/dashboard');
+              context.push('/vnpt-epay');
             }
             if (state is LoginFailedState) {
               FocusManager.instance.primaryFocus?.unfocus();
