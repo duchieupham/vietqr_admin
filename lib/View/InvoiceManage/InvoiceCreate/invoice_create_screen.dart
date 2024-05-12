@@ -840,7 +840,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   Widget _itemTitleWidget() {
     return Container(
       alignment: Alignment.center,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: AppColor.WHITE,
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
@@ -903,7 +903,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
 
   Widget _buildItem() {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: AppColor.WHITE,
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
@@ -1034,7 +1034,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         color: AppColor.BLUE_TEXT.withOpacity(0.3),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.edit,
                         size: 12,
                         color: AppColor.BLUE_TEXT,
@@ -1051,7 +1051,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         color: AppColor.RED_TEXT.withOpacity(0.3),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
+                      child: const Icon(
                         Icons.delete_forever,
                         size: 12,
                         color: AppColor.RED_TEXT,
