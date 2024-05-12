@@ -3,7 +3,7 @@ import 'package:vietqr_admin/commons/constants/configurations/stringify.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/event/service_pack_event.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/repository/rq_bank_account_repository.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/state/rq_bank_account_state.dart';
-import 'package:vietqr_admin/feature/service_pack/state/service_pack_state.dart';
+import 'package:vietqr_admin/View/SettingManage/ServicePack/state/service_pack_state.dart';
 
 import '../../../../models/DTO/account_bank_rq_dto.dart';
 import '../../../../models/DTO/response_message_dto.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vietqr_admin/View/EnvironmentSetting/widgets/environment_setting_screen.dart';
+import 'package:vietqr_admin/View/SettingManage/SettingEnv/environment_setting_screen.dart';
 import 'package:vietqr_admin/commons/constants/configurations/app_image.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
@@ -232,7 +232,7 @@ class Header extends StatelessWidget {
               builder: (context, provider, child) {
                 return InkWell(
                   onTap: () {
-                    provider.selectMenu(MenuType.ENVIRONMENT_SETTING);
+                    // provider.selectMenu(MenuType.ENVIRONMENT_SETTING);
                   },
                   child: BoxLayout(
                     width: 40,

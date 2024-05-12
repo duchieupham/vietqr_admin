@@ -21,9 +21,9 @@ class MenuProvider with ChangeNotifier {
 
   bool get showMenu => _isShowMenu;
 
-  MenuType _menuHomeType = MenuType.VNPT_EPAY;
+  // MenuType _menuHomeType = MenuType.VNPT_EPAY;
 
-  MenuType get menuHomeType => _menuHomeType;
+  // MenuType get menuHomeType => _menuHomeType;
 
   SubMenuType _subMenuType = SubMenuType.OTHER;
 
@@ -79,56 +79,54 @@ class MenuProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void selectMenu(MenuType value) {
-    if (value != _menuHomeType) {
-      _initPage = 0;
-    }
-    if (value == MenuType.VNPT_EPAY) {
-      EnvConfig.instance.updateEnv(EnvType.GOLIVE);
-      updateENV(1);
-    }
-    _menuHomeType = value;
-    changePage(value);
-    notifyListeners();
-  }
+  // void selectMenu(MenuType value) {
+  //   if (value != _menuHomeType) {
+  //     _initPage = 0;
+  //   }
+  //   if (value == MenuType.VNPT_EPAY) {
+  //     EnvConfig.instance.updateEnv(EnvType.GOLIVE);
+  //     updateENV(1);
+  //   }
+  //   _menuHomeType = value;
+  //   changePage(value);
+  //   notifyListeners();
+  // }
 
-  void changePage(MenuType value) {
-    if (value == MenuType.VNPT_EPAY) {
-      initMenuPage = 0;
-    } else if (value == MenuType.SERVICE_CONNECT) {
-      initMenuPage = 1;
-    } else if (value == MenuType.INTEGRATION_CONNECTIVITY) {
-      initMenuPage = 2;
-    } else if (value == MenuType.SERVICE_PACK) {
-      initMenuPage = 3;
-    } else if (value == MenuType.ENVIRONMENT_SETTING) {
-      initMenuPage = 4;
-    } else if (value == MenuType.SERVICE_FEE) {
-      initMenuPage = 5;
-    } else if (value == MenuType.ANNUAL_FEE_AFTER) {
-      initMenuPage = 6;
-    } else if (value == MenuType.USER_RECHARGE) {
-      initMenuPage = 7;
-    } else if (value == MenuType.TRANSACTION) {
-      initMenuPage = 8;
-    } else if (value == MenuType.MERCHANT_FEE) {
-      initMenuPage = 9;
-    } else if (value == MenuType.SYSTEM_TRANSACTION) {
-      initMenuPage = 10;
-    } else if (value == MenuType.INVOICE) {
-      initMenuPage = 11;
-    } else if (value == MenuType.LOG) {
-      initMenuPage = 12;
-    } else if (value == MenuType.CONFIG) {
-      initMenuPage = 13;
-    } else if (value == MenuType.ACCOUNT_BANK) {
-      initMenuPage = 14;
-    } else if (value == MenuType.POST) {
-      initMenuPage = 15;
-    } else if (value == MenuType.PUSH_NOTIFICATION) {
-      initMenuPage = 16;
-    } else if (value == MenuType.USER) {
-      initMenuPage = 17;
-    }
-  }
+  // void changePage(MenuType value) {
+  //   if (value == MenuType.VNPT_EPAY) {
+  //     initMenuPage = 0;
+  //   } else if (value == MenuType.SERVICE_CONNECT) {
+  //     initMenuPage = 1;
+  //   } else if (value == MenuType.INTEGRATION_CONNECTIVITY) {
+  //     initMenuPage = 2;
+  //   } else if (value == MenuType.SERVICE_PACK) {
+  //     initMenuPage = 3;
+  //   } else if (value == MenuType.ENVIRONMENT_SETTING) {
+  //     initMenuPage = 4;
+  //   } else if (value == MenuType.SERVICE_FEE) {
+  //     initMenuPage = 5;
+  //   } else if (value == MenuType.ANNUAL_FEE_AFTER) {
+  //     initMenuPage = 6;
+  //   } else if (value == MenuType.USER_RECHARGE) {
+  //     initMenuPage = 7;
+  //   } else if (value == MenuType.TRANSACTION) {
+  //     initMenuPage = 8;
+  //   } else if (value == MenuType.MERCHANT_FEE) {
+  //     initMenuPage = 9;
+  //   } else if (value == MenuType.SYSTEM_TRANSACTION) {
+  //     initMenuPage = 10;
+  //   } else if (value == MenuType.LOG) {
+  //     initMenuPage = 11;
+  //   } else if (value == MenuType.CONFIG) {
+  //     initMenuPage = 12;
+  //   } else if (value == MenuType.ACCOUNT_BANK) {
+  //     initMenuPage = 13;
+  //   } else if (value == MenuType.POST) {
+  //     initMenuPage = 14;
+  //   } else if (value == MenuType.PUSH_NOTIFICATION) {
+  //     initMenuPage = 15;
+  //   } else if (value == MenuType.USER) {
+  //     initMenuPage = 16;
+  //   }
+  // }
 }
