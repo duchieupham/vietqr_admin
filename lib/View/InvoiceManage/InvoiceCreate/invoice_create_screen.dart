@@ -19,21 +19,23 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
       body: Column(
         children: [
           Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                  color: AppColor.WHITE,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _headerWidget(),
-                  const Divider(),
-                  _bodyWidget(),
-                ],
+            child: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                    color: AppColor.WHITE,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _headerWidget(),
+                    const Divider(),
+                    _bodyWidget(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -151,7 +153,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
         colorEnableBgr: AppColor.WHITE,
         colorEnableText: AppColor.BLUE_TEXT,
         width: 350,
-        margin: const EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10, bottom: 20),
         height: 50,
       ),
     );
@@ -630,13 +632,17 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             ),
           ),
           Container(
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: AppColor.GREY_TEXT, width: 0.5))),
+            // decoration: const BoxDecoration(
+            //     border: Border(
+            //         bottom: BorderSide(color: AppColor.GREY_TEXT, width: 0.5))),
             width: 1270,
             child: Column(
               children: [
                 _itemTitleWidget(),
+                _buildItem(),
+                _buildItem(),
+                _buildItem(),
+                _buildItem(),
               ],
             ),
           ),
@@ -673,7 +679,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   Widget _itemTitleWidget() {
     return Container(
       alignment: Alignment.center,
-      decoration: BoxDecoration(color: AppColor.WHITE),
+      decoration: BoxDecoration(
+          color: AppColor.WHITE,
+          border: Border(
+              bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
       child: Row(
         children: [
           _buildItemTitle('STT',
@@ -721,6 +730,128 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItem() {
+    return Container(
+      decoration: BoxDecoration(
+          color: AppColor.WHITE,
+          border: Border(
+              bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 50,
+            child: SelectionArea(
+              child: Text(
+                '1',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 300,
+            child: SelectionArea(
+              child: Text(
+                'Phí giao dịch phần mềm VietQR tháng 03/2024',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 120,
+            child: SelectionArea(
+              child: Text(
+                'Tháng',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 100,
+            child: SelectionArea(
+              child: Text(
+                '1',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                '100,000',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                '100,000',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 100,
+            child: SelectionArea(
+              child: Text(
+                '8',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                '8,000',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                '108,000',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
         ],
       ),
     );
