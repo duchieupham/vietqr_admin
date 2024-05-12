@@ -612,6 +612,171 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   ],
                 ),
               ),
+              SizedBox(
+                width: double.infinity,
+                height: 80,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 250,
+                      height: 80,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            width: 100,
+                            height: 20,
+                            child: Text(
+                              'Luồng kết nối',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: 250,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: AppColor.GREY_DADADA,
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'VietQR Pro',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    SizedBox(
+                      width: 250,
+                      height: 80,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            width: 250,
+                            height: 20,
+                            child: Text(
+                              'Gói dịch vụ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: 250,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: AppColor.GREY_DADADA,
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'VQR5_PT',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    SizedBox(
+                      width: 250,
+                      height: 80,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            width: 250,
+                            height: 20,
+                            child: Text(
+                              'VAT (%)',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: 250,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color:
+                                  Colors.white, // Changed to white background
+                              border: Border.all(
+                                color: Colors.grey, // Gray border
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: TextField(
+                                    controller:
+                                        TextEditingController(text: '8'),
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Nhập VAT',
+                                      hintStyle: TextStyle(
+                                          color: AppColor.GREY_TEXT,
+                                          fontSize: 15),
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 10),
               const MySeparator(
                 color: AppColor.GREY_TEXT,
@@ -629,7 +794,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 // decoration: const BoxDecoration(
                 //     border: Border(
                 //         bottom: BorderSide(color: AppColor.GREY_TEXT, width: 0.5))),
-                width: 1270,
+                width: 1360,
                 child: Column(
                   children: [
                     _itemTitleWidget(),
@@ -724,6 +889,11 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           _buildItemTitle('Tổng tiền (VND)',
               height: 50,
               width: 150,
+              alignment: Alignment.centerLeft,
+              textAlign: TextAlign.center),
+          _buildItemTitle('Thao tác',
+              height: 50,
+              width: 90,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
         ],
@@ -845,6 +1015,50 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 '108,000',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            height: 50,
+            width: 90,
+            child: SelectionArea(
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.edit,
+                        size: 12,
+                        color: AppColor.BLUE_TEXT,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: AppColor.RED_TEXT.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.delete_forever,
+                        size: 12,
+                        color: AppColor.RED_TEXT,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
