@@ -130,7 +130,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           ),
           const Spacer(),
           MButtonWidget(
-            title: 'Lưu',
+            title: 'Tạo hoá đơn',
             isEnable: true,
             width: 350,
             height: 50,
@@ -141,8 +141,25 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
     );
   }
 
+  Widget _buttonAddIvoiceItem() {
+    return InkWell(
+      onTap: () {},
+      child: MButtonWidget(
+        title: 'Thêm mới danh mục hàng hoá / dịch vụ',
+        border: Border.all(color: AppColor.BLUE_TEXT),
+        isEnable: true,
+        colorEnableBgr: AppColor.WHITE,
+        colorEnableText: AppColor.BLUE_TEXT,
+        width: 350,
+        margin: const EdgeInsets.only(top: 10),
+        height: 50,
+      ),
+    );
+  }
+
   Widget _bodyWidget() {
     int type = 0;
+    String displayText = "Chọn đại lý";
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(
@@ -333,12 +350,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   DropdownMenuItem<int>(
                                       value: 1,
                                       child: Text(
-                                        "ĐL1",
-                                      )),
-                                  DropdownMenuItem<int>(
-                                      value: 2,
-                                      child: Text(
-                                        "ĐL2",
+                                        "Tài khoản ngân hàng",
                                       )),
                                 ],
                                 onChanged: (value) {},
@@ -355,35 +367,22 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               child: Container(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
-                                child: DropdownButton<int>(
-                                  isExpanded: true,
-                                  value: type,
-                                  underline: const SizedBox.shrink(),
-                                  icon: const RotatedBox(
-                                    quarterTurns: 5,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 12,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      displayText,
+                                      style: const TextStyle(
+                                          color: AppColor.GREY_TEXT,
+                                          fontSize: 15),
                                     ),
-                                  ),
-                                  items: const [
-                                    DropdownMenuItem<int>(
-                                        value: 0,
-                                        child: Text(
-                                          "Chọn đại lý",
-                                        )),
-                                    DropdownMenuItem<int>(
-                                        value: 1,
-                                        child: Text(
-                                          "ĐL1",
-                                        )),
-                                    DropdownMenuItem<int>(
-                                        value: 2,
-                                        child: Text(
-                                          "ĐL2",
-                                        )),
+                                    const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      size: 15,
+                                      color: AppColor.GREY_TEXT,
+                                    ),
                                   ],
-                                  onChanged: (value) {},
                                 ),
                               ),
                             ),
@@ -462,6 +461,161 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             ),
           ),
           const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 80,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 250,
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 100,
+                        height: 20,
+                        child: Text(
+                          'Chủ tài khoản',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: 250,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColor.GREY_DADADA,
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'Cong Ty Co Phan Dau Tu Hang...asdnamsndm',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                              textAlign: TextAlign.left,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: 250,
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 250,
+                        height: 20,
+                        child: Text(
+                          'Tài khoản VietQR',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: 250,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColor.GREY_DADADA,
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              '093 186 5469',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                              textAlign: TextAlign.left,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: 250,
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 250,
+                        height: 20,
+                        child: Text(
+                          'Email',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: 250,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColor.GREY_DADADA,
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              'admin@sab.vn',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                              textAlign: TextAlign.left,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
           const MySeparator(
             color: AppColor.GREY_TEXT,
           ),
@@ -485,6 +639,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               ],
             ),
           ),
+          _buttonAddIvoiceItem(),
         ],
       ),
     );
