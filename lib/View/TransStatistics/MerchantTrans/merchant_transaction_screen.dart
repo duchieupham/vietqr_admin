@@ -230,7 +230,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
           Text(
-            "Thống kê",
+            "Thống kê GD",
             style: TextStyle(fontSize: 15),
           ),
           Text(
@@ -238,7 +238,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
             style: TextStyle(fontSize: 15),
           ),
           Text(
-            "Thống kê giao dịch",
+            "Thống kê GD đại lý",
             style: TextStyle(fontSize: 15),
           ),
         ],

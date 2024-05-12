@@ -134,7 +134,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+      backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
         model: _model,
         child: Container(

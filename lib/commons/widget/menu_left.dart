@@ -18,6 +18,7 @@ class MenuLeft extends StatelessWidget {
   final List<Widget> subMenuTransStatistics;
   final List<Widget> subMenuTransFee;
   final List<Widget> subMenuInvoice;
+  final List<Widget> subMenuSetting;
 
   const MenuLeft({
     super.key,
@@ -28,6 +29,7 @@ class MenuLeft extends StatelessWidget {
     this.subMenuTransStatistics = const [],
     this.subMenuTransFee = const [],
     this.subMenuInvoice = const [],
+    this.subMenuSetting = const [],
   });
 
   @override
@@ -109,11 +111,31 @@ class MenuLeft extends StatelessWidget {
                 isSelect: currentType == MenuType.INVOICE,
                 bold: true,
                 onTap: () {
-                  // context.go('/trans-fee');
+                  context.go('/invoice-list');
+                },
+              ),
+              ItemMenuHome(
+                title: 'Thiết lập và cài đặt',
+                enableDropDownList: true,
+                listItemDrop: subMenuSetting,
+                isSelect: currentType == MenuType.SETTING,
+                bold: true,
+                onTap: () {
+                  context.go('/setting-fee');
                 },
               ),
             ],
           ),
+        ),
+        ItemMenuHome(
+          title: 'Đăng xuất',
+          isLogout: true,
+          // isSelect: currentType == MenuType.LOG_OUT,
+          bold: true,
+          onTap: () {
+            UserInformationHelper.instance.setAdminId('');
+            context.go('/login');
+          },
         ),
       ],
     );

@@ -182,7 +182,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
           Text(
-            "Phí",
+            "Quản lý thu phí",
             style: TextStyle(fontSize: 15),
           ),
           Text(
@@ -190,7 +190,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
             style: TextStyle(fontSize: 15),
           ),
           Text(
-            "Phí dịch vụ",
+            "Thu phí giao dịch",
             style: TextStyle(fontSize: 15),
           ),
         ],

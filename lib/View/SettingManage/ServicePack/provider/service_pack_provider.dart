@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/DTO/service_pack_dto.dart';
+import '../../../../models/DTO/service_pack_dto.dart';
 
 class ServicePackProvider with ChangeNotifier {
   List<ServicePackDTO> _listServicePack = [];

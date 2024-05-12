@@ -168,7 +168,7 @@ class _SystemTransStatisticsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.WHITE,
+      backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
           model: _model,
           child: ScopedModelDescendant<SystemTransactionViewModel>(
@@ -233,7 +233,7 @@ class _SystemTransStatisticsScreenState
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
           Text(
-            "Thống kê",
+            "Thống kê GD",
             style: TextStyle(fontSize: 15),
           ),
           Text(
@@ -241,7 +241,7 @@ class _SystemTransStatisticsScreenState
             style: TextStyle(fontSize: 15),
           ),
           Text(
-            "Thống kê giao dịch",
+            "Thống kê GD hệ thống",
             style: TextStyle(fontSize: 15),
           ),
         ],

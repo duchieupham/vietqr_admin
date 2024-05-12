@@ -7,10 +7,10 @@ import 'package:vietqr_admin/commons/constants/utils/error_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
-import 'package:vietqr_admin/feature/service_pack/bloc/service_pack_bloc.dart';
-import 'package:vietqr_admin/feature/service_pack/event/service_pack_event.dart';
-import 'package:vietqr_admin/feature/service_pack/provider/service_pack_provider.dart';
-import 'package:vietqr_admin/feature/service_pack/state/service_pack_state.dart';
+import 'package:vietqr_admin/View/SettingManage/ServicePack/bloc/service_pack_bloc.dart';
+import 'package:vietqr_admin/View/SettingManage/ServicePack/event/service_pack_event.dart';
+import 'package:vietqr_admin/View/SettingManage/ServicePack/provider/service_pack_provider.dart';
+import 'package:vietqr_admin/View/SettingManage/ServicePack/state/service_pack_state.dart';
 
 import '../../../models/DTO/service_pack_dto.dart';
 

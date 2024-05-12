@@ -35,7 +35,7 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
         title: const SizedBox(),
         menu: MenuLeft(
           currentType: MenuType.INVOICE,
-          subMenuTransFee: [
+          subMenuInvoice: [
             ItemDropDownMenu(
               title: 'Danh sách hoá đơn',
               isSelect: type == Invoice.LIST,
@@ -53,10 +53,10 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
 
   void onTapMenu(Invoice value) {
     if (value == Invoice.LIST) {
-      html.window.history.pushState(null, '/trans-fee', '/trans-fee');
+      html.window.history.pushState(null, '/invoice', '/invoice-list');
       type = value;
     } else if (value == Invoice.CREATE) {
-      html.window.history.pushState(null, '/trans-fee', '/annual-fee');
+      html.window.history.pushState(null, '/invoice', '/create-invoice');
       type = value;
     }
     setState(() {});

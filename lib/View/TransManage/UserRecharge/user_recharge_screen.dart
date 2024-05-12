@@ -160,7 +160,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
           Text(
-            "Phí",
+            "Quản lý giao dịch",
             style: TextStyle(fontSize: 15),
           ),
           Text(
@@ -168,7 +168,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
             style: TextStyle(fontSize: 15),
           ),
           Text(
-            "Nạp dịch vụ",
+            "Giao dịch thu phí VietQR",
             style: TextStyle(fontSize: 15),
           ),
         ],

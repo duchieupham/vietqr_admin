@@ -12,7 +12,9 @@ import 'package:vietqr_admin/service/shared_references/session.dart';
 import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
 import 'View/FeeManage/fee_manage_screen.dart';
+import 'View/InvoiceManage/invoice_manage_screen.dart';
 import 'View/MerchantManage/merchant_manage_screen.dart';
+import 'View/SettingManage/setting_env_screen.dart';
 import 'View/TransManage/trans_manage_screen.dart';
 import 'View/TransStatistics/trans_statistics_screen.dart';
 import 'View/ValueAddedService/vas_screen.dart';
@@ -197,6 +199,58 @@ final GoRouter _router = GoRouter(
             context: context,
             state: state,
             child: const FeeManageScreen(type: TransFee.ANNUAL_FEE));
+      },
+    ),
+    GoRoute(
+      path: '/invoice-list',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/invoice-list' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const InvoiceManageScreen(type: Invoice.LIST),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const InvoiceManageScreen(type: Invoice.LIST));
+      },
+    ),
+    GoRoute(
+      path: '/create-invoice',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/create-invoice' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const InvoiceManageScreen(type: Invoice.CREATE),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const InvoiceManageScreen(type: Invoice.CREATE));
+      },
+    ),
+    GoRoute(
+      path: '/setting-fee',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/setting-fee' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const SettingEnvScreen(type: SettingEnv.FEE),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const SettingEnvScreen(type: SettingEnv.FEE));
+      },
+    ),
+    GoRoute(
+      path: '/setting-env',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/setting-env' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const SettingEnvScreen(type: SettingEnv.ENV),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const SettingEnvScreen(type: SettingEnv.ENV));
       },
     ),
   ],

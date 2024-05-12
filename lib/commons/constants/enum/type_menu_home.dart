@@ -7,6 +7,8 @@ enum MenuType {
   TRANS_STATISTICS,
   TRANS_FEE,
   INVOICE,
+  SETTING,
+  LOG_OUT
 }
 
 enum SubMenuType {
