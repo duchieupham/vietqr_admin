@@ -5,6 +5,8 @@ enum MenuType {
   MERCHANT_MANAGE,
   TRANS_MANAGE,
   TRANS_STATISTICS,
+  TRANS_FEE,
+  INVOICE,
 }
 
 enum SubMenuType {

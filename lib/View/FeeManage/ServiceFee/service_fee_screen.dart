@@ -1,44 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/View/AnnualFeeAfter/widgets/item_widget.dart';
-import 'package:vietqr_admin/View/AnnualFeeAfter/widgets/title_item_widget.dart';
-import '../../ViewModel/annualFee_viewModel.dart';
-import '../../commons/constants/configurations/theme.dart';
-import '../../commons/constants/enum/view_status.dart';
-import '../../commons/constants/utils/custom_scroll.dart';
-import '../../commons/constants/utils/string_utils.dart';
-import '../../commons/widget/dialog_pick_month.dart';
-import '../../commons/widget/separator_widget.dart';
-import '../../main.dart';
-import '../../models/DTO/annual_fee_after_dto.dart';
-import '../../models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/View/FeeManage/ServiceFee/widgets/item_widget.dart';
+import 'package:vietqr_admin/View/FeeManage/ServiceFee/widgets/title_item_widget.dart';
+import 'package:vietqr_admin/ViewModel/serviceFee_viewModel.dart';
+import 'package:vietqr_admin/models/DTO/service_fee_dto.dart';
 
-class AnnualFeeAfterScreen extends StatefulWidget {
-  const AnnualFeeAfterScreen({super.key});
+import '../../../commons/constants/configurations/theme.dart';
+import '../../../commons/constants/enum/view_status.dart';
+import '../../../commons/constants/utils/custom_scroll.dart';
+import '../../../commons/constants/utils/string_utils.dart';
+import '../../../commons/widget/dialog_pick_month.dart';
+import '../../../commons/widget/separator_widget.dart';
+import '../../../main.dart';
+import '../../../models/DTO/metadata_dto.dart';
+
+class ServiceFeeScreen extends StatefulWidget {
+  const ServiceFeeScreen({super.key});
 
   @override
-  State<AnnualFeeAfterScreen> createState() => _AnnualFeeAfterScreenState();
+  State<ServiceFeeScreen> createState() => _ServiceFeeScreenState();
 }
 
-class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
+class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
   TextEditingController controller = TextEditingController(text: '');
   late ScrollController controller1;
   late ScrollController controller2;
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
 
-  late AnnualFeeAfterViewModel _model;
+  late ServiceFeeViewModel _model;
   DateTime? selectDate;
   String? searchValue = '';
 
   @override
   void initState() {
     super.initState();
-    _model = Get.find<AnnualFeeAfterViewModel>();
-    selectDate = _model.getPreviousDay();
-    _model.filterListAnnualFeeAfter(time: selectDate!, page: 1);
+    _model = Get.find<ServiceFeeViewModel>();
+    selectDate = _model.getPreviousMonth();
+    _model.filterListServiceFee(time: selectDate!, page: 1);
 
     controller1 = ScrollController();
     controller2 = ScrollController();
@@ -64,22 +67,6 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
     controller1.dispose();
     controller2.dispose();
     super.dispose();
-  }
-
-  void _onPickDay(DateTime dateTime) async {
-    DateTime? date = await showDateTimePicker(
-      context: context,
-      initialDate: dateTime,
-      firstDate: DateTime(2021, 6),
-      lastDate: dateTime,
-    );
-    if (date != null) {
-      setState(() {
-        selectDate = date;
-      });
-    } else {
-      selectDate = _model.getPreviousDay();
-    }
   }
 
   Future<DateTime?> showDateTimePicker({
@@ -125,16 +112,16 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
       setState(() {
         selectDate = result;
       });
+      _model.filterListServiceFee(time: selectDate!, page: 1);
     } else {
       selectDate = _model.getPreviousMonth();
     }
-    print(selectDate);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+      backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
         model: _model,
         child: Container(
@@ -165,11 +152,18 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                       color: AppColor.GREY_DADADA,
                     ),
                     const SizedBox(height: 20),
-                    _statisticAnnualFee(),
+                    const Text(
+                      "Thống kê phí dịch vụ",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    _statisticServiceFee(),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-              _buildListAnnualFee(),
+              _buildListServiceFee(),
               const SizedBox(height: 10),
               _pagingWidget(),
               const SizedBox(height: 10),
@@ -196,7 +190,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
             style: TextStyle(fontSize: 15),
           ),
           Text(
-            "Phí thường niên",
+            "Phí dịch vụ",
             style: TextStyle(fontSize: 15),
           ),
         ],
@@ -205,7 +199,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
   }
 
   Widget _filterWidget() {
-    return ScopedModelDescendant<AnnualFeeAfterViewModel>(
+    return ScopedModelDescendant<ServiceFeeViewModel>(
       builder: (context, child, model) {
         return Row(
           children: [
@@ -236,19 +230,14 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                     ),
                     items: const [
                       DropdownMenuItem<int>(
-                          value: 0,
+                          value: 9,
                           child: Text(
                             "Tất cả (mặc định)",
                           )),
                       DropdownMenuItem<int>(
-                          value: 1,
+                          value: 0,
                           child: Text(
                             "Phần mềm VietQR",
-                          )),
-                      DropdownMenuItem<int>(
-                          value: 2,
-                          child: Text(
-                            "Quản lý cửa hàng",
                           )),
                     ],
                     onChanged: (value) {
@@ -300,13 +289,9 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  model.filterByDate == 0
-                                      ? (selectDate == null
-                                          ? '${model.getPreviousMonth().month}/${model.getPreviousMonth().year}'
-                                          : '${selectDate?.month}/${selectDate?.year}')
-                                      : (selectDate == null
-                                          ? '${model.getPreviousDay().day}/${model.getPreviousDay().month}/${model.getPreviousDay().year}'
-                                          : '${selectDate?.day}/${selectDate?.month}/${selectDate?.year}'),
+                                  (selectDate == null
+                                      ? '${model.getPreviousMonth().month}/${model.getPreviousMonth().year}'
+                                      : '${selectDate?.month}/${selectDate?.year}'),
                                   style: const TextStyle(fontSize: 15),
                                 ),
                                 const Icon(Icons.calendar_month_outlined)
@@ -331,7 +316,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () async {
-                    await model.filterListAnnualFeeAfter(
+                    await model.filterListServiceFee(
                         time: selectDate!, page: 1);
                   },
                   child: Container(
@@ -366,90 +351,172 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
     );
   }
 
-  Widget _statisticAnnualFee() {
-    return ScopedModelDescendant<AnnualFeeAfterViewModel>(
+  Widget _statisticServiceFee() {
+    return ScopedModelDescendant<ServiceFeeViewModel>(
       builder: (context, child, model) {
-        return model.annualFeeAfterDTO != null
-            ? Column(
+        return model.serviceFeeDTO != null
+            ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Thống kê phí thường niên",
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  Container(
+                    decoration: BoxDecoration(
+                        // color: AppColor.WHITE,
+                        border: Border.all(
+                            color: AppColor.GREY_DADADA, width: 0.5)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: Center(
+                            child: Text(
+                              model.filterByDate == 0
+                                  ? "Ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
+                                  : 'Tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 50,
+                          color: AppColor.GREY_DADADA,
+                        ),
+                        Container(
+                          height: 50,
+                          color: AppColor.WHITE,
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    model.serviceFeeDTO!.extraData.transFee),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.BLUE_TEXT),
+                              ),
+                              const Text(
+                                ' VND',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.BLACK),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 30),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        model.filterByDate == 1
-                            ? "Phí thường niên ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
-                            : 'Phí thường niên tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 60),
-                      SizedBox(
-                        height: 60,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Text("Phí giao dịch:     "),
-                                Text(
-                                  StringUtils.formatNumber(model
-                                      .annualFeeAfterDTO?.extraData.transFee),
-                                  style: const TextStyle(
-                                      color: AppColor.BLUE_TEXT,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Text(" VND"),
-                              ],
+                  const SizedBox(width: 30),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppColor.WHITE,
+                        border: Border.all(
+                            color: AppColor.GREY_DADADA, width: 0.5)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          child: const Center(
+                            child: Text(
+                              'Chưa TT',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
-                            Row(
-                              children: [
-                                const Text("Đã TT:                 "),
-                                Text(
-                                  StringUtils.formatNumber(model
-                                      .annualFeeAfterDTO
-                                      ?.extraData
-                                      .completeFee),
-                                  style: const TextStyle(
-                                      color: AppColor.GREEN,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Text(" VND"),
-                              ],
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 40),
-                      SizedBox(
-                        height: 60,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                const Text("Chưa TT:            "),
-                                Text(
-                                  StringUtils.formatNumber(model
-                                      .annualFeeAfterDTO?.extraData.pendingFee),
-                                  style: const TextStyle(
-                                      color: AppColor.RED_TEXT,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const Text(" VND "),
-                              ],
-                            ),
-                          ],
+                        Container(
+                          width: 1,
+                          height: 50,
+                          color: AppColor.GREY_DADADA,
                         ),
-                      ),
-                    ],
+                        Container(
+                          height: 50,
+                          color: AppColor.WHITE,
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    model.serviceFeeDTO!.extraData.pendingFee),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.ORANGE_DARK),
+                              ),
+                              const Text(
+                                ' VND',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.BLACK),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 30),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppColor.WHITE,
+                        border: Border.all(
+                            color: AppColor.GREY_DADADA, width: 0.5)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          child: const Center(
+                            child: Text(
+                              'Đã TT',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 50,
+                          color: AppColor.GREY_DADADA,
+                        ),
+                        Container(
+                          height: 50,
+                          color: AppColor.WHITE,
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    model.serviceFeeDTO!.extraData.completeFee),
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.GREEN),
+                              ),
+                              const Text(
+                                ' VND',
+                                style: TextStyle(
+                                    fontSize: 15, color: AppColor.BLACK),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               )
@@ -458,8 +525,8 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
     );
   }
 
-  Widget _buildListAnnualFee() {
-    return ScopedModelDescendant<AnnualFeeAfterViewModel>(
+  Widget _buildListServiceFee() {
+    return ScopedModelDescendant<ServiceFeeViewModel>(
       builder: (context, child, model) {
         if (model.status == ViewStatus.Loading) {
           return const Expanded(child: Center(child: Text('Đang tải...')));
@@ -467,9 +534,9 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
         if (model.status == ViewStatus.Error) {
           return const SizedBox.shrink();
         }
-        List<AnnualItems>? list = model.annualFeeAfterDTO?.items;
+        List<ServiceItems>? list = model.serviceFeeDTO?.items;
         List<Widget> buildItemList(
-            List<AnnualItems>? list, MetaDataDTO metadata) {
+            List<ServiceItems>? list, MetaDataDTO metadata) {
           if (list == null || list.isEmpty) {
             return [];
           }
@@ -482,7 +549,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                     index + ((metadata.page! - 1) * itemsPerPage);
                 return MapEntry(
                     index,
-                    ItemAnnualWidget(
+                    ItemWidget(
                       dto: e,
                       index: calculatedIndex,
                     ));
@@ -495,7 +562,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
         return list != null
             ? Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width - 220,
                     child: Stack(
@@ -510,7 +577,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                                 width: 1400,
                                 child: Column(
                                   children: [
-                                    const TitleItemAnnualWidget(),
+                                    const TitleItemWidget(),
                                     ...buildItemList(list, metadata),
                                   ],
                                 ),
@@ -522,7 +589,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                           width: 1400,
                           child: Row(
                             children: [
-                              Expanded(child: Container()),
+                              const Expanded(child: SizedBox()),
                               SingleChildScrollView(
                                 controller: controller2,
                                 child: SingleChildScrollView(
@@ -630,7 +697,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
   }
 
   Widget _pagingWidget() {
-    return ScopedModelDescendant<AnnualFeeAfterViewModel>(
+    return ScopedModelDescendant<ServiceFeeViewModel>(
       builder: (context, child, model) {
         bool isPaging = false;
         if (model.status == ViewStatus.Loading ||
@@ -660,7 +727,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                     InkWell(
                       onTap: () async {
                         if (paging.page != 1) {
-                          await model.filterListAnnualFeeAfter(
+                          await model.filterListServiceFee(
                             time: selectDate!,
                             page: paging.page! - 1,
                           );
@@ -689,7 +756,7 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                     InkWell(
                       onTap: () async {
                         if (isPaging) {
-                          await model.filterListAnnualFeeAfter(
+                          await model.filterListServiceFee(
                             time: selectDate!,
                             page: paging.page! + 1,
                           );

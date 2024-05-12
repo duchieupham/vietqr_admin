@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-
-
-import '../../../commons/constants/configurations/theme.dart';
+import '../../../../commons/constants/configurations/theme.dart';
 
 class TitleItemAnnualWidget extends StatelessWidget {
   const TitleItemAnnualWidget({super.key});

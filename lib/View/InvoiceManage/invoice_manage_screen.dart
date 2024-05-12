@@ -2,27 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'dart:html' as html;
+
 import '../../commons/constants/enum/type_menu_home.dart';
 import '../../commons/widget/frame_view_widget.dart';
 import '../../commons/widget/item_menu_dropdown.dart';
 import '../../commons/widget/menu_left.dart';
-import 'AnnualFeeAfter/annual_fee_after_screen.dart';
-import 'ServiceFee/service_fee_screen.dart';
 
 // ignore: constant_identifier_names
-enum TransFee { FEE_TRANS, ANNUAL_FEE }
+enum Invoice { CREATE, LIST }
 
-class FeeManageScreen extends StatefulWidget {
-  final TransFee type;
-
-  const FeeManageScreen({super.key, required this.type});
+class InvoiceManageScreen extends StatefulWidget {
+  final Invoice type;
+  const InvoiceManageScreen({super.key, required this.type});
 
   @override
-  State<FeeManageScreen> createState() => _FeeManageScreenState();
+  State<InvoiceManageScreen> createState() => _InvoiceManageScreenState();
 }
 
-class _FeeManageScreenState extends State<FeeManageScreen> {
-  TransFee type = TransFee.FEE_TRANS;
+class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
+  Invoice type = Invoice.LIST;
   @override
   void initState() {
     super.initState();
@@ -35,28 +33,28 @@ class _FeeManageScreenState extends State<FeeManageScreen> {
     return FrameViewWidget(
         title: const SizedBox(),
         menu: MenuLeft(
-          currentType: MenuType.TRANS_FEE,
+          currentType: MenuType.INVOICE,
           subMenuTransFee: [
             ItemDropDownMenu(
-              title: 'Thu phí giao dịch',
-              isSelect: type == TransFee.FEE_TRANS,
-              onTap: () => onTapMenu(TransFee.FEE_TRANS),
+              title: 'Danh sách hoá đơn',
+              isSelect: type == Invoice.LIST,
+              onTap: () => onTapMenu(Invoice.LIST),
             ),
             ItemDropDownMenu(
-              title: 'Thu phí duy trì',
-              isSelect: type == TransFee.ANNUAL_FEE,
-              onTap: () => onTapMenu(TransFee.ANNUAL_FEE),
+              title: 'Tạo mới hoá đơn',
+              isSelect: type == Invoice.CREATE,
+              onTap: () => onTapMenu(Invoice.CREATE),
             ),
           ],
         ),
         child: _buildBody());
   }
 
-  void onTapMenu(TransFee value) {
-    if (value == TransFee.FEE_TRANS) {
+  void onTapMenu(Invoice value) {
+    if (value == Invoice.LIST) {
       html.window.history.pushState(null, '/trans-fee', '/trans-fee');
       type = value;
-    } else if (value == TransFee.ANNUAL_FEE) {
+    } else if (value == Invoice.CREATE) {
       html.window.history.pushState(null, '/trans-fee', '/annual-fee');
       type = value;
     }
@@ -64,10 +62,10 @@ class _FeeManageScreenState extends State<FeeManageScreen> {
   }
 
   Widget _buildBody() {
-    if (type == TransFee.FEE_TRANS) {
-      return const ServiceFeeScreen();
+    if (type == Invoice.LIST) {
+      return Container();
     } else {
-      return const AnnualFeeAfterScreen();
+      return Container();
     }
   }
 }

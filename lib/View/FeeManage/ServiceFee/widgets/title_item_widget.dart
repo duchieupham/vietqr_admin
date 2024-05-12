@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-import '../../../commons/constants/configurations/theme.dart';
+import '../../../../commons/constants/configurations/theme.dart';
 
 class TitleItemWidget extends StatelessWidget {
   const TitleItemWidget({super.key});

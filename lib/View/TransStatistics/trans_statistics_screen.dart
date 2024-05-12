@@ -43,7 +43,7 @@ class _TransStatisticsScreenState extends State<TransStatisticsScreen> {
               onTap: () => onTapMenu(TransStatistics.SYS_TRANS_STATISTICS),
             ),
             ItemDropDownMenu(
-              title: 'Giao dịch thu phí VietQR',
+              title: 'Thống kê GD đại lý',
               isSelect: type == TransStatistics.MERCHANT_TRANS_STATISTICS,
               onTap: () => onTapMenu(TransStatistics.MERCHANT_TRANS_STATISTICS),
             ),

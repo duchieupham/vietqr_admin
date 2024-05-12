@@ -19,9 +19,9 @@ import 'package:vietqr_admin/feature/surplus/epay_screen.dart';
 import 'package:vietqr_admin/View/TransManage/SysTrans/transaction_screen.dart';
 import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
-import '../../View/AnnualFeeAfter/annual_fee_after_screen.dart';
+import '../../View/FeeManage/AnnualFeeAfter/annual_fee_after_screen.dart';
 import '../../View/EnvironmentSetting/widgets/environment_setting_screen.dart';
-import '../../View/ServiceFee/service_fee_screen.dart';
+import '../../View/FeeManage/ServiceFee/service_fee_screen.dart';
 import '../../View/TransStatistics/MerchantTrans/merchant_transaction_screen.dart';
 import 'state/token_state.dart';
 

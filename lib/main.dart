@@ -11,6 +11,7 @@ import 'package:vietqr_admin/feature/login/views/login.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 import 'package:vietqr_admin/service/shared_references/user_information_helper.dart';
 
+import 'View/FeeManage/fee_manage_screen.dart';
 import 'View/MerchantManage/merchant_manage_screen.dart';
 import 'View/TransManage/trans_manage_screen.dart';
 import 'View/TransStatistics/trans_statistics_screen.dart';
@@ -171,6 +172,31 @@ final GoRouter _router = GoRouter(
             state: state,
             child: const TransStatisticsScreen(
                 type: TransStatistics.MERCHANT_TRANS_STATISTICS));
+      },
+    ),
+    GoRoute(
+      path: '/trans-fee',
+      redirect: (context, state) => userId.isNotEmpty ? '/trans-fee' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const FeeManageScreen(type: TransFee.FEE_TRANS),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const FeeManageScreen(type: TransFee.FEE_TRANS));
+      },
+    ),
+    GoRoute(
+      path: '/annual-fee',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/annual-fee' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const FeeManageScreen(type: TransFee.ANNUAL_FEE),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const FeeManageScreen(type: TransFee.ANNUAL_FEE));
       },
     ),
   ],

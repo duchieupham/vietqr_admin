@@ -16,6 +16,8 @@ class MenuLeft extends StatelessWidget {
   final List<Widget> subMenuMerchantManage;
   final List<Widget> subMenuTransManage;
   final List<Widget> subMenuTransStatistics;
+  final List<Widget> subMenuTransFee;
+  final List<Widget> subMenuInvoice;
 
   const MenuLeft({
     super.key,
@@ -24,6 +26,8 @@ class MenuLeft extends StatelessWidget {
     this.subMenuMerchantManage = const [],
     this.subMenuTransManage = const [],
     this.subMenuTransStatistics = const [],
+    this.subMenuTransFee = const [],
+    this.subMenuInvoice = const [],
   });
 
   @override
@@ -86,6 +90,26 @@ class MenuLeft extends StatelessWidget {
                 bold: true,
                 onTap: () {
                   context.go('/sys-trans-statistics');
+                },
+              ),
+              ItemMenuHome(
+                title: 'Quản lý thu phí',
+                enableDropDownList: true,
+                listItemDrop: subMenuTransFee,
+                isSelect: currentType == MenuType.TRANS_FEE,
+                bold: true,
+                onTap: () {
+                  context.go('/trans-fee');
+                },
+              ),
+              ItemMenuHome(
+                title: 'Quản lý hóa đơn',
+                enableDropDownList: true,
+                listItemDrop: subMenuInvoice,
+                isSelect: currentType == MenuType.INVOICE,
+                bold: true,
+                onTap: () {
+                  // context.go('/trans-fee');
                 },
               ),
             ],
