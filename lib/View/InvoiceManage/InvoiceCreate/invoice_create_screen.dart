@@ -863,7 +863,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               textAlign: TextAlign.center),
           _buildItemTitle('Số lượng',
               height: 50,
-              width: 100,
+              width: 80,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
           _buildItemTitle('Đơn giá (VND)',
@@ -949,7 +949,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
-            width: 100,
+            width: 80,
             child: SelectionArea(
               child: Text(
                 '1',
