@@ -28,69 +28,74 @@ class _EPayScreenState extends State<EPayScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        Consumer<MenuProvider>(builder: (context, provider, child) {
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            height: 45,
-            decoration: BoxDecoration(
-              color: AppColor.BLUE_TEXT.withOpacity(0.2),
-            ),
-            padding: const EdgeInsets.only(left: 16),
-            child: Row(
-              children: [
-                const Text(
-                  'VNPT Epay',
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ItemMenuTop(
-                        title: 'Số dư',
-                        isSelect:
-                            provider.initPage == SubMenuType.SURPLUS.pageNumber,
-                        onTap: () {
-                          provider.selectSubMenu(SubMenuType.SURPLUS);
-                          // provider.updateShowMenuLink(false);
-                        },
-                      ),
-                      ItemMenuTop(
-                        title: 'Giao dịch nạp tiền ĐT',
-                        isSelect: provider.initPage ==
-                            SubMenuType.TOP_UP_PHONE.pageNumber,
-                        onTap: () {
-                          DialogWidget.instance.openMsgDialog(
-                              title: 'Bảo trì',
-                              msg:
-                                  'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-
-                          // provider.selectSubMenu(SubMenuType.TOP_UP_PHONE);
-                        },
-                      ),
-                      const SizedBox(
-                        width: 80,
-                      )
-                    ],
+    return Scaffold(
+      backgroundColor: AppColor.WHITE,
+      body: Column(
+        children: [
+          Consumer<MenuProvider>(builder: (context, provider, child) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: 45,
+              decoration: const BoxDecoration(
+                  color: AppColor.WHITE,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
+              padding: const EdgeInsets.only(left: 16),
+              child: Row(
+                children: [
+                  const Text(
+                    'VNPT Epay',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ItemMenuTop(
+                          title: 'Số dư',
+                          isSelect: provider.initPage ==
+                              SubMenuType.SURPLUS.pageNumber,
+                          onTap: () {
+                            provider.selectSubMenu(SubMenuType.SURPLUS);
+                            // provider.updateShowMenuLink(false);
+                          },
+                        ),
+                        ItemMenuTop(
+                          title: 'Giao dịch nạp tiền ĐT',
+                          isSelect: provider.initPage ==
+                              SubMenuType.TOP_UP_PHONE.pageNumber,
+                          onTap: () {
+                            DialogWidget.instance.openMsgDialog(
+                                title: 'Bảo trì',
+                                msg:
+                                    'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+
+                            // provider.selectSubMenu(SubMenuType.TOP_UP_PHONE);
+                          },
+                        ),
+                        const SizedBox(
+                          width: 80,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+          Expanded(
+            child: Consumer<MenuProvider>(
+              builder: (context, provider, child) {
+                return pages[provider.initPage];
+              },
             ),
-          );
-        }),
-        Expanded(
-          child: Consumer<MenuProvider>(
-            builder: (context, provider, child) {
-              return pages[provider.initPage];
-            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

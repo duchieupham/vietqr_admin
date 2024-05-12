@@ -63,7 +63,8 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return SizedBox(
+    return Container(
+      color: AppColor.WHITE,
       width: width,
       child: Column(
         children: [
