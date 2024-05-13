@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
+import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
@@ -15,11 +19,39 @@ class CreateInvoiceScreen extends StatefulWidget {
 }
 
 class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
+  final TextEditingController _invoiceTextController = TextEditingController();
+  final TextEditingController _descriptionTextController =
+      TextEditingController();
+
   late InvoiceViewModel _model;
+
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _invoiceTextController.clear();
+    _descriptionTextController.clear();
+    _model.clear();
+  }
+
+  void onShowPopup(int type, {String? id}) async {
+    return await showDialog(
+      context: context,
+      builder: (context) =>
+          PopupSelectTypeWidget(type: type, merchantId: id ?? ''),
+    );
+  }
+
+  void onShowCreatePopup() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => PopupCreateServiceWidget(),
+    );
   }
 
   @override
@@ -31,23 +63,25 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           child: Column(
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                        color: AppColor.WHITE,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _headerWidget(),
-                        const Divider(),
-                        _bodyWidget(),
-                      ],
-                    ),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                      color: AppColor.WHITE,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _headerWidget(),
+                      const Divider(),
+                      Expanded(
+                        child: ListView(
+                          children: [_bodyWidget()],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -157,7 +191,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
 
   Widget _buttonAddIvoiceItem() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        onShowCreatePopup();
+      },
       child: MButtonWidget(
         title: 'Thêm mới danh mục hàng hoá / dịch vụ',
         border: Border.all(color: AppColor.BLUE_TEXT),
@@ -172,9 +208,18 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   }
 
   Widget _bodyWidget() {
-    String displayText = "Chọn đại lý";
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
+        String displayText = '';
+        if (model.type == 0) {
+          displayText =
+              '${model.selectMerchantItem != null ? model.selectMerchantItem?.merchantName : "Chọn đại lý"}';
+        } else {
+          displayText = model.selectBank != null
+              ? "${model.selectBank?.bankShortName} - ${model.selectBank?.bankAccount}"
+              : 'Chọn TK ngân hàng';
+        }
+
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
@@ -233,9 +278,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: const TextField(
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 8),
+                            child: TextField(
+                              controller: _invoiceTextController,
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.only(bottom: 10),
                                 border: InputBorder.none,
                                 hintText: 'Nhập tên hoá đơn tại đây',
                                 hintStyle: TextStyle(
@@ -276,9 +322,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: const TextField(
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 8),
+                            child: TextField(
+                              controller: _descriptionTextController,
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.only(bottom: 10),
                                 border: InputBorder.none,
                                 hintText: 'Nhập thông tin mô tả hoá đơn ở đây',
                                 hintStyle: TextStyle(
@@ -294,7 +341,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               ),
               const SizedBox(height: 10),
               const MySeparator(
-                color: AppColor.GREY_TEXT,
+                color: AppColor.GREY_DADADA,
               ),
               Container(
                 height: 30,
@@ -311,7 +358,6 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 400,
                       height: 80,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -329,7 +375,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             height: 10,
                           ),
                           Container(
-                            width: 400,
+                            width: model.type == 1 ? 500 : 400,
                             height: 40,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -344,7 +390,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
-                                  width: 150,
+                                  width: model.type == 1 ? 200 : 150,
                                   child: DropdownButton<int>(
                                     isExpanded: true,
                                     value: model.type,
@@ -381,25 +427,44 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          displayText,
-                                          style: const TextStyle(
-                                              color: AppColor.GREY_TEXT,
-                                              fontSize: 15),
-                                        ),
-                                        const Icon(
-                                          Icons.keyboard_arrow_down,
-                                          size: 15,
-                                          color: AppColor.GREY_TEXT,
-                                        ),
-                                      ],
+                                  child: InkWell(
+                                    onTap: () async {
+                                      if (model.type == 0) {
+                                        await model.getMerchant('');
+                                      } else {
+                                        await model.getBanks('');
+                                      }
+                                      onShowPopup(
+                                        model.type,
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            displayText,
+                                            style: TextStyle(
+                                                color: model.type == 0
+                                                    ? (model.selectMerchantItem !=
+                                                            null
+                                                        ? AppColor.BLACK
+                                                        : AppColor.GREY_TEXT)
+                                                    : (model.selectBank != null
+                                                        ? AppColor.BLACK
+                                                        : AppColor.GREY_TEXT),
+                                                fontSize: 15),
+                                          ),
+                                          const Icon(
+                                            Icons.keyboard_arrow_down,
+                                            size: 15,
+                                            color: AppColor.GREY_TEXT,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -409,378 +474,402 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 350,
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                            height: 20,
-                            child: Text(
-                              'Tài khoản ngân hàng*',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 350,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
+                    if (model.type == 0 &&
+                        model.selectMerchantItem != null) ...[
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        width: 350,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 100,
+                              height: 20,
+                              child: Text(
+                                'Tài khoản ngân hàng*',
+                                style: TextStyle(fontSize: 15),
                               ),
-                              borderRadius: BorderRadius.circular(5),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text('Chọn tài khoản ngân hàng'),
-                                Icon(
-                                  Icons.keyboard_arrow_down_outlined,
-                                  size: 15,
-                                )
-                              ],
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
-                        ],
+                            InkWell(
+                              onTap: () async {
+                                if (model.selectMerchantItem != null) {
+                                  await model.getBanks('',
+                                      merchantId:
+                                          model.selectMerchantItem?.merchantId);
+                                  onShowPopup(1,
+                                      id: model.selectMerchantItem?.merchantId);
+                                }
+                              },
+                              child: Container(
+                                width: 350,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(model.selectBank != null
+                                        ? '${model.selectBank?.bankShortName} - ${model.selectBank?.bankAccount}'
+                                        : 'Chọn tài khoản ngân hàng'),
+                                    const Icon(
+                                      Icons.keyboard_arrow_down_outlined,
+                                      size: 15,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                height: 80,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 250,
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                            height: 20,
-                            child: Text(
-                              'Chủ tài khoản',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColor.GREY_DADADA,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
+              if (model.selectBank != null) ...[
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  height: 80,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 100,
+                              height: 20,
+                              child: Text(
+                                'Chủ tài khoản',
+                                style: TextStyle(fontSize: 15),
                               ),
-                              borderRadius: BorderRadius.circular(5),
                             ),
-                            child: const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  'Cong Ty Co Phan Dau Tu Hang...asdnamsndm',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: AppColor.GREY_DADADA,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
                                 ),
+                                borderRadius: BorderRadius.circular(5),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 250,
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 250,
-                            height: 20,
-                            child: Text(
-                              'Tài khoản VietQR',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColor.GREY_DADADA,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  '093 186 5469',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 250,
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 250,
-                            height: 20,
-                            child: Text(
-                              'Email',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColor.GREY_DADADA,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  'admin@sab.vn',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 80,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 250,
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                            height: 20,
-                            child: Text(
-                              'Luồng kết nối',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppColor.GREY_DADADA,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  'VietQR Pro',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 250,
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 250,
-                            height: 20,
-                            child: Text(
-                              'Gói dịch vụ',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppColor.GREY_DADADA,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  'VQR5_PT',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 250,
-                      height: 80,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 250,
-                            height: 20,
-                            child: Text(
-                              'VAT (%)',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color:
-                                  Colors.white, // Changed to white background
-                              border: Border.all(
-                                color: Colors.grey, // Gray border
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
+                              child: const Align(
+                                alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: TextField(
-                                    controller:
-                                        TextEditingController(text: '8'),
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Nhập VAT',
-                                      hintStyle: TextStyle(
-                                          color: AppColor.GREY_TEXT,
-                                          fontSize: 15),
-                                    ),
-                                    style: const TextStyle(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Cong Ty Co Phan Dau Tu Hang...asdnamsndm',
+                                    style: TextStyle(
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        width: 250,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 250,
+                              height: 20,
+                              child: Text(
+                                'Tài khoản VietQR',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: AppColor.GREY_DADADA,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    '093 186 5469',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        width: 250,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 250,
+                              height: 20,
+                              child: Text(
+                                'Email',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: AppColor.GREY_DADADA,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'admin@sab.vn',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 80,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 100,
+                              height: 20,
+                              child: Text(
+                                'Luồng kết nối',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppColor.GREY_DADADA,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'VietQR Pro',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        width: 250,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 250,
+                              height: 20,
+                              child: Text(
+                                'Gói dịch vụ',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppColor.GREY_DADADA,
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'VQR5_PT',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        width: 250,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 250,
+                              height: 20,
+                              child: Text(
+                                'VAT (%)',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color:
+                                    Colors.white, // Changed to white background
+                                border: Border.all(
+                                  color: Colors.grey, // Gray border
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: TextField(
+                                      controller:
+                                          TextEditingController(text: '8'),
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Nhập VAT',
+                                        hintStyle: TextStyle(
+                                            color: AppColor.GREY_TEXT,
+                                            fontSize: 15),
+                                      ),
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 20),
+              const MySeparator(
+                color: AppColor.GREY_DADADA,
               ),
               const SizedBox(height: 10),
-              const MySeparator(
-                color: AppColor.GREY_TEXT,
-              ),
               Container(
                 height: 30,
                 width: 250,
@@ -805,7 +894,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   ],
                 ),
               ),
-              _buttonAddIvoiceItem(),
+              model.selectBank != null
+                  ? _buttonAddIvoiceItem()
+                  : const SizedBox.shrink(),
             ],
           ),
         );
@@ -845,53 +936,63 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
       child: Row(
-        children: [
-          _buildItemTitle('STT',
-              height: 50,
+        children: const [
+          BuildItemlTitle(
+              title: 'STT',
+              textAlign: TextAlign.center,
               width: 50,
-              alignment: Alignment.centerLeft,
-              textAlign: TextAlign.center),
-          _buildItemTitle('Nội dung hoá đơn thanh toán',
+              height: 50,
+              alignment: Alignment.centerLeft),
+          BuildItemlTitle(
+              title: 'Nội dung hoá đơn thanh toán',
               height: 50,
               width: 300,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('Đơn vị tính',
+          BuildItemlTitle(
+              title: 'Đơn vị tính',
               height: 50,
               width: 120,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('Số lượng',
+          BuildItemlTitle(
+              title: 'Số lượng',
               height: 50,
               width: 80,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('Đơn giá (VND)',
+          BuildItemlTitle(
+              title: 'Đơn giá (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('Thành tiền (VND)',
+          BuildItemlTitle(
+              title: 'Thành tiền (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('% VAT',
+          BuildItemlTitle(
+              title: '% VAT',
               height: 50,
               width: 100,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('VAT (VND)',
+          BuildItemlTitle(
+              title: 'VAT (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('Tổng tiền (VND)',
+          BuildItemlTitle(
+              title: 'Tổng tiền (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          _buildItemTitle('Thao tác',
+          BuildItemlTitle(
+              title: 'Thao tác',
               height: 50,
               width: 90,
               alignment: Alignment.centerLeft,
@@ -1063,26 +1164,6 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildItemTitle(String title,
-      {TextAlign? textAlign,
-      EdgeInsets? padding,
-      double? width,
-      double? height,
-      Alignment? alignment}) {
-    return Container(
-      width: width,
-      height: height,
-      padding: padding,
-      alignment: alignment,
-      child: Text(
-        title,
-        textAlign: textAlign,
-        style: const TextStyle(
-            fontSize: 12, color: AppColor.BLACK, fontWeight: FontWeight.bold),
       ),
     );
   }
