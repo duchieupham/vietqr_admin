@@ -7,6 +7,7 @@ import '../../commons/constants/enum/type_menu_home.dart';
 import '../../commons/widget/frame_view_widget.dart';
 import '../../commons/widget/item_menu_dropdown.dart';
 import '../../commons/widget/menu_left.dart';
+import 'Invoice/invoice_screen.dart';
 import 'InvoiceCreate/invoice_create_screen.dart';
 
 // ignore: constant_identifier_names
@@ -64,7 +65,7 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
 
   Widget _buildBody() {
     if (type == Invoice.LIST) {
-      return Container();
+      return const InvoiceScreen();
     } else {
       return const CreateInvoiceScreen();
     }
