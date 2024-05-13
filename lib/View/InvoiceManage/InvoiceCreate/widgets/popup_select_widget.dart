@@ -297,7 +297,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
       builder: (context, child, model) {
         bool isPaging = false;
 
-        MetaDataDTO paging = model.metaData!;
+        MetaDataDTO paging = model.createMetaData!;
         if (paging == null) {
           return const SizedBox.shrink();
         }
