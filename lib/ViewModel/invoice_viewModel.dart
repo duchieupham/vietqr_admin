@@ -16,7 +16,6 @@ class InvoiceViewModel extends BaseModel {
   InvoiceDTO? invoiceDTO;
   MerchantDTO? merchantDTO;
   BankInvoiceDTO? bankDTO;
-
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
   int type = 0;

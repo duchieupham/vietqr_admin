@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:intl/intl.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 import 'package:vietqr_admin/models/DTO/service_fee_dto.dart';
 
@@ -15,12 +16,23 @@ class ItemInvoiceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDateTimePaid = dto.timePaid != null &&
+            dto.timePaid.toString().isNotEmpty
+        ? DateFormat('yyyy-MM-dd HH:mm:ss')
+            .format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))
+        : '-';
+    String formattedDateTimeCreated = dto.timeCreated != null &&
+            dto.timeCreated.toString().isNotEmpty
+        ? DateFormat('yyyy-MM-dd HH:mm:ss')
+            .format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))
+        : '-';
     return Container(
       // color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,
       child: Row(
         children: [
           Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             alignment: Alignment.center,
             decoration: const BoxDecoration(
                 border: Border(
@@ -37,7 +49,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerRight,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -46,14 +59,17 @@ class ItemInvoiceWidget extends StatelessWidget {
             width: 120,
             child: SelectionArea(
               child: Text(
-                dto.timePaid.toString().isNotEmpty ? '14/04/2024 \n16:32' : '-',
+                dto.timePaid.toString().isNotEmpty
+                    ? formattedDateTimePaid
+                    : '-',
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
           Container(
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -70,8 +86,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -87,8 +103,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -104,8 +120,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -115,14 +131,14 @@ class ItemInvoiceWidget extends StatelessWidget {
             child: SelectionArea(
               child: Text(
                 dto.invoiceName,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerRight,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -143,8 +159,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -160,8 +176,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -170,6 +186,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     dto.bankAccount,
@@ -186,8 +204,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -203,8 +221,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -220,8 +238,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerRight,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -231,9 +249,9 @@ class ItemInvoiceWidget extends StatelessWidget {
             child: SelectionArea(
               child: Text(
                 dto.timeCreated.toString().isNotEmpty
-                    ? '14/04/2024 \n16:32'
+                    ? formattedDateTimeCreated
                     : '-',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.end,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),

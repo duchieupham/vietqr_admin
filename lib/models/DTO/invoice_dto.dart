@@ -35,6 +35,10 @@ class InvoiceItem {
   String email;
   int timeCreated;
   int status;
+  String qrCode;
+  int vatAmount;
+  double vat;
+  int amountNoVat;
 
   InvoiceItem({
     required this.invoiceId,
@@ -51,6 +55,10 @@ class InvoiceItem {
     required this.email,
     required this.timeCreated,
     required this.status,
+    required this.amountNoVat,
+    required this.qrCode,
+    required this.vat,
+    required this.vatAmount,
   });
 
   factory InvoiceItem.fromJson(Map<String, dynamic> json) {
@@ -69,6 +77,10 @@ class InvoiceItem {
       email: json['email'],
       timeCreated: json['timeCreated'],
       status: json['status'],
+      amountNoVat: json['amountNoVat'],
+      qrCode: json['qrCode'],
+      vat: json['vat'],
+      vatAmount: json['vatAmount'],
     );
   }
 
@@ -88,6 +100,10 @@ class InvoiceItem {
       'email': email,
       'timeCreated': timeCreated,
       'status': status,
+      'amountNoVat': amountNoVat,
+      'qrCode': qrCode,
+      'vat': vat,
+      'vatAmount': vatAmount,
     };
   }
 }

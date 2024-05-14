@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:intl/intl.dart';
 import 'package:vietqr_admin/models/DTO/service_fee_dto.dart';
 
 import '../../../../commons/constants/configurations/theme.dart';
@@ -36,7 +37,8 @@ class ItemWidget extends StatelessWidget {
             ),
           ),
           Container(
-            alignment: Alignment.center,
+            padding: const EdgeInsets.only(right: 10),
+            alignment: Alignment.centerRight,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -44,10 +46,29 @@ class ItemWidget extends StatelessWidget {
             height: 60,
             width: 130,
             child: SelectionArea(
-              child: Text(
-                dto.timePaid.toString().isNotEmpty ? '14/04/2024 \n16:32' : '-',
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    dto.timePaid.toString().isNotEmpty
+                        ? DateFormat('dd-MM-yyyy').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                                dto.timePaid * 1000))
+                        : '-',
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    dto.timePaid.toString().isNotEmpty
+                        ? DateFormat('HH:mm').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                                dto.timePaid * 1000))
+                        : '',
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
               ),
             ),
           ),
