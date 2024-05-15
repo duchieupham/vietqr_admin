@@ -40,39 +40,46 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
             children: [
               _headerWidget(),
               const Divider(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 30,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.arrow_back_ios,
-                              size: 15,
-                            ),
-                          ),
-                          const SizedBox(width: 30),
-                          const Text(
-                            'Chỉnh sửa hoá đơn',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: ListView(
+                  children: [_bodyWidget()],
                 ),
-              )
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _bodyWidget() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {},
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 15,
+                  ),
+                ),
+                const SizedBox(width: 30),
+                const Text(
+                  'Chỉnh sửa hoá đơn',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

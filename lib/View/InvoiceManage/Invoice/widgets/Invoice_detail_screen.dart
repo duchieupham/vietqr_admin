@@ -38,146 +38,147 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               color: AppColor.WHITE,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _headerWidget(),
+              const Divider(),
+              Expanded(
+                child: ListView(
+                  children: [_bodyWidget()],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bodyWidget() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _headerWidget(),
-                const Divider(),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {},
-                              child: const Icon(
-                                Icons.arrow_back_ios,
-                                size: 15,
-                              ),
-                            ),
-                            const SizedBox(width: 30),
-                            const Text(
-                              'Chi tiết hoá đơn',
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(width: 30),
-                            if (statusNum == 0)
-                              InkWell(
-                                onTap: () {},
-                                child: const Text(
-                                  'Chỉnh sửa hoá đơn',
-                                  style: TextStyle(
-                                      color: AppColor.BLUE_TEXT,
-                                      fontSize: 15,
-                                      decoration: TextDecoration.underline),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: 500,
-                        height: 60,
-                        margin: const EdgeInsets.only(top: 30),
-                        child: Text(
-                          'Hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        width: double.infinity,
-                        height: 20,
-                        child: Text(
-                          'Mô tả của hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ),
-                      const SizedBox(height: 29),
-                      const MySeparator(
-                        color: AppColor.GREY_DADADA,
-                      ),
-                      const SizedBox(height: 30),
-                      Container(
-                        width: double.infinity,
-                        height: 20,
-                        child: const Text(
-                          'Thông tin khách hàng thanh toán',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      SizedBox(
-                        width: 1300,
-                        child: Column(
-                          children: [
-                            _itemTitlePaymentInfo(),
-                            _buildItemPaymentInfo(),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      const MySeparator(
-                        color: AppColor.GREY_DADADA,
-                      ),
-                      const SizedBox(height: 30),
-                      Container(
-                        width: double.infinity,
-                        height: 20,
-                        child: const Text(
-                          'Thông tin gói dịch vụ',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      SizedBox(
-                        width: 920,
-                        child: Column(
-                          children: [
-                            _itemTitleServiceInfo(),
-                            _buildItemServiceInfo(),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Container(
-                        width: double.infinity,
-                        height: 20,
-                        child: const Text(
-                          'Danh mục hàng hoá / dịch vụ',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      SizedBox(
-                        width: statusNum == 0 ? 1360 : 1270,
-                        child: Column(
-                          children: [
-                            _itemTitleListService(),
-                            _buildItemListService(),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                    ],
+                InkWell(
+                  onTap: () {},
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 15,
                   ),
                 ),
+                const SizedBox(width: 30),
+                const Text(
+                  'Chi tiết hoá đơn',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 30),
+                if (statusNum == 0)
+                  InkWell(
+                    onTap: () {},
+                    child: const Text(
+                      'Chỉnh sửa hoá đơn',
+                      style: TextStyle(
+                          color: AppColor.BLUE_TEXT,
+                          fontSize: 15,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ),
               ],
             ),
           ),
-        ),
+          Container(
+            width: 500,
+            height: 60,
+            margin: const EdgeInsets.only(top: 30),
+            child: Text(
+              'Hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            width: double.infinity,
+            height: 20,
+            child: Text(
+              'Mô tả của hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
+              style: const TextStyle(fontSize: 15),
+            ),
+          ),
+          const SizedBox(height: 29),
+          const MySeparator(
+            color: AppColor.GREY_DADADA,
+          ),
+          const SizedBox(height: 30),
+          Container(
+            width: double.infinity,
+            height: 20,
+            child: const Text(
+              'Thông tin khách hàng thanh toán',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: 1300,
+            child: Column(
+              children: [
+                _itemTitlePaymentInfo(),
+                _buildItemPaymentInfo(),
+              ],
+            ),
+          ),
+          const SizedBox(height: 30),
+          const MySeparator(
+            color: AppColor.GREY_DADADA,
+          ),
+          const SizedBox(height: 30),
+          Container(
+            width: double.infinity,
+            height: 20,
+            child: const Text(
+              'Thông tin gói dịch vụ',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: 920,
+            child: Column(
+              children: [
+                _itemTitleServiceInfo(),
+                _buildItemServiceInfo(),
+              ],
+            ),
+          ),
+          const SizedBox(height: 30),
+          Container(
+            width: double.infinity,
+            height: 20,
+            child: const Text(
+              'Danh mục hàng hoá / dịch vụ',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: statusNum == 0 ? 1360 : 1270,
+            child: Column(
+              children: [
+                _itemTitleListService(),
+                _buildItemListService(),
+              ],
+            ),
+          ),
+          const SizedBox(height: 30),
+        ],
       ),
     );
   }
