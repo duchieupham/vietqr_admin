@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
@@ -67,6 +68,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     return await showDialog(
       context: context,
       builder: (context) => PopupQrCodeInvoice(dto: dto),
+    );
+  }
+
+  void onShowPopupExcel() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => PopupExcelInvoice(),
     );
   }
 
@@ -481,7 +489,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                             message:
                                                                 'Xuất Excel',
                                                             child: InkWell(
-                                                              onTap: () {},
+                                                              onTap: () {
+                                                                onShowPopupExcel();
+                                                              },
                                                               child: BoxLayout(
                                                                 width: 30,
                                                                 height: 30,

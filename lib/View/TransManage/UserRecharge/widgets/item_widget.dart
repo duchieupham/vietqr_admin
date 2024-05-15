@@ -64,23 +64,27 @@ class ItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    dto.timePaid.toString().isNotEmpty
+                    dto.timePaid != 0
                         ? DateFormat('dd-MM-yyyy').format(
                             DateTime.fromMillisecondsSinceEpoch(
                                 dto.timePaid * 1000))
                         : '-',
                     textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 12),
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: dto.timePaid != 0
+                            ? FontWeight.normal
+                            : FontWeight.bold),
                   ),
-                  Text(
-                    dto.timePaid.toString().isNotEmpty
-                        ? DateFormat('HH:mm').format(
-                            DateTime.fromMillisecondsSinceEpoch(
-                                dto.timePaid * 1000))
-                        : '',
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 12),
-                  ),
+                  dto.timePaid != 0
+                      ? Text(
+                          DateFormat('HH:mm').format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  dto.timePaid * 1000)),
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(fontSize: 12),
+                        )
+                      : const SizedBox.shrink(),
                 ],
               ),
             ),
