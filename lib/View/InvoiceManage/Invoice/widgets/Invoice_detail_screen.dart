@@ -17,6 +17,7 @@ class InvoiceDetailScreen extends StatefulWidget {
 
 class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
   late InvoiceViewModel _model;
+  int statusNum = 0;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
+      bottomNavigationBar: _bottomData(),
       body: ScopedModel(
         model: _model,
         child: Container(
@@ -36,122 +38,144 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               color: AppColor.WHITE,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _headerWidget(),
-              const Divider(),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 30,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.arrow_back_ios,
-                              size: 15,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _headerWidget(),
+                const Divider(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {},
+                              child: const Icon(
+                                Icons.arrow_back_ios,
+                                size: 15,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 30),
-                          const Text(
-                            'Chi tiết hoá đơn',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(width: 30),
-                          const Text(
-                            'Chỉnh sửa hoá đơn',
-                            style: TextStyle(
-                                color: AppColor.BLUE_TEXT,
-                                fontSize: 15,
-                                decoration: TextDecoration.underline),
-                          ),
-                        ],
+                            const SizedBox(width: 30),
+                            const Text(
+                              'Chi tiết hoá đơn',
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 30),
+                            if (statusNum == 0)
+                              InkWell(
+                                onTap: () {},
+                                child: const Text(
+                                  'Chỉnh sửa hoá đơn',
+                                  style: TextStyle(
+                                      color: AppColor.BLUE_TEXT,
+                                      fontSize: 15,
+                                      decoration: TextDecoration.underline),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: 500,
-                      height: 60,
-                      margin: const EdgeInsets.only(top: 30),
-                      child: Text(
-                        'Hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                      Container(
+                        width: 500,
+                        height: 60,
+                        margin: const EdgeInsets.only(top: 30),
+                        child: Text(
+                          'Hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      height: 20,
-                      child: Text(
-                        'Mô tả của hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
-                        style: const TextStyle(fontSize: 15),
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        height: 20,
+                        child: Text(
+                          'Mô tả của hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
+                          style: const TextStyle(fontSize: 15),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 29),
-                    const MySeparator(
-                      color: AppColor.GREY_DADADA,
-                    ),
-                    const SizedBox(height: 30),
-                    Container(
-                      width: double.infinity,
-                      height: 20,
-                      child: const Text(
-                        'Thông tin khách hàng thanh toán',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                      const SizedBox(height: 29),
+                      const MySeparator(
+                        color: AppColor.GREY_DADADA,
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: 1300,
-                      child: Column(
-                        children: [
-                          _itemTitlePaymentInfo(),
-                          _buildItemPaymentInfo(),
-                        ],
+                      const SizedBox(height: 30),
+                      Container(
+                        width: double.infinity,
+                        height: 20,
+                        child: const Text(
+                          'Thông tin khách hàng thanh toán',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    const MySeparator(
-                      color: AppColor.GREY_DADADA,
-                    ),
-                    const SizedBox(height: 30),
-                    Container(
-                      width: double.infinity,
-                      height: 20,
-                      child: const Text(
-                        'Thông tin gói dịch vụ',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: 1300,
+                        child: Column(
+                          children: [
+                            _itemTitlePaymentInfo(),
+                            _buildItemPaymentInfo(),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: 920,
-                      child: Column(
-                        children: [
-                          _itemTitleServiceInfo(),
-                          _buildItemServiceInfo(),
-                        ],
+                      const SizedBox(height: 30),
+                      const MySeparator(
+                        color: AppColor.GREY_DADADA,
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    const MySeparator(
-                      color: AppColor.GREY_DADADA,
-                    ),
-                    const SizedBox(height: 30),
-                  ],
+                      const SizedBox(height: 30),
+                      Container(
+                        width: double.infinity,
+                        height: 20,
+                        child: const Text(
+                          'Thông tin gói dịch vụ',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: 920,
+                        child: Column(
+                          children: [
+                            _itemTitleServiceInfo(),
+                            _buildItemServiceInfo(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Container(
+                        width: double.infinity,
+                        height: 20,
+                        child: const Text(
+                          'Danh mục hàng hoá / dịch vụ',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: statusNum == 0 ? 1360 : 1270,
+                        child: Column(
+                          children: [
+                            _itemTitleListService(),
+                            _buildItemListService(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -533,7 +557,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
         ),
       ),
       child: Row(
-        children: const [
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
@@ -541,53 +565,60 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               height: 50,
               alignment: Alignment.centerLeft),
           BuildItemlTitle(
-              title: 'VSO',
+              title: 'Nội dung hoá đơn thanh toán',
+              height: 50,
+              width: 300,
+              alignment: Alignment.centerLeft,
+              textAlign: TextAlign.center),
+          BuildItemlTitle(
+              title: 'Đơn vị tính',
+              height: 50,
+              width: 120,
+              alignment: Alignment.centerLeft,
+              textAlign: TextAlign.center),
+          BuildItemlTitle(
+              title: 'Số lượng',
+              height: 50,
+              width: 100,
+              alignment: Alignment.centerLeft,
+              textAlign: TextAlign.center),
+          BuildItemlTitle(
+              title: 'Đơn giá (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
           BuildItemlTitle(
-              title: 'Đại lý',
+              title: 'Thành tiền (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
           BuildItemlTitle(
-              title: 'Nền tảng',
+              title: '% VAT',
+              height: 50,
+              width: 100,
+              alignment: Alignment.centerLeft,
+              textAlign: TextAlign.center),
+          BuildItemlTitle(
+              title: 'VAT (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
           BuildItemlTitle(
-              title: 'TK ngân hàng',
+              title: 'Tổng tiền (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
-              title: 'Chủ TK',
-              height: 50,
-              width: 200,
-              alignment: Alignment.centerLeft,
-              textAlign: TextAlign.center),
-          BuildItemlTitle(
-              title: 'Luồng kết nối',
-              height: 50,
-              width: 150,
-              alignment: Alignment.centerLeft,
-              textAlign: TextAlign.center),
-          BuildItemlTitle(
-              title: 'Tài khoản VietQR',
-              height: 50,
-              width: 150,
-              alignment: Alignment.centerLeft,
-              textAlign: TextAlign.center),
-          BuildItemlTitle(
-              title: 'Email',
-              height: 50,
-              width: 150,
-              alignment: Alignment.centerLeft,
-              textAlign: TextAlign.center),
+          if (statusNum == 0)
+            BuildItemlTitle(
+                title: 'Thao tác',
+                height: 50,
+                width: 90,
+                alignment: Alignment.centerLeft,
+                textAlign: TextAlign.center),
         ],
       ),
     );
@@ -613,10 +644,38 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
-            width: 150,
+            width: 300,
             child: SelectionArea(
               child: Text(
-                'VSO0001',
+                'Phí giao dịch phần mềm VietQR tháng 03/2024',
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 120,
+            child: SelectionArea(
+              child: Text(
+                'Tháng',
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 100,
+            child: SelectionArea(
+              child: Text(
+                '1',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -630,7 +689,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'SAB',
+                '100,000',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -644,7 +703,21 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'API Service',
+                '100,000',
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 100,
+            child: SelectionArea(
+              child: Text(
+                '8',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -658,21 +731,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '0541103612005\nMBBank',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 200,
-            child: SelectionArea(
-              child: Text(
-                'Cong Ty Co Phan Dau Tu Hang Tieu Dung Quoc Te cong ty hang dau quoc te',
+                '8,000',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -686,7 +745,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'VietQR Pro',
+                '108,000',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -694,34 +753,51 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               ),
             ),
           ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 150,
-            child: SelectionArea(
-              child: Text(
-                '093 186 5469',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+          if (statusNum == 0)
+            Container(
+              alignment: Alignment.center,
+              height: 50,
+              width: 90,
+              child: SelectionArea(
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          size: 12,
+                          color: AppColor.BLUE_TEXT,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: AppColor.RED_TEXT.withOpacity(0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.delete_forever,
+                          size: 12,
+                          color: AppColor.RED_TEXT,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 150,
-            child: SelectionArea(
-              child: Text(
-                'admin@sab.vn',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -729,7 +805,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
 
   Widget _headerWidget() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+      padding: const EdgeInsets.fromLTRB(30, 18, 30, 10),
       width: MediaQuery.of(context).size.width * 0.32,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -758,6 +834,105 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
       ),
     );
   }
-}
 
-class _model {}
+  Widget _bottomData() {
+    return Container(
+      width: double.infinity,
+      height: 120,
+      decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColor.BLACK, width: 1),
+          ),
+          color: AppColor.WHITE),
+      child: Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 30),
+            width: 250,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'Tổng tiền hàng',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '300,000 VND',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 30),
+            width: 250,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'VAT',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '24,000 VND',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 30),
+            width: 350,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Tổng tiền thanh toán (bao gồm VAT)',
+                  style: TextStyle(fontSize: 15),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  '324,000 VND',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: statusNum == 0 ? AppColor.ORANGE : AppColor.GREEN,
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(right: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Trạng thái',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Chưa thanh toán',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: statusNum == 0 ? AppColor.ORANGE : AppColor.GREEN,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
