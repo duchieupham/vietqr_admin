@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/Invoice_detail_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
@@ -11,10 +14,12 @@ import '../../../commons/constants/configurations/theme.dart';
 import '../../../commons/constants/enum/view_status.dart';
 import '../../../commons/constants/utils/custom_scroll.dart';
 import '../../../commons/constants/utils/string_utils.dart';
+import '../../../commons/widget/box_layout.dart';
 import '../../../commons/widget/dialog_pick_month.dart';
 import '../../../commons/widget/separator_widget.dart';
 import '../../../main.dart';
 import '../../../models/DTO/metadata_dto.dart';
+import '../InvoiceCreate/widgets/popup_qr_widget.dart';
 import '../widgets/item_invoice_widget.dart';
 import '../widgets/title_invoice_widget.dart';
 
@@ -30,7 +35,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   late ScrollController controller2;
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
-
+  int? pageNumber = 1;
   DateTime? selectDate;
   late InvoiceViewModel _model;
 
@@ -60,6 +65,20 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     });
   }
 
+  void onShowPopup(InvoiceItem dto) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => PopupQrCodeInvoice(dto: dto),
+    );
+  }
+
+  void onShowPopupExcel() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => PopupExcelInvoice(),
+    );
+  }
+
   void _onPickMonth(DateTime dateTime) async {
     DateTime result = await showDialog(
       barrierDismissible: false,
@@ -87,6 +106,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return pageNumber == 1 ? _buildInvoiceScreen() : InvoiceDetailScreen();
+  }
+
+  Widget _buildInvoiceScreen() {
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
@@ -348,123 +371,191 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                     child: SelectionArea(
                                                       child: Row(
                                                         children: [
-                                                          GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              width: 30,
-                                                              height: 30,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: AppColor
+                                                          Visibility(
+                                                            visible:
+                                                                e.status == 0,
+                                                            child: Tooltip(
+                                                              message: 'Mã QR',
+                                                              child: InkWell(
+                                                                onTap: () {
+                                                                  onShowPopup(
+                                                                      e);
+                                                                },
+                                                                child:
+                                                                    BoxLayout(
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  borderRadius:
+                                                                      100,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(0),
+                                                                  bgColor: AppColor
+                                                                      .BLUE_TEXT
+                                                                      .withOpacity(
+                                                                          0.3),
+                                                                  child:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .qr_code,
+                                                                    size: 12,
+                                                                    color: AppColor
+                                                                        .BLUE_TEXT,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Visibility(
+                                                            visible:
+                                                                e.status == 0,
+                                                            child:
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                          ),
+                                                          Tooltip(
+                                                            message:
+                                                                'Thông tin hoá đơn',
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  pageNumber =
+                                                                      2;
+                                                                });
+                                                              },
+                                                              child: BoxLayout(
+                                                                width: 30,
+                                                                height: 30,
+                                                                borderRadius:
+                                                                    100,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(0),
+                                                                bgColor: AppColor
                                                                     .BLUE_TEXT
                                                                     .withOpacity(
                                                                         0.3),
-                                                                shape: BoxShape
-                                                                    .circle,
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.info,
+                                                                  size: 12,
+                                                                  color: AppColor
+                                                                      .BLUE_TEXT,
+                                                                ),
                                                               ),
-                                                              child: const Icon(
-                                                                Icons.qr_code,
-                                                                size: 12,
-                                                                color: AppColor
-                                                                    .BLUE_TEXT,
+                                                            ),
+                                                          ),
+                                                          Visibility(
+                                                            visible:
+                                                                e.status == 0,
+                                                            child:
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                          ),
+                                                          Visibility(
+                                                            visible:
+                                                                e.status == 0,
+                                                            child: Tooltip(
+                                                              message:
+                                                                  'Chỉnh sửa',
+                                                              child: InkWell(
+                                                                onTap: () {},
+                                                                child:
+                                                                    BoxLayout(
+                                                                  width: 30,
+                                                                  height: 30,
+                                                                  borderRadius:
+                                                                      100,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(0),
+                                                                  bgColor: AppColor
+                                                                      .BLUE_TEXT
+                                                                      .withOpacity(
+                                                                          0.3),
+                                                                  child:
+                                                                      const Icon(
+                                                                    Icons.edit,
+                                                                    size: 12,
+                                                                    color: AppColor
+                                                                        .BLUE_TEXT,
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
                                                           const SizedBox(
                                                               width: 10),
-                                                          GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              width: 30,
-                                                              height: 30,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: AppColor
+                                                          Tooltip(
+                                                            message:
+                                                                'Xuất Excel',
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                onShowPopupExcel();
+                                                              },
+                                                              child: BoxLayout(
+                                                                width: 30,
+                                                                height: 30,
+                                                                borderRadius:
+                                                                    100,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(0),
+                                                                bgColor: AppColor
                                                                     .BLUE_TEXT
                                                                     .withOpacity(
                                                                         0.3),
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                              ),
-                                                              child: const Icon(
-                                                                Icons
-                                                                    .info_outline,
-                                                                size: 12,
-                                                                color: AppColor
-                                                                    .BLUE_TEXT,
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.list,
+                                                                  size: 12,
+                                                                  color: AppColor
+                                                                      .BLUE_TEXT,
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
                                                           const SizedBox(
                                                               width: 10),
-                                                          GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              width: 30,
-                                                              height: 30,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: AppColor
-                                                                    .BLUE_TEXT
-                                                                    .withOpacity(
-                                                                        0.3),
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                              ),
-                                                              child: const Icon(
-                                                                Icons.edit,
-                                                                size: 12,
-                                                                color: AppColor
-                                                                    .BLUE_TEXT,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 10),
-                                                          GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              width: 30,
-                                                              height: 30,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: AppColor
-                                                                    .BLUE_TEXT
-                                                                    .withOpacity(
-                                                                        0.3),
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                              ),
-                                                              child: const Icon(
-                                                                Icons.list,
-                                                                size: 12,
-                                                                color: AppColor
-                                                                    .BLUE_TEXT,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 10),
-                                                          GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              width: 30,
-                                                              height: 30,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: AppColor
+                                                          Tooltip(
+                                                            message: 'Xoá',
+                                                            child: InkWell(
+                                                              onTap: () {},
+                                                              child: BoxLayout(
+                                                                width: 30,
+                                                                height: 30,
+                                                                borderRadius:
+                                                                    100,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(0),
+                                                                bgColor: AppColor
                                                                     .RED_TEXT
                                                                     .withOpacity(
                                                                         0.3),
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                              ),
-                                                              child: const Icon(
-                                                                Icons
-                                                                    .delete_forever,
-                                                                size: 12,
-                                                                color: AppColor
-                                                                    .RED_TEXT,
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .delete_forever,
+                                                                  size: 12,
+                                                                  color: AppColor
+                                                                      .RED_TEXT,
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -821,12 +912,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               ),
                               SizedBox(
                                 width: 234,
-                                // padding: const EdgeInsets.symmetric(
-                                //     horizontal: 10),
                                 child: TextField(
                                   decoration: InputDecoration(
-                                    // contentPadding:
-                                    //     EdgeInsets.only(bottom: 0),
                                     border: InputBorder.none,
                                     hintText: 'Nhập mã hoá đơn',
                                     hintStyle: TextStyle(
@@ -932,12 +1019,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                     DropdownMenuItem<int>(
                                         value: 0,
                                         child: Text(
-                                          "Đã thanh toán",
+                                          "Chờ thanh toán",
                                         )),
                                     DropdownMenuItem<int>(
                                         value: 1,
                                         child: Text(
-                                          "Chưa thanh toán",
+                                          "Đã thanh toán",
                                         )),
                                   ],
                                   onChanged: (value) {
@@ -1054,7 +1141,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 30),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  context.go('/create-invoice');
+                },
                 child: MButtonWidget(
                   title: 'Tạo mới hoá đơn',
                   isEnable: true,

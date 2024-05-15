@@ -719,7 +719,9 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                                                   child: Text(
                                                     e.status == 0
                                                         ? 'Chưa TT'
-                                                        : 'Đã TT',
+                                                        : (e.status == 1
+                                                            ? 'Đã TT'
+                                                            : 'Đã huỷ'),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontSize: 12,

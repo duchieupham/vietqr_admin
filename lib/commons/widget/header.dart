@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/View/SettingManage/SettingEnv/environment_setting_screen.dart';
 import 'package:vietqr_admin/commons/constants/configurations/app_image.dart';
@@ -232,7 +233,7 @@ class Header extends StatelessWidget {
               builder: (context, provider, child) {
                 return InkWell(
                   onTap: () {
-                    // provider.selectMenu(MenuType.ENVIRONMENT_SETTING);
+                    context.go('/setting-env');
                   },
                   child: BoxLayout(
                     width: 40,
