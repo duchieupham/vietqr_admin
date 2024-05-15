@@ -113,7 +113,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                                 Container(
                                   child: _itemTitleInfoTransactionWidget(),
                                 ),
-                                Container(
+                                SizedBox(
                                   height: 250,
                                   width: 1000,
                                   child: SingleChildScrollView(
