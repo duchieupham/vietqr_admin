@@ -461,7 +461,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
-                    width: 100,
+                    width: 120,
                     child: SelectionArea(
                       child: Text(
                         bankItem!.bankAccount,

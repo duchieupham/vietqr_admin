@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../constants/configurations/theme.dart';
 
@@ -46,7 +47,7 @@ class MButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: isEnable ? onTap : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,

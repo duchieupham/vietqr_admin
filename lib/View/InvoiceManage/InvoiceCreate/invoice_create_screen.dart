@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
+import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
+import 'dart:html' as html;
 
 import '../../../ViewModel/invoice_viewModel.dart';
 import '../../../commons/constants/configurations/theme.dart';
+import '../../../models/DTO/bank_detail_dto.dart';
+import '../../../models/DTO/service_item_dto.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
   const CreateInvoiceScreen({super.key});
@@ -22,6 +29,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   final TextEditingController _invoiceTextController = TextEditingController();
   final TextEditingController _descriptionTextController =
       TextEditingController();
+  final TextEditingController _vatTextController = TextEditingController();
+
+  bool? isErrorInvoiceName = false;
+  bool? isErrorDescription = false;
 
   late InvoiceViewModel _model;
 
@@ -47,10 +58,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
     );
   }
 
-  void onShowCreatePopup() async {
+  void onShowCreatePopup({required bool isEdit, ServiceItemDTO? dto}) async {
     return await showDialog(
       context: context,
-      builder: (context) => PopupCreateServiceWidget(),
+      builder: (context) => PopupCreateServiceWidget(
+        isEdit: isEdit,
+        dto: isEdit == true ? dto : null,
+      ),
     );
   }
 
@@ -92,107 +106,132 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   }
 
   Widget bottomWidget() {
-    return Container(
-      height: 120,
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: const BoxDecoration(
-          color: AppColor.WHITE,
-          border: Border(
-              top: BorderSide(
-            color: AppColor.GREY_BORDER,
-            width: 1,
-          ))),
-      child: Row(
-        children: [
-          Container(
-            width: 250,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Tổng tiền hàng",
-                    style: TextStyle(fontSize: 15),
+    return ScopedModelDescendant<InvoiceViewModel>(
+      builder: (context, child, model) {
+        return Container(
+          height: 120,
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: const BoxDecoration(
+              color: AppColor.WHITE,
+              border: Border(
+                  top: BorderSide(
+                color: AppColor.GREY_BORDER,
+                width: 1,
+              ))),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 250,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Tổng tiền hàng",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        StringUtils.formatNumber(model.totalAmount),
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    '0 VND',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  )
-                ],
+                ),
               ),
-            ),
-          ),
-          Container(
-            width: 250,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "VAT",
-                    style: TextStyle(fontSize: 15),
+              SizedBox(
+                width: 250,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "VAT",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        StringUtils.formatNumber(model.totalVat),
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    '0 VND',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  )
-                ],
+                ),
               ),
-            ),
-          ),
-          Container(
-            width: 350,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Tổng tiền thanh toán (bao gồm VAT)",
-                    style: TextStyle(fontSize: 15),
+              SizedBox(
+                width: 350,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Tổng tiền thanh toán (bao gồm VAT)",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        StringUtils.formatNumber(model.totalAmountVat),
+                        style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.BLUE_TEXT),
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    '0 VND',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.BLUE_TEXT),
-                  )
-                ],
+                ),
               ),
-            ),
+              const Spacer(),
+              MButtonWidget(
+                title: 'Tạo hoá đơn',
+                colorDisableBgr: AppColor.GREY_DADADA,
+                isEnable: model.totalAmountVat != 0 ? true : false,
+                width: 350,
+                height: 50,
+                onTap: () async {
+                  setState(() {
+                    isErrorInvoiceName =
+                        _invoiceTextController.text.isEmpty ? true : false;
+                    isErrorDescription =
+                        _descriptionTextController.text.isEmpty ? true : false;
+                  });
+
+                  if (isErrorDescription == false &&
+                      isErrorInvoiceName == false &&
+                      model.listService!.isNotEmpty) {
+                    bool? result = await model.createInvoice(
+                        invoiceName: _invoiceTextController.text,
+                        description: _descriptionTextController.text);
+                    if (result == true) {
+                      context.go('/invoice-list');
+                    }
+                  }
+                },
+              ),
+            ],
           ),
-          const Spacer(),
-          MButtonWidget(
-            title: 'Tạo hoá đơn',
-            isEnable: true,
-            width: 350,
-            height: 50,
-            onTap: () {},
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   Widget _buttonAddIvoiceItem() {
     return InkWell(
       onTap: () {
-        onShowCreatePopup();
+        onShowCreatePopup(isEdit: false);
       },
       child: MButtonWidget(
         title: 'Thêm mới danh mục hàng hoá / dịch vụ',
@@ -219,6 +258,19 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               ? "${model.selectBank?.bankShortName} - ${model.selectBank?.bankAccount}"
               : 'Chọn TK ngân hàng';
         }
+        List<Widget> buildItemList(List<ServiceItemDTO>? list) {
+          if (list == null || list.isEmpty) {
+            return [];
+          }
+
+          return list
+              .asMap()
+              .map((index, e) {
+                return MapEntry(index, _buildItem(e, index + 1));
+              })
+              .values
+              .toList();
+        }
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 30),
@@ -244,9 +296,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
-                height: 80,
                 child: Row(
                   children: [
                     SizedBox(
@@ -280,12 +332,18 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: TextField(
                               controller: _invoiceTextController,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 10),
+                              decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.only(bottom: 10),
                                 border: InputBorder.none,
-                                hintText: 'Nhập tên hoá đơn tại đây',
+                                hintText: isErrorInvoiceName == true
+                                    ? 'Vui lòng nhập tên hóa đơn'
+                                    : 'Nhập tên hoá đơn tại đây',
                                 hintStyle: TextStyle(
-                                    fontSize: 15, color: AppColor.GREY_TEXT),
+                                    fontSize: 15,
+                                    color: isErrorInvoiceName == true
+                                        ? AppColor.RED_TEXT
+                                        : AppColor.GREY_TEXT),
                               ),
                             ),
                           ),
@@ -324,12 +382,18 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: TextField(
                               controller: _descriptionTextController,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 10),
+                              decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.only(bottom: 10),
                                 border: InputBorder.none,
-                                hintText: 'Nhập thông tin mô tả hoá đơn ở đây',
+                                hintText: isErrorDescription == true
+                                    ? 'Vui lòng nhập mô tả hóa đơn'
+                                    : 'Nhập thông tin mô tả hoá đơn ở đây',
                                 hintStyle: TextStyle(
-                                    fontSize: 15, color: AppColor.GREY_TEXT),
+                                    fontSize: 15,
+                                    color: isErrorDescription == true
+                                        ? AppColor.RED_TEXT
+                                        : AppColor.GREY_TEXT),
                               ),
                             ),
                           ),
@@ -540,7 +604,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   ],
                 ),
               ),
-              if (model.selectBank != null) ...[
+              if (model.bankDetail != null) ...[
                 const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
@@ -576,13 +640,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    'Cong Ty Co Phan Dau Tu Hang...asdnamsndm',
-                                    style: TextStyle(
+                                    model.bankDetail!.userBankName,
+                                    style: const TextStyle(
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -625,13 +689,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    '093 186 5469',
-                                    style: TextStyle(
+                                    model.bankDetail!.phoneNo,
+                                    style: const TextStyle(
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -674,13 +738,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    'admin@sab.vn',
-                                    style: TextStyle(
+                                    model.bankDetail!.email,
+                                    style: const TextStyle(
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -733,13 +797,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    'VietQR Pro',
-                                    style: TextStyle(
+                                    model.bankDetail!.connectionType,
+                                    style: const TextStyle(
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -782,13 +846,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: const Align(
+                              child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    'VQR5_PT',
-                                    style: TextStyle(
+                                    model.bankDetail!.feePackage,
+                                    style: const TextStyle(
                                       fontSize: 15,
                                     ),
                                     textAlign: TextAlign.left,
@@ -839,12 +903,20 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child: TextField(
-                                      controller:
-                                          TextEditingController(text: '8'),
-                                      decoration: const InputDecoration(
+                                      controller: _vatTextController,
+                                      textInputAction: TextInputAction.done,
+                                      keyboardType:
+                                          const TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^\d*\.?\d*')),
+                                      ],
+                                      decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'Nhập VAT',
-                                        hintStyle: TextStyle(
+                                        hintText:
+                                            model.bankDetail?.vat.toString(),
+                                        hintStyle: const TextStyle(
                                             color: AppColor.GREY_TEXT,
                                             fontSize: 15),
                                       ),
@@ -864,7 +936,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                     ],
                   ),
                 ),
-              ],
+              ] else
+                const SizedBox.shrink(),
               const SizedBox(height: 20),
               const MySeparator(
                 color: AppColor.GREY_DADADA,
@@ -879,7 +952,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
+              SizedBox(
                 // decoration: const BoxDecoration(
                 //     border: Border(
                 //         bottom: BorderSide(color: AppColor.GREY_TEXT, width: 0.5))),
@@ -887,14 +960,11 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 child: Column(
                   children: [
                     _itemTitleWidget(),
-                    _buildItem(),
-                    _buildItem(),
-                    _buildItem(),
-                    _buildItem(),
+                    ...buildItemList(model.listService),
                   ],
                 ),
               ),
-              model.selectBank != null
+              model.bankDetail != null
                   ? _buttonAddIvoiceItem()
                   : const SizedBox.shrink(),
             ],
@@ -1002,7 +1072,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
     );
   }
 
-  Widget _buildItem() {
+  Widget _buildItem(ServiceItemDTO item, int index) {
     return Container(
       decoration: const BoxDecoration(
           color: AppColor.WHITE,
@@ -1017,7 +1087,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 50,
             child: SelectionArea(
               child: Text(
-                '1',
+                index.toString(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1029,7 +1099,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 300,
             child: SelectionArea(
               child: Text(
-                'Phí giao dịch phần mềm VietQR tháng 03/2024',
+                item.content,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1041,7 +1111,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                'Tháng',
+                item.unit,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1053,7 +1123,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 80,
             child: SelectionArea(
               child: Text(
-                '1',
+                item.quantity.toString(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1065,7 +1135,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '100,000',
+                StringUtils.formatNumberWithOutVND(item.amount),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1077,7 +1147,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '100,000',
+                StringUtils.formatNumberWithOutVND(item.totalAmount),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1089,7 +1159,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 100,
             child: SelectionArea(
               child: Text(
-                '8',
+                item.vat.round().toString(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1101,7 +1171,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '8,000',
+                StringUtils.formatNumberWithOutVND(item.vatAmount.round()),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1113,7 +1183,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '108,000',
+                StringUtils.formatNumberWithOutVND(item.amountAfterVat),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -1126,8 +1196,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             child: SelectionArea(
               child: Row(
                 children: [
-                  GestureDetector(
-                    onTap: () {},
+                  InkWell(
+                    onTap: () {
+                      onShowCreatePopup(isEdit: true, dto: item);
+                    },
                     child: Container(
                       width: 30,
                       height: 30,
@@ -1143,8 +1215,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {},
+                  InkWell(
+                    onTap: () {
+                      _model.deleteService(item);
+                    },
                     child: Container(
                       width: 30,
                       height: 30,
