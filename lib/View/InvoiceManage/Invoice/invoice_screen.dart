@@ -20,6 +20,7 @@ import '../../../commons/widget/separator_widget.dart';
 import '../../../main.dart';
 import '../../../models/DTO/metadata_dto.dart';
 import '../InvoiceCreate/widgets/popup_qr_widget.dart';
+import '../InvoiceCreate/widgets/popup_select_widget.dart';
 import '../widgets/item_invoice_widget.dart';
 import '../widgets/title_invoice_widget.dart';
 
@@ -31,11 +32,18 @@ class InvoiceScreen extends StatefulWidget {
 }
 
 class _InvoiceScreenState extends State<InvoiceScreen> {
+  final TextEditingController _invoiceController = TextEditingController();
+  final TextEditingController _bankController = TextEditingController();
+  final TextEditingController _accController = TextEditingController();
+
   late ScrollController controller1;
   late ScrollController controller2;
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
   int? pageNumber = 1;
+  int? type = 9;
+  String? status = '';
+
   DateTime? selectDate;
   late InvoiceViewModel _model;
 
@@ -44,7 +52,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     selectDate = _model.getPreviousMonth();
-    _model.filterListInvoice(time: selectDate!, page: 1);
+    _model.filterListInvoice(time: selectDate!, page: 1, filter: '');
 
     controller1 = ScrollController();
     controller2 = ScrollController();
@@ -65,6 +73,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _invoiceController.clear();
+    _accController.clear();
+    _bankController.clear();
+  }
+
   void onShowPopup(InvoiceItem dto) async {
     return await showDialog(
       context: context,
@@ -76,6 +92,34 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     return await showDialog(
       context: context,
       builder: (context) => PopupExcelInvoice(),
+    );
+  }
+
+  String? textInput() {
+    switch (type) {
+      case 0:
+        return _model.selectMerchantItem?.merchantId;
+      case 1:
+        return _invoiceController.text;
+
+      case 2:
+        return _bankController.text;
+
+      case 3:
+        return _accController.text;
+      case 4:
+        return status;
+      default:
+        break;
+    }
+    return '';
+  }
+
+  void onSelectMerchant({String? id}) async {
+    return await showDialog(
+      context: context,
+      builder: (context) =>
+          PopupSelectTypeWidget(type: 0, merchantId: id ?? '', isGetList: true),
     );
   }
 
@@ -98,7 +142,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       setState(() {
         selectDate = result;
       });
-      _model.filterListInvoice(time: selectDate!, page: 1);
+      _model.filterListInvoice(
+          time: selectDate!, page: 1, filter: textInput()!);
     } else {
       selectDate = _model.getPreviousMonth();
     }
@@ -854,6 +899,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 )),
                           ],
                           onChanged: (value) {
+                            setState(() {
+                              type = value;
+                            });
                             model.changeTypeInvoice(value);
                           },
                         ),
@@ -871,7 +919,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () async {
+                                  await model.getMerchant('', isGetList: true);
+                                  onSelectMerchant();
+                                },
                                 child: SizedBox(
                                   width: 234,
                                   // padding: const EdgeInsets.symmetric(
@@ -879,14 +930,18 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: const [
+                                    children: [
                                       Text(
-                                        'Chọn đại lý',
-                                        style: TextStyle(
+                                        model.selectMerchantItem != null
+                                            ? model.selectMerchantItem!
+                                                .merchantName
+                                            : 'Chọn đại lý',
+                                        style: const TextStyle(
+                                            overflow: TextOverflow.ellipsis,
                                             color: AppColor.GREY_TEXT,
                                             fontSize: 15),
                                       ),
-                                      Icon(
+                                      const Icon(
                                         Icons.keyboard_arrow_down,
                                         size: 20,
                                         color: AppColor.GREY_TEXT,
@@ -901,9 +956,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       if (model.value != null && model.value == 1)
                         Expanded(
                           child: Row(
-                            children: const [
-                              SizedBox(width: 8),
-                              SizedBox(
+                            children: [
+                              const SizedBox(width: 8),
+                              const SizedBox(
                                 height: 50,
                                 child: VerticalDivider(
                                   thickness: 1,
@@ -913,7 +968,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               SizedBox(
                                 width: 234,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: _invoiceController,
+                                  decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     hintText: 'Nhập mã hoá đơn',
                                     hintStyle: TextStyle(
@@ -928,9 +984,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       if (model.value != null && model.value == 2)
                         Expanded(
                           child: Row(
-                            children: const [
-                              SizedBox(width: 8),
-                              SizedBox(
+                            children: [
+                              const SizedBox(width: 8),
+                              const SizedBox(
                                 height: 50,
                                 child: VerticalDivider(
                                   thickness: 1,
@@ -942,7 +998,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 // padding: const EdgeInsets.symmetric(
                                 //     horizontal: 10),
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: _bankController,
+                                  decoration: const InputDecoration(
                                     // contentPadding:
                                     //     EdgeInsets.only(bottom: 0),
                                     border: InputBorder.none,
@@ -959,9 +1016,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       if (model.value != null && model.value == 3)
                         Expanded(
                           child: Row(
-                            children: const [
-                              SizedBox(width: 8),
-                              SizedBox(
+                            children: [
+                              const SizedBox(width: 8),
+                              const SizedBox(
                                 height: 50,
                                 child: VerticalDivider(
                                   thickness: 1,
@@ -973,7 +1030,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 // padding: const EdgeInsets.symmetric(
                                 //     horizontal: 10),
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: _accController,
+                                  decoration: const InputDecoration(
                                     // contentPadding:
                                     //     EdgeInsets.only(bottom: 0),
                                     border: InputBorder.none,
@@ -991,8 +1049,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         Expanded(
                           child: Row(
                             children: [
-                              SizedBox(width: 8),
-                              SizedBox(
+                              const SizedBox(width: 8),
+                              const SizedBox(
                                 height: 50,
                                 child: VerticalDivider(
                                   thickness: 1,
@@ -1028,6 +1086,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         )),
                                   ],
                                   onChanged: (value) {
+                                    setState(() {
+                                      status = value.toString();
+                                    });
                                     model.changeStatus(value);
                                   },
                                 ),
@@ -1109,7 +1170,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () async {
-                    await model.filterListInvoice(time: selectDate!, page: 1);
+                    await model.filterListInvoice(
+                        time: selectDate!, page: 1, filter: textInput()!);
                   },
                   child: Container(
                     height: 50,
@@ -1197,6 +1259,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           await model.filterListInvoice(
                             time: selectDate!,
                             page: paging.page! - 1,
+                            filter: textInput()!,
                           );
                         }
                       },
@@ -1226,6 +1289,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           await model.filterListInvoice(
                             time: selectDate!,
                             page: paging.page! + 1,
+                            filter: textInput()!,
                           );
                         }
                       },

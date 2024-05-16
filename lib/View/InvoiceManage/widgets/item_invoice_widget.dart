@@ -131,6 +131,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             child: SelectionArea(
               child: Text(
                 dto.invoiceName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),

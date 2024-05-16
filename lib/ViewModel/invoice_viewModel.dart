@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -14,6 +15,7 @@ import '../models/DTO/metadata_dto.dart';
 import '../models/DTO/service_item_dto.dart';
 
 class InvoiceViewModel extends BaseModel {
+  final TextEditingController vatTextController = TextEditingController();
   late InvoiceDAO _dao;
   InvoiceDTO? invoiceDTO;
   MerchantDTO? merchantDTO;
@@ -48,13 +50,14 @@ class InvoiceViewModel extends BaseModel {
     selectMerchantItem = null;
     selectBank = null;
     bankDetail = null;
+    vatTextController.clear();
   }
 
   void selectServiceType(int value) async {
     serviceType = value;
-    if (value == 9) {
-      await getService();
-    }
+    // if (value == 9) {
+    //   await getService();
+    // }
     notifyListeners();
   }
 
@@ -172,13 +175,14 @@ class InvoiceViewModel extends BaseModel {
     required DateTime time,
     required int page,
     int? size,
+    required String filter,
   }) async {
     try {
       String formattedDate = '';
       formattedDate = DateFormat('yyyy-MM').format(time);
       setState(ViewStatus.Loading);
       invoiceDTO = await _dao.filterInvoiceList(
-          type: value!, time: formattedDate, page: page, value: value!);
+          type: value!, time: formattedDate, page: page, filter: filter);
       metadata = _dao.metaDataDTO;
       setState(ViewStatus.Completed);
     } catch (e) {
@@ -196,6 +200,16 @@ class InvoiceViewModel extends BaseModel {
           bankId: bankDetail?.bankId,
           merchantId: type == 0 ? selectMerchantItem?.merchantId : '',
           time: serviceType == 9 ? '' : time);
+      if (vatTextController.text.isNotEmpty) {
+        serviceItemDTO?.vat = double.parse(vatTextController.text);
+        double vat = serviceItemDTO!.vat.round() / 100;
+        double vatAmount = serviceItemDTO!.totalAmount * vat;
+        serviceItemDTO!.vatAmount = vatAmount.round();
+
+        serviceItemDTO?.amountAfterVat =
+            serviceItemDTO!.totalAmount + serviceItemDTO!.vatAmount;
+      }
+
       Future.delayed(const Duration(milliseconds: 500));
 
       setState(ViewStatus.Completed);
@@ -205,9 +219,13 @@ class InvoiceViewModel extends BaseModel {
     }
   }
 
-  Future<void> getMerchant(String? value, {int? page}) async {
+  Future<void> getMerchant(String? value,
+      {int? page, required bool isGetList}) async {
     try {
-      setState(ViewStatus.Loading);
+      if (isGetList == false) {
+        setState(ViewStatus.Loading);
+      }
+
       merchantDTO = await _dao.getMerchant(page: page ?? 1, value: value ?? '');
       createMetaData = _dao.metaDataDTO;
       Future.delayed(const Duration(milliseconds: 500));
@@ -238,6 +256,9 @@ class InvoiceViewModel extends BaseModel {
       bankDetail = await _dao.getBankDetail(
           bankId: selectBank?.bankId,
           merchantId: type == 0 ? selectMerchantItem?.merchantId : '');
+      if (vatTextController.text.isNotEmpty) {
+        bankDetail?.vat = double.parse(vatTextController.text);
+      }
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

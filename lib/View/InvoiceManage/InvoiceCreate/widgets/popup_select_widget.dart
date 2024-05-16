@@ -13,10 +13,14 @@ import '../../../../models/DTO/metadata_dto.dart';
 import 'item_title_widget.dart';
 
 class PopupSelectTypeWidget extends StatefulWidget {
+  final bool? isGetList;
   final String merchantId;
   final int type;
   const PopupSelectTypeWidget(
-      {super.key, required this.type, required this.merchantId});
+      {super.key,
+      required this.type,
+      required this.merchantId,
+      required this.isGetList});
 
   @override
   State<PopupSelectTypeWidget> createState() => _PopupSelectTypeWidgetState();
@@ -100,7 +104,8 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                                       controller: _controller,
                                       onFieldSubmitted: (value) {
                                         if (widget.type == 0) {
-                                          model.getMerchant(value);
+                                          model.getMerchant(value,
+                                              isGetList: widget.isGetList!);
                                         } else {
                                           model.getBanks(value,
                                               merchantId: widget.merchantId);
@@ -142,6 +147,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                                   onTap: () {
                                     if (widget.type == 0) {
                                       model.getMerchant(
+                                          isGetList: widget.isGetList!,
                                           _controller.text.isNotEmpty
                                               ? _controller.text
                                               : '');
@@ -319,6 +325,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
               onTap: () async {
                 if (paging.page != 1) {
                   await model.getMerchant(
+                      isGetList: widget.isGetList!,
                       _controller.text.isNotEmpty ? _controller.text : '',
                       page: paging.page! - 1);
                   // await model.filterListSystemTransaction(
@@ -351,6 +358,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
               onTap: () async {
                 if (isPaging) {
                   await model.getMerchant(
+                      isGetList: widget.isGetList!,
                       _controller.text.isNotEmpty ? _controller.text : '',
                       page: paging.page! + 1);
                   // await model.filterListSystemTransaction(

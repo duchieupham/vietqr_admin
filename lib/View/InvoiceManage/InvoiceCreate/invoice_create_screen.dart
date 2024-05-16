@@ -29,10 +29,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   final TextEditingController _invoiceTextController = TextEditingController();
   final TextEditingController _descriptionTextController =
       TextEditingController();
-  final TextEditingController _vatTextController = TextEditingController();
 
   bool? isErrorInvoiceName = false;
   bool? isErrorDescription = false;
+  bool? isCreateSuccess = false;
 
   late InvoiceViewModel _model;
 
@@ -40,6 +40,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _model.clear();
   }
 
   @override
@@ -53,8 +54,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   void onShowPopup(int type, {String? id}) async {
     return await showDialog(
       context: context,
-      builder: (context) =>
-          PopupSelectTypeWidget(type: type, merchantId: id ?? ''),
+      builder: (context) => PopupSelectTypeWidget(
+          type: type, merchantId: id ?? '', isGetList: false),
     );
   }
 
@@ -108,6 +109,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   Widget bottomWidget() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
+        if (isCreateSuccess == true) {
+          context.go('/invoice-list');
+        }
         return Container(
           height: 120,
           margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -216,7 +220,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         invoiceName: _invoiceTextController.text,
                         description: _descriptionTextController.text);
                     if (result == true) {
-                      context.go('/invoice-list');
+                      setState(() {
+                        isCreateSuccess = true;
+                      });
                     }
                   }
                 },
@@ -494,7 +500,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   child: InkWell(
                                     onTap: () async {
                                       if (model.type == 0) {
-                                        await model.getMerchant('');
+                                        await model.getMerchant('',
+                                            isGetList: false);
                                       } else {
                                         await model.getBanks('');
                                       }
@@ -903,7 +910,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child: TextField(
-                                      controller: _vatTextController,
+                                      controller: model.vatTextController,
                                       textInputAction: TextInputAction.done,
                                       keyboardType:
                                           const TextInputType.numberWithOptions(

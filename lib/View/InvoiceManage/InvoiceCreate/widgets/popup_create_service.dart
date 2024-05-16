@@ -142,6 +142,11 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
                 builder: (context, child, model) {
+                  final bankDetail = model.bankDetail;
+                  if (model.vatTextController.text.isNotEmpty &&
+                      bankDetail != null) {
+                    bankDetail.vat = double.parse(model.vatTextController.text);
+                  }
                   bool hasSelect = false;
                   if (model.serviceType == 9) {
                     if (_amountController.text.isNotEmpty &&
@@ -178,7 +183,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                           ),
                           const SizedBox(height: 45),
                           _itemTitleWidget(false),
-                          _buildBankItem(dto: model.bankDetail),
+                          _buildBankItem(dto: bankDetail),
                           const SizedBox(height: 20),
                           const MySeparator(
                             color: AppColor.GREY_DADADA,
@@ -190,7 +195,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 30),
-                          _serivceSelectWidget(model),
+                          _serivceSelectWidget(),
                           const SizedBox(height: 45),
                           if (widget.isEdit == true) ...[
                             _itemTitleWidget(true),
@@ -297,224 +302,238 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     );
   }
 
-  Widget _serivceSelectWidget(InvoiceViewModel model) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 350,
-          height: 80,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                width: 100,
-                height: 20,
-                child: Text(
-                  'Tài khoản ngân hàng*',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 350,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: AppColor.GREY_DADADA,
-                    width: 1,
+  Widget _serivceSelectWidget() {
+    return ScopedModelDescendant<InvoiceViewModel>(
+      builder: (context, child, model) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 350,
+              height: 80,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    width: 100,
+                    height: 20,
+                    child: Text(
+                      'Tài khoản ngân hàng*',
+                      style: TextStyle(fontSize: 15),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: DropdownButton<int>(
-                    isExpanded: true,
-                    value: widget.isEdit == true
-                        ? widget.dto?.type
-                        : model.serviceType,
-                    underline: const SizedBox.shrink(),
-                    icon: const RotatedBox(
-                      quarterTurns: 5,
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 12,
-                      ),
-                    ),
-                    items: const [
-                      DropdownMenuItem<int>(
-                          value: 0,
-                          child: Text(
-                            "Phí thường niên / duy trì",
-                          )),
-                      DropdownMenuItem<int>(
-                          value: 1,
-                          child: Text(
-                            "Phí giao dịch",
-                          )),
-                      DropdownMenuItem<int>(
-                          value: 9,
-                          child: Text(
-                            "Phí khác",
-                          )),
-                    ],
-                    onChanged: widget.isEdit == false
-                        ? (value) {
-                            model.selectServiceType(value!);
-                          }
-                        : null,
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 30),
-        widget.isEdit == false && model.serviceType != 9
-            ? SizedBox(
-                width: 250,
-                height: 80,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      width: 100,
-                      height: 20,
-                      child: Text(
-                        'Thời gian*',
-                        style: TextStyle(fontSize: 15),
+                  Container(
+                    width: 350,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: AppColor.GREY_DADADA,
+                        width: 1,
                       ),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: 280,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: AppColor.GREY_DADADA,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Tháng', style: TextStyle(fontSize: 15)),
-                          const SizedBox(width: 20),
-                          const SizedBox(
-                            height: 40,
-                            child: VerticalDivider(
-                              thickness: 1,
-                              color: AppColor.GREY_DADADA,
-                            ),
+                      child: DropdownButton<int>(
+                        isExpanded: true,
+                        value: widget.isEdit == true
+                            ? widget.dto?.type
+                            : model.serviceType,
+                        underline: const SizedBox.shrink(),
+                        icon: const RotatedBox(
+                          quarterTurns: 5,
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12,
                           ),
-                          InkWell(
-                            onTap: () {
-                              _onPickMonth(model.getPreviousMonth());
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 4),
-                              width: 140,
+                        ),
+                        items: const [
+                          DropdownMenuItem<int>(
+                              value: 0,
+                              child: Text(
+                                "Phí thường niên / duy trì",
+                              )),
+                          DropdownMenuItem<int>(
+                              value: 1,
+                              child: Text(
+                                "Phí giao dịch",
+                              )),
+                          DropdownMenuItem<int>(
+                              value: 9,
+                              child: Text(
+                                "Phí khác",
+                              )),
+                        ],
+                        onChanged: widget.isEdit == false
+                            ? (value) async {
+                                model.selectServiceType(value!);
+                                if (value == 9) {
+                                  await model.getService();
+                                }
+                              }
+                            : null,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 30),
+            widget.isEdit == false && model.serviceType != 9
+                ? SizedBox(
+                    width: 250,
+                    height: 80,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          width: 100,
+                          height: 20,
+                          child: Text(
+                            'Thời gian*',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: 280,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: AppColor.GREY_DADADA,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('Tháng',
+                                  style: TextStyle(fontSize: 15)),
+                              const SizedBox(width: 20),
+                              const SizedBox(
+                                height: 40,
+                                child: VerticalDivider(
+                                  thickness: 1,
+                                  color: AppColor.GREY_DADADA,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  _onPickMonth(model.getPreviousMonth());
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(left: 4),
+                                  width: 140,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          selectDate == null
+                                              ? 'Chọn tháng'
+                                              : DateFormat('MM-yyyy')
+                                                  .format(selectDate!),
+                                          style: const TextStyle(fontSize: 15)),
+                                      const Icon(
+                                        Icons.calendar_month_outlined,
+                                        color: AppColor.BLACK,
+                                        size: 15,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : (widget.isEdit == true
+                    ? SizedBox(
+                        width: 250,
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 100,
+                              height: 20,
+                              child: Text(
+                                'Thời gian*',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 280,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: AppColor.GREY_DADADA,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                      selectDate == null
-                                          ? 'Chọn tháng'
-                                          : DateFormat('MM-yyyy')
-                                              .format(selectDate!),
-                                      style: const TextStyle(fontSize: 15)),
-                                  const Icon(
-                                    Icons.calendar_month_outlined,
-                                    color: AppColor.BLACK,
-                                    size: 15,
-                                  )
+                                  const Text('Tháng',
+                                      style: TextStyle(fontSize: 15)),
+                                  const SizedBox(width: 20),
+                                  const SizedBox(
+                                    height: 40,
+                                    child: VerticalDivider(
+                                      thickness: 1,
+                                      color: AppColor.GREY_DADADA,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 4),
+                                    width: 140,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(widget.dto!.time,
+                                            style:
+                                                const TextStyle(fontSize: 15)),
+                                        const Icon(
+                                          Icons.calendar_month_outlined,
+                                          color: AppColor.BLACK,
+                                          size: 15,
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : SizedBox(
-                width: 250,
-                height: 80,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      width: 100,
-                      height: 20,
-                      child: Text(
-                        'Thời gian*',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: 280,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: AppColor.GREY_DADADA,
-                          width: 1,
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Tháng', style: TextStyle(fontSize: 15)),
-                          const SizedBox(width: 20),
-                          const SizedBox(
-                            height: 40,
-                            child: VerticalDivider(
-                              thickness: 1,
-                              color: AppColor.GREY_DADADA,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(left: 4),
-                            width: 140,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(widget.dto!.time,
-                                    style: const TextStyle(fontSize: 15)),
-                                const Icon(
-                                  Icons.calendar_month_outlined,
-                                  color: AppColor.BLACK,
-                                  size: 15,
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-      ],
+                      )
+                    : const SizedBox.shrink()),
+          ],
+        );
+      },
     );
   }
 
@@ -804,7 +823,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             color: AppColor.GREY_DADADA,
             child: SelectionArea(
               child: Text(
-                item!.vat.round().toString(),
+                item!.vat.toString(),
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
               ),

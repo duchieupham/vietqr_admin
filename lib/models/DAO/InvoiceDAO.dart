@@ -47,11 +47,11 @@ class InvoiceDAO extends BaseDAO {
     required int page,
     int? size,
     required int type,
-    required int value,
+    required String filter,
   }) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=$value&time=$time';
+          'https://dev.vietqr.org/vqr/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
