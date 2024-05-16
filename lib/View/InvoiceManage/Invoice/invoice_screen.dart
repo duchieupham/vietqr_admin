@@ -4,7 +4,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/Invoice_detail_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/invoice_detail_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/invoice_edit_screen.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
@@ -151,7 +152,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return pageNumber == 1 ? _buildInvoiceScreen() : InvoiceDetailScreen();
+    switch (pageNumber) {
+      case 1:
+        return _buildInvoiceScreen();
+      case 2:
+        return InvoiceDetailScreen();
+      case 3:
+        return InvoiceEditScreen();
+      default:
+        return Container();
+    }
   }
 
   Widget _buildInvoiceScreen() {
@@ -510,7 +520,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                               message:
                                                                   'Chỉnh sửa',
                                                               child: InkWell(
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    pageNumber =
+                                                                        3;
+                                                                  });
+                                                                },
                                                                 child:
                                                                     BoxLayout(
                                                                   width: 30,
