@@ -142,11 +142,6 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
                 builder: (context, child, model) {
-                  final bankDetail = model.bankDetail;
-                  if (model.vatTextController.text.isNotEmpty &&
-                      bankDetail != null) {
-                    bankDetail.vat = double.parse(model.vatTextController.text);
-                  }
                   bool hasSelect = false;
                   if (model.serviceType == 9) {
                     if (_amountController.text.isNotEmpty &&
@@ -183,7 +178,9 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                           ),
                           const SizedBox(height: 45),
                           _itemTitleWidget(false),
-                          _buildBankItem(dto: bankDetail),
+                          _buildBankItem(
+                              dto: model.bankDetail,
+                              textAmount: model.vatTextController.text),
                           const SizedBox(height: 20),
                           const MySeparator(
                             color: AppColor.GREY_DADADA,
@@ -537,7 +534,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     );
   }
 
-  Widget _buildBankItem({BankDetailDTO? dto}) {
+  Widget _buildBankItem({BankDetailDTO? dto, String? textAmount}) {
     return Container(
       decoration: const BoxDecoration(
         color: AppColor.WHITE,
@@ -641,7 +638,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             width: 110,
             child: SelectionArea(
               child: Text(
-                dto.vat.toString(),
+                textAmount!.isNotEmpty ? textAmount : dto.vat.toString(),
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),

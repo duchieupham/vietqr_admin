@@ -7,6 +7,8 @@ import '../../commons/constants/utils/log.dart';
 import '../DTO/bank_detail_dto.dart';
 import '../DTO/bank_invoice_dto.dart';
 import '../DTO/invocie_merchant_dto.dart';
+import '../DTO/invoice_detail_dto.dart';
+import '../DTO/invoice_detail_qr_dto.dart';
 import '../DTO/invoice_dto.dart';
 import '../DTO/metadata_dto.dart';
 import '../DTO/service_item_dto.dart';
@@ -42,6 +44,41 @@ class InvoiceDAO extends BaseDAO {
     return false;
   }
 
+  Future<InvoiceDetailDTO?> getInvoiceDetail(String invoiceId) async {
+    try {
+      String url = 'https://api.vietqr.org/vqr/api/invoice/detail/$invoiceId';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return InvoiceDetailDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error("Failed to fetch Invoice detail: ${e.toString()}");
+    }
+    return null;
+  }
+
+  Future<InvoiceDetailQrDTO?> getDetailQr(String invoiceId) async {
+    try {
+      String url =
+          'https://api.vietqr.org/vqr/api/invoice/admin-list/$invoiceId';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return InvoiceDetailQrDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error("Failed to fetch QR detail: ${e.toString()}");
+    }
+    return null;
+  }
+
   Future<InvoiceDTO?> filterInvoiceList({
     required String time,
     required int page,
@@ -51,7 +88,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
+          'https://api.vietqr.org/vqr/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

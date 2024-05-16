@@ -17,6 +17,7 @@ import '../../../commons/constants/utils/custom_scroll.dart';
 import '../../../commons/constants/utils/string_utils.dart';
 import '../../../commons/widget/box_layout.dart';
 import '../../../commons/widget/dialog_pick_month.dart';
+import '../../../commons/widget/dialog_widget.dart';
 import '../../../commons/widget/separator_widget.dart';
 import '../../../main.dart';
 import '../../../models/DTO/metadata_dto.dart';
@@ -24,6 +25,9 @@ import '../InvoiceCreate/widgets/popup_qr_widget.dart';
 import '../InvoiceCreate/widgets/popup_select_widget.dart';
 import '../widgets/item_invoice_widget.dart';
 import '../widgets/title_invoice_widget.dart';
+
+// ignore: constant_identifier_names
+enum PageInvoice { LIST, DETAIL, EDIT }
 
 class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({super.key});
@@ -41,12 +45,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   late ScrollController controller2;
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
-  int? pageNumber = 1;
+  String? selectInvoiceId;
+
   int? type = 9;
   String? status = '';
 
   DateTime? selectDate;
   late InvoiceViewModel _model;
+
+  PageInvoice pageType = PageInvoice.LIST;
 
   @override
   void initState() {
@@ -85,7 +92,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void onShowPopup(InvoiceItem dto) async {
     return await showDialog(
       context: context,
-      builder: (context) => PopupQrCodeInvoice(dto: dto),
+      builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
     );
   }
 
@@ -152,19 +159,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    switch (pageNumber) {
-      case 1:
-        return _buildInvoiceScreen();
-      case 2:
-        return InvoiceDetailScreen();
-      case 3:
-        return InvoiceEditScreen();
-      default:
-        return Container();
-    }
-  }
-
-  Widget _buildInvoiceScreen() {
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
@@ -180,38 +174,50 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             children: [
               _headerWidget(),
               const Divider(),
-              Container(
-                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Tìm kiếm thông tin hoá đơn ",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    _filterWidget(),
-                    const SizedBox(height: 20),
-                    const MySeparator(
-                      color: AppColor.GREY_DADADA,
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Danh sách hoá đơn",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    _statisticInvoice(),
-                    const SizedBox(height: 20),
-                  ],
+              if (pageType == PageInvoice.LIST) ...[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Tìm kiếm thông tin hoá đơn ",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      _filterWidget(),
+                      const SizedBox(height: 20),
+                      const MySeparator(
+                        color: AppColor.GREY_DADADA,
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Danh sách hoá đơn",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      _statisticInvoice(),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
-              ),
-              _buildListInvoice(),
-              const SizedBox(height: 10),
-              _pagingWidget(),
-              const SizedBox(height: 10),
+                _buildListInvoice(),
+                const SizedBox(height: 10),
+                _pagingWidget(),
+                const SizedBox(height: 10),
+              ] else if (pageType == PageInvoice.DETAIL) ...[
+                Expanded(
+                  child: InvoiceDetailScreen(
+                      callback: () {
+                        setState(() {
+                          pageType = PageInvoice.LIST;
+                        });
+                      },
+                      invoiceId: selectInvoiceId!),
+                ),
+              ]
             ],
           ),
         ),
@@ -477,8 +483,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                             child: InkWell(
                                                               onTap: () {
                                                                 setState(() {
-                                                                  pageNumber =
-                                                                      2;
+                                                                  selectInvoiceId =
+                                                                      e.invoiceId;
+                                                                  pageType =
+                                                                      PageInvoice
+                                                                          .DETAIL;
                                                                 });
                                                               },
                                                               child: BoxLayout(
@@ -521,10 +530,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                   'Chỉnh sửa',
                                                               child: InkWell(
                                                                 onTap: () {
-                                                                  setState(() {
-                                                                    pageNumber =
-                                                                        3;
-                                                                  });
+                                                                  // setState(() {
+                                                                  //   pageNumber =
+                                                                  //       3;
+                                                                  // });
                                                                 },
                                                                 child:
                                                                     BoxLayout(
@@ -560,7 +569,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                 'Xuất Excel',
                                                             child: InkWell(
                                                               onTap: () {
-                                                                onShowPopupExcel();
+                                                                // onShowPopupExcel();
+                                                                DialogWidget
+                                                                    .instance
+                                                                    .openMsgDialog(
+                                                                        title:
+                                                                            'Bảo trì',
+                                                                        msg:
+                                                                            'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
                                                               },
                                                               child: BoxLayout(
                                                                 width: 30,
@@ -592,7 +608,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                           Tooltip(
                                                             message: 'Xoá',
                                                             child: InkWell(
-                                                              onTap: () {},
+                                                              onTap: () {
+                                                                DialogWidget
+                                                                    .instance
+                                                                    .openMsgDialog(
+                                                                        title:
+                                                                            'Bảo trì',
+                                                                        msg:
+                                                                            'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                              },
                                                               child: BoxLayout(
                                                                 width: 30,
                                                                 height: 30,
@@ -824,22 +848,57 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   Widget _headerWidget() {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
-      width: MediaQuery.of(context).size.width * 0.22,
+      width: MediaQuery.of(context).size.width *
+          (pageType == PageInvoice.LIST ? 0.22 : 0.33),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
+        children: [
+          const Text(
             "Quản lý hoá đơn",
             style: TextStyle(fontSize: 15),
           ),
-          Text(
+          const Text(
             "/",
             style: TextStyle(fontSize: 15),
           ),
-          Text(
-            "Danh sách hoá đơn",
-            style: TextStyle(fontSize: 15),
-          ),
+          pageType == PageInvoice.LIST
+              ? const Text(
+                  "Danh sách hoá đơn",
+                  style: TextStyle(fontSize: 15),
+                )
+              : InkWell(
+                  onTap: () {
+                    setState(() {
+                      pageType = PageInvoice.LIST;
+                    });
+                  },
+                  child: const Text(
+                    'Danh sách hoá đơn',
+                    style: TextStyle(
+                        color: AppColor.BLUE_TEXT,
+                        fontSize: 15,
+                        decoration: TextDecoration.underline),
+                  ),
+                ),
+          if (pageType == PageInvoice.DETAIL) ...[
+            const Text(
+              "/",
+              style: TextStyle(fontSize: 15),
+            ),
+            const Text(
+              "Chi tiết hoá đơn",
+              style: TextStyle(fontSize: 15),
+            ),
+          ] else if (pageType == PageInvoice.EDIT) ...[
+            const Text(
+              "/",
+              style: TextStyle(fontSize: 15),
+            ),
+            const Text(
+              "Chỉnh sửa hoá đơn",
+              style: TextStyle(fontSize: 15),
+            ),
+          ]
         ],
       ),
     );

@@ -302,11 +302,11 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         bool isPaging = false;
-
-        MetaDataDTO paging = model.createMetaData!;
-        if (paging == null) {
+        if (model.createMetaData == null) {
           return const SizedBox.shrink();
         }
+        MetaDataDTO paging = model.createMetaData!;
+
         if (paging.page! != paging.totalPage!) {
           isPaging = true;
         }

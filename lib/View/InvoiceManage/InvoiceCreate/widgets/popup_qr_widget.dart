@@ -12,8 +12,8 @@ import '../../../../commons/constants/configurations/theme.dart';
 import '../../../../commons/constants/utils/string_utils.dart';
 
 class PopupQrCodeInvoice extends StatefulWidget {
-  final InvoiceItem dto;
-  const PopupQrCodeInvoice({super.key, required this.dto});
+  final String invoiceId;
+  const PopupQrCodeInvoice({super.key, required this.invoiceId});
 
   @override
   State<PopupQrCodeInvoice> createState() => _PopupQrCodeInvoiceState();
@@ -26,6 +26,13 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _model.getQrDetail(widget.invoiceId);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _model.clear();
   }
 
   @override
@@ -41,6 +48,9 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
                 builder: (context, child, model) {
+                  if (model.detailQrDTO == null) {
+                    return const SizedBox.shrink();
+                  }
                   return Column(
                     children: [
                       Container(
@@ -112,7 +122,8 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                             height: 240,
                                             // color: AppColor.GREY_DADADA,
                                             child: QrImage(
-                                              data: widget.dto.qrCode ?? '',
+                                              data: model.detailQrDTO?.qrCode ??
+                                                  '',
                                               size: 220,
                                               version: QrVersions.auto,
                                               embeddedImage: const AssetImage(
@@ -184,7 +195,8 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                   width: double.infinity,
                                   height: 60,
                                   child: Text(
-                                    widget.dto.invoiceName,
+                                    // widget.dto.invoiceName,
+                                    model.detailQrDTO!.invoiceName,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25),
@@ -198,7 +210,7 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                   height: 40,
                                   child: Text(
                                     StringUtils.formatNumber(
-                                        widget.dto.amount.toString()),
+                                        model.detailQrDTO?.totalAmountAfterVat),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 30,
@@ -208,20 +220,22 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                 const SizedBox(
                                   height: 50,
                                 ),
-                                _buildItem('Mã hoá đơn', widget.dto.billNumber),
+                                _buildItem('Mã hoá đơn',
+                                    model.detailQrDTO!.invoiceNumber),
                                 _buildItem('Tài khoản ngân hàng',
-                                    '${widget.dto.bankShortName} - ${widget.dto.bankAccount}'),
-                                _buildItem('Chủ TK', widget.dto.fullName),
+                                    '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount}'),
+                                _buildItem(
+                                    'Chủ TK', model.detailQrDTO!.userBankName),
                                 _buildItem(
                                     'Tổng tiền',
                                     StringUtils.formatNumber(
-                                        widget.dto.amountNoVat.toString())),
+                                        model.detailQrDTO?.totalAmount)),
                                 _buildItem('Tiền thuế GTGT (VAT)',
-                                    '${widget.dto.vat}% - ${StringUtils.formatNumber(widget.dto.vatAmount.toString())}'),
+                                    '${model.detailQrDTO?.vat}% - ${StringUtils.formatNumber(model.detailQrDTO?.vatAmount)}'),
                                 _buildItem(
                                     'Tổng tiền thanh toán',
-                                    StringUtils.formatNumber(
-                                        widget.dto.amount.toString())),
+                                    StringUtils.formatNumber(model
+                                        .detailQrDTO?.totalAmountAfterVat)),
                               ],
                             ),
                           ),

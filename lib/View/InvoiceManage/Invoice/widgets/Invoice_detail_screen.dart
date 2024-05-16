@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
+import '../../../../commons/widget/dialog_widget.dart';
 import '../../../../commons/widget/separator_widget.dart';
+import '../../../../models/DTO/invoice_detail_dto.dart';
 import '../../InvoiceCreate/widgets/item_title_widget.dart';
 
 class InvoiceDetailScreen extends StatefulWidget {
-  const InvoiceDetailScreen({super.key});
+  final String invoiceId;
+  final Function() callback;
+  const InvoiceDetailScreen(
+      {super.key, required this.callback, required this.invoiceId});
 
   @override
   State<InvoiceDetailScreen> createState() => _InvoiceDetailScreenState();
@@ -23,163 +29,197 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _model.getInvoiceDetail(widget.invoiceId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.BLUE_BGR,
-      bottomNavigationBar: _bottomData(),
-      body: ScopedModel(
-        model: _model,
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
-              color: AppColor.WHITE,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _headerWidget(),
-              const Divider(),
-              Expanded(
-                child: ListView(
-                  children: [_bodyWidget()],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return ScopedModel(
+      model: _model,
+      child: _bodyWidget(),
     );
   }
 
   Widget _bodyWidget() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 30,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 15,
-                  ),
-                ),
-                const SizedBox(width: 30),
-                const Text(
-                  'Chi tiết hoá đơn',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 30),
-                if (statusNum == 0)
-                  InkWell(
-                    onTap: () {},
-                    child: const Text(
-                      'Chỉnh sửa hoá đơn',
-                      style: TextStyle(
-                          color: AppColor.BLUE_TEXT,
-                          fontSize: 15,
-                          decoration: TextDecoration.underline),
+    return ScopedModelDescendant<InvoiceViewModel>(
+      builder: (context, child, model) {
+        if (model.invoiceDetailDTO == null) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: widget.callback,
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            size: 15,
+                          ),
+                        ),
+                        const SizedBox(width: 30),
+                        const Text(
+                          'Chi tiết hoá đơn',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 30),
+                        if (statusNum == 0)
+                          InkWell(
+                            onTap: () {
+                              DialogWidget.instance.openMsgDialog(
+                                  title: 'Bảo trì',
+                                  msg:
+                                      'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                            },
+                            child: const Text(
+                              'Chỉnh sửa hoá đơn',
+                              style: TextStyle(
+                                  color: AppColor.BLUE_TEXT,
+                                  fontSize: 15,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-              ],
-            ),
+                  Container(
+                    width: 500,
+                    height: 60,
+                    margin: const EdgeInsets.only(top: 30),
+                    child: Text(
+                      model.invoiceDetailDTO!.invoiceName,
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 20,
+                    child: Text(
+                      model.invoiceDetailDTO!.invoiceDescription,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  const SizedBox(height: 29),
+                  const MySeparator(
+                    color: AppColor.GREY_DADADA,
+                  ),
+                  const SizedBox(height: 30),
+                  Container(
+                    width: double.infinity,
+                    height: 20,
+                    child: const Text(
+                      'Thông tin khách hàng thanh toán',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: 1300,
+                    child: Column(
+                      children: [
+                        _itemTitlePaymentInfo(),
+                        ...model.invoiceDetailDTO!.customerDetailDTOS
+                            .asMap()
+                            .map(
+                              (index, e) => MapEntry(
+                                index,
+                                _buildItemPaymentInfo(e, index),
+                              ),
+                            )
+                            .values
+                            .toList()
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  const MySeparator(
+                    color: AppColor.GREY_DADADA,
+                  ),
+                  const SizedBox(height: 30),
+                  Container(
+                    width: double.infinity,
+                    height: 20,
+                    child: const Text(
+                      'Thông tin gói dịch vụ',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: 920,
+                    child: Column(
+                      children: [
+                        _itemTitleServiceInfo(),
+                        ...model.invoiceDetailDTO!.feePackageDetailDTOS
+                            .asMap()
+                            .map(
+                              (index, e) => MapEntry(
+                                index,
+                                _buildItemServiceInfo(e, index),
+                              ),
+                            )
+                            .values
+                            .toList()
+                        // _buildItemServiceInfo(),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Container(
+                    width: double.infinity,
+                    height: 20,
+                    child: const Text(
+                      'Danh mục hàng hoá / dịch vụ',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: statusNum == 0 ? 1360 : 1270,
+                    child: Column(
+                      children: [
+                        _itemTitleListService(),
+                        // _buildItemListService(),
+                        ...model.invoiceDetailDTO!.invoiceItemDetailDTOS
+                            .asMap()
+                            .map(
+                              (index, e) => MapEntry(
+                                index,
+                                _buildItemListService(e, index),
+                              ),
+                            )
+                            .values
+                            .toList()
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                ],
+              ),
+              Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: _bottomData(model.invoiceDetailDTO!))
+            ],
           ),
-          Container(
-            width: 500,
-            height: 60,
-            margin: const EdgeInsets.only(top: 30),
-            child: Text(
-              'Hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            width: double.infinity,
-            height: 20,
-            child: Text(
-              'Mô tả của hoá đơn thu phí dịch vụ phần mềm VietQR tháng 03-04/2024',
-              style: const TextStyle(fontSize: 15),
-            ),
-          ),
-          const SizedBox(height: 29),
-          const MySeparator(
-            color: AppColor.GREY_DADADA,
-          ),
-          const SizedBox(height: 30),
-          Container(
-            width: double.infinity,
-            height: 20,
-            child: const Text(
-              'Thông tin khách hàng thanh toán',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 30),
-          SizedBox(
-            width: 1300,
-            child: Column(
-              children: [
-                _itemTitlePaymentInfo(),
-                _buildItemPaymentInfo(),
-              ],
-            ),
-          ),
-          const SizedBox(height: 30),
-          const MySeparator(
-            color: AppColor.GREY_DADADA,
-          ),
-          const SizedBox(height: 30),
-          Container(
-            width: double.infinity,
-            height: 20,
-            child: const Text(
-              'Thông tin gói dịch vụ',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 30),
-          SizedBox(
-            width: 920,
-            child: Column(
-              children: [
-                _itemTitleServiceInfo(),
-                _buildItemServiceInfo(),
-              ],
-            ),
-          ),
-          const SizedBox(height: 30),
-          Container(
-            width: double.infinity,
-            height: 20,
-            child: const Text(
-              'Danh mục hàng hoá / dịch vụ',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 30),
-          SizedBox(
-            width: statusNum == 0 ? 1360 : 1270,
-            child: Column(
-              children: [
-                _itemTitleListService(),
-                _buildItemListService(),
-              ],
-            ),
-          ),
-          const SizedBox(height: 30),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -252,7 +292,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
     );
   }
 
-  Widget _buildItemPaymentInfo() {
+  Widget _buildItemPaymentInfo(CustomerDetailDTO dto, int index) {
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -263,7 +303,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 50,
             child: SelectionArea(
               child: Text(
-                '1',
+                index.toString(),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
               ),
@@ -275,21 +315,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'VSO0001',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 150,
-            child: SelectionArea(
-              child: Text(
-                'SAB',
+                dto.vso.isNotEmpty ? dto.vso : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -303,7 +329,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'API Service',
+                dto.merchantName.isNotEmpty ? dto.merchantName : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -317,7 +343,21 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '0541103612005\nMBBank',
+                dto.platform.isNotEmpty ? dto.platform : '-',
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                '${dto.bankAccount}\n${dto.bankShortName}',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -331,7 +371,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 200,
             child: SelectionArea(
               child: Text(
-                'Cong Ty Co Phan Dau Tu Hang Tieu Dung Quoc Te cong ty hang dau quoc te',
+                dto.userBankName,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -345,7 +385,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'VietQR Pro',
+                dto.connectionType,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -359,7 +399,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '093 186 5469',
+                dto.phoneNo,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -373,7 +413,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'admin@sab.vn',
+                dto.email,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -443,7 +483,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
     );
   }
 
-  Widget _buildItemServiceInfo() {
+  Widget _buildItemServiceInfo(FeePackageDetailDTO dto, index) {
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -454,7 +494,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 50,
             child: SelectionArea(
               child: Text(
-                '1',
+                index.toString(),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
               ),
@@ -466,21 +506,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'VQR5_PT',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 150,
-            child: SelectionArea(
-              child: Text(
-                '110,000',
+                dto.feePackage,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -494,7 +520,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '0',
+                StringUtils.formatNumberWithOutVND(dto.annualFee),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -508,7 +534,21 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '0.8',
+                StringUtils.formatNumberWithOutVND(dto.fixFee),
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                StringUtils.formatNumberWithOutVND(dto.percentFee),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -536,7 +576,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                'Chỉ GD đối soát',
+                dto.recordType == 0 ? 'Chỉ GD đối soát' : 'Tất cả GD',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -625,7 +665,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
     );
   }
 
-  Widget _buildItemListService() {
+  Widget _buildItemListService(InvoiceItemDetailDTO dto, int index) {
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -636,7 +676,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 50,
             child: SelectionArea(
               child: Text(
-                '1',
+                index.toString(),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
               ),
@@ -648,7 +688,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 300,
             child: SelectionArea(
               child: Text(
-                'Phí giao dịch phần mềm VietQR tháng 03/2024',
+                dto.invoiceItemName,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -662,7 +702,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                'Tháng',
+                dto.unit,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -676,7 +716,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 100,
             child: SelectionArea(
               child: Text(
-                '1',
+                dto.quantity.toString(),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -690,7 +730,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '100,000',
+                StringUtils.formatNumberWithOutVND(dto.amount),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -704,7 +744,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '100,000',
+                StringUtils.formatNumberWithOutVND(dto.totalAmount),
+
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -718,7 +759,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 100,
             child: SelectionArea(
               child: Text(
-                '8',
+                dto.vat.toString(),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -732,7 +773,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '8,000',
+                StringUtils.formatNumberWithOutVND(dto.vatAmount),
+
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -746,7 +788,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                '108,000',
+                StringUtils.formatNumberWithOutVND(dto.totalAmountAfterVat),
+
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -763,7 +806,12 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        DialogWidget.instance.openMsgDialog(
+                            title: 'Bảo trì',
+                            msg:
+                                'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      },
                       child: Container(
                         width: 30,
                         height: 30,
@@ -780,7 +828,12 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        DialogWidget.instance.openMsgDialog(
+                            title: 'Bảo trì',
+                            msg:
+                                'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      },
                       child: Container(
                         width: 30,
                         height: 30,
@@ -804,45 +857,13 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
     );
   }
 
-  Widget _headerWidget() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(30, 18, 30, 10),
-      width: MediaQuery.of(context).size.width * 0.32,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            "Quản lý hoá đơn",
-            style: TextStyle(fontSize: 15),
-          ),
-          Text(
-            "/",
-            style: TextStyle(fontSize: 15),
-          ),
-          Text(
-            "Danh sách hoá đơn",
-            style: TextStyle(fontSize: 15),
-          ),
-          Text(
-            "/",
-            style: TextStyle(fontSize: 15),
-          ),
-          Text(
-            " Chi tiết hoá đơn",
-            style: TextStyle(fontSize: 15),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _bottomData() {
+  Widget _bottomData(InvoiceDetailDTO dto) {
     return Container(
       width: double.infinity,
       height: 120,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           border: Border(
-            top: BorderSide(color: AppColor.BLACK, width: 1),
+            top: BorderSide(color: AppColor.GREY_DADADA, width: 1),
           ),
           color: AppColor.WHITE),
       child: Row(
@@ -853,15 +874,16 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Tổng tiền hàng',
                   style: TextStyle(fontSize: 15),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  '300,000 VND',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  StringUtils.formatNumber(dto.totalAmount),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -872,15 +894,16 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'VAT',
                   style: TextStyle(fontSize: 15),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  '24,000 VND',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  StringUtils.formatNumber(dto.vatAmount),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -898,11 +921,11 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  '324,000 VND',
+                  StringUtils.formatNumber(dto.totalAmountAfterVat),
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: statusNum == 0 ? AppColor.ORANGE : AppColor.GREEN,
+                    color: dto.status == 0 ? AppColor.ORANGE : AppColor.GREEN,
                   ),
                 )
               ],
@@ -921,11 +944,11 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Chưa thanh toán',
+                    dto.status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: statusNum == 0 ? AppColor.ORANGE : AppColor.GREEN,
+                      color: dto.status == 0 ? AppColor.ORANGE : AppColor.GREEN,
                     ),
                   )
                 ],

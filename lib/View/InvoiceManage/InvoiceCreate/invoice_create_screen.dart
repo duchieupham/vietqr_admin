@@ -15,6 +15,7 @@ import 'dart:html' as html;
 
 import '../../../ViewModel/invoice_viewModel.dart';
 import '../../../commons/constants/configurations/theme.dart';
+import '../../../commons/widget/dialog_widget.dart';
 import '../../../models/DTO/bank_detail_dto.dart';
 import '../../../models/DTO/service_item_dto.dart';
 
@@ -60,7 +61,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   }
 
   void onShowCreatePopup({required bool isEdit, ServiceItemDTO? dto}) async {
-    return await showDialog(
+    await showDialog(
       context: context,
       builder: (context) => PopupCreateServiceWidget(
         isEdit: isEdit,
@@ -485,7 +486,11 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                           )),
                                     ],
                                     onChanged: (value) {
-                                      model.changeType(value!);
+                                      // model.changeType(value!);
+                                      DialogWidget.instance.openMsgDialog(
+                                          title: 'Bảo trì',
+                                          msg:
+                                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
                                     },
                                   ),
                                 ),
@@ -499,15 +504,19 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () async {
-                                      if (model.type == 0) {
-                                        await model.getMerchant('',
-                                            isGetList: false);
-                                      } else {
-                                        await model.getBanks('');
-                                      }
-                                      onShowPopup(
-                                        model.type,
-                                      );
+                                      DialogWidget.instance.openMsgDialog(
+                                          title: 'Bảo trì',
+                                          msg:
+                                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                      // if (model.type == 0) {
+                                      //   await model.getMerchant('',
+                                      //       isGetList: false);
+                                      // } else {
+                                      //   await model.getBanks('');
+                                      // }
+                                      // onShowPopup(
+                                      //   model.type,
+                                      // );
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
@@ -911,6 +920,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child: TextField(
                                       controller: model.vatTextController,
+                                      onChanged: (value) {
+                                        model.onChangeVat(value);
+                                      },
                                       textInputAction: TextInputAction.done,
                                       keyboardType:
                                           const TextInputType.numberWithOptions(
