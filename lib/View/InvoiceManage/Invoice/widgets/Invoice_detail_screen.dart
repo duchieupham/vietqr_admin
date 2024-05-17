@@ -111,78 +111,90 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                       style: const TextStyle(fontSize: 15),
                     ),
                   ),
-                  const SizedBox(height: 29),
-                  const MySeparator(
-                    color: AppColor.GREY_DADADA,
-                  ),
+                  if (model
+                      .invoiceDetailDTO!.customerDetailDTOS.isNotEmpty) ...[
+                    const SizedBox(height: 29),
+                    const MySeparator(
+                      color: AppColor.GREY_DADADA,
+                    ),
+                    const SizedBox(height: 30),
+                    const SizedBox(
+                      width: double.infinity,
+                      height: 20,
+                      child: Text(
+                        'Thông tin khách hàng thanh toán',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: 1300,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          children: [
+                            _itemTitlePaymentInfo(),
+                            ...model.invoiceDetailDTO!.customerDetailDTOS
+                                .asMap()
+                                .map(
+                                  (index, e) => MapEntry(
+                                    index,
+                                    _buildItemPaymentInfo(e, index + 1),
+                                  ),
+                                )
+                                .values
+                                .toList()
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const MySeparator(
+                      color: AppColor.GREY_DADADA,
+                    ),
+                  ],
+                  if (model
+                      .invoiceDetailDTO!.feePackageDetailDTOS.isNotEmpty) ...[
+                    const SizedBox(height: 30),
+                    const SizedBox(
+                      width: double.infinity,
+                      height: 20,
+                      child: Text(
+                        'Thông tin gói dịch vụ',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: 920,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Column(
+                          children: [
+                            _itemTitleServiceInfo(),
+                            ...model.invoiceDetailDTO!.feePackageDetailDTOS
+                                .asMap()
+                                .map(
+                                  (index, e) => MapEntry(
+                                    index,
+                                    _buildItemServiceInfo(e, index + 1),
+                                  ),
+                                )
+                                .values
+                                .toList()
+                            // _buildItemServiceInfo(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 30),
-                  Container(
+                  const SizedBox(
                     width: double.infinity,
                     height: 20,
-                    child: const Text(
-                      'Thông tin khách hàng thanh toán',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: 1300,
-                    child: Column(
-                      children: [
-                        _itemTitlePaymentInfo(),
-                        ...model.invoiceDetailDTO!.customerDetailDTOS
-                            .asMap()
-                            .map(
-                              (index, e) => MapEntry(
-                                index,
-                                _buildItemPaymentInfo(e, index),
-                              ),
-                            )
-                            .values
-                            .toList()
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  const MySeparator(
-                    color: AppColor.GREY_DADADA,
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    width: double.infinity,
-                    height: 20,
-                    child: const Text(
-                      'Thông tin gói dịch vụ',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: 920,
-                    child: Column(
-                      children: [
-                        _itemTitleServiceInfo(),
-                        ...model.invoiceDetailDTO!.feePackageDetailDTOS
-                            .asMap()
-                            .map(
-                              (index, e) => MapEntry(
-                                index,
-                                _buildItemServiceInfo(e, index),
-                              ),
-                            )
-                            .values
-                            .toList()
-                        // _buildItemServiceInfo(),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    width: double.infinity,
-                    height: 20,
-                    child: const Text(
+                    child: Text(
                       'Danh mục hàng hoá / dịch vụ',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -190,22 +202,26 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                   ),
                   const SizedBox(height: 30),
                   SizedBox(
-                    width: statusNum == 0 ? 1360 : 1270,
-                    child: Column(
-                      children: [
-                        _itemTitleListService(),
-                        // _buildItemListService(),
-                        ...model.invoiceDetailDTO!.invoiceItemDetailDTOS
-                            .asMap()
-                            .map(
-                              (index, e) => MapEntry(
-                                index,
-                                _buildItemListService(e, index),
-                              ),
-                            )
-                            .values
-                            .toList()
-                      ],
+                    // width: statusNum == 0 ? 1360 : 1270,
+                    width: 1270,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [
+                          _itemTitleListService(),
+                          // _buildItemListService(),
+                          ...model.invoiceDetailDTO!.invoiceItemDetailDTOS
+                              .asMap()
+                              .map(
+                                (index, e) => MapEntry(
+                                  index,
+                                  _buildItemListService(e, index + 1),
+                                ),
+                              )
+                              .values
+                              .toList()
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -598,7 +614,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
         ),
       ),
       child: Row(
-        children: [
+        children: const [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
@@ -608,7 +624,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           BuildItemlTitle(
               title: 'Nội dung hoá đơn thanh toán',
               height: 50,
-              width: 300,
+              width: 250,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
           BuildItemlTitle(
@@ -644,7 +660,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           BuildItemlTitle(
               title: 'VAT (VND)',
               height: 50,
-              width: 150,
+              width: 120,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
           BuildItemlTitle(
@@ -653,13 +669,12 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          if (statusNum == 0)
-            BuildItemlTitle(
-                title: 'Thao tác',
-                height: 50,
-                width: 90,
-                alignment: Alignment.centerLeft,
-                textAlign: TextAlign.center),
+          BuildItemlTitle(
+              title: 'Thao tác',
+              height: 50,
+              width: 90,
+              alignment: Alignment.centerLeft,
+              textAlign: TextAlign.center),
         ],
       ),
     );
@@ -685,7 +700,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
-            width: 300,
+            width: 250,
             child: SelectionArea(
               child: Text(
                 dto.invoiceItemName,
@@ -702,7 +717,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                dto.unit,
+                dto.unit.isEmpty ? '-' : dto.unit,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -770,7 +785,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
-            width: 150,
+            width: 120,
             child: SelectionArea(
               child: Text(
                 StringUtils.formatNumberWithOutVND(dto.vatAmount),
