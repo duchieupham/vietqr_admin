@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/QrBoxManage/QrBox/widgets/title_item_qr_box_widget.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/qr_box_dto.dart';
 
@@ -351,13 +352,12 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                                       message: 'Xoá',
                                                       child: InkWell(
                                                         onTap: () {
-                                                          // DialogWidget
-                                                          //     .instance
-                                                          //     .openMsgDialog(
-                                                          //         title:
-                                                          //             'Bảo trì',
-                                                          //         msg:
-                                                          //             'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                          DialogWidget.instance
+                                                              .openMsgDialog(
+                                                                  title:
+                                                                      'Bảo trì',
+                                                                  msg:
+                                                                      'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
                                                         },
                                                         child: BoxLayout(
                                                           width: 30,
