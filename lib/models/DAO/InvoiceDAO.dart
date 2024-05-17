@@ -113,7 +113,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/invoice/invoice-item?bankId=$bankId&merchantId=${merchantId ?? ''}&type=$type&time=$time&vat=$vat';
+          'https://api.vietqr.org/vqr/mock/invoice/invoice-item?bankId=$bankId&merchantId=${merchantId ?? ''}&type=$type&time=$time&vat=$vat';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -181,7 +181,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/admin/bank-detail?bankId=$bankId&merchantId=${merchantId ?? ''}';
+          'https://api.vietqr.org/vqr/api/admin/bank-detail?bankId=$bankId&merchantId=${merchantId ?? ''}';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

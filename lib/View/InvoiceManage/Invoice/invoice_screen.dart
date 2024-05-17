@@ -215,7 +215,23 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           pageType = PageInvoice.LIST;
                         });
                       },
+                      onEdit: () {
+                        setState(() {
+                          pageType = PageInvoice.EDIT;
+                        });
+                      },
                       invoiceId: selectInvoiceId!),
+                ),
+              ] else ...[
+                Expanded(
+                  child: InvoiceEditScreen(
+                    invoiceId: selectInvoiceId!,
+                    callback: () {
+                      setState(() {
+                        pageType = PageInvoice.DETAIL;
+                      });
+                    },
+                  ),
                 ),
               ]
             ],
@@ -1044,6 +1060,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 child: TextField(
                                   controller: _invoiceController,
                                   decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.only(bottom: 8),
                                     border: InputBorder.none,
                                     hintText: 'Nhập mã hoá đơn',
                                     hintStyle: TextStyle(
@@ -1074,6 +1091,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 child: TextField(
                                   controller: _bankController,
                                   decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.only(bottom: 8),
+
                                     // contentPadding:
                                     //     EdgeInsets.only(bottom: 0),
                                     border: InputBorder.none,
@@ -1106,6 +1125,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 child: TextField(
                                   controller: _accController,
                                   decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.only(bottom: 8),
+
                                     // contentPadding:
                                     //     EdgeInsets.only(bottom: 0),
                                     border: InputBorder.none,

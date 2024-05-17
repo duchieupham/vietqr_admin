@@ -14,8 +14,13 @@ import '../../InvoiceCreate/widgets/item_title_widget.dart';
 class InvoiceDetailScreen extends StatefulWidget {
   final String invoiceId;
   final Function() callback;
+  final Function() onEdit;
+
   const InvoiceDetailScreen(
-      {super.key, required this.callback, required this.invoiceId});
+      {super.key,
+      required this.callback,
+      required this.onEdit,
+      required this.invoiceId});
 
   @override
   State<InvoiceDetailScreen> createState() => _InvoiceDetailScreenState();
@@ -23,7 +28,6 @@ class InvoiceDetailScreen extends StatefulWidget {
 
 class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
   late InvoiceViewModel _model;
-  int statusNum = 0;
 
   @override
   void initState() {
@@ -73,22 +77,23 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 30),
-                        if (statusNum == 0)
-                          InkWell(
-                            onTap: () {
-                              DialogWidget.instance.openMsgDialog(
-                                  title: 'Bảo trì',
-                                  msg:
-                                      'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                            },
-                            child: const Text(
-                              'Chỉnh sửa hoá đơn',
-                              style: TextStyle(
-                                  color: AppColor.BLUE_TEXT,
-                                  fontSize: 15,
-                                  decoration: TextDecoration.underline),
-                            ),
+                        InkWell(
+                          onTap: widget.onEdit,
+                          // onTap: () {
+
+                          //   DialogWidget.instance.openMsgDialog(
+                          //       title: 'Bảo trì',
+                          //       msg:
+                          //           'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                          // },
+                          child: const Text(
+                            'Chỉnh sửa hoá đơn',
+                            style: TextStyle(
+                                color: AppColor.BLUE_TEXT,
+                                fontSize: 15,
+                                decoration: TextDecoration.underline),
                           ),
+                        ),
                       ],
                     ),
                   ),
@@ -103,14 +108,12 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 20,
-                    child: Text(
-                      model.invoiceDetailDTO!.invoiceDescription,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
+                  model.invoiceDetailDTO!.invoiceDescription.isNotEmpty
+                      ? Text(
+                          model.invoiceDetailDTO!.invoiceDescription,
+                          style: const TextStyle(fontSize: 15),
+                        )
+                      : const SizedBox.shrink(),
                   if (model
                       .invoiceDetailDTO!.customerDetailDTOS.isNotEmpty) ...[
                     const SizedBox(height: 29),
@@ -812,61 +815,61 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               ),
             ),
           ),
-          if (statusNum == 0)
-            Container(
-              alignment: Alignment.center,
-              height: 50,
-              width: 90,
-              child: SelectionArea(
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        DialogWidget.instance.openMsgDialog(
-                            title: 'Bảo trì',
-                            msg:
-                                'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                      },
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.edit,
-                          size: 12,
-                          color: AppColor.BLUE_TEXT,
-                        ),
+          Container(
+            alignment: Alignment.center,
+            height: 50,
+            width: 90,
+            child: SelectionArea(
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: widget.onEdit,
+                    // onTap: () {
+                    //   DialogWidget.instance.openMsgDialog(
+                    //       title: 'Bảo trì',
+                    //       msg:
+                    //           'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                    // },
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.edit,
+                        size: 12,
+                        color: AppColor.BLUE_TEXT,
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        DialogWidget.instance.openMsgDialog(
-                            title: 'Bảo trì',
-                            msg:
-                                'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                      },
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: AppColor.RED_TEXT.withOpacity(0.3),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.delete_forever,
-                          size: 12,
-                          color: AppColor.RED_TEXT,
-                        ),
+                  ),
+                  const SizedBox(width: 10),
+                  InkWell(
+                    onTap: () {
+                      DialogWidget.instance.openMsgDialog(
+                          title: 'Bảo trì',
+                          msg:
+                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                    },
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: AppColor.RED_TEXT.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.delete_forever,
+                        size: 12,
+                        color: AppColor.RED_TEXT,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+          ),
         ],
       ),
     );

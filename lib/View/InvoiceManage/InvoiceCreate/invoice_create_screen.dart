@@ -486,11 +486,11 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                           )),
                                     ],
                                     onChanged: (value) {
-                                      // model.changeType(value!);
-                                      DialogWidget.instance.openMsgDialog(
-                                          title: 'Bảo trì',
-                                          msg:
-                                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                      model.changeType(value!);
+                                      // DialogWidget.instance.openMsgDialog(
+                                      //     title: 'Bảo trì',
+                                      //     msg:
+                                      //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
                                     },
                                   ),
                                 ),
@@ -504,19 +504,19 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () async {
-                                      DialogWidget.instance.openMsgDialog(
-                                          title: 'Bảo trì',
-                                          msg:
-                                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                                      // if (model.type == 0) {
-                                      //   await model.getMerchant('',
-                                      //       isGetList: false);
-                                      // } else {
-                                      //   await model.getBanks('');
-                                      // }
-                                      // onShowPopup(
-                                      //   model.type,
-                                      // );
+                                      // DialogWidget.instance.openMsgDialog(
+                                      //     title: 'Bảo trì',
+                                      //     msg:
+                                      //         'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                      if (model.type == 0) {
+                                        await model.getMerchant('',
+                                            isGetList: false);
+                                      } else {
+                                        await model.getBanks('');
+                                      }
+                                      onShowPopup(
+                                        model.type,
+                                      );
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(

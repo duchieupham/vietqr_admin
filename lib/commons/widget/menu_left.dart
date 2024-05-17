@@ -18,6 +18,8 @@ class MenuLeft extends StatelessWidget {
   final List<Widget> subMenuTransStatistics;
   final List<Widget> subMenuTransFee;
   final List<Widget> subMenuInvoice;
+  final List<Widget> subMenuQrBox;
+
   final List<Widget> subMenuSetting;
 
   const MenuLeft({
@@ -29,6 +31,7 @@ class MenuLeft extends StatelessWidget {
     this.subMenuTransStatistics = const [],
     this.subMenuTransFee = const [],
     this.subMenuInvoice = const [],
+    this.subMenuQrBox = const [],
     this.subMenuSetting = const [],
   });
 
@@ -112,6 +115,16 @@ class MenuLeft extends StatelessWidget {
                 bold: true,
                 onTap: () {
                   context.go('/invoice-list');
+                },
+              ),
+              ItemMenuHome(
+                title: 'Quản lý QR Box',
+                enableDropDownList: true,
+                listItemDrop: subMenuQrBox,
+                isSelect: currentType == MenuType.QR_BOX,
+                bold: true,
+                onTap: () {
+                  context.go('/qr-box');
                 },
               ),
               ItemMenuHome(
