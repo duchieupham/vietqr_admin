@@ -7,6 +7,7 @@ enum MenuType {
   TRANS_STATISTICS,
   TRANS_FEE,
   INVOICE,
+  QR_BOX,
   SETTING,
   LOG_OUT
 }

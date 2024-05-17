@@ -14,6 +14,7 @@ import 'package:vietqr_admin/service/shared_references/user_information_helper.d
 import 'View/FeeManage/fee_manage_screen.dart';
 import 'View/InvoiceManage/invoice_manage_screen.dart';
 import 'View/MerchantManage/merchant_manage_screen.dart';
+import 'View/QrBoxManage/qr_box_screen.dart';
 import 'View/SettingManage/setting_env_screen.dart';
 import 'View/TransManage/trans_manage_screen.dart';
 import 'View/TransStatistics/trans_statistics_screen.dart';
@@ -225,6 +226,31 @@ final GoRouter _router = GoRouter(
             context: context,
             state: state,
             child: const InvoiceManageScreen(type: Invoice.CREATE));
+      },
+    ),
+    GoRoute(
+      path: '/qr-box',
+      redirect: (context, state) => userId.isNotEmpty ? '/qr-box' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const QrBoxScreen(type: QrBox.LIST),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const QrBoxScreen(type: QrBox.LIST));
+      },
+    ),
+    GoRoute(
+      path: '/active-qr-box',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/active-qr-box' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const QrBoxScreen(type: QrBox.ACTIVE),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const QrBoxScreen(type: QrBox.ACTIVE));
       },
     ),
     GoRoute(
