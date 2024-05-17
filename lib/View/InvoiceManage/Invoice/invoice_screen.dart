@@ -687,7 +687,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          height: 50,
+                          height: 40,
                           color: AppColor.BLUE_TEXT.withOpacity(0.3),
                           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                           child: Center(
@@ -703,12 +703,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         ),
                         Container(
                           width: 1,
-                          height: 50,
+                          height: 40,
                           color: AppColor.GREY_DADADA,
                         ),
                         Container(
                           width: 120,
-                          height: 50,
+                          height: 40,
                           color: AppColor.WHITE,
                           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                           child: Row(
@@ -736,7 +736,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          height: 50,
+                          height: 40,
                           color: AppColor.BLUE_TEXT.withOpacity(0.3),
                           padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                           child: const Center(
@@ -749,11 +749,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         ),
                         Container(
                           width: 1,
-                          height: 50,
+                          height: 40,
                           color: AppColor.GREY_DADADA,
                         ),
                         Container(
-                          height: 50,
+                          height: 40,
                           color: AppColor.WHITE,
                           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                           child: Row(
@@ -792,7 +792,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          height: 50,
+                          height: 40,
                           color: AppColor.BLUE_TEXT.withOpacity(0.3),
                           padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                           child: const Center(
@@ -805,11 +805,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         ),
                         Container(
                           width: 1,
-                          height: 50,
+                          height: 40,
                           color: AppColor.GREY_DADADA,
                         ),
                         Container(
-                          height: 50,
+                          height: 40,
                           color: AppColor.WHITE,
                           padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                           child: Row(
@@ -918,7 +918,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  height: 50,
+                  height: 40,
                   width: model.value == 9 ? 250 : 500,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: BoxDecoration(
@@ -927,7 +927,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   child: Row(
                     children: [
                       SizedBox(
-                        height: 50,
+                        height: 40,
                         width: 220,
                         child: DropdownButton<int>(
                           isExpanded: true,
@@ -986,7 +986,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             children: [
                               const SizedBox(width: 8),
                               const SizedBox(
-                                height: 50,
+                                height: 40,
                                 child: VerticalDivider(
                                   thickness: 1,
                                   color: AppColor.GREY_DADADA,
@@ -1033,7 +1033,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             children: [
                               const SizedBox(width: 8),
                               const SizedBox(
-                                height: 50,
+                                height: 40,
                                 child: VerticalDivider(
                                   thickness: 1,
                                   color: AppColor.GREY_DADADA,
@@ -1061,7 +1061,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             children: [
                               const SizedBox(width: 8),
                               const SizedBox(
-                                height: 50,
+                                height: 40,
                                 child: VerticalDivider(
                                   thickness: 1,
                                   color: AppColor.GREY_DADADA,
@@ -1093,7 +1093,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             children: [
                               const SizedBox(width: 8),
                               const SizedBox(
-                                height: 50,
+                                height: 40,
                                 child: VerticalDivider(
                                   thickness: 1,
                                   color: AppColor.GREY_DADADA,
@@ -1125,7 +1125,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             children: [
                               const SizedBox(width: 8),
                               const SizedBox(
-                                height: 50,
+                                height: 40,
                                 child: VerticalDivider(
                                   thickness: 1,
                                   color: AppColor.GREY_DADADA,
@@ -1133,7 +1133,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               ),
                               SizedBox(
                                 width: 234,
-                                height: 50,
+                                height: 40,
                                 // padding: const EdgeInsets.symmetric(
                                 //     horizontal: 10),
                                 child: DropdownButton<int>(
@@ -1193,14 +1193,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   child: Row(
                     children: [
                       const SizedBox(
-                        width: 50,
+                        width: 40,
                         child: Center(
                           child: Text('Tháng'),
                         ),
                       ),
                       const SizedBox(width: 8),
                       const SizedBox(
-                        height: 50,
+                        height: 40,
                         child: VerticalDivider(
                           thickness: 1,
                           color: AppColor.GREY_DADADA,
@@ -1248,7 +1248,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         time: selectDate!, page: 1, filter: textInput()!);
                   },
                   child: Container(
-                    height: 50,
+                    height: 40,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: AppColor.BLUE_TEXT,
@@ -1289,7 +1289,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   colorEnableText: AppColor.BLUE_TEXT,
                   border: Border.all(color: AppColor.BLUE_TEXT),
                   radius: 10,
-                  height: 50,
+                  height: 40,
                 ),
               ),
             ),
