@@ -105,6 +105,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
           const MySeparator(color: AppColor.GREY_DADADA),
           const SizedBox(height: 30),
           _buildListQrBox(),
+          const SizedBox(height: 30),
           _pagingWidget(),
           const SizedBox(height: 20),
         ],
@@ -146,218 +147,178 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
 
         MetaDataDTO metadata = model.metadata!;
 
-        return Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Danh sách QR Box',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 220,
-                child: Stack(
-                  children: [
-                    SingleChildScrollView(
-                      controller: controller1,
-                      child: ScrollConfiguration(
-                          behavior: MyCustomScrollBehavior(),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Danh sách QR Box',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              height: 450,
+              width: MediaQuery.of(context).size.width - 220,
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    controller: controller1,
+                    child: ScrollConfiguration(
+                        behavior: MyCustomScrollBehavior(),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            width: 1950,
+                            child: Column(
+                              children: [
+                                const TitleItemQrBoxWidget(),
+                                ...buildItemList(list, metadata)
+                              ],
+                            ),
+                          ),
+                        )),
+                  ),
+                  SizedBox(
+                    width: 1950,
+                    child: Row(
+                      children: [
+                        const Expanded(child: SizedBox()),
+                        SingleChildScrollView(
+                          controller: controller2,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: SizedBox(
-                              width: 1950,
-                              child: Column(
-                                children: [
-                                  const TitleItemQrBoxWidget(),
-                                  ...buildItemList(list, metadata)
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColor.WHITE,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color:
+                                          AppColor.GREY_BORDER.withOpacity(0.8),
+                                      blurRadius: 5,
+                                      spreadRadius: 1,
+                                      offset: const Offset(0, 0)),
                                 ],
                               ),
-                            ),
-                          )),
-                    ),
-                    SizedBox(
-                      width: 1950,
-                      child: Row(
-                        children: [
-                          const Expanded(child: SizedBox()),
-                          SingleChildScrollView(
-                            controller: controller2,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColor.WHITE,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: AppColor.GREY_BORDER
-                                            .withOpacity(0.8),
-                                        blurRadius: 5,
-                                        spreadRadius: 1,
-                                        offset: const Offset(0, 0)),
-                                  ],
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: AppColor.BLUE_TEXT
-                                              .withOpacity(0.3)),
-                                      child: Row(
-                                        children: [
-                                          Container(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                        color: AppColor.BLUE_TEXT
+                                            .withOpacity(0.3)),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                            height: 50,
+                                            width: 130,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: AppColor.GREY_TEXT
+                                                        .withOpacity(0.3))),
+                                            child: const Text(
+                                              'Trạng thái',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: AppColor.BLACK,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                            height: 50,
+                                            width: 100,
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: AppColor.GREY_TEXT
+                                                        .withOpacity(0.3))),
+                                            child: const Text(
+                                              'Thao tác',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: AppColor.BLACK,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  ...list!.map(
+                                    (e) {
+                                      return Container(
+                                        alignment: Alignment.center,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  border: Border(
+                                                      left: BorderSide(
+                                                          color: AppColor
+                                                              .GREY_TEXT
+                                                              .withOpacity(
+                                                                  0.3)),
+                                                      bottom: BorderSide(
+                                                          color: AppColor
+                                                              .GREY_TEXT
+                                                              .withOpacity(
+                                                                  0.3)),
+                                                      right: BorderSide(
+                                                          color: AppColor
+                                                              .GREY_TEXT
+                                                              .withOpacity(
+                                                                  0.3)))),
                                               height: 50,
                                               width: 130,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: AppColor.GREY_TEXT
-                                                          .withOpacity(0.3))),
-                                              child: const Text(
-                                                'Trạng thái',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
+                                              child: SelectionArea(
+                                                child: Text(
+                                                  // e.status == 0
+                                                  //     ? 'Không xác định'
+                                                  //     : 'Đã thanh toán',
+                                                  'Không xác định',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
                                                     fontSize: 12,
-                                                    color: AppColor.BLACK,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )),
-                                          Container(
-                                              height: 50,
-                                              width: 100,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: AppColor.GREY_TEXT
-                                                          .withOpacity(0.3))),
-                                              child: const Text(
-                                                'Thao tác',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: AppColor.BLACK,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                    ...list!.map(
-                                      (e) {
-                                        return Container(
-                                          alignment: Alignment.center,
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                    border: Border(
-                                                        left: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                        bottom: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                        right: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)))),
-                                                height: 50,
-                                                width: 130,
-                                                child: SelectionArea(
-                                                  child: Text(
-                                                    e.status == 0
-                                                        ? 'Không xác định'
-                                                        : 'Đã thanh toán',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: e.status == 0
-                                                            ? AppColor
-                                                                .ORANGE_DARK
-                                                            : AppColor.GREEN),
+                                                    // color: e.status == 0
+                                                    //     ? AppColor.ORANGE_DARK
+                                                    //     : AppColor.GREEN,
+                                                    color: AppColor.ORANGE_DARK,
                                                   ),
                                                 ),
                                               ),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8),
-                                                alignment: Alignment.centerLeft,
-                                                decoration: BoxDecoration(
-                                                    border: Border(
-                                                        left: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                        bottom: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                        right: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)))),
-                                                height: 50,
-                                                width: 100,
-                                                child: Row(
-                                                  children: [
-                                                    Visibility(
-                                                      visible: e.status == 0,
-                                                      child: Tooltip(
-                                                        message: 'Mã QR',
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            onShowPopup(e);
-                                                          },
-                                                          child: BoxLayout(
-                                                            width: 30,
-                                                            height: 30,
-                                                            borderRadius: 100,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(0),
-                                                            bgColor: AppColor
-                                                                .BLUE_TEXT
-                                                                .withOpacity(
-                                                                    0.3),
-                                                            child: const Icon(
-                                                              Icons.qr_code,
-                                                              size: 12,
-                                                              color: AppColor
-                                                                  .BLUE_TEXT,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Visibility(
-                                                      visible: e.status == 0,
-                                                      child: const SizedBox(
-                                                          width: 10),
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    Tooltip(
-                                                      message: 'Xoá',
+                                            ),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                              alignment: Alignment.centerLeft,
+                                              decoration: BoxDecoration(
+                                                  border: Border(
+                                                      left: BorderSide(
+                                                          color: AppColor
+                                                              .GREY_TEXT
+                                                              .withOpacity(
+                                                                  0.3)),
+                                                      bottom: BorderSide(
+                                                          color: AppColor
+                                                              .GREY_TEXT
+                                                              .withOpacity(
+                                                                  0.3)),
+                                                      right: BorderSide(
+                                                          color: AppColor
+                                                              .GREY_TEXT
+                                                              .withOpacity(
+                                                                  0.3)))),
+                                              height: 50,
+                                              width: 100,
+                                              child: Row(
+                                                children: [
+                                                  Visibility(
+                                                    visible: true,
+                                                    child: Tooltip(
+                                                      message: 'Tạo mã QR',
                                                       child: InkWell(
                                                         onTap: () {
-                                                          DialogWidget.instance
-                                                              .openMsgDialog(
-                                                                  title:
-                                                                      'Bảo trì',
-                                                                  msg:
-                                                                      'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                          onShowPopup(e);
                                                         },
                                                         child: BoxLayout(
                                                           width: 30,
@@ -369,39 +330,76 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                                               const EdgeInsets
                                                                   .all(0),
                                                           bgColor: AppColor
-                                                              .RED_TEXT
+                                                              .BLUE_TEXT
                                                               .withOpacity(0.3),
                                                           child: const Icon(
-                                                            Icons
-                                                                .delete_forever,
+                                                            Icons.qr_code,
                                                             size: 12,
                                                             color: AppColor
-                                                                .RED_TEXT,
+                                                                .BLUE_TEXT,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                  Visibility(
+                                                    visible: true,
+                                                    child: const SizedBox(
+                                                        width: 10),
+                                                  ),
+                                                  const SizedBox(width: 10),
+                                                  Tooltip(
+                                                    message: 'Xoá',
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        DialogWidget.instance
+                                                            .openMsgDialog(
+                                                                title:
+                                                                    'Bảo trì',
+                                                                msg:
+                                                                    'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                      },
+                                                      child: BoxLayout(
+                                                        width: 30,
+                                                        height: 30,
+                                                        borderRadius: 100,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(0),
+                                                        bgColor: AppColor
+                                                            .RED_TEXT
+                                                            .withOpacity(0.3),
+                                                        child: const Icon(
+                                                          Icons.delete_forever,
+                                                          size: 12,
+                                                          color:
+                                                              AppColor.RED_TEXT,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  ],
-                                ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  )
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
