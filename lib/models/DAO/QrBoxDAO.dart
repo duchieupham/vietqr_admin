@@ -100,7 +100,7 @@ class QrBoxDAO extends BaseDAO {
     List<QrBoxDTO> result = [];
     try {
       String url =
-          'https://dev.vietqr.org/vqr/api/tid-internal/list?page=$page&size=${size ?? 20}&type=$type&value=$value';
+          'https://api.vietqr.org/vqr/api/tid-internal/list?page=$page&size=${size ?? 20}&type=$type&value=$value';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
