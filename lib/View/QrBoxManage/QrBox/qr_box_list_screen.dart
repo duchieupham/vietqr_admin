@@ -273,7 +273,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                                 child: SelectionArea(
                                                   child: Text(
                                                     e.status == 0
-                                                        ? 'Chờ thanh toán'
+                                                        ? 'Không xác định'
                                                         : 'Đã thanh toán',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
