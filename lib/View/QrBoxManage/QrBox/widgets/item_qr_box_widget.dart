@@ -50,7 +50,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.macAddr,
+                dto.macAddr.isNotEmpty ? dto.macAddr : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -67,7 +67,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.boxCode,
+                dto.boxCode.isNotEmpty ? dto.boxCode : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -84,7 +84,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.merchantName,
+                dto.merchantName.isNotEmpty ? dto.merchantName : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -101,7 +101,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.terminalName,
+                dto.terminalName.isNotEmpty ? dto.terminalName : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -118,7 +118,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.terminalCode,
+                dto.terminalCode.isNotEmpty ? dto.terminalCode : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -126,7 +126,7 @@ class ItemQrBoxWidget extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            alignment: Alignment.centerRight,
+            alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -139,12 +139,12 @@ class ItemQrBoxWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    dto.bankAccount,
+                    dto.bankAccount.isNotEmpty ? dto.bankAccount : '-',
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
                   ),
                   Text(
-                    dto.bankShortName,
+                    dto.bankShortName.isNotEmpty ? dto.bankShortName : '-',
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
                   ),
@@ -163,7 +163,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.userBankName,
+                dto.userBankName.isNotEmpty ? dto.userBankName : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -180,7 +180,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 120,
             child: SelectionArea(
               child: Text(
-                dto.feePackage,
+                dto.feePackage.isNotEmpty ? dto.feePackage : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -197,7 +197,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 200,
             child: SelectionArea(
               child: Text(
-                dto.boxAddress,
+                dto.boxAddress.isNotEmpty ? dto.boxAddress : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -214,7 +214,7 @@ class ItemQrBoxWidget extends StatelessWidget {
             width: 300,
             child: SelectionArea(
               child: Text(
-                dto.certificate,
+                dto.certificate.isNotEmpty ? dto.certificate : '-',
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
