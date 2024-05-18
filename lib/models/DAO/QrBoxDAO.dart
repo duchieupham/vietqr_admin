@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
+import 'package:vietqr_admin/models/DTO/bank_type_dto.dart';
 import 'package:vietqr_admin/models/DTO/qr_box_dto.dart';
 
 import '../../commons/constants/utils/base_api.dart';
@@ -8,6 +9,53 @@ import '../../commons/constants/utils/log.dart';
 import '../DTO/metadata_dto.dart';
 
 class QrBoxDAO extends BaseDAO {
+  Future<bool?> activeQrBox(
+      {String? boxAddress,
+      String? qrCertificate,
+      String? bankAccount,
+      String? terminalName}) async {
+    try {
+      Map<String, dynamic> params = {};
+      params['boxAddress'] = boxAddress;
+      params['qrCertificate'] = qrCertificate;
+      params['bankCode'] = 'MB';
+      params['bankAccount'] = bankAccount;
+      params['terminalName'] = terminalName;
+
+      String url = 'https://api.vietqr.org/vqr/api/tid-internal/sync';
+      final response = await BaseAPIClient.postAPI(
+        body: params,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<List<BankTypeDTO>?> getBanks() async {
+    List<BankTypeDTO> result = [];
+
+    try {
+      String url = 'https://api.vietqr.org/vqr/api/bank-type';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+
+        result = data.map<BankTypeDTO>((e) => BankTypeDTO.fromJson(e)).toList();
+        return result;
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return null;
+  }
+
   Future<bool?> createQrBox(QrBoxDTO dto,
       {String? note, int? amount, String? content}) async {
     try {
