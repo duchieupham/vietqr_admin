@@ -157,664 +157,668 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
           return const SizedBox.shrink();
         }
         InvoiceDetailDTO? detailDTO = model.invoiceDetailDTO;
-        return Container(
-          padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 30,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: widget.callback,
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        size: 15,
+        return SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 30,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: widget.callback,
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          size: 15,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 30),
-                    const Text(
-                      'Chỉnh sửa hoá đơn',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                      const SizedBox(width: 30),
+                      const Text(
+                        'Chỉnh sửa hoá đơn',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              const Text(
-                'Thông tin khách hàng thanh toán',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                height: 80,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 350,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                            height: 20,
-                            child: Text(
-                              'Tên hoá đơn*',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 350,
-                            height: 40,
-                            padding: const EdgeInsets.only(
-                                left: 10, bottom: 8, top: 4),
-                            decoration: BoxDecoration(
-                              color:
-                                  Colors.white, // Changed to white background
-                              border: Border.all(
-                                color: Colors.grey, // Gray border
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                controller: _invoiceTextController,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: detailDTO!.invoiceName.isNotEmpty
-                                      ? detailDTO.invoiceName
-                                      : 'Nhập tên hoá đơn tại đây',
-                                  hintStyle: const TextStyle(
-                                      color: AppColor.GREY_TEXT, fontSize: 15),
-                                  suffixIcon: const IconButton(
-                                      onPressed: null,
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 15,
-                                        color: AppColor.BLUE_TEXT,
-                                      )),
-                                ),
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                                textAlign: TextAlign.left,
-                                maxLines: 1,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: 350,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                            height: 20,
-                            child: Text(
-                              'Mô tả hoá đơn',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 350,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            padding: const EdgeInsets.only(
-                                left: 10, bottom: 8, top: 4),
-                            child: Center(
-                              child: TextField(
-                                controller: _descriptionTextController,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: detailDTO
-                                          .invoiceDescription.isNotEmpty
-                                      ? detailDTO.invoiceDescription
-                                      : 'Nhập thông tin mô tả hoá đơn ở đây',
-                                  hintStyle: const TextStyle(
-                                      fontSize: 15, color: AppColor.GREY_TEXT),
-                                  suffixIcon: const IconButton(
-                                      onPressed: null,
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 15,
-                                        color: AppColor.BLUE_TEXT,
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-              const MySeparator(
-                color: AppColor.GREY_DADADA,
-              ),
-              Container(
-                height: 30,
-                width: 250,
-                margin: const EdgeInsets.only(top: 30),
-                child: const Text(
+                const SizedBox(height: 30),
+                const Text(
                   'Thông tin khách hàng thanh toán',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                width: double.infinity,
-                height: 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 400,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'Đối tượng*',
-                              style: TextStyle(fontSize: 15),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: double.infinity,
+                  height: 80,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 350,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 100,
+                              height: 20,
+                              child: Text(
+                                'Tên hoá đơn*',
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 400,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 350,
+                              height: 40,
+                              padding: const EdgeInsets.only(
+                                  left: 10, bottom: 8, top: 4),
+                              decoration: BoxDecoration(
+                                color:
+                                    Colors.white, // Changed to white background
+                                border: Border.all(
+                                  color: Colors.grey, // Gray border
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Center(
+                                child: TextField(
+                                  controller: _invoiceTextController,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: detailDTO!.invoiceName.isNotEmpty
+                                        ? detailDTO.invoiceName
+                                        : 'Nhập tên hoá đơn tại đây',
+                                    hintStyle: const TextStyle(
+                                        color: AppColor.GREY_TEXT,
+                                        fontSize: 15),
+                                    suffixIcon: const IconButton(
+                                        onPressed: null,
+                                        icon: Icon(
+                                          Icons.edit,
+                                          size: 15,
+                                          color: AppColor.BLUE_TEXT,
+                                        )),
+                                  ),
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        width: 350,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 100,
+                              height: 20,
+                              child: Text(
+                                'Mô tả hoá đơn',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 350,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
                                 border: Border.all(
                                   color: Colors.grey,
                                   width: 1,
                                 ),
-                                color: AppColor.GREY_DADADA),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 150,
-                                  height: 40,
-                                  decoration: const BoxDecoration(
-                                      border: Border(
-                                          right: BorderSide(
-                                              color: Colors.grey, width: 1))),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Text(
-                                        'Đại lý',
-                                        style: TextStyle(fontSize: 15),
-                                        textAlign: TextAlign.left,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              padding: const EdgeInsets.only(
+                                  left: 10, bottom: 8, top: 4),
+                              child: Center(
+                                child: TextField(
+                                  controller: _descriptionTextController,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: detailDTO
+                                            .invoiceDescription.isNotEmpty
+                                        ? detailDTO.invoiceDescription
+                                        : 'Nhập thông tin mô tả hoá đơn ở đây',
+                                    hintStyle: const TextStyle(
+                                        fontSize: 15,
+                                        color: AppColor.GREY_TEXT),
+                                    suffixIcon: const IconButton(
+                                        onPressed: null,
+                                        icon: Icon(
+                                          Icons.edit,
+                                          size: 15,
+                                          color: AppColor.BLUE_TEXT,
+                                        )),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+                const MySeparator(
+                  color: AppColor.GREY_DADADA,
+                ),
+                Container(
+                  height: 30,
+                  width: 250,
+                  margin: const EdgeInsets.only(top: 30),
+                  child: const Text(
+                    'Thông tin khách hàng thanh toán',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 400,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'Đối tượng*',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 400,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                  color: AppColor.GREY_DADADA),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 150,
+                                    height: 40,
+                                    decoration: const BoxDecoration(
+                                        border: Border(
+                                            right: BorderSide(
+                                                color: Colors.grey, width: 1))),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                          'Đại lý',
+                                          style: TextStyle(fontSize: 15),
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  height: 40,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Text(
-                                        'SAB',
-                                        style: TextStyle(fontSize: 15),
-                                        textAlign: TextAlign.left,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                  Container(
+                                    height: 40,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                          'SAB',
+                                          style: TextStyle(fontSize: 15),
+                                          textAlign: TextAlign.left,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 30),
-                    Container(
-                      width: 350,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'Tài khoản ngân hàng*',
-                              style: TextStyle(fontSize: 15),
+                      const SizedBox(width: 30),
+                      Container(
+                        width: 350,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'Tài khoản ngân hàng*',
+                                style: TextStyle(fontSize: 15),
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 350,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                                color: AppColor.GREY_DADADA),
-                            child: Container(
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 350,
                               height: 40,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    'MBBank - 0541103612005',
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
                                   ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                height: 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 250,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'Chủ tài khoản',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                                color: AppColor.GREY_DADADA),
-                            child: Container(
-                              height: 40,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    'Cong Ty Co Phan Dau Tu Hang dau viet nam quoc te',
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 30),
-                    Container(
-                      width: 250,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'Tài khoản VietQR',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                                color: AppColor.GREY_DADADA),
-                            child: Container(
-                              height: 40,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    '093 186 5469',
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 30),
-                    Container(
-                      width: 250,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'Email',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                                color: AppColor.GREY_DADADA),
-                            child: Container(
-                              height: 40,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    'admin@sab.vn',
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                height: 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 250,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'Luồng kết nối',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                                color: AppColor.GREY_DADADA),
-                            child: Container(
-                              height: 40,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    'VietQR Pro',
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 30),
-                    Container(
-                      width: 250,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'Gói dịch vụ',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                                color: AppColor.GREY_DADADA),
-                            child: Container(
-                              height: 40,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    'VQR5_PT',
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 30),
-                    Container(
-                      width: 250,
-                      height: 70,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            child: Text(
-                              'VAT (%)',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: 250,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color:
-                                  Colors.white, // Changed to white background
-                              border: Border.all(
-                                color: Colors.grey, // Gray border
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: TextField(
-                                    controller:
-                                        TextEditingController(text: '8'),
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Nhập VAT',
-                                      hintStyle: TextStyle(
-                                          color: AppColor.GREY_TEXT,
-                                          fontSize: 15),
+                                  color: AppColor.GREY_DADADA),
+                              child: Container(
+                                height: 40,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      'MBBank - 0541103612005',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                    textAlign: TextAlign.left,
-                                    maxLines: 1,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              const MySeparator(
-                color: AppColor.GREY_DADADA,
-              ),
-              const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                height: 20,
-                child: const Text(
-                  'Danh mục hàng hoá / dịch vụ',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  height: 70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 250,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'Chủ tài khoản',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                  color: AppColor.GREY_DADADA),
+                              child: Container(
+                                height: 40,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      'Cong Ty Co Phan Dau Tu Hang dau viet nam quoc te',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      Container(
+                        width: 250,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'Tài khoản VietQR',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                  color: AppColor.GREY_DADADA),
+                              child: Container(
+                                height: 40,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      '093 186 5469',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      Container(
+                        width: 250,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'Email',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                  color: AppColor.GREY_DADADA),
+                              child: Container(
+                                height: 40,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      'admin@sab.vn',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: 1360,
-                child: Column(
-                  children: [
-                    _itemTitlePaymentInfo(),
-                    _buildItemPaymentInfo(),
-                    _buildItemPaymentInfo(),
-                    _buildItemPaymentInfo(),
-                  ],
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  height: 70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 250,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'Luồng kết nối',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                  color: AppColor.GREY_DADADA),
+                              child: Container(
+                                height: 40,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      'VietQR Pro',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      Container(
+                        width: 250,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'Gói dịch vụ',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                  color: AppColor.GREY_DADADA),
+                              child: Container(
+                                height: 40,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Text(
+                                      'VQR5_PT',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      Container(
+                        width: 250,
+                        height: 70,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              child: Text(
+                                'VAT (%)',
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 250,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color:
+                                    Colors.white, // Changed to white background
+                                border: Border.all(
+                                  color: Colors.grey, // Gray border
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: TextField(
+                                      controller:
+                                          TextEditingController(text: '8'),
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Nhập VAT',
+                                        hintStyle: TextStyle(
+                                            color: AppColor.GREY_TEXT,
+                                            fontSize: 15),
+                                      ),
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 30),
-            ],
+                const SizedBox(
+                  height: 30,
+                ),
+                const MySeparator(
+                  color: AppColor.GREY_DADADA,
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  height: 20,
+                  child: const Text(
+                    'Danh mục hàng hoá / dịch vụ',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: 1360,
+                  child: Column(
+                    children: [
+                      _itemTitlePaymentInfo(),
+                      _buildItemPaymentInfo(),
+                      _buildItemPaymentInfo(),
+                      _buildItemPaymentInfo(),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         );
       },
