@@ -46,7 +46,7 @@ class InvoiceDAO extends BaseDAO {
 
   Future<InvoiceDetailDTO?> getInvoiceDetail(String invoiceId) async {
     try {
-      String url = 'https://api.vietqr.org/vqr/api/invoice/detail/$invoiceId';
+      String url = 'https://dev.vietqr.org/vqr/api/invoice/detail/$invoiceId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -64,7 +64,7 @@ class InvoiceDAO extends BaseDAO {
   Future<InvoiceDetailQrDTO?> getDetailQr(String invoiceId) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/admin-list/$invoiceId';
+          'https://dev.vietqr.org/vqr/api/invoice/admin-list/$invoiceId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -88,7 +88,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
+          'https://dev.vietqr.org/vqr/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -113,7 +113,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/mock/invoice/invoice-item?bankId=$bankId&merchantId=${merchantId ?? ''}&type=$type&time=$time&vat=$vat';
+          'https://dev.vietqr.org/vqr/api/invoice/invoice-item?bankId=$bankId&merchantId=${merchantId ?? ''}&type=$type&time=$time&vat=$vat';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -135,7 +135,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/invoice/merchant-list?&type=1&value=$value&page=$page&size=${size ?? 20}';
+          'https://dev.vietqr.org/vqr/api/invoice/merchant-list?&type=1&value=$value&page=$page&size=${size ?? 20}';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -143,7 +143,7 @@ class InvoiceDAO extends BaseDAO {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         metaDataDTO = MetaDataDTO.fromJson(data["metadata"]);
-        return MerchantDTO.fromJson(data['data']);
+        return MerchantDTO.fromJson(data);
       }
     } catch (e) {
       LOG.error(e.toString());
@@ -159,7 +159,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/invoice/bank-account-list?merchantId=${merchantId ?? ''}&page=$page&size=${size ?? 20}&type=1&value=$value';
+          'https://dev.vietqr.org/vqr/api/invoice/bank-account-list?merchantId=${merchantId ?? ''}&page=$page&size=${size ?? 20}&type=1&value=$value';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -167,7 +167,7 @@ class InvoiceDAO extends BaseDAO {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         metaDataDTO = MetaDataDTO.fromJson(data["metadata"]);
-        return BankInvoiceDTO.fromJson(data['data']);
+        return BankInvoiceDTO.fromJson(data);
       }
     } catch (e) {
       LOG.error(e.toString());
@@ -181,7 +181,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/admin/bank-detail?bankId=$bankId&merchantId=${merchantId ?? ''}';
+          'https://dev.vietqr.org/vqr/api/admin/bank-detail?bankId=$bankId&merchantId=${merchantId ?? ''}';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

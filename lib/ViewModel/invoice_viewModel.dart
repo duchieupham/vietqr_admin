@@ -152,6 +152,19 @@ class InvoiceViewModel extends BaseModel {
     notifyListeners();
   }
 
+  DateTime getMonth() {
+    DateTime now = DateTime.now();
+    int newMonth = now.month;
+    int newYear = now.year;
+
+    if (newMonth < 1) {
+      newMonth = 12; // Set month to December
+      newYear--; // Decrement year
+    }
+
+    return DateTime(newYear, newMonth);
+  }
+
   DateTime getPreviousMonth() {
     DateTime now = DateTime.now();
     int newMonth = now.month - 1;
@@ -170,7 +183,7 @@ class InvoiceViewModel extends BaseModel {
     try {
       setState(ViewStatus.Loading);
       bool? result = await _dao.createInvoice(
-          vat: double.parse(bankDetail!.vat.round().toString()),
+          vat: double.parse(bankDetail!.vat.toString()),
           bankId: selectBank!.bankId,
           merchantId: selectMerchantItem != null
               ? selectMerchantItem?.merchantId

@@ -59,7 +59,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
-    selectDate = _model.getPreviousMonth();
+    selectDate = _model.getMonth();
     _model.filterListInvoice(time: selectDate!, page: 1, filter: '');
 
     controller1 = ScrollController();
@@ -153,7 +153,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       _model.filterListInvoice(
           time: selectDate!, page: 1, filter: textInput()!);
     } else {
-      selectDate = _model.getPreviousMonth();
+      selectDate = _model.getMonth();
     }
   }
 
@@ -279,406 +279,449 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             ? Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 220,
-                    child: Stack(
-                      children: [
-                        SingleChildScrollView(
-                          controller: controller1,
-                          child: ScrollConfiguration(
-                            behavior: MyCustomScrollBehavior(),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: SizedBox(
-                                width: 2100,
-                                child: Column(
-                                  children: [
-                                    const TitleItemInvoiceWidget(),
-                                    ...buildItemList(list, metadata),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          // width: 1890,
-                          width: 2100,
-                          child: Row(
+                  child: list.isNotEmpty
+                      ? SizedBox(
+                          width: MediaQuery.of(context).size.width - 220,
+                          child: Stack(
                             children: [
-                              const Expanded(child: SizedBox()),
                               SingleChildScrollView(
-                                controller: controller2,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColor.WHITE,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: AppColor.GREY_BORDER
-                                                .withOpacity(0.8),
-                                            blurRadius: 5,
-                                            spreadRadius: 1,
-                                            offset: const Offset(0, 0)),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                              color: AppColor.BLUE_TEXT
-                                                  .withOpacity(0.3)),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                  height: 50,
-                                                  width: 130,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: AppColor
-                                                              .GREY_TEXT
-                                                              .withOpacity(
-                                                                  0.3))),
-                                                  child: const Text(
-                                                    'Trạng thái',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: AppColor.BLACK,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  )),
-                                              Container(
-                                                  height: 50,
-                                                  width: 210,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: AppColor
-                                                              .GREY_TEXT
-                                                              .withOpacity(
-                                                                  0.3))),
-                                                  child: const Text(
-                                                    'Thao tác',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: AppColor.BLACK,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
-                                        ...list.map(
-                                          (e) {
-                                            return Container(
-                                              alignment: Alignment.center,
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10),
-                                                    alignment: Alignment.center,
-                                                    decoration: BoxDecoration(
-                                                        border: Border(
-                                                            left: BorderSide(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3)),
-                                                            bottom: BorderSide(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3)),
-                                                            right: BorderSide(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3)))),
-                                                    height: 50,
-                                                    width: 130,
-                                                    child: SelectionArea(
-                                                      child: Text(
-                                                        e.status == 0
-                                                            ? 'Chờ thanh toán'
-                                                            : 'Đã thanh toán',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: e.status == 0
-                                                                ? AppColor
-                                                                    .ORANGE_DARK
-                                                                : AppColor
-                                                                    .GREEN),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 8),
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    decoration: BoxDecoration(
-                                                        border: Border(
-                                                            left: BorderSide(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3)),
-                                                            bottom: BorderSide(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3)),
-                                                            right: BorderSide(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3)))),
-                                                    height: 50,
-                                                    width: 210,
-                                                    child: SelectionArea(
-                                                      child: Row(
-                                                        children: [
-                                                          Visibility(
-                                                            visible:
-                                                                e.status == 0,
-                                                            child: Tooltip(
-                                                              message: 'Mã QR',
-                                                              child: InkWell(
-                                                                onTap: () {
-                                                                  onShowPopup(
-                                                                      e);
-                                                                },
-                                                                child:
-                                                                    BoxLayout(
-                                                                  width: 30,
-                                                                  height: 30,
-                                                                  borderRadius:
-                                                                      100,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(0),
-                                                                  bgColor: AppColor
-                                                                      .BLUE_TEXT
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons
-                                                                        .qr_code,
-                                                                    size: 12,
-                                                                    color: AppColor
-                                                                        .BLUE_TEXT,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Visibility(
-                                                            visible:
-                                                                e.status == 0,
-                                                            child:
-                                                                const SizedBox(
-                                                                    width: 10),
-                                                          ),
-                                                          Tooltip(
-                                                            message:
-                                                                'Thông tin hoá đơn',
-                                                            child: InkWell(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  selectInvoiceId =
-                                                                      e.invoiceId;
-                                                                  pageType =
-                                                                      PageInvoice
-                                                                          .DETAIL;
-                                                                });
-                                                              },
-                                                              child: BoxLayout(
-                                                                width: 30,
-                                                                height: 30,
-                                                                borderRadius:
-                                                                    100,
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(0),
-                                                                bgColor: AppColor
-                                                                    .BLUE_TEXT
-                                                                    .withOpacity(
-                                                                        0.3),
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons.info,
-                                                                  size: 12,
-                                                                  color: AppColor
-                                                                      .BLUE_TEXT,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Visibility(
-                                                            visible:
-                                                                e.status == 0,
-                                                            child:
-                                                                const SizedBox(
-                                                                    width: 10),
-                                                          ),
-                                                          Visibility(
-                                                            visible:
-                                                                e.status == 0,
-                                                            child: Tooltip(
-                                                              message:
-                                                                  'Chỉnh sửa',
-                                                              child: InkWell(
-                                                                onTap: () {
-                                                                  // setState(() {
-                                                                  //   pageNumber =
-                                                                  //       3;
-                                                                  // });
-                                                                },
-                                                                child:
-                                                                    BoxLayout(
-                                                                  width: 30,
-                                                                  height: 30,
-                                                                  borderRadius:
-                                                                      100,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(0),
-                                                                  bgColor: AppColor
-                                                                      .BLUE_TEXT
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons.edit,
-                                                                    size: 12,
-                                                                    color: AppColor
-                                                                        .BLUE_TEXT,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 10),
-                                                          Tooltip(
-                                                            message:
-                                                                'Xuất Excel',
-                                                            child: InkWell(
-                                                              onTap: () {
-                                                                // onShowPopupExcel();
-                                                                DialogWidget
-                                                                    .instance
-                                                                    .openMsgDialog(
-                                                                        title:
-                                                                            'Bảo trì',
-                                                                        msg:
-                                                                            'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                                                              },
-                                                              child: BoxLayout(
-                                                                width: 30,
-                                                                height: 30,
-                                                                borderRadius:
-                                                                    100,
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(0),
-                                                                bgColor: AppColor
-                                                                    .BLUE_TEXT
-                                                                    .withOpacity(
-                                                                        0.3),
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons.list,
-                                                                  size: 12,
-                                                                  color: AppColor
-                                                                      .BLUE_TEXT,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 10),
-                                                          Tooltip(
-                                                            message: 'Xoá',
-                                                            child: InkWell(
-                                                              onTap: () {
-                                                                DialogWidget
-                                                                    .instance
-                                                                    .openMsgDialog(
-                                                                        title:
-                                                                            'Bảo trì',
-                                                                        msg:
-                                                                            'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                                                              },
-                                                              child: BoxLayout(
-                                                                width: 30,
-                                                                height: 30,
-                                                                borderRadius:
-                                                                    100,
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(0),
-                                                                bgColor: AppColor
-                                                                    .RED_TEXT
-                                                                    .withOpacity(
-                                                                        0.3),
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .delete_forever,
-                                                                  size: 12,
-                                                                  color: AppColor
-                                                                      .RED_TEXT,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        )
-                                      ],
+                                controller: controller1,
+                                child: ScrollConfiguration(
+                                  behavior: MyCustomScrollBehavior(),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: SizedBox(
+                                      width: 2100,
+                                      child: Column(
+                                        children: [
+                                          const TitleItemInvoiceWidget(),
+                                          ...buildItemList(list, metadata)
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
+                              SizedBox(
+                                // width: 1890,
+                                width: 2100,
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: SizedBox()),
+                                    SingleChildScrollView(
+                                      controller: controller2,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: AppColor.WHITE,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: AppColor.GREY_BORDER
+                                                      .withOpacity(0.8),
+                                                  blurRadius: 5,
+                                                  spreadRadius: 1,
+                                                  offset: const Offset(0, 0)),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    color: AppColor.BLUE_TEXT
+                                                        .withOpacity(0.3)),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                        height: 50,
+                                                        width: 130,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                color: AppColor
+                                                                    .GREY_TEXT
+                                                                    .withOpacity(
+                                                                        0.3))),
+                                                        child: const Text(
+                                                          'Trạng thái',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: AppColor
+                                                                  .BLACK,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        )),
+                                                    Container(
+                                                        height: 50,
+                                                        width: 210,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                color: AppColor
+                                                                    .GREY_TEXT
+                                                                    .withOpacity(
+                                                                        0.3))),
+                                                        child: const Text(
+                                                          'Thao tác',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: AppColor
+                                                                  .BLACK,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        )),
+                                                  ],
+                                                ),
+                                              ),
+                                              ...list.map(
+                                                (e) {
+                                                  return Container(
+                                                    alignment: Alignment.center,
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 10),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          decoration: BoxDecoration(
+                                                              border: Border(
+                                                                  left: BorderSide(
+                                                                      color: AppColor
+                                                                          .GREY_TEXT
+                                                                          .withOpacity(
+                                                                              0.3)),
+                                                                  bottom: BorderSide(
+                                                                      color: AppColor
+                                                                          .GREY_TEXT
+                                                                          .withOpacity(
+                                                                              0.3)),
+                                                                  right: BorderSide(
+                                                                      color: AppColor
+                                                                          .GREY_TEXT
+                                                                          .withOpacity(
+                                                                              0.3)))),
+                                                          height: 50,
+                                                          width: 130,
+                                                          child: SelectionArea(
+                                                            child: Text(
+                                                              e.status == 0
+                                                                  ? 'Chờ thanh toán'
+                                                                  : 'Đã thanh toán',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: e.status ==
+                                                                          0
+                                                                      ? AppColor
+                                                                          .ORANGE_DARK
+                                                                      : AppColor
+                                                                          .GREEN),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      8),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          decoration: BoxDecoration(
+                                                              border: Border(
+                                                                  left: BorderSide(
+                                                                      color: AppColor
+                                                                          .GREY_TEXT
+                                                                          .withOpacity(
+                                                                              0.3)),
+                                                                  bottom: BorderSide(
+                                                                      color: AppColor
+                                                                          .GREY_TEXT
+                                                                          .withOpacity(
+                                                                              0.3)),
+                                                                  right: BorderSide(
+                                                                      color: AppColor
+                                                                          .GREY_TEXT
+                                                                          .withOpacity(
+                                                                              0.3)))),
+                                                          height: 50,
+                                                          width: 210,
+                                                          child: SelectionArea(
+                                                            child: Row(
+                                                              children: [
+                                                                Visibility(
+                                                                  visible:
+                                                                      e.status ==
+                                                                          0,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    message:
+                                                                        'Mã QR',
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        onShowPopup(
+                                                                            e);
+                                                                      },
+                                                                      child:
+                                                                          BoxLayout(
+                                                                        width:
+                                                                            30,
+                                                                        height:
+                                                                            30,
+                                                                        borderRadius:
+                                                                            100,
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        padding:
+                                                                            const EdgeInsets.all(0),
+                                                                        bgColor: AppColor
+                                                                            .BLUE_TEXT
+                                                                            .withOpacity(0.3),
+                                                                        child:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .qr_code,
+                                                                          size:
+                                                                              12,
+                                                                          color:
+                                                                              AppColor.BLUE_TEXT,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Visibility(
+                                                                  visible:
+                                                                      e.status ==
+                                                                          0,
+                                                                  child:
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              10),
+                                                                ),
+                                                                Tooltip(
+                                                                  message:
+                                                                      'Thông tin hoá đơn',
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap: () {
+                                                                      setState(
+                                                                          () {
+                                                                        selectInvoiceId =
+                                                                            e.invoiceId;
+                                                                        pageType =
+                                                                            PageInvoice.DETAIL;
+                                                                      });
+                                                                    },
+                                                                    child:
+                                                                        BoxLayout(
+                                                                      width: 30,
+                                                                      height:
+                                                                          30,
+                                                                      borderRadius:
+                                                                          100,
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              0),
+                                                                      bgColor: AppColor
+                                                                          .BLUE_TEXT
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .info,
+                                                                        size:
+                                                                            12,
+                                                                        color: AppColor
+                                                                            .BLUE_TEXT,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Visibility(
+                                                                  visible:
+                                                                      e.status ==
+                                                                          0,
+                                                                  child:
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              10),
+                                                                ),
+                                                                Visibility(
+                                                                  visible:
+                                                                      e.status ==
+                                                                          0,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    message:
+                                                                        'Chỉnh sửa',
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        // setState(() {
+                                                                        //   pageNumber =
+                                                                        //       3;
+                                                                        // });
+                                                                      },
+                                                                      child:
+                                                                          BoxLayout(
+                                                                        width:
+                                                                            30,
+                                                                        height:
+                                                                            30,
+                                                                        borderRadius:
+                                                                            100,
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        padding:
+                                                                            const EdgeInsets.all(0),
+                                                                        bgColor: AppColor
+                                                                            .BLUE_TEXT
+                                                                            .withOpacity(0.3),
+                                                                        child:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .edit,
+                                                                          size:
+                                                                              12,
+                                                                          color:
+                                                                              AppColor.BLUE_TEXT,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                Tooltip(
+                                                                  message:
+                                                                      'Xuất Excel',
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap: () {
+                                                                      // onShowPopupExcel();
+                                                                      DialogWidget
+                                                                          .instance
+                                                                          .openMsgDialog(
+                                                                              title: 'Bảo trì',
+                                                                              msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                                    },
+                                                                    child:
+                                                                        BoxLayout(
+                                                                      width: 30,
+                                                                      height:
+                                                                          30,
+                                                                      borderRadius:
+                                                                          100,
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              0),
+                                                                      bgColor: AppColor
+                                                                          .BLUE_TEXT
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .list,
+                                                                        size:
+                                                                            12,
+                                                                        color: AppColor
+                                                                            .BLUE_TEXT,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 10),
+                                                                Tooltip(
+                                                                  message:
+                                                                      'Xoá',
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap: () {
+                                                                      DialogWidget
+                                                                          .instance
+                                                                          .openMsgDialog(
+                                                                              title: 'Bảo trì',
+                                                                              msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                                    },
+                                                                    child:
+                                                                        BoxLayout(
+                                                                      width: 30,
+                                                                      height:
+                                                                          30,
+                                                                      borderRadius:
+                                                                          100,
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              0),
+                                                                      bgColor: AppColor
+                                                                          .RED_TEXT
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .delete_forever,
+                                                                        size:
+                                                                            12,
+                                                                        color: AppColor
+                                                                            .RED_TEXT,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
+                        )
+                      : const Center(
+                          child: Text("Không có hóa đơn"),
                         ),
-                      ],
-                    ),
-                  ),
                 ),
               )
             : const SizedBox.shrink();
@@ -1230,7 +1273,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            _onPickMonth(model.getPreviousMonth());
+                            _onPickMonth(model.getMonth());
                           },
                           child: Container(
                             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -1239,7 +1282,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               children: [
                                 Text(
                                   (selectDate == null
-                                      ? '${model.getPreviousMonth().month}/${model.getPreviousMonth().year}'
+                                      ? '${model.getMonth().month}/${model.getMonth().year}'
                                       : '${selectDate?.month}/${selectDate?.year}'),
                                   style: const TextStyle(fontSize: 15),
                                 ),

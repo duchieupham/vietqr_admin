@@ -7,14 +7,13 @@ class BankInvoiceDTO {
 
   factory BankInvoiceDTO.fromJson(Map<String, dynamic> json) {
     return BankInvoiceDTO(
-      items:
-          List<BankItem>.from(json['items'].map((x) => BankItem.fromJson(x))),
+      items: List<BankItem>.from(json['data'].map((x) => BankItem.fromJson(x))),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'items': List<dynamic>.from(items.map((x) => x.toJson())),
+      'data': List<dynamic>.from(items.map((x) => x.toJson())),
     };
   }
 }

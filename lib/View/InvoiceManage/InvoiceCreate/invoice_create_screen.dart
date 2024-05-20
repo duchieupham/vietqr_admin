@@ -1178,7 +1178,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             width: 100,
             child: SelectionArea(
               child: Text(
-                item.vat.round().toString(),
+                item.vat.toString(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),

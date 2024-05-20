@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
@@ -81,8 +82,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         setState(() {
           amountInput = _amountController.text.replaceAll(',', '');
           totalAmount = double.parse(amountInput!) * dto.quantity;
-          vatAmount =
-              totalAmount! * double.parse(dto.vat.round().toString()) / 100;
+          vatAmount = totalAmount! * double.parse(dto.vat.toString()) / 100;
         });
       }
       if (serviceType != 9) {
@@ -108,8 +108,9 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             type: dto.type);
         // model.confirmService(item);
       } else {
-        totalAmount = double.parse(amountInput!) * dto.quantity;
-        vatAmount = totalAmount! * int.parse(dto.vat.round().toString());
+        totalAmount =
+            double.parse(amountInput!) * int.parse(_quantityController.text);
+        vatAmount = totalAmount! * int.parse(dto.vat.toString()) / 100;
 
         item = ServiceItemDTO(
             itemId: dto.itemId,
@@ -730,8 +731,25 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             color: type == 9 ? AppColor.WHITE : AppColor.GREY_DADADA,
             child: type == 9
                 ? TextField(
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        totalAmount =
+                            double.parse(amountInput ?? '0') * int.parse(value);
+                        vatAmount = totalAmount! *
+                            double.parse(item!.vat.round().toString()) /
+                            100;
+                      } else {
+                        totalAmount = double.parse(amountInput ?? '0') * 1;
+                        vatAmount = totalAmount! *
+                            double.parse(item!.vat.round().toString()) /
+                            100;
+                      }
+                      hasInputAmount = true;
+                      setState(() {});
+                    },
                     controller: _quantityController,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: const InputDecoration(
                       // contentPadding: EdgeInsets.only(top: 15),
                       border: InputBorder.none,
@@ -755,6 +773,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             width: 130,
             child: TextField(
               controller: _amountController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               onChanged: (value) {
                 String text = value.replaceAll(',', '');
                 if (text.isNotEmpty) {
@@ -766,10 +786,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                     selection: TextSelection.collapsed(offset: newText.length),
                   );
                   amountInput = text;
-                  totalAmount = double.parse(amountInput!) * item!.quantity;
-                  vatAmount = totalAmount! *
-                      double.parse(item.vat.round().toString()) /
-                      100;
+                  totalAmount = double.parse(amountInput!) *
+                      (type == 9
+                          ? int.parse(_quantityController.text.isNotEmpty
+                              ? _quantityController.text
+                              : '1')
+                          : item!.quantity);
+                  vatAmount =
+                      totalAmount! * double.parse(item!.vat.toString()) / 100;
                   hasInputAmount = true;
                 } else {
                   hasInputAmount = false;

@@ -8,13 +8,13 @@ class MerchantDTO {
   factory MerchantDTO.fromJson(Map<String, dynamic> json) {
     return MerchantDTO(
       items: List<MerchantItem>.from(
-          json['items'].map((x) => MerchantItem.fromJson(x))),
+          json['data'].map((x) => MerchantItem.fromJson(x))),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'items': List<dynamic>.from(items.map((x) => x.toJson())),
+      'data': List<dynamic>.from(items.map((x) => x.toJson())),
     };
   }
 }
