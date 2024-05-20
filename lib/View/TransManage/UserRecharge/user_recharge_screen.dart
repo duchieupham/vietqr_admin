@@ -129,15 +129,15 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                     const MySeparator(
                       color: AppColor.GREY_DADADA,
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Thống kê phí dịch vụ",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    _statisticUserRecharge(),
-                    const SizedBox(height: 20),
+                    // const SizedBox(height: 20),
+                    // const Text(
+                    //   "Thống kê phí dịch vụ",
+                    //   style:
+                    //       TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    // ),
+                    // const SizedBox(height: 10),
+                    // _statisticUserRecharge(),
+                    // const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -308,11 +308,10 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                             });
                           },
                           decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.only(top: 5, bottom: 5),
+                              contentPadding: const EdgeInsets.only(top: 8),
                               hintText: 'Nhập mã ở đây',
                               hintStyle: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 15,
                                   color: AppColor.BLACK.withOpacity(0.5)),
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
@@ -378,7 +377,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                                 child: Text(
                                   item.toString(),
                                   style: const TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -724,13 +723,16 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                                                             : 'Đã huỷ'),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: e.status == 0
-                                                            ? AppColor
-                                                                .ORANGE_DARK
-                                                            : AppColor.GREEN),
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: e.status == 0
+                                                          ? AppColor.ORANGE_DARK
+                                                          : (e.status == 1
+                                                              ? AppColor.GREEN
+                                                              : AppColor
+                                                                  .GREY_TEXT),
+                                                    ),
                                                   ),
                                                 ),
                                               ),

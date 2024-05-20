@@ -45,7 +45,7 @@ class _TransManageScreenState extends State<TransManageScreen> {
               onTap: () => onTapMenu(Transtype.SYS_TRANS),
             ),
             ItemDropDownMenu(
-              title: 'Giao dịch thu phí VietQR',
+              title: 'Thu phí VietQR',
               isSelect: type == Transtype.RECHARGE_TRANS,
               onTap: () => onTapMenu(Transtype.RECHARGE_TRANS),
             ),
