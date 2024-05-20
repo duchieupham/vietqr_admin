@@ -77,23 +77,24 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 30),
-                        InkWell(
-                          onTap: widget.onEdit,
-                          // onTap: () {
+                        if (_model.invoiceDetailDTO!.status == 0)
+                          InkWell(
+                            onTap: widget.onEdit,
+                            // onTap: () {
 
-                          //   DialogWidget.instance.openMsgDialog(
-                          //       title: 'Bảo trì',
-                          //       msg:
-                          //           'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                          // },
-                          child: const Text(
-                            'Chỉnh sửa hoá đơn',
-                            style: TextStyle(
-                                color: AppColor.BLUE_TEXT,
-                                fontSize: 15,
-                                decoration: TextDecoration.underline),
+                            //   DialogWidget.instance.openMsgDialog(
+                            //       title: 'Bảo trì',
+                            //       msg:
+                            //           'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                            // },
+                            child: const Text(
+                              'Chỉnh sửa hoá đơn',
+                              style: TextStyle(
+                                  color: AppColor.BLUE_TEXT,
+                                  fontSize: 15,
+                                  decoration: TextDecoration.underline),
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -206,7 +207,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                   const SizedBox(height: 30),
                   SizedBox(
                     // width: statusNum == 0 ? 1360 : 1270,
-                    width: 1270,
+                    width: _model.invoiceDetailDTO!.status == 0 ? 1360 : 1270,
+                    // width: 1270,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Column(
@@ -432,7 +434,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.email,
+                dto.email.isNotEmpty ? dto.email : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
@@ -617,67 +619,68 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
         ),
       ),
       child: Row(
-        children: const [
-          BuildItemlTitle(
+        children: [
+          const BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
               width: 50,
               height: 50,
               alignment: Alignment.centerLeft),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: 'Nội dung hoá đơn thanh toán',
               height: 50,
               width: 250,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: 'Đơn vị tính',
               height: 50,
               width: 120,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: 'Số lượng',
               height: 50,
               width: 100,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: 'Đơn giá (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: 'Thành tiền (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: '% VAT',
               height: 50,
               width: 100,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: 'VAT (VND)',
               height: 50,
               width: 120,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
+          const BuildItemlTitle(
               title: 'Tổng tiền (VND)',
               height: 50,
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
-          BuildItemlTitle(
-              title: 'Thao tác',
-              height: 50,
-              width: 90,
-              alignment: Alignment.centerLeft,
-              textAlign: TextAlign.center),
+          if (_model.invoiceDetailDTO!.status == 0)
+            const BuildItemlTitle(
+                title: 'Thao tác',
+                height: 50,
+                width: 90,
+                alignment: Alignment.centerLeft,
+                textAlign: TextAlign.center),
         ],
       ),
     );
@@ -815,61 +818,62 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               ),
             ),
           ),
-          Container(
-            alignment: Alignment.center,
-            height: 50,
-            width: 90,
-            child: SelectionArea(
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: widget.onEdit,
-                    // onTap: () {
-                    //   DialogWidget.instance.openMsgDialog(
-                    //       title: 'Bảo trì',
-                    //       msg:
-                    //           'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                    // },
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.edit,
-                        size: 12,
-                        color: AppColor.BLUE_TEXT,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  InkWell(
-                    onTap: () {
-                      DialogWidget.instance.openMsgDialog(
-                          title: 'Bảo trì',
-                          msg:
-                              'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                    },
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: AppColor.RED_TEXT.withOpacity(0.3),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.delete_forever,
-                        size: 12,
-                        color: AppColor.RED_TEXT,
+          if (_model.invoiceDetailDTO!.status == 0)
+            Container(
+              alignment: Alignment.center,
+              height: 50,
+              width: 90,
+              child: SelectionArea(
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: widget.onEdit,
+                      // onTap: () {
+                      //   DialogWidget.instance.openMsgDialog(
+                      //       title: 'Bảo trì',
+                      //       msg:
+                      //           'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      // },
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.edit,
+                          size: 12,
+                          color: AppColor.BLUE_TEXT,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 10),
+                    InkWell(
+                      onTap: () {
+                        DialogWidget.instance.openMsgDialog(
+                            title: 'Bảo trì',
+                            msg:
+                                'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                      },
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: AppColor.RED_TEXT.withOpacity(0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.delete_forever,
+                          size: 12,
+                          color: AppColor.RED_TEXT,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
