@@ -100,12 +100,15 @@ class ItemWidget extends StatelessWidget {
             width: 150,
             child: SelectionArea(
               child: Text(
-                "${dto.transType == 'C' ? '+' : '-'}${StringUtils.formatNumber(dto.amount.toString())}",
+                StringUtils.formatNumber(dto.amount.toString()),
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.GREEN),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: dto.status == 0
+                      ? AppColor.ORANGE_DARK
+                      : (dto.status == 1 ? AppColor.GREEN : AppColor.GREY_TEXT),
+                ),
               ),
             ),
           ),
