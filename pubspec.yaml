@@ -57,6 +57,7 @@ dependencies:
   jiffy:
   get: ^4.6.5
   scoped_model: ^2.0.0
+  image_downloader_web: ^2.0.2
 
 dev_dependencies:
   flutter_test:

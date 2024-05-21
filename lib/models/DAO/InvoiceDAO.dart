@@ -64,7 +64,7 @@ class InvoiceDAO extends BaseDAO {
   Future<InvoiceDetailQrDTO?> getDetailQr(String invoiceId) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/api/invoice/admin-list/$invoiceId';
+          'https://dev.vietqr.org/vqr/api/invoice/qr-detail/$invoiceId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
