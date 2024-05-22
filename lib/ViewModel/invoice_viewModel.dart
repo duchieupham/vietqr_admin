@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 
 import '../commons/constants/enum/view_status.dart';
@@ -25,8 +26,11 @@ class InvoiceViewModel extends BaseModel {
   BankDetailDTO? bankDetail;
   List<ServiceItemDTO>? listService = [];
   ServiceItemDTO? serviceItemDTO;
+
   InvoiceDetailQrDTO? detailQrDTO;
   InvoiceDetailDTO? invoiceDetailDTO;
+  InvoiceInfoDTO? invoiceInfo;
+  List<InvoiceInfoItem>? listInvoiceItem = [];
 
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
@@ -41,6 +45,10 @@ class InvoiceViewModel extends BaseModel {
   int totalVat = 0;
   int totalAmountVat = 0;
 
+  int totalEditAmount = 0;
+  int totalEditVat = 0;
+  int totalEditAmountVat = 0;
+
   bool? isInsert;
 
   MetaDataDTO? metadata;
@@ -51,6 +59,7 @@ class InvoiceViewModel extends BaseModel {
   }
 
   clear() {
+    listService = [];
     merchantDTO = null;
     bankDTO = null;
     selectMerchantItem = null;
@@ -102,10 +111,30 @@ class InvoiceViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void editVatInvoiceInfo(String? text) {
+    double vat = double.parse(
+        text!.isNotEmpty ? text : invoiceInfo!.userInformation.vat.toString());
+    if (listInvoiceItem!.isNotEmpty) {
+      double vatTotal = totalEditAmount * vat / 100;
+      totalEditVat = vatTotal.round();
+      totalEditAmountVat = totalEditAmount + totalEditVat;
+      for (var item in listInvoiceItem!) {
+        item.vat = double.parse(vat.toString());
+        double vatAmount = item.totalAmount * vat / 100;
+        item.vatAmount = vatAmount.toInt();
+        item.totalAmountAfterVat = item.totalAmount + item.vatAmount;
+      }
+    }
+    notifyListeners();
+  }
+
   void onChangeVat(String? text) {
     double vat =
         double.parse(text!.isNotEmpty ? text : bankDetail!.vat.toString());
     if (listService!.isNotEmpty) {
+      double vatTotal = totalAmount * vat / 100;
+      totalVat = vatTotal.round();
+      totalAmountVat = totalAmount + totalVat;
       for (var item in listService!) {
         item.vat = double.parse(vat.toString());
         double vatAmount = item.totalAmount * vat / 100;
@@ -178,6 +207,23 @@ class InvoiceViewModel extends BaseModel {
     return DateTime(newYear, newMonth);
   }
 
+  Future<void> getInvoiceInfo(String id) async {
+    try {
+      setState(ViewStatus.Loading);
+      invoiceInfo = await _dao.getInvoiceInfo(id);
+      if (invoiceInfo!.invoiceItems.isNotEmpty) {
+        listInvoiceItem = invoiceInfo?.invoiceItems;
+      }
+      totalEditAmount = invoiceInfo!.totalAmount;
+      totalEditVat = invoiceInfo!.vatAmount;
+      totalEditAmountVat = invoiceInfo!.totalAfterVat;
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
   Future<bool?> createInvoice(
       {required String invoiceName, required String description}) async {
     try {
@@ -197,6 +243,19 @@ class InvoiceViewModel extends BaseModel {
         setState(ViewStatus.Error);
       }
       print('Create Invoice: ------${result}');
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
+
+  Future<bool?> deleteInvoice(String id) async {
+    try {
+      setState(ViewStatus.Loading);
+      bool? result = await _dao.delelteInvoice(id);
+      setState(ViewStatus.Completed);
       return result;
     } catch (e) {
       LOG.error(e.toString());
@@ -307,11 +366,11 @@ class InvoiceViewModel extends BaseModel {
     }
   }
 
-  Future<void> getBankDetail() async {
+  Future<void> getBankDetail({String? id}) async {
     try {
-      setState(ViewStatus.Loading);
+      setState(id != null ? ViewStatus.Empty : ViewStatus.Loading);
       bankDetail = await _dao.getBankDetail(
-          bankId: selectBank?.bankId,
+          bankId: id ?? selectBank?.bankId,
           merchantId: type == 0 ? selectMerchantItem?.merchantId : '');
       // if (vatTextController.text.isNotEmpty) {
       //   bankDetail?.vat = double.parse(vatTextController.text);

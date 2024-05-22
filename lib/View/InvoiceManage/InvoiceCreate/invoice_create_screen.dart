@@ -110,9 +110,6 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   Widget bottomWidget() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
-        if (isCreateSuccess == true) {
-          context.go('/invoice-list');
-        }
         return Container(
           height: 120,
           margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -221,9 +218,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         invoiceName: _invoiceTextController.text,
                         description: _descriptionTextController.text);
                     if (result == true) {
-                      setState(() {
-                        isCreateSuccess = true;
-                      });
+                      if (!mounted) return;
+
+                      context.go('/invoice-list');
                     }
                   }
                 },
@@ -759,7 +756,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 10),
                                   child: Text(
-                                    model.bankDetail!.email,
+                                    model.bankDetail!.email.isNotEmpty
+                                        ? model.bankDetail!.email
+                                        : '-',
                                     style: const TextStyle(
                                       fontSize: 15,
                                     ),

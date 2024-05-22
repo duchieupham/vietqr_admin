@@ -422,7 +422,9 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                     width: 120,
                     child: SelectionArea(
                       child: Text(
-                        merchantItem!.vsoCode,
+                        merchantItem!.vsoCode.isNotEmpty
+                            ? merchantItem.vsoCode
+                            : '-',
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 12),
                       ),
@@ -472,7 +474,9 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                     width: 120,
                     child: SelectionArea(
                       child: Text(
-                        bankItem!.bankAccount,
+                        bankItem!.bankAccount.isNotEmpty
+                            ? bankItem.bankAccount
+                            : '-',
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 12),
                       ),
@@ -484,7 +488,9 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                     width: 200,
                     child: SelectionArea(
                       child: Text(
-                        bankItem.userBankName,
+                        bankItem.userBankName.isNotEmpty
+                            ? bankItem.userBankName
+                            : '-',
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 12),
                       ),
@@ -496,7 +502,9 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                     width: 100,
                     child: SelectionArea(
                       child: Text(
-                        bankItem.bankShortName,
+                        bankItem.bankShortName.isNotEmpty
+                            ? bankItem.bankShortName
+                            : '-',
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 12),
                       ),

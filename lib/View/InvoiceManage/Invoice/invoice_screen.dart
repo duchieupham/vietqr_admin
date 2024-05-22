@@ -4,8 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/invoice_detail_screen.dart';
-import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/invoice_edit_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/Invoice_detail_screen.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
@@ -25,6 +24,7 @@ import '../InvoiceCreate/widgets/popup_qr_widget.dart';
 import '../InvoiceCreate/widgets/popup_select_widget.dart';
 import '../widgets/item_invoice_widget.dart';
 import '../widgets/title_invoice_widget.dart';
+import 'views/invoice_edit_screen.dart';
 
 // ignore: constant_identifier_names
 enum PageInvoice { LIST, DETAIL, EDIT }
@@ -59,7 +59,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
-    selectDate = _model.getMonth();
+    selectDate = _model.getPreviousMonth();
     _model.filterListInvoice(time: selectDate!, page: 1, filter: '');
 
     controller1 = ScrollController();
@@ -132,7 +132,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   }
 
   void _onPickMonth(DateTime dateTime) async {
-    DateTime result = await showDialog(
+    DateTime? result = await showDialog(
       barrierDismissible: false,
       context: NavigationService.navigatorKey.currentContext!,
       builder: (BuildContext context) {
@@ -214,6 +214,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         setState(() {
                           pageType = PageInvoice.LIST;
                         });
+                        _model.filterListInvoice(
+                            time: selectDate!, page: 1, filter: textInput()!);
                       },
                       onEdit: () {
                         setState(() {
@@ -228,8 +230,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     invoiceId: selectInvoiceId!,
                     callback: () {
                       setState(() {
-                        pageType = PageInvoice.DETAIL;
+                        pageType = PageInvoice.LIST;
                       });
+                      _model.filterListInvoice(
+                          time: selectDate!, page: 1, filter: textInput()!);
                     },
                   ),
                 ),
@@ -579,10 +583,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                         InkWell(
                                                                       onTap:
                                                                           () {
-                                                                        // setState(() {
-                                                                        //   pageNumber =
-                                                                        //       3;
-                                                                        // });
+                                                                        setState(
+                                                                            () {
+                                                                          selectInvoiceId =
+                                                                              e.invoiceId;
+                                                                          pageType =
+                                                                              PageInvoice.EDIT;
+                                                                        });
                                                                       },
                                                                       child:
                                                                           BoxLayout(
@@ -666,9 +673,31 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                     onTap: () {
                                                                       DialogWidget
                                                                           .instance
-                                                                          .openMsgDialog(
-                                                                              title: 'Bảo trì',
-                                                                              msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                                          .openMsgDialogQuestion(
+                                                                        title:
+                                                                            "Hóa đơn",
+                                                                        msg:
+                                                                            'Xác nhận xóa hóa đơn!!',
+                                                                        onConfirm:
+                                                                            () async {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                          bool?
+                                                                              result =
+                                                                              await model.deleteInvoice(e.invoiceId);
+                                                                          if (result!) {
+                                                                            model.filterListInvoice(
+                                                                                time: selectDate!,
+                                                                                page: 1,
+                                                                                filter: textInput()!);
+                                                                          }
+                                                                        },
+                                                                      );
+                                                                      // DialogWidget
+                                                                      //     .instance
+                                                                      //     .openMsgDialog(
+                                                                      //         title: 'Bảo trì',
+                                                                      //         msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
                                                                     },
                                                                     child:
                                                                         BoxLayout(
@@ -930,6 +959,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     setState(() {
                       pageType = PageInvoice.LIST;
                     });
+                    _model.filterListInvoice(
+                        time: selectDate!, page: 1, filter: textInput()!);
                   },
                   child: const Text(
                     'Danh sách hoá đơn',

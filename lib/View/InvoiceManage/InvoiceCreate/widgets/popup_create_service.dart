@@ -45,6 +45,28 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.resetConfirmService();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initData();
+    });
+  }
+
+  void initData() {
+    if (widget.isEdit == true && widget.dto != null) {
+      if (_amountController.text.isEmpty) {
+        _amountController.text =
+            StringUtils.formatNumberWithOutVND(widget.dto!.amount);
+        amountInput = _amountController.text;
+      }
+      if (_contentController.text.isEmpty) {
+        _contentController.text = widget.dto!.content;
+      }
+      if (_quantityController.text.isEmpty) {
+        _quantityController.text = widget.dto!.quantity.toString();
+      }
+      if (_unitController.text.isEmpty) {
+        _unitController.text = widget.dto!.unit;
+      }
+    }
   }
 
   void _onPickMonth(DateTime dateTime) async {
@@ -77,7 +99,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
       required int serviceType,
       required Function(ServiceItemDTO) confirmService}) {
     ServiceItemDTO item;
-    if (hasSelect) {
+    if (hasSelect && widget.isEdit == false) {
       if (_amountController.text.isNotEmpty) {
         setState(() {
           amountInput = _amountController.text.replaceAll(',', '');
@@ -125,6 +147,20 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             amountAfterVat: (totalAmount! + vatAmount!).round(),
             type: dto.type);
       }
+      confirmService(item);
+    } else {
+      item = ServiceItemDTO(
+          itemId: dto.itemId,
+          time: dto.time,
+          content: _contentController.text,
+          unit: _unitController.text,
+          quantity: int.parse(_quantityController.text),
+          amount: int.parse(amountInput!),
+          totalAmount: totalAmount!.round(),
+          vat: dto.vat,
+          vatAmount: vatAmount!.round(),
+          amountAfterVat: (totalAmount! + vatAmount!).round(),
+          type: dto.type);
       confirmService(item);
     }
   }
@@ -231,9 +267,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                             child: InkWell(
                               onTap: () {
                                 onConfirmService(
-                                  widget.isEdit == true
-                                      ? widget.isEdit
-                                      : hasSelect,
+                                  hasSelect,
                                   dto: widget.isEdit == true
                                       ? widget.dto!
                                       : model.serviceItemDTO!,
@@ -429,7 +463,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  _onPickMonth(model.getPreviousMonth());
+                                  _onPickMonth(model.getMonth());
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.only(left: 4),
@@ -681,12 +715,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             child: type == 9
                 ? TextField(
                     controller: _contentController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       // contentPadding: EdgeInsets.only(top: 15),
                       border: InputBorder.none,
-                      hintText: 'Nhập nội dung',
-                      hintStyle:
-                          TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                      hintText: widget.dto != null
+                          ? widget.dto?.content
+                          : 'Nhập nội dung',
+                      hintStyle: const TextStyle(
+                          fontSize: 12, color: AppColor.GREY_TEXT),
                     ),
                   )
                 : SelectionArea(
@@ -707,12 +743,13 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                 ? TextField(
                     controller: _unitController,
                     keyboardType: TextInputType.text,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       // contentPadding: EdgeInsets.only(top: 15),
                       border: InputBorder.none,
-                      hintText: 'Nhập đơn vị',
-                      hintStyle:
-                          TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                      hintText:
+                          widget.dto != null ? widget.dto?.unit : 'Nhập đơn vị',
+                      hintStyle: const TextStyle(
+                          fontSize: 12, color: AppColor.GREY_TEXT),
                     ),
                   )
                 : SelectionArea(
@@ -750,12 +787,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                     controller: _quantityController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       // contentPadding: EdgeInsets.only(top: 15),
                       border: InputBorder.none,
-                      hintText: 'Nhập số lượng',
-                      hintStyle:
-                          TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                      hintText: widget.dto != null
+                          ? widget.dto?.quantity.toString()
+                          : 'Nhập số lượng',
+                      hintStyle: const TextStyle(
+                          fontSize: 12, color: AppColor.GREY_TEXT),
                     ),
                   )
                 : SelectionArea(
@@ -778,7 +817,6 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
               onChanged: (value) {
                 String text = value.replaceAll(',', '');
                 if (text.isNotEmpty) {
-                  // Using intl to format the input text
                   final formatter = NumberFormat('#,###');
                   String newText = formatter.format(int.parse(text));
                   _amountController.value = TextEditingValue(
@@ -804,7 +842,9 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                 contentPadding: const EdgeInsets.only(top: 15),
                 border: InputBorder.none,
                 hintText: type == 9
-                    ? 'Nhập đơn giá'
+                    ? widget.dto != null
+                        ? StringUtils.formatNumberWithOutVND(widget.dto?.amount)
+                        : 'Nhập đơn giá'
                     : StringUtils.formatNumberWithOutVND(item!.amount),
                 hintStyle: TextStyle(
                     fontSize: 12,
