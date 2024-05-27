@@ -62,7 +62,9 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
           quantity: _quantityController.text.isNotEmpty
               ? int.parse(_quantityController.text)
               : widget.invoiceItem.quantity,
-          amount: int.parse(amountInput!),
+          amount: amountInput != null
+              ? int.parse(amountInput!)
+              : widget.invoiceItem.amount,
           totalAmount: totalAmount!.round(),
           vat: widget.invoiceItem.vat,
           vatAmount: vatAmount!.round(),

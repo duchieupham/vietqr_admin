@@ -55,7 +55,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
       if (_amountController.text.isEmpty) {
         _amountController.text =
             StringUtils.formatNumberWithOutVND(widget.dto!.amount);
-        amountInput = _amountController.text;
+        amountInput = _amountController.text.replaceAll(',', '');
       }
       if (_contentController.text.isEmpty) {
         _contentController.text = widget.dto!.content;
@@ -66,6 +66,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
       if (_unitController.text.isEmpty) {
         _unitController.text = widget.dto!.unit;
       }
+      totalAmount = double.parse(widget.dto!.totalAmount.toString());
+      vatAmount = double.parse(widget.dto!.vatAmount.toString());
     }
   }
 

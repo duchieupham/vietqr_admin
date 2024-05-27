@@ -28,6 +28,8 @@ class QrBoxListScreen extends StatefulWidget {
 
 class _QrBoxListScreenState extends State<QrBoxListScreen> {
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _homePageTextController = TextEditingController();
+
   final TextEditingController _msg1Controller = TextEditingController();
   final TextEditingController _msg2Controller = TextEditingController();
 
@@ -113,7 +115,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
           ),
           const SizedBox(height: 30),
           _buildListQrBox(),
-          // const SizedBox(height: 30),
+          const SizedBox(height: 20),
           _pagingWidget(),
           const SizedBox(height: 20),
         ],
@@ -505,12 +507,41 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 20),
-                  Text(
-                    model.qrMsg!.homePage,
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.normal,
-                        color: AppColor.BLUE_TEXT),
+                  Container(
+                    width: 250,
+                    height: 40,
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                        color: AppColor.WHITE,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: AppColor.GREY_DADADA)),
+                    child: TextField(
+                      controller: _homePageTextController,
+                      onChanged: (value) {
+                        _homePageTextController.value = TextEditingValue(
+                            text: value,
+                            selection:
+                                TextSelection.collapsed(offset: value.length));
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.only(bottom: 8, top: 8),
+                          border: InputBorder.none,
+                          hintText: model.qrMsg!.homePage,
+                          hintStyle: const TextStyle(
+                              fontSize: 15, color: AppColor.BLUE_TEXT),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                _homePageTextController.clear();
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                size: 15,
+                                color: AppColor.GREY_TEXT,
+                              ))),
+                      maxLines: 1,
+                    ),
                   ),
                 ],
               )
@@ -613,15 +644,29 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                       InkWell(
                         onTap: () async {
                           if (_msg1Controller.text.isNotEmpty ||
-                              _msg2Controller.text.isNotEmpty) {
+                              _msg2Controller.text.isNotEmpty ||
+                              _homePageTextController.text.isNotEmpty) {
                             QRBoxMsgDTO msg = QRBoxMsgDTO(
-                                homePage: model.qrMsg!.homePage,
-                                message1: _msg1Controller.text,
-                                message2: _msg2Controller.text);
+                                homePage:
+                                    _homePageTextController.text.isNotEmpty
+                                        ? _homePageTextController.text
+                                        : model.qrMsg!.homePage,
+                                message1: _msg1Controller.text.isNotEmpty
+                                    ? _msg1Controller.text
+                                    : model.qrMsg!.message1,
+                                message2: _msg2Controller.text.isNotEmpty
+                                    ? _msg2Controller.text
+                                    : model.qrMsg!.message2);
                             final result = await model.updateMsg(msg);
                             if (result!) {
                               DialogWidget.instance.openMsgSuccessDialog(
-                                  title: 'Cập nhật thành công');
+                                title: 'Cập nhật thành công',
+                                function: () {
+                                  _model.getQRBoxMsg();
+                                  DialogWidget.instance.openLoadingDialog();
+                                  Navigator.of(context).pop();
+                                },
+                              );
                             }
                           }
                         },
