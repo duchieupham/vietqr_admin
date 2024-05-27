@@ -12,7 +12,7 @@ import '../DTO/metadata_dto.dart';
 class QrBoxDAO extends BaseDAO {
   Future<bool?> updateMsg(QRBoxMsgDTO boxMsgDTO) async {
     try {
-      String url = 'http://localhost:8084/api/tid-internal/env-setting';
+      String url = 'https://api.vietqr.org/vqr/api/tid-internal/env-setting';
       final response = await BaseAPIClient.postAPI(
         body: boxMsgDTO.toJson(),
         url: url,
@@ -27,7 +27,7 @@ class QrBoxDAO extends BaseDAO {
 
   Future<QRBoxMsgDTO?> getMsg() async {
     try {
-      String url = 'https://dev.vietqr.org/vqr/api/tid-internal/env-setting';
+      String url = 'https://api.vietqr.org/vqr/api/tid-internal/env-setting';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

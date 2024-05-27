@@ -663,7 +663,6 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                 title: 'Cập nhật thành công',
                                 function: () {
                                   _model.getQRBoxMsg();
-                                  DialogWidget.instance.openLoadingDialog();
                                   Navigator.of(context).pop();
                                 },
                               );
