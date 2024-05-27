@@ -218,7 +218,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         invoiceName: _invoiceTextController.text,
                         description: _descriptionTextController.text);
                     if (result!) {
-                      context.go('/invoice-list');
+                      DialogWidget.instance.openMsgSuccessDialog(
+                        title: 'Tạo hóa đơn thành công',
+                        function: () {
+                          Navigator.of(context).pop();
+                          context.go('/invoice-list');
+                        },
+                      );
                     }
                   }
                 },

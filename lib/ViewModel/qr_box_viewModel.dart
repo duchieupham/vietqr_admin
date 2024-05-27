@@ -119,7 +119,7 @@ class QrBoxViewModel extends BaseModel {
 
   Future<void> getQRBoxMsg() async {
     try {
-      setState(ViewStatus.Loading);
+      setState(ViewStatus.Refreshing);
       final result = await _dao.getMsg();
       if (result != null) {
         qrMsg = result;

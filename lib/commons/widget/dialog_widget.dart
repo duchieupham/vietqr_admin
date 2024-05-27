@@ -240,7 +240,7 @@ class DialogWidget {
   openMsgSuccessDialog(
       {required String title,
       String? msg,
-      VoidCallback? function,
+      Function()? function,
       BuildContext? context}) {
     return showDialog(
         barrierDismissible: false,

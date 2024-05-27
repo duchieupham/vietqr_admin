@@ -234,6 +234,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     Expanded(
                       child: InvoiceEditScreen(
                         invoiceId: selectInvoiceId!,
+                        onEdit: () async {
+                          bool? result = await _model.editInvoice();
+                          if (result!) {
+                            _model.onChangePage(PageInvoice.LIST);
+                            _model.filterListInvoice(
+                                time: selectDate!,
+                                page: 1,
+                                filter: textInput()!);
+                          }
+                        },
                         callback: () {
                           _model.onChangePage(PageInvoice.LIST);
 

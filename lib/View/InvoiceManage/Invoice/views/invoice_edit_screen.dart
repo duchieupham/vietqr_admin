@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_edit_invoice_widget.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 
@@ -18,9 +19,13 @@ import '../../InvoiceCreate/widgets/item_title_widget.dart';
 
 class InvoiceEditScreen extends StatefulWidget {
   final Function() callback;
+  final Function() onEdit;
   final String invoiceId;
   const InvoiceEditScreen(
-      {super.key, required this.callback, required this.invoiceId});
+      {super.key,
+      required this.callback,
+      required this.onEdit,
+      required this.invoiceId});
 
   @override
   State<InvoiceEditScreen> createState() => _InvoiceEditScreenState();
@@ -159,9 +164,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               ),
               const Spacer(),
               MButtonWidget(
-                onTap: () {
-                  model.editInvoice();
-                },
+                onTap: widget.onEdit,
                 title: 'Cập nhật thông tin',
                 isEnable: true,
                 margin: EdgeInsets.zero,
@@ -1137,7 +1140,16 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                   ),
                   const SizedBox(width: 10),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      DialogWidget.instance.openMsgDialogQuestion(
+                        title: 'Xóa dịch vụ',
+                        msg: 'Xác nhận xóa dịch vụ!!',
+                        onConfirm: () {
+                          _model.removeInvoiceItem(item);
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
                     child: Container(
                       width: 30,
                       height: 30,

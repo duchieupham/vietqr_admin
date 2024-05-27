@@ -132,6 +132,12 @@ class InvoiceViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void removeInvoiceItem(InvoiceInfoItem? item) {
+    listInvoiceItem?.removeWhere(
+        (element) => element.invoiceItemId == item?.invoiceItemId);
+    notifyListeners();
+  }
+
   void confirmEditInvoiceItem(InvoiceInfoItem? item) {
     int? index = listInvoiceItem
         ?.indexWhere((e) => e.invoiceItemId == item!.invoiceItemId);
@@ -249,7 +255,7 @@ class InvoiceViewModel extends BaseModel {
     return DateTime(newYear, newMonth);
   }
 
-  Future<void> editInvoice() async {
+  Future<bool?> editInvoice() async {
     try {
       setState(ViewStatus.Empty);
       bool? result = await _dao.editInvoice(
@@ -258,14 +264,14 @@ class InvoiceViewModel extends BaseModel {
               ? double.parse(vatTextController.text)
               : invoiceInfo!.userInformation.vat);
       if (result!) {
-        onChangePage(PageInvoice.LIST);
+        setState(ViewStatus.Completed);
+        return true;
       }
-      setState(ViewStatus.Completed);
-      notifyListeners();
     } catch (e) {
       LOG.error(e.toString());
       setState(ViewStatus.Error);
     }
+    return false;
   }
 
   Future<void> getInvoiceInfo(String id) async {
