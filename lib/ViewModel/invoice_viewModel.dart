@@ -17,8 +17,12 @@ import '../models/DTO/invoice_dto.dart';
 import '../models/DTO/metadata_dto.dart';
 import '../models/DTO/service_item_dto.dart';
 
+// ignore: constant_identifier_names
+enum PageInvoice { LIST, DETAIL, EDIT }
+
 class InvoiceViewModel extends BaseModel {
-  final TextEditingController vatTextController = TextEditingController();
+  TextEditingController vatTextController = TextEditingController();
+
   late InvoiceDAO _dao;
   InvoiceDTO? invoiceDTO;
   MerchantDTO? merchantDTO;
@@ -54,6 +58,8 @@ class InvoiceViewModel extends BaseModel {
   MetaDataDTO? metadata;
   MetaDataDTO? createMetaData;
 
+  PageInvoice pageType = PageInvoice.LIST;
+
   InvoiceViewModel() {
     _dao = InvoiceDAO();
   }
@@ -67,6 +73,11 @@ class InvoiceViewModel extends BaseModel {
     bankDetail = null;
     detailQrDTO = null;
     vatTextController.clear();
+  }
+
+  void onChangePage(PageInvoice page) {
+    pageType = page;
+    notifyListeners();
   }
 
   void selectServiceType(int value) async {
@@ -111,9 +122,36 @@ class InvoiceViewModel extends BaseModel {
     notifyListeners();
   }
 
+  void onEditInvoiceName(String? text) {
+    invoiceInfo!.invoiceName = text!;
+    notifyListeners();
+  }
+
+  void onEditDescription(String? text) {
+    invoiceInfo!.description = text!;
+    notifyListeners();
+  }
+
+  void confirmEditInvoiceItem(InvoiceInfoItem? item) {
+    int? index = listInvoiceItem
+        ?.indexWhere((e) => e.invoiceItemId == item!.invoiceItemId);
+    totalEditAmount -= listInvoiceItem![index!].totalAmount;
+    totalEditVat -= listInvoiceItem![index].vatAmount;
+    totalEditAmountVat -= listInvoiceItem![index].totalAmountAfterVat;
+    totalEditAmount += item!.totalAmount;
+    totalEditVat += item.vatAmount;
+    totalEditAmountVat += item.totalAmountAfterVat;
+    listInvoiceItem![index] = item;
+    notifyListeners();
+  }
+
   void editVatInvoiceInfo(String? text) {
+    vatTextController.value = TextEditingValue(
+      text: text!,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
     double vat = double.parse(
-        text!.isNotEmpty ? text : invoiceInfo!.userInformation.vat.toString());
+        text.isNotEmpty ? text : invoiceInfo!.userInformation.vat.toString());
     if (listInvoiceItem!.isNotEmpty) {
       double vatTotal = totalEditAmount * vat / 100;
       totalEditVat = vatTotal.round();
@@ -129,8 +167,12 @@ class InvoiceViewModel extends BaseModel {
   }
 
   void onChangeVat(String? text) {
+    vatTextController.value = TextEditingValue(
+      text: text!,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
     double vat =
-        double.parse(text!.isNotEmpty ? text : bankDetail!.vat.toString());
+        double.parse(text.isNotEmpty ? text : bankDetail!.vat.toString());
     if (listService!.isNotEmpty) {
       double vatTotal = totalAmount * vat / 100;
       totalVat = vatTotal.round();
@@ -207,6 +249,25 @@ class InvoiceViewModel extends BaseModel {
     return DateTime(newYear, newMonth);
   }
 
+  Future<void> editInvoice() async {
+    try {
+      setState(ViewStatus.Empty);
+      bool? result = await _dao.editInvoice(
+          invoice: invoiceInfo,
+          vat: vatTextController.text.isNotEmpty
+              ? double.parse(vatTextController.text)
+              : invoiceInfo!.userInformation.vat);
+      if (result!) {
+        onChangePage(PageInvoice.LIST);
+      }
+      setState(ViewStatus.Completed);
+      notifyListeners();
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
   Future<void> getInvoiceInfo(String id) async {
     try {
       setState(ViewStatus.Loading);
@@ -229,7 +290,9 @@ class InvoiceViewModel extends BaseModel {
     try {
       setState(ViewStatus.Loading);
       bool? result = await _dao.createInvoice(
-          vat: double.parse(bankDetail!.vat.toString()),
+          vat: vatTextController.text.isNotEmpty
+              ? double.parse(vatTextController.text)
+              : double.parse(bankDetail!.vat.toString()),
           bankId: selectBank!.bankId,
           merchantId: selectMerchantItem != null
               ? selectMerchantItem?.merchantId

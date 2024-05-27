@@ -48,6 +48,43 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
     // });
   }
 
+  void confirmEdit({required Function(InvoiceInfoItem) onEdit}) {
+    InvoiceInfoItem? item;
+    if (widget.invoiceItem.type == 9) {
+      item = InvoiceInfoItem(
+          invoiceItemId: widget.invoiceItem.invoiceItemId,
+          invoiceItemName: _contentController.text.isNotEmpty
+              ? _contentController.text
+              : widget.invoiceItem.invoiceItemName,
+          unit: _unitController.text.isNotEmpty
+              ? _unitController.text
+              : widget.invoiceItem.unit,
+          quantity: _quantityController.text.isNotEmpty
+              ? int.parse(_quantityController.text)
+              : widget.invoiceItem.quantity,
+          amount: int.parse(amountInput!),
+          totalAmount: totalAmount!.round(),
+          vat: widget.invoiceItem.vat,
+          vatAmount: vatAmount!.round(),
+          totalAmountAfterVat: (totalAmount! + vatAmount!).round(),
+          type: widget.invoiceItem.type);
+    } else {
+      item = InvoiceInfoItem(
+          invoiceItemId: widget.invoiceItem.invoiceItemId,
+          invoiceItemName: widget.invoiceItem.invoiceItemName,
+          unit: widget.invoiceItem.unit,
+          quantity: widget.invoiceItem.quantity,
+          amount: int.parse(amountInput!),
+          totalAmount: totalAmount!.round(),
+          vat: widget.invoiceItem.vat,
+          vatAmount: vatAmount!.round(),
+          totalAmountAfterVat: (totalAmount! + vatAmount!).round(),
+          type: widget.invoiceItem.type);
+    }
+
+    onEdit(item);
+  }
+
   String extractDateString(String itemName) {
     RegExp regExp = RegExp(r'(0[1-9]|1[0-2])/\d{4}');
     Match? match = regExp.firstMatch(itemName);
@@ -72,6 +109,19 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
                 builder: (context, child, model) {
+                  bool hasSelect = false;
+                  if (widget.invoiceItem.type == 9) {
+                    if (_amountController.text.isNotEmpty ||
+                        _contentController.text.isNotEmpty ||
+                        _unitController.text.isNotEmpty ||
+                        _quantityController.text.isNotEmpty) {
+                      hasSelect = true;
+                    }
+                  } else {
+                    if (_amountController.text.isNotEmpty) {
+                      hasSelect = true;
+                    }
+                  }
                   if (model.status == ViewStatus.Empty) {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -80,6 +130,7 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
                   if (model.bankDetail == null) {
                     return const SizedBox.shrink();
                   }
+
                   return Stack(
                     children: [
                       Column(
@@ -116,6 +167,42 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
                           const SizedBox(height: 45),
                           _itemTitleWidget(true),
                           _buildItem(),
+                          const Spacer(),
+                          const SizedBox(height: 20),
+                          Container(
+                            alignment: Alignment.center,
+                            child: InkWell(
+                              onTap: hasSelect == true
+                                  ? () {
+                                      confirmEdit(
+                                        onEdit: (item) {
+                                          Navigator.of(context).pop();
+                                          model.confirmEditInvoiceItem(item);
+                                        },
+                                      );
+                                    }
+                                  : null,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.18,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    color: hasSelect == true
+                                        ? AppColor.BLUE_TEXT
+                                        : AppColor.GREY_DADADA,
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Center(
+                                  child: Text(
+                                    'Xác nhận',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: hasSelect == true
+                                            ? AppColor.WHITE
+                                            : AppColor.BLACK),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                       Positioned(
@@ -159,6 +246,14 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
                 : AppColor.GREY_DADADA,
             child: widget.invoiceItem.type == 9
                 ? TextField(
+                    onChanged: (value) {
+                      _contentController.value = TextEditingValue(
+                        text: value,
+                        selection:
+                            TextSelection.collapsed(offset: value.length),
+                      );
+                      setState(() {});
+                    },
                     controller: _contentController,
                     decoration: InputDecoration(
                       // contentPadding: EdgeInsets.only(top: 15),
@@ -186,6 +281,14 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
                 : AppColor.GREY_DADADA,
             child: widget.invoiceItem.type == 9
                 ? TextField(
+                    onChanged: (value) {
+                      _unitController.value = TextEditingValue(
+                        text: value,
+                        selection:
+                            TextSelection.collapsed(offset: value.length),
+                      );
+                      setState(() {});
+                    },
                     controller: _unitController,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -232,6 +335,11 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
                                 widget.invoiceItem.vat.round().toString()) /
                             100;
                       }
+                      _quantityController.value = TextEditingValue(
+                        text: value,
+                        selection:
+                            TextSelection.collapsed(offset: value.length),
+                      );
                       hasInputAmount = true;
                       setState(() {});
                     },
@@ -278,7 +386,7 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
                       (widget.invoiceItem.type == 9
                           ? int.parse(_quantityController.text.isNotEmpty
                               ? _quantityController.text
-                              : '1')
+                              : widget.invoiceItem.quantity.toString())
                           : widget.invoiceItem.quantity);
                   vatAmount = totalAmount! *
                       double.parse(widget.invoiceItem.vat.toString()) /
@@ -328,6 +436,52 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
               ),
             ),
           ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 80,
+            color: AppColor.GREY_DADADA,
+            child: SelectionArea(
+              child: Text(
+                widget.invoiceItem.vat.toString(),
+                textAlign: TextAlign.left,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 120,
+            color: AppColor.GREY_DADADA,
+            child: SelectionArea(
+              child: Text(
+                hasInputAmount == true
+                    ? StringUtils.formatNumberWithOutVND(vatAmount?.round())
+                    : StringUtils.formatNumberWithOutVND(
+                        widget.invoiceItem.vatAmount),
+                textAlign: TextAlign.left,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 115,
+            color: AppColor.GREY_DADADA,
+            child: SelectionArea(
+              child: Text(
+                hasInputAmount == true
+                    ? StringUtils.formatNumberWithOutVND(
+                        (totalAmount! + vatAmount!).round())
+                    : StringUtils.formatNumberWithOutVND(
+                        widget.invoiceItem.totalAmountAfterVat),
+                textAlign: TextAlign.left,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -357,7 +511,7 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Tài khoản ngân hàng*',
+              'Loại hàng hoá / dịch vụ*',
               style: TextStyle(fontSize: 15),
             ),
             const SizedBox(

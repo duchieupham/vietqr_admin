@@ -3,12 +3,46 @@ import 'dart:convert';
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
 import 'package:vietqr_admin/models/DTO/bank_type_dto.dart';
 import 'package:vietqr_admin/models/DTO/qr_box_dto.dart';
+import 'package:vietqr_admin/models/DTO/qr_box_msg_dto.dart';
 
 import '../../commons/constants/utils/base_api.dart';
 import '../../commons/constants/utils/log.dart';
 import '../DTO/metadata_dto.dart';
 
 class QrBoxDAO extends BaseDAO {
+  Future<bool?> updateMsg(QRBoxMsgDTO boxMsgDTO) async {
+    try {
+      String url = 'http://localhost:8084/api/tid-internal/env-setting';
+      final response = await BaseAPIClient.postAPI(
+        body: boxMsgDTO.toJson(),
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<QRBoxMsgDTO?> getMsg() async {
+    try {
+      String url = 'https://dev.vietqr.org/vqr/api/tid-internal/env-setting';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+
+        return QRBoxMsgDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return null;
+  }
+
   Future<bool?> activeQrBox(
       {String? boxAddress,
       String? qrCertificate,

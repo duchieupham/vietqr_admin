@@ -217,9 +217,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                     bool? result = await model.createInvoice(
                         invoiceName: _invoiceTextController.text,
                         description: _descriptionTextController.text);
-                    if (result == true) {
-                      if (!mounted) return;
-
+                    if (result!) {
                       context.go('/invoice-list');
                     }
                   }

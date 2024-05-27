@@ -101,7 +101,6 @@ class _PopupCreateQrBoxWidgetState extends State<PopupCreateQrBoxWidget> {
                                       createSuccess = result;
                                     });
                                     if (result == true) {
-                                      if (!mounted) return;
                                       Navigator.of(context).pop();
                                       DialogWidget.instance
                                           .openMsgSuccessDialog(

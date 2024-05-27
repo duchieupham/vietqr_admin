@@ -36,7 +36,7 @@ class UserInformation {
       bankAccount: json['bankAccount'],
       userBankName: json['userBankName'],
       phoneNo: json['phoneNo'],
-      email: json['email'],
+      email: json['email'] ?? '',
       connectionType: json['connectionType'],
       feePackage: json['feePackage'],
       vat: json['vat'].toDouble(),
@@ -102,15 +102,15 @@ class InvoiceInfoItem {
 
   Map<String, dynamic> toJson() {
     return {
-      'invoiceItemId': invoiceItemId,
-      'invoiceItemName': invoiceItemName,
+      'itemId': invoiceItemId,
+      'content': invoiceItemName,
       'unit': unit,
       'quantity': quantity,
       'amount': amount,
       'totalAmount': totalAmount,
       'vat': vat,
       'vatAmount': vatAmount,
-      'totalAmountAfterVat': totalAmountAfterVat,
+      'amountAfterVat': totalAmountAfterVat,
       'type': type,
     };
   }
@@ -118,8 +118,8 @@ class InvoiceInfoItem {
 
 class InvoiceInfoDTO {
   final String invoiceId;
-  final String invoiceName;
-  final String description;
+  String invoiceName;
+  String description;
   final int totalAmount;
   final int vatAmount;
   final int totalAfterVat;

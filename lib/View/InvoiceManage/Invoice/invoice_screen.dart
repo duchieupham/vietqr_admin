@@ -27,7 +27,6 @@ import '../widgets/title_invoice_widget.dart';
 import 'views/invoice_edit_screen.dart';
 
 // ignore: constant_identifier_names
-enum PageInvoice { LIST, DETAIL, EDIT }
 
 class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({super.key});
@@ -53,12 +52,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   DateTime? selectDate;
   late InvoiceViewModel _model;
 
-  PageInvoice pageType = PageInvoice.LIST;
-
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _model.onChangePage(PageInvoice.LIST);
     selectDate = _model.getPreviousMonth();
     _model.filterListInvoice(time: selectDate!, page: 1, filter: '');
 
@@ -161,85 +159,97 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
-      body: ScopedModel(
+      body: ScopedModel<InvoiceViewModel>(
         model: _model,
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
-              color: AppColor.WHITE,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _headerWidget(),
-              const Divider(),
-              if (pageType == PageInvoice.LIST) ...[
-                Container(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tìm kiếm thông tin hoá đơn ",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+        child: ScopedModelDescendant<InvoiceViewModel>(
+          builder: (context, child, model) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                  color: AppColor.WHITE,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _headerWidget(),
+                  const Divider(),
+                  if (model.pageType == PageInvoice.LIST) ...[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Tìm kiếm thông tin hoá đơn ",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          _filterWidget(),
+                          const SizedBox(height: 20),
+                          const MySeparator(
+                            color: AppColor.GREY_DADADA,
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            "Danh sách hoá đơn",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          _statisticInvoice(),
+                          const SizedBox(height: 20),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      _filterWidget(),
-                      const SizedBox(height: 20),
-                      const MySeparator(
-                        color: AppColor.GREY_DADADA,
+                    ),
+                    _buildListInvoice(),
+                    const SizedBox(height: 10),
+                    _pagingWidget(),
+                    const SizedBox(height: 10),
+                  ] else if (model.pageType == PageInvoice.DETAIL) ...[
+                    Expanded(
+                      child: InvoiceDetailScreen(
+                          callback: () {
+                            _model.onChangePage(PageInvoice.LIST);
+                            // setState(() {
+                            //   pageType = PageInvoice.LIST;
+                            // });
+                            _model.filterListInvoice(
+                                time: selectDate!,
+                                page: 1,
+                                filter: textInput()!);
+                          },
+                          onEdit: () {
+                            _model.onChangePage(PageInvoice.EDIT);
+
+                            // setState(() {
+                            //   pageType = PageInvoice.EDIT;
+                            // });
+                          },
+                          invoiceId: selectInvoiceId!),
+                    ),
+                  ] else ...[
+                    Expanded(
+                      child: InvoiceEditScreen(
+                        invoiceId: selectInvoiceId!,
+                        callback: () {
+                          _model.onChangePage(PageInvoice.LIST);
+
+                          // setState(() {
+                          //   pageType = PageInvoice.LIST;
+                          // });
+                          _model.filterListInvoice(
+                              time: selectDate!, page: 1, filter: textInput()!);
+                        },
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Danh sách hoá đơn",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      _statisticInvoice(),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-                _buildListInvoice(),
-                const SizedBox(height: 10),
-                _pagingWidget(),
-                const SizedBox(height: 10),
-              ] else if (pageType == PageInvoice.DETAIL) ...[
-                Expanded(
-                  child: InvoiceDetailScreen(
-                      callback: () {
-                        setState(() {
-                          pageType = PageInvoice.LIST;
-                        });
-                        _model.filterListInvoice(
-                            time: selectDate!, page: 1, filter: textInput()!);
-                      },
-                      onEdit: () {
-                        setState(() {
-                          pageType = PageInvoice.EDIT;
-                        });
-                      },
-                      invoiceId: selectInvoiceId!),
-                ),
-              ] else ...[
-                Expanded(
-                  child: InvoiceEditScreen(
-                    invoiceId: selectInvoiceId!,
-                    callback: () {
-                      setState(() {
-                        pageType = PageInvoice.LIST;
-                      });
-                      _model.filterListInvoice(
-                          time: selectDate!, page: 1, filter: textInput()!);
-                    },
-                  ),
-                ),
-              ]
-            ],
-          ),
+                    ),
+                  ]
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -529,9 +539,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           () {
                                                                         selectInvoiceId =
                                                                             e.invoiceId;
-                                                                        pageType =
-                                                                            PageInvoice.DETAIL;
+                                                                        // pageType =
+                                                                        //     PageInvoice.DETAIL;
                                                                       });
+                                                                      _model.onChangePage(
+                                                                          PageInvoice
+                                                                              .DETAIL);
                                                                     },
                                                                     child:
                                                                         BoxLayout(
@@ -587,9 +600,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             () {
                                                                           selectInvoiceId =
                                                                               e.invoiceId;
-                                                                          pageType =
-                                                                              PageInvoice.EDIT;
+                                                                          // pageType =
+                                                                          //     PageInvoice.EDIT;
                                                                         });
+                                                                        _model.onChangePage(
+                                                                            PageInvoice.EDIT);
                                                                       },
                                                                       child:
                                                                           BoxLayout(
@@ -934,63 +949,66 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   }
 
   Widget _headerWidget() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
-      width: MediaQuery.of(context).size.width *
-          (pageType == PageInvoice.LIST ? 0.22 : 0.33),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            "Quản lý hoá đơn",
-            style: TextStyle(fontSize: 15),
-          ),
-          const Text(
-            "/",
-            style: TextStyle(fontSize: 15),
-          ),
-          pageType == PageInvoice.LIST
-              ? const Text(
-                  "Danh sách hoá đơn",
+    return ScopedModelDescendant<InvoiceViewModel>(
+      builder: (context, child, model) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
+          width: MediaQuery.of(context).size.width *
+              (model.pageType == PageInvoice.LIST ? 0.22 : 0.33),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Quản lý hoá đơn",
+                style: TextStyle(fontSize: 15),
+              ),
+              const Text(
+                "/",
+                style: TextStyle(fontSize: 15),
+              ),
+              model.pageType == PageInvoice.LIST
+                  ? const Text(
+                      "Danh sách hoá đơn",
+                      style: TextStyle(fontSize: 15),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        _model.onChangePage(PageInvoice.LIST);
+
+                        _model.filterListInvoice(
+                            time: selectDate!, page: 1, filter: textInput()!);
+                      },
+                      child: const Text(
+                        'Danh sách hoá đơn',
+                        style: TextStyle(
+                            color: AppColor.BLUE_TEXT,
+                            fontSize: 15,
+                            decoration: TextDecoration.underline),
+                      ),
+                    ),
+              if (model.pageType == PageInvoice.DETAIL) ...[
+                const Text(
+                  "/",
                   style: TextStyle(fontSize: 15),
-                )
-              : InkWell(
-                  onTap: () {
-                    setState(() {
-                      pageType = PageInvoice.LIST;
-                    });
-                    _model.filterListInvoice(
-                        time: selectDate!, page: 1, filter: textInput()!);
-                  },
-                  child: const Text(
-                    'Danh sách hoá đơn',
-                    style: TextStyle(
-                        color: AppColor.BLUE_TEXT,
-                        fontSize: 15,
-                        decoration: TextDecoration.underline),
-                  ),
                 ),
-          if (pageType == PageInvoice.DETAIL) ...[
-            const Text(
-              "/",
-              style: TextStyle(fontSize: 15),
-            ),
-            const Text(
-              "Chi tiết hoá đơn",
-              style: TextStyle(fontSize: 15),
-            ),
-          ] else if (pageType == PageInvoice.EDIT) ...[
-            const Text(
-              "/",
-              style: TextStyle(fontSize: 15),
-            ),
-            const Text(
-              "Chỉnh sửa hoá đơn",
-              style: TextStyle(fontSize: 15),
-            ),
-          ]
-        ],
-      ),
+                const Text(
+                  "Chi tiết hoá đơn",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ] else if (model.pageType == PageInvoice.EDIT) ...[
+                const Text(
+                  "/",
+                  style: TextStyle(fontSize: 15),
+                ),
+                const Text(
+                  "Chỉnh sửa hoá đơn",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ]
+            ],
+          ),
+        );
+      },
     );
   }
 

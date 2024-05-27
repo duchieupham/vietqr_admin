@@ -3,6 +3,7 @@ import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/models/DTO/qr_box_dto.dart';
+import 'package:vietqr_admin/models/DTO/qr_box_msg_dto.dart';
 
 import '../models/DAO/QrBoxDAO.dart';
 import '../models/DTO/bank_type_dto.dart';
@@ -21,6 +22,7 @@ class QrBoxViewModel extends BaseModel {
   late QrBoxDAO _dao;
   List<QrBoxDTO>? qrBoxList = [];
   List<BankTypeDTO>? bankList = [];
+  QRBoxMsgDTO? qrMsg;
 
   MetaDataDTO? metadata;
 
@@ -101,6 +103,31 @@ class QrBoxViewModel extends BaseModel {
       setState(ViewStatus.Error);
     }
     return false;
+  }
+
+  Future<bool?> updateMsg(QRBoxMsgDTO dto) async {
+    try {
+      setState(ViewStatus.Empty);
+      bool? result = await _dao.updateMsg(dto);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
+
+  Future<void> getQRBoxMsg() async {
+    try {
+      setState(ViewStatus.Loading);
+      final result = await _dao.getMsg();
+      if (result != null) {
+        qrMsg = result;
+      }
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      setState(ViewStatus.Error);
+    }
   }
 
   Future<void> getListQrBox(

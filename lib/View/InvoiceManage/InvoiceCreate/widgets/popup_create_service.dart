@@ -351,7 +351,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                     width: 100,
                     height: 20,
                     child: Text(
-                      'Tài khoản ngân hàng*',
+                      'Loại hàng hoá / dịch vụ*',
                       style: TextStyle(fontSize: 15),
                     ),
                   ),

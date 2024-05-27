@@ -9,6 +9,7 @@ import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/qr_box_dto.dart';
+import 'package:vietqr_admin/models/DTO/qr_box_msg_dto.dart';
 
 import '../../../ViewModel/qr_box_viewModel.dart';
 import '../../../commons/constants/configurations/theme.dart';
@@ -27,6 +28,9 @@ class QrBoxListScreen extends StatefulWidget {
 
 class _QrBoxListScreenState extends State<QrBoxListScreen> {
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _msg1Controller = TextEditingController();
+  final TextEditingController _msg2Controller = TextEditingController();
+
   late ScrollController controller1;
   late ScrollController controller2;
   bool isScrollingDown1 = false;
@@ -41,7 +45,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
     super.initState();
     _model = Get.find<QrBoxViewModel>();
     _model.getListQrBox(type: type);
-
+    _model.getQRBoxMsg();
     controller1 = ScrollController();
     controller2 = ScrollController();
     controller1.addListener(() {
@@ -123,7 +127,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
         if (model.status == ViewStatus.Loading) {
           return const Expanded(child: Center(child: Text('Đang tải...')));
         }
-        if (model.status == ViewStatus.Error) {
+        if (model.status == ViewStatus.Error || model.qrBoxList!.isEmpty) {
           return const SizedBox.shrink();
         }
         List<QrBoxDTO>? list = model.qrBoxList;
@@ -398,7 +402,8 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
       builder: (context, child, model) {
         bool isPaging = false;
         if (model.status == ViewStatus.Loading ||
-            model.status == ViewStatus.Error) {
+            model.status == ViewStatus.Error ||
+            model.metadata == null) {
           return const SizedBox.shrink();
         }
 
@@ -485,14 +490,160 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
   Widget _filterWidget() {
     return ScopedModelDescendant<QrBoxViewModel>(
       builder: (context, child, model) {
+        if (model.qrMsg == null) {
+          return const SizedBox.shrink();
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (model.qrMsg != null) ...[
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Text(
+                    'Home Page:',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 20),
+                  Text(
+                    model.qrMsg!.homePage,
+                    style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.normal,
+                        color: AppColor.BLUE_TEXT),
+                  ),
+                ],
+              )
+            ],
             const SizedBox(height: 30),
             const Text(
               'Tìm kiếm thông tin ',
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 10),
+            model.qrMsg != null
+                ? Row(
+                    children: [
+                      const Text(
+                        "Nội dung thanh toán thành công:",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.normal),
+                      ),
+                      const SizedBox(width: 20),
+                      Container(
+                        width: 350,
+                        height: 40,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                            color: AppColor.WHITE,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: AppColor.GREY_DADADA)),
+                        child: TextField(
+                          controller: _msg1Controller,
+                          onChanged: (value) {
+                            _msg1Controller.value = TextEditingValue(
+                                text: value,
+                                selection: TextSelection.collapsed(
+                                    offset: value.length));
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.only(bottom: 8, top: 8),
+                              border: InputBorder.none,
+                              hintText: model.qrMsg!.message1,
+                              hintStyle: const TextStyle(
+                                  fontSize: 15, color: AppColor.GREY_TEXT),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _msg1Controller.clear();
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    size: 15,
+                                    color: AppColor.GREY_TEXT,
+                                  ))),
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        "Số tiền",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.normal),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        width: 200,
+                        height: 40,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                            color: AppColor.WHITE,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: AppColor.GREY_DADADA)),
+                        child: TextField(
+                          controller: _msg2Controller,
+                          onChanged: (value) {
+                            _msg2Controller.value = TextEditingValue(
+                                text: value,
+                                selection: TextSelection.collapsed(
+                                    offset: value.length));
+                            setState(() {});
+                          },
+                          decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.only(bottom: 8, top: 8),
+                              border: InputBorder.none,
+                              hintText: model.qrMsg!.message2,
+                              hintStyle: const TextStyle(
+                                  fontSize: 15, color: AppColor.GREY_TEXT),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _msg2Controller.clear();
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    size: 15,
+                                    color: AppColor.GREY_TEXT,
+                                  ))),
+                          maxLines: 1,
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      InkWell(
+                        onTap: () async {
+                          if (_msg1Controller.text.isNotEmpty ||
+                              _msg2Controller.text.isNotEmpty) {
+                            QRBoxMsgDTO msg = QRBoxMsgDTO(
+                                homePage: model.qrMsg!.homePage,
+                                message1: _msg1Controller.text,
+                                message2: _msg2Controller.text);
+                            final result = await model.updateMsg(msg);
+                            if (result!) {
+                              DialogWidget.instance.openMsgSuccessDialog(
+                                  title: 'Cập nhật thành công');
+                            }
+                          }
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: AppColor.BLUE_TEXT,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Cập nhật',
+                              style: TextStyle(
+                                  fontSize: 15, color: AppColor.WHITE),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                : const SizedBox.shrink(),
             const SizedBox(height: 30),
             const Text(
               "Tìm kiếm theo",

@@ -101,7 +101,7 @@ class CustomerDetailDTO {
       userBankName: json['userBankName'],
       connectionType: json['connectionType'],
       phoneNo: json['phoneNo'],
-      email: json['email'],
+      email: json['email'] ?? '',
     );
   }
 

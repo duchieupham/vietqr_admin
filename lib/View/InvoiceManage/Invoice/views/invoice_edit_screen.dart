@@ -159,7 +159,9 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               ),
               const Spacer(),
               MButtonWidget(
-                onTap: () {},
+                onTap: () {
+                  model.editInvoice();
+                },
                 title: 'Cập nhật thông tin',
                 isEnable: true,
                 margin: EdgeInsets.zero,
@@ -277,6 +279,9 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               child: Center(
                                 child: TextField(
                                   controller: _invoiceTextController,
+                                  onChanged: (value) {
+                                    model.onEditInvoiceName(value);
+                                  },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText:
@@ -339,6 +344,9 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               child: Center(
                                 child: TextField(
                                   controller: _descriptionTextController,
+                                  onChanged: (value) {
+                                    model.onEditDescription(value);
+                                  },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: invoiceInfo.description.isNotEmpty
