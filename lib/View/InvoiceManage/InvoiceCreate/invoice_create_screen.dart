@@ -34,6 +34,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   bool? isErrorInvoiceName = false;
   bool? isErrorDescription = false;
   bool? isCreateSuccess = false;
+  final _horizontal = ScrollController();
 
   late InvoiceViewModel _model;
 
@@ -200,15 +201,18 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               MButtonWidget(
                 title: 'Tạo hoá đơn',
                 colorDisableBgr: AppColor.GREY_DADADA,
-                isEnable: model.totalAmountVat != 0 ? true : false,
+                isEnable: (model.totalAmountVat != 0 &&
+                        _invoiceTextController.text.isNotEmpty)
+                    ? true
+                    : false,
                 width: 350,
                 height: 50,
                 onTap: () async {
                   setState(() {
                     isErrorInvoiceName =
                         _invoiceTextController.text.isEmpty ? true : false;
-                    isErrorDescription =
-                        _descriptionTextController.text.isEmpty ? true : false;
+                    // isErrorDescription =
+                    //     _descriptionTextController.text.isEmpty ? true : false;
                   });
 
                   if (isErrorDescription == false &&
@@ -340,6 +344,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: TextField(
                               controller: _invoiceTextController,
+                              onChanged: (value) {
+                                _invoiceTextController.value = TextEditingValue(
+                                    text: value,
+                                    selection: TextSelection.collapsed(
+                                        offset: value.length));
+                                setState(() {});
+                              },
                               decoration: InputDecoration(
                                 contentPadding:
                                     const EdgeInsets.only(bottom: 10),
@@ -979,11 +990,18 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 //     border: Border(
                 //         bottom: BorderSide(color: AppColor.GREY_TEXT, width: 0.5))),
                 width: 1360,
-                child: Column(
-                  children: [
-                    _itemTitleWidget(),
-                    ...buildItemList(model.listService),
-                  ],
+                child: Scrollbar(
+                  controller: _horizontal,
+                  child: SingleChildScrollView(
+                    controller: _horizontal,
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      children: [
+                        _itemTitleWidget(),
+                        ...buildItemList(model.listService),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               model.bankDetail != null
