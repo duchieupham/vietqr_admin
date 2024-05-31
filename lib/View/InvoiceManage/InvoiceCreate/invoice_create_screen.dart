@@ -123,85 +123,86 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               ))),
           child: Row(
             children: [
-              SizedBox(
-                width: 250,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tổng tiền hàng",
-                        style: TextStyle(fontSize: 15),
+              Expanded(
+                  child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Tổng tiền hàng",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            StringUtils.formatNumber(model.totalAmount),
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
-                      const SizedBox(
-                        height: 5,
+                    ),
+                    const SizedBox(width: 110),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "VAT",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            StringUtils.formatNumber(model.totalVat),
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
-                      Text(
-                        StringUtils.formatNumber(model.totalAmount),
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 110),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Tổng tiền thanh toán (bao gồm VAT)",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            StringUtils.formatNumber(model.totalAmountVat),
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.BLUE_TEXT),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(
-                width: 250,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "VAT",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        StringUtils.formatNumber(model.totalVat),
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 350,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tổng tiền thanh toán (bao gồm VAT)",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        StringUtils.formatNumber(model.totalAmountVat),
-                        style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.BLUE_TEXT),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const Spacer(),
+              )),
               MButtonWidget(
                 title: 'Tạo hoá đơn',
                 colorDisableBgr: AppColor.GREY_DADADA,
                 isEnable: (model.totalAmountVat != 0 &&
+                        model.listService!.isNotEmpty &&
                         _invoiceTextController.text.isNotEmpty)
                     ? true
                     : false,
@@ -1017,7 +1018,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   Widget _headerWidget() {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 25, 30, 10),
-      width: MediaQuery.of(context).size.width * 0.22,
+      width: 300,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [

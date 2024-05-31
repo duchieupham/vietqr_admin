@@ -177,8 +177,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           color: AppColor.WHITE,
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.85,
+          width: 1070,
+          height: 700,
           child: ScopedModel<InvoiceViewModel>(
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
@@ -248,8 +248,21 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                           _serivceSelectWidget(),
                           const SizedBox(height: 45),
                           if (widget.isEdit == true) ...[
-                            _itemTitleWidget(true),
-                            _buildItem(item: widget.dto, type: widget.dto?.type)
+                            Scrollbar(
+                              controller: _horizontal2,
+                              child: SingleChildScrollView(
+                                controller: _horizontal2,
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  children: [
+                                    _itemTitleWidget(true),
+                                    _buildItem(
+                                        item: widget.dto,
+                                        type: widget.dto?.type)
+                                  ],
+                                ),
+                              ),
+                            ),
                           ] else ...[
                             if (model.status == ViewStatus.Loading) ...[
                               const CircularProgressIndicator(),

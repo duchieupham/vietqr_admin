@@ -53,8 +53,8 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
           color: AppColor.WHITE,
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.width * 0.5,
+          width: 700,
+          height: 700,
           child: ScopedModel<InvoiceViewModel>(
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
@@ -244,10 +244,12 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                               onTap: () {
                                 if (hasSelect == true && selectItem != null) {
                                   model.selectMerchant(selectItem!);
-                                  Navigator.of(context).pop();
                                 }
                                 if (hasSelect == true && selectBank != null) {
                                   model.bankSelect(selectBank!);
+                                }
+                                if (hasSelect == true) {
+                                  model.clearItem();
                                   Navigator.of(context).pop();
                                 }
                               },
