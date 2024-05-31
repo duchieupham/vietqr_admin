@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/TransManage/UserRecharge/widgets/item_widget.dart';
@@ -77,17 +75,13 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
         );
       },
     );
-    if (result != null) {
-      _model.getSelectMoth(dateTime);
-      setState(() {
-        selectDate = result;
-      });
-      _model.filterUserRecharge(
-          page: 1, value: searchValue!.isEmpty ? searchValue! : '');
-    } else {
-      selectDate = _model.getPreviousMonth();
+    _model.getSelectMoth(dateTime);
+    setState(() {
+      selectDate = result;
+    });
+    _model.filterUserRecharge(
+        page: 1, value: searchValue!.isEmpty ? searchValue! : '');
     }
-  }
 
   @override
   void dispose() {
@@ -156,9 +150,9 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Quản lý giao dịch",
             style: TextStyle(fontSize: 15),
@@ -450,9 +444,9 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           size: 15,

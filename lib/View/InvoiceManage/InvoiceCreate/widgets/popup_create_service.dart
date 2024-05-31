@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -86,15 +84,11 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         );
       },
     );
-    if (result != null) {
-      setState(() {
-        selectDate = result;
-      });
-      await _model.getService(time: DateFormat('yyyy-MM').format(result));
-    } else {
-      selectDate = null;
+    setState(() {
+      selectDate = result;
+    });
+    await _model.getService(time: DateFormat('yyyy-MM').format(result));
     }
-  }
 
   void onConfirmService(bool hasSelect,
       {required ServiceItemDTO dto,

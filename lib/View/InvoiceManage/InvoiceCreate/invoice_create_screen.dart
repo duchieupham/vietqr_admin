@@ -8,15 +8,12 @@ import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
-import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
-import 'dart:html' as html;
 
 import '../../../ViewModel/invoice_viewModel.dart';
 import '../../../commons/constants/configurations/theme.dart';
 import '../../../commons/widget/dialog_widget.dart';
-import '../../../models/DTO/bank_detail_dto.dart';
 import '../../../models/DTO/service_item_dto.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
@@ -1000,9 +997,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 25, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Quản lý hoá đơn",
             style: TextStyle(fontSize: 15),
@@ -1027,8 +1024,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           color: AppColor.WHITE,
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,

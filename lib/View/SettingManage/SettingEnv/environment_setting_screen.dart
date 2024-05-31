@@ -127,9 +127,9 @@ class _EnvironmentSettingScreenState extends State<EnvironmentSettingScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 25, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Thiết lập và cài đặt",
             style: TextStyle(fontSize: 15),

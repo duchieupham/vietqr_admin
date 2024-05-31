@@ -11,7 +11,6 @@ import 'package:vietqr_admin/feature/config/config_screen.dart';
 import 'package:vietqr_admin/feature/dashboard/bloc/token_bloc.dart';
 import 'package:vietqr_admin/feature/dashboard/event/token_event.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
-import 'package:vietqr_admin/feature/integration_connectivity/integration_connectivity_screen.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/list_connect_screen.dart';
 import 'package:vietqr_admin/feature/log/log_screen.dart';
 import 'package:vietqr_admin/View/SettingManage/ServicePack/service_pack_screen.dart';
@@ -26,7 +25,7 @@ import '../../View/TransStatistics/MerchantTrans/merchant_transaction_screen.dar
 import 'state/token_state.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashBroadScreenState();

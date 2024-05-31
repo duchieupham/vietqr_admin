@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
-import 'package:vietqr_admin/models/DTO/service_fee_dto.dart';
 
 import '../../../../commons/constants/configurations/theme.dart';
 import '../../../../commons/constants/utils/string_utils.dart';
-import '../../../../models/DTO/merchant_dto.dart';
 
 class ItemInvoiceWidget extends StatelessWidget {
   final int index;
@@ -16,13 +12,11 @@ class ItemInvoiceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDateTimePaid = dto.timePaid != null &&
-            dto.timePaid.toString().isNotEmpty
+    String formattedDateTimePaid = dto.timePaid.toString().isNotEmpty
         ? DateFormat('yyyy-MM-dd HH:mm:ss')
             .format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))
         : '-';
-    String formattedDateTimeCreated = dto.timeCreated != null &&
-            dto.timeCreated.toString().isNotEmpty
+    String formattedDateTimeCreated = dto.timeCreated.toString().isNotEmpty
         ? DateFormat('yyyy-MM-dd HH:mm:ss')
             .format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))
         : '-';

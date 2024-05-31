@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class MerchantDTO {
   List<MerchantItem> items;

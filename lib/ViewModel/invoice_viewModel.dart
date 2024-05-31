@@ -5,7 +5,6 @@ import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 
-import '../commons/constants/enum/view_status.dart';
 import '../commons/constants/utils/log.dart';
 import '../models/DAO/index.dart';
 import '../models/DTO/bank_detail_dto.dart';
@@ -14,7 +13,6 @@ import '../models/DTO/invocie_merchant_dto.dart';
 import '../models/DTO/invoice_detail_dto.dart';
 import '../models/DTO/invoice_detail_qr_dto.dart';
 import '../models/DTO/invoice_dto.dart';
-import '../models/DTO/metadata_dto.dart';
 import '../models/DTO/service_item_dto.dart';
 
 // ignore: constant_identifier_names
@@ -300,9 +298,7 @@ class InvoiceViewModel extends BaseModel {
               ? double.parse(vatTextController.text)
               : double.parse(bankDetail!.vat.toString()),
           bankId: selectBank!.bankId,
-          merchantId: selectMerchantItem != null
-              ? selectMerchantItem?.merchantId
-              : null,
+          merchantId: selectMerchantItem?.merchantId,
           invoiceName: invoiceName,
           description: description,
           list: listService!);
@@ -311,7 +307,7 @@ class InvoiceViewModel extends BaseModel {
       } else {
         setState(ViewStatus.Error);
       }
-      print('Create Invoice: ------${result}');
+      print('Create Invoice: ------$result');
       return result;
     } catch (e) {
       LOG.error(e.toString());

@@ -135,7 +135,7 @@ class _BillState extends State<Bill> {
                                   ...listActiveFee.map((e) {
                                     int i = listActiveFee.indexOf(e);
                                     return _buildItem(i, e);
-                                  }).toList(),
+                                  }),
                                   _buildItemTotal(totalAmount,
                                       'Tổng tiền hàng (Total amount excl. VAT):'),
                                   _buildItemTotal(
@@ -307,8 +307,8 @@ class _BillState extends State<Bill> {
       height: 45,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(color: AppColor.BLUE_TEXT.withOpacity(0.2)),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           Align(
             alignment: Alignment.centerLeft,
             child: Text(

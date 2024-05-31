@@ -18,7 +18,7 @@ import 'package:vietqr_admin/feature/config/lark_web_hook/lark_web_hook/widget/u
 import '../../../../models/DTO/web_hook_dto.dart';
 
 class LarkHook extends StatefulWidget {
-  const LarkHook({Key? key}) : super(key: key);
+  const LarkHook({super.key});
 
   @override
   State<LarkHook> createState() => _LarkHookScreenState();
@@ -195,7 +195,7 @@ class _LarkHookScreenState extends State<LarkHook> {
                           int index = listLark.indexOf(e) + 1;
 
                           return _buildItem(e, index);
-                        }).toList(),
+                        }),
                         const SizedBox(width: 12),
                       ],
                     ),

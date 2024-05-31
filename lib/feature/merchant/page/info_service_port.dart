@@ -12,7 +12,7 @@ import '../../../models/DTO/bank_account_dto.dart';
 import '../../../models/DTO/statistic_dto.dart';
 
 class InfoServicePort extends StatefulWidget {
-  const InfoServicePort({Key? key}) : super(key: key);
+  const InfoServicePort({super.key});
 
   @override
   State<InfoServicePort> createState() => _InformationPopupState();

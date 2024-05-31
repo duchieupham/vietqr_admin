@@ -86,7 +86,7 @@ class _RequestBankAccountScreenState extends State<RequestBankAccountScreen> {
                                   int index = rqBankLit.indexOf(e);
 
                                   return _buildItem(e, index);
-                                }).toList(),
+                                }),
                               ],
                             ))),
                   ));

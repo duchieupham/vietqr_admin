@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -401,9 +399,9 @@ class _ActiveQrBoxScreenState extends State<ActiveQrBoxScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Quản lý QR Box",
             style: TextStyle(fontSize: 15),

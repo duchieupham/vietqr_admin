@@ -171,7 +171,7 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                                                   listBankSync.indexOf(e) + 1;
 
                                               return _buildItem(e, index);
-                                            }).toList(),
+                                            }),
                                             const SizedBox(width: 12),
                                           ],
                                         ),

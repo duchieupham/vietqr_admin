@@ -13,7 +13,7 @@ import 'event/log_event.dart';
 import 'state/log_state.dart';
 
 class LogScreen extends StatefulWidget {
-  const LogScreen({Key? key}) : super(key: key);
+  const LogScreen({super.key});
 
   @override
   State<LogScreen> createState() => _LogScreenState();

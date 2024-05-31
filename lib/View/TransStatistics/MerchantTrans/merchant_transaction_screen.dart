@@ -1,8 +1,5 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -150,16 +147,12 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
         );
       },
     );
-    if (result != null) {
-      setState(() {
-        selectDate = result;
-      });
-      _model.filterListMerchant(
-          time: selectDate!, page: 1, value: searchValue ?? '');
-    } else {
-      selectDate = _model.getPreviousMonth();
+    setState(() {
+      selectDate = result;
+    });
+    _model.filterListMerchant(
+        time: selectDate!, page: 1, value: searchValue ?? '');
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,9 +219,9 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Thống kê GD",
             style: TextStyle(fontSize: 15),
@@ -402,10 +395,11 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                           ],
                           onChanged: (value) {
                             model.changeTime(value);
-                            if (value == 1)
+                            if (value == 1) {
                               selectDate = model.getPreviousMonth();
-                            else
+                            } else {
                               selectDate = model.getPreviousDay();
+                            }
                           },
                         ),
                       ),
@@ -473,9 +467,9 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           size: 15,

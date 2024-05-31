@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/QrBoxManage/QrBox/widgets/title_item_qr_box_widget.dart';
@@ -269,7 +267,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                                                 0.3)))),
                                             height: 50,
                                             width: 130,
-                                            child: SelectionArea(
+                                            child: const SelectionArea(
                                               child: Text(
                                                 // e.status == 0
                                                 //     ? 'Không xác định'
@@ -339,10 +337,10 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                Visibility(
+                                                const Visibility(
                                                   visible: true,
                                                   child:
-                                                      const SizedBox(width: 10),
+                                                      SizedBox(width: 10),
                                                 ),
                                                 const SizedBox(width: 10),
                                                 Tooltip(
@@ -806,9 +804,9 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           size: 20,
@@ -835,9 +833,9 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Quản lý QR Box",
             style: TextStyle(fontSize: 15),

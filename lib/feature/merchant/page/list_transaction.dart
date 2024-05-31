@@ -138,7 +138,7 @@ class _ListTransactionState extends State<ListTransaction> {
                                                       1;
 
                                               return _buildItem(e, index);
-                                            }).toList(),
+                                            }),
                                             const SizedBox(width: 12),
                                           ],
                                         ),

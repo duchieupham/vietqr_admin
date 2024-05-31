@@ -7,12 +7,12 @@ class ItemMenuTop extends StatefulWidget {
   final bool isSelect;
   final double titleSize;
   const ItemMenuTop({
-    Key? key,
+    super.key,
     required this.title,
     required this.onTap,
     this.isSelect = false,
     this.titleSize = 14,
-  }) : super(key: key);
+  });
 
   @override
   State<ItemMenuTop> createState() => _ItemMenuHomeState();

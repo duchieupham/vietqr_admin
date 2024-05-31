@@ -21,14 +21,13 @@ class ListBank extends StatelessWidget {
   final bool isVertical;
 
   const ListBank(
-      {Key? key,
+      {super.key,
       required this.listBank,
       this.showButtonAddBank = false,
       required this.apiServiceDTO,
       required this.customerSyncId,
       this.isVertical = false,
-      required this.bloc})
-      : super(key: key);
+      required this.bloc});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +68,7 @@ class ListBank extends StatelessWidget {
         if (isVertical)
           ...listBank.map((e) {
             return _buildItemBank(e, context);
-          }).toList()
+          })
         else
           Expanded(
               child: ListView(

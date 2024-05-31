@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class ServiceFeeDTO {
   List<ServiceItems> items;

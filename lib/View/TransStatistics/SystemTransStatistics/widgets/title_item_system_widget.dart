@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../commons/constants/configurations/theme.dart';
@@ -193,7 +191,7 @@ class TitleItemSystemTransactionWidget extends StatelessWidget {
                     width: 80,
                     child: SelectionArea(
                       child: Text(
-                        extra!.creCountTotal.toString(),
+                        extra.creCountTotal.toString(),
                         textAlign: TextAlign.right,
                         style: const TextStyle(
                             fontSize: 12, color: AppColor.BLACK),
@@ -212,7 +210,7 @@ class TitleItemSystemTransactionWidget extends StatelessWidget {
                     child: SelectionArea(
                       child: Text(
                         StringUtils.formatNumberWithOutVND(
-                            extra!.creditTotal.toString()),
+                            extra.creditTotal.toString()),
                         textAlign: TextAlign.right,
                         style: const TextStyle(
                             fontSize: 12, color: AppColor.BLACK),
@@ -230,7 +228,7 @@ class TitleItemSystemTransactionWidget extends StatelessWidget {
                     width: 80,
                     child: SelectionArea(
                       child: Text(
-                        extra!.deCountTotal.toString(),
+                        extra.deCountTotal.toString(),
                         textAlign: TextAlign.right,
                         style: const TextStyle(
                             fontSize: 12, color: AppColor.BLACK),
@@ -249,7 +247,7 @@ class TitleItemSystemTransactionWidget extends StatelessWidget {
                     child: SelectionArea(
                       child: Text(
                         StringUtils.formatNumberWithOutVND(
-                            extra!.debitTotal.toString()),
+                            extra.debitTotal.toString()),
                         textAlign: TextAlign.right,
                         style: const TextStyle(
                             fontSize: 12, color: AppColor.BLACK),
@@ -267,7 +265,7 @@ class TitleItemSystemTransactionWidget extends StatelessWidget {
                     width: 80,
                     child: SelectionArea(
                       child: Text(
-                        extra!.recCountTotal.toString(),
+                        extra.recCountTotal.toString(),
                         textAlign: TextAlign.right,
                         style: const TextStyle(
                             fontSize: 12, color: AppColor.BLACK),
@@ -286,7 +284,7 @@ class TitleItemSystemTransactionWidget extends StatelessWidget {
                     child: SelectionArea(
                       child: Text(
                         StringUtils.formatNumberWithOutVND(
-                            extra!.recTotal.toString()),
+                            extra.recTotal.toString()),
                         textAlign: TextAlign.right,
                         style: const TextStyle(
                             fontSize: 12, color: AppColor.BLACK),

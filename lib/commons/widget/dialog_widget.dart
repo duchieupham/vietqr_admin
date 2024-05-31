@@ -132,10 +132,10 @@ class DialogWidget {
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     CircularProgressIndicator(
                       color: AppColor.GREEN,
                     ),
@@ -447,7 +447,7 @@ class DialogWidget {
   }
 
   openTransactionDialog(String address, String body) {
-    final ScrollController _scrollContoller = ScrollController();
+    final ScrollController scrollContoller = ScrollController();
     return showDialog(
       barrierDismissible: false,
       context: NavigationService.navigatorKey.currentContext!,
@@ -525,7 +525,7 @@ class DialogWidget {
                           width: 220,
                           height: 250,
                           child: SingleChildScrollView(
-                            controller: _scrollContoller,
+                            controller: scrollContoller,
                             child: Text(
                               body,
                               style: const TextStyle(fontSize: 15),

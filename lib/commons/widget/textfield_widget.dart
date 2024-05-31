@@ -31,7 +31,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool disableBorder;
 
   const TextFieldWidget({
-    Key? key,
+    super.key,
     this.width,
     required this.hintText,
     this.controller,
@@ -58,7 +58,7 @@ class TextFieldWidget extends StatelessWidget {
     this.required = false,
     this.inputFormatter,
     this.disableBorder = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_edit_invoice_widget.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -14,7 +12,6 @@ import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
 import '../../../../commons/widget/separator_widget.dart';
-import '../../../../models/DTO/invoice_detail_dto.dart';
 import '../../InvoiceCreate/widgets/item_title_widget.dart';
 
 class InvoiceEditScreen extends StatefulWidget {
@@ -391,14 +388,14 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 70,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
+                      SizedBox(
                         width: 400,
                         height: 70,
                         child: Column(
@@ -586,7 +583,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                         ),
                       ),
                       const SizedBox(width: 30),
-                      Container(
+                      SizedBox(
                         width: 250,
                         height: 70,
                         child: Column(
@@ -878,10 +875,10 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                   color: AppColor.GREY_DADADA,
                 ),
                 const SizedBox(height: 30),
-                SizedBox(
+                const SizedBox(
                   width: double.infinity,
                   height: 20,
-                  child: const Text(
+                  child: Text(
                     'Danh mục hàng hoá / dịch vụ',
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
@@ -914,8 +911,8 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
           bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
         ),
       ),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
@@ -1177,9 +1174,9 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 18, 30, 10),
       width: MediaQuery.of(context).size.width * 0.32,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Quản lý hoá đơn",
             style: TextStyle(fontSize: 15),

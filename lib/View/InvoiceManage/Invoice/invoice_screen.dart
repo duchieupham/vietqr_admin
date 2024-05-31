@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -97,7 +96,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void onShowPopupExcel() async {
     return await showDialog(
       context: context,
-      builder: (context) => PopupExcelInvoice(),
+      builder: (context) => const PopupExcelInvoice(),
     );
   }
 
@@ -1377,9 +1376,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           size: 15,

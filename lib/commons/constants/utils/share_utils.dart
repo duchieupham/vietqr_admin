@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-import 'dart:js' as js;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -25,7 +23,7 @@ class ShareUtils {
           await image.toByteData(format: ui.ImageByteFormat.png);
       Uint8List pngBytes = byteData!.buffer.asUint8List();
       await WebImageDownloader.downloadImageFromUInt8List(
-          uInt8List: pngBytes, name: 'VietQr-${bankAccount}');
+          uInt8List: pngBytes, name: 'VietQr-$bankAccount');
       // await ImageGallerySaver.saveImage(
       //   pngBytes,
       //   quality: 100,

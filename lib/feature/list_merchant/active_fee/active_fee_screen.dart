@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/mixin/events.dart';
@@ -16,10 +15,11 @@ import 'package:vietqr_admin/feature/list_merchant/active_fee/provider/active_fe
 import 'package:vietqr_admin/feature/list_merchant/active_fee/state/active_fee_state.dart';
 import 'package:vietqr_admin/feature/list_merchant/active_fee/widget/active_fee_detail.dart';
 
+import '../../../commons/widget/dialog_pick_month.dart';
 import '../../../models/DTO/active_fee_dto.dart';
 
 class ActiveFeeScreen extends StatefulWidget {
-  const ActiveFeeScreen({Key? key}) : super(key: key);
+  const ActiveFeeScreen({super.key});
 
   @override
   State<ActiveFeeScreen> createState() => _ActiveFeeScreenState();
@@ -86,9 +86,9 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
         }
       }, builder: (context, state) {
         if (state is ActiveFeeLoadingInitState) {
-          return Column(
+          return const Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               CircularProgressIndicator(),
               SizedBox(
                 height: 16,
@@ -127,13 +127,13 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                               ...provider.listActiveFeeDTO.map((e) {
                                 int i = provider.listActiveFeeDTO.indexOf(e);
                                 return _buildItem(i, e);
-                              }).toList()
+                              })
                             ] else ...[
                               _buildTitleItemBank(),
                               ...provider.bankAccounts.map((e) {
                                 int i = provider.bankAccounts.indexOf(e);
                                 return _buildItemBank(i, e);
-                              }).toList()
+                              })
                             ]
                           ],
                         ),
@@ -616,13 +616,27 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
             ),
             InkWell(
               onTap: () async {
-                final selected = await showMonthYearPicker(
+                // final selected = await showMonthYearPicker(
+                //   context: context,
+                //   initialDate: provider.currentDate,
+                //   firstDate: DateTime(2022),
+                //   lastDate: DateTime.now(),
+                // );
+                DateTime selected = await showDialog(
+                  barrierDismissible: false,
                   context: context,
-                  initialDate: provider.currentDate,
-                  firstDate: DateTime(2022),
-                  lastDate: DateTime.now(),
+                  builder: (BuildContext context) {
+                    return Material(
+                      color: AppColor.TRANSPARENT,
+                      child: Center(
+                        child: DialogPickDate(
+                          dateTime: provider.currentDate,
+                        ),
+                      ),
+                    );
+                  },
                 );
-                provider.changeDate(selected!);
+                provider.changeDate(selected);
                 String month = TimeUtils.instance.getFormatMonth(selected);
                 nowMonth = month;
                 _activeFeeBloc.add(ActiveFeeGetListEvent(month: month));

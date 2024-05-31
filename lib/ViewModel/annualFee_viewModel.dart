@@ -1,12 +1,10 @@
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/models/DTO/annual_fee_after_dto.dart';
-import 'package:vietqr_admin/models/DTO/service_fee_dto.dart';
 
 import '../commons/constants/enum/view_status.dart';
 import '../commons/constants/utils/log.dart';
 import '../models/DAO/AnnualDAO.dart';
-import '../models/DAO/ServiceDAO.dart';
 import '../models/DTO/metadata_dto.dart';
 
 class AnnualFeeAfterViewModel extends BaseModel {

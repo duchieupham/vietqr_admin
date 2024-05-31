@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
-import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
@@ -152,11 +150,11 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: 240,
                                                   height: 240,
                                                   // color: AppColor.GREY_DADADA,
-                                                  child: QrImage(
+                                                  child: QrImageView(
                                                     data: model.detailQrDTO
                                                             ?.qrCode ??
                                                         '',
@@ -165,8 +163,8 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                                     embeddedImage: const AssetImage(
                                                         'assets/images/ic-viet-qr-small.png'),
                                                     embeddedImageStyle:
-                                                        QrEmbeddedImageStyle(
-                                                      size: const Size(30, 30),
+                                                        const QrEmbeddedImageStyle(
+                                                      size: Size(30, 30),
                                                     ),
                                                   ),
                                                 ),

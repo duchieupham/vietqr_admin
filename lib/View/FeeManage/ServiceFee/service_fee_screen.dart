@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -108,15 +106,11 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
         );
       },
     );
-    if (result != null) {
-      setState(() {
-        selectDate = result;
-      });
-      _model.filterListServiceFee(time: selectDate!, page: 1);
-    } else {
-      selectDate = _model.getPreviousMonth();
+    setState(() {
+      selectDate = result;
+    });
+    _model.filterListServiceFee(time: selectDate!, page: 1);
     }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,9 +172,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Quản lý thu phí",
             style: TextStyle(fontSize: 15),
@@ -326,9 +320,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           size: 15,

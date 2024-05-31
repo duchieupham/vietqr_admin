@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
-import '../../../../commons/widget/dialog_widget.dart';
 import '../../../../commons/widget/separator_widget.dart';
 import '../../../../models/DTO/invoice_detail_dto.dart';
 import '../../InvoiceCreate/widgets/item_title_widget.dart';
@@ -148,7 +146,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                   ),
                                 )
                                 .values
-                                .toList()
+                                
                           ],
                         ),
                       ),
@@ -187,7 +185,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                   ),
                                 )
                                 .values
-                                .toList()
+                                
                             // _buildItemServiceInfo(),
                           ],
                         ),
@@ -224,7 +222,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                 ),
                               )
                               .values
-                              .toList()
+                              
                         ],
                       ),
                     ),
@@ -252,8 +250,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
         ),
       ),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
@@ -455,8 +453,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
         ),
       ),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
@@ -581,11 +579,11 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 '8',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -618,8 +616,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
         ),
       ),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,

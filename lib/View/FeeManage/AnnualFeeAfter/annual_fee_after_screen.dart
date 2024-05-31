@@ -121,14 +121,10 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
         );
       },
     );
-    if (result != null) {
-      setState(() {
-        selectDate = result;
-      });
-    } else {
-      selectDate = _model.getPreviousMonth();
-    }
-    print(selectDate);
+    setState(() {
+      selectDate = result;
+    });
+      print(selectDate);
   }
 
   @override
@@ -184,9 +180,9 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
       width: MediaQuery.of(context).size.width * 0.22,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Phí",
             style: TextStyle(fontSize: 15),
@@ -341,9 +337,9 @@ class _AnnualFeeAfterScreenState extends State<AnnualFeeAfterScreen> {
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           size: 15,

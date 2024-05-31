@@ -20,7 +20,7 @@ import '../../../models/DTO/transaction_dto.dart';
 import 'provider/transaction_provider.dart';
 
 class SysTransactionScreen extends StatelessWidget {
-  const SysTransactionScreen({Key? key}) : super(key: key);
+  const SysTransactionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class SysTransactionScreen extends StatelessWidget {
 }
 
 class _TransactionScreen extends StatefulWidget {
-  const _TransactionScreen({Key? key}) : super(key: key);
+  const _TransactionScreen();
 
   @override
   State<_TransactionScreen> createState() => _TransactionScreenState();
@@ -139,8 +139,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     color: AppColor.BLUE_TEXT.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Row(
-                    children: const [
+                  child: const Row(
+                    children: [
                       Icon(
                         Icons.arrow_back_ios,
                         color: AppColor.BLUE_TEXT,
@@ -534,7 +534,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                                 int index = transactionList.indexOf(e) + 1;
 
                                 return _buildItem(e, index);
-                              }).toList(),
+                              }),
                               const SizedBox(width: 12),
                             ],
                           ),

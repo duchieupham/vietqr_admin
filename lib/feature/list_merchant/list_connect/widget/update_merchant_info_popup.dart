@@ -19,8 +19,7 @@ class UpdateMerchantPopup extends StatefulWidget {
   final VoidCallback uploadSuccess;
 
   const UpdateMerchantPopup(
-      {Key? key, required this.dto, required this.uploadSuccess})
-      : super(key: key);
+      {super.key, required this.dto, required this.uploadSuccess});
 
   @override
   State<UpdateMerchantPopup> createState() => _UpdateMerchantPopupState();
