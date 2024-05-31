@@ -263,9 +263,7 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                 _buildItem('Mã hoá đơn',
                                     model.detailQrDTO!.invoiceNumber),
                                 _buildItem('Tài khoản ngân hàng',
-                                    '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount}'),
-                                _buildItem(
-                                    'Chủ TK', model.detailQrDTO!.userBankName),
+                                    '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount} - ${model.detailQrDTO?.userBankName}'),
                                 _buildItem(
                                     'Tổng tiền',
                                     StringUtils.formatNumber(
@@ -309,11 +307,19 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                   leftText,
                   style: defaultStyle,
                 ),
-                Text(
-                  rightText,
-                  style: leftText == 'Tổng tiền thanh toán'
-                      ? boldStyle
-                      : defaultStyle,
+                const SizedBox(width: 40),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      rightText,
+                      style: leftText == 'Tổng tiền thanh toán'
+                          ? boldStyle
+                          : defaultStyle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
               ],
             ),

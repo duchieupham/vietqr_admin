@@ -38,6 +38,8 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
   final TextEditingController _descriptionTextController =
       TextEditingController();
   late InvoiceViewModel _model;
+  final controller1 = ScrollController();
+  final controller2 = ScrollController();
 
   @override
   void initState() {
@@ -90,89 +92,101 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
           return const SizedBox.shrink();
         }
         return Container(
-          width: double.infinity,
+          width: MediaQuery.of(context).size.width,
           height: 120,
           decoration: const BoxDecoration(
               border: Border(
                 top: BorderSide(color: AppColor.GREY_DADADA, width: 1),
               ),
               color: AppColor.WHITE),
-          child: Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 30),
-                width: 250,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Tổng tiền hàng',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      StringUtils.formatNumber(model.totalEditAmount),
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 30),
-                width: 250,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'VAT',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      StringUtils.formatNumber(model.totalEditVat),
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 30),
-                width: 350,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Tổng tiền thanh toán (bao gồm VAT)',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      StringUtils.formatNumber(model.totalEditAmountVat),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.BLUE_TEXT,
+          child: Scrollbar(
+            controller: controller2,
+            child: SingleChildScrollView(
+              controller: controller2,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 30),
+                        width: 250,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Tổng tiền hàng',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              StringUtils.formatNumber(model.totalEditAmount),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 30),
+                        width: 250,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'VAT',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              StringUtils.formatNumber(model.totalEditVat),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 30),
+                        width: 350,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Tổng tiền thanh toán (bao gồm VAT)',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              StringUtils.formatNumber(
+                                  model.totalEditAmountVat),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.BLUE_TEXT,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 70),
+                  MButtonWidget(
+                    onTap: widget.onEdit,
+                    title: 'Cập nhật thông tin',
+                    isEnable: true,
+                    margin: EdgeInsets.symmetric(horizontal: 30),
+                    width: 350,
+                    height: 50,
+                  ),
+                ],
               ),
-              const Spacer(),
-              MButtonWidget(
-                onTap: widget.onEdit,
-                title: 'Cập nhật thông tin',
-                isEnable: true,
-                margin: EdgeInsets.zero,
-                width: 350,
-                height: 50,
-              ),
-              const SizedBox(width: 30),
-            ],
+            ),
           ),
         );
       },
@@ -889,12 +903,19 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                 const SizedBox(height: 30),
                 SizedBox(
                   width: 1360,
-                  child: Column(
-                    children: [
-                      _itemTitlePaymentInfo(),
-                      ...buildItemList(invoiceInfo.invoiceItems,
-                          bankId: invoiceInfo.userInformation.bankId),
-                    ],
+                  child: Scrollbar(
+                    controller: controller1,
+                    child: SingleChildScrollView(
+                      controller: controller1,
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [
+                          _itemTitlePaymentInfo(),
+                          ...buildItemList(invoiceInfo.invoiceItems,
+                              bankId: invoiceInfo.userInformation.bankId),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 30),
