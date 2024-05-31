@@ -37,6 +37,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
   double? totalAmount;
   double? vatAmount;
   String? amountInput;
+  final _horizontal = ScrollController();
+  final _horizontal2 = ScrollController();
 
   DateTime? selectDate;
 
@@ -175,8 +177,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           color: AppColor.WHITE,
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.75,
+          width: 1070,
+          height: 700,
           child: ScopedModel<InvoiceViewModel>(
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
@@ -210,16 +212,28 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 50),
+                          Column(),
                           const Text(
                             'Thông tin khách hàng thanh toán',
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 45),
-                          _itemTitleWidget(false),
-                          _buildBankItem(
-                              dto: model.bankDetail,
-                              textAmount: model.vatTextController.text),
+                          Scrollbar(
+                            controller: _horizontal,
+                            child: SingleChildScrollView(
+                              controller: _horizontal,
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                children: [
+                                  _itemTitleWidget(false),
+                                  _buildBankItem(
+                                      dto: model.bankDetail,
+                                      textAmount: model.vatTextController.text),
+                                ],
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 20),
                           const MySeparator(
                             color: AppColor.GREY_DADADA,
@@ -234,18 +248,43 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                           _serivceSelectWidget(),
                           const SizedBox(height: 45),
                           if (widget.isEdit == true) ...[
-                            _itemTitleWidget(true),
-                            _buildItem(item: widget.dto, type: widget.dto?.type)
+                            Scrollbar(
+                              controller: _horizontal2,
+                              child: SingleChildScrollView(
+                                controller: _horizontal2,
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  children: [
+                                    _itemTitleWidget(true),
+                                    _buildItem(
+                                        item: widget.dto,
+                                        type: widget.dto?.type)
+                                  ],
+                                ),
+                              ),
+                            ),
                           ] else ...[
                             if (model.status == ViewStatus.Loading) ...[
                               const CircularProgressIndicator(),
                             ] else if (model.serviceItemDTO != null) ...[
-                              _itemTitleWidget(true),
-                              model.serviceItemDTO?.type == model.serviceType
-                                  ? _buildItem(
-                                      item: model.serviceItemDTO,
-                                      type: model.serviceType)
-                                  : const SizedBox.shrink()
+                              Scrollbar(
+                                controller: _horizontal2,
+                                child: SingleChildScrollView(
+                                  controller: _horizontal2,
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(
+                                    children: [
+                                      _itemTitleWidget(true),
+                                      model.serviceItemDTO?.type ==
+                                              model.serviceType
+                                          ? _buildItem(
+                                              item: model.serviceItemDTO,
+                                              type: model.serviceType)
+                                          : const SizedBox.shrink(),
+                                    ],
+                                  ),
+                                ),
+                              )
                             ] else
                               const SizedBox.shrink(),
                           ],
@@ -465,7 +504,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  _onPickMonth(model.getMonth());
+                                  _onPickMonth(model.getPreviousMonth());
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.only(left: 4),

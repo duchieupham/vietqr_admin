@@ -72,6 +72,9 @@ class InvoiceViewModel extends BaseModel {
     selectBank = null;
     bankDetail = null;
     detailQrDTO = null;
+    totalAmount = 0;
+    totalVat = 0;
+    totalAmountVat = 0;
     vatTextController.clear();
   }
 
@@ -92,7 +95,16 @@ class InvoiceViewModel extends BaseModel {
     selectMerchantItem = item;
     selectBank = null;
     bankDetail = null;
+
     notifyListeners();
+  }
+
+  void clearItem() {
+    listService = [];
+    totalAmount = 0;
+    totalVat = 0;
+    totalAmountVat = 0;
+    bankDetail = null;
   }
 
   void bankSelect(BankItem item) async {
@@ -202,8 +214,18 @@ class InvoiceViewModel extends BaseModel {
   }
 
   void editService(ServiceItemDTO? item) {
-    int? index = listService?.indexWhere((item) => item.itemId == item.itemId);
-    listService![index!] = item!;
+    if (item != null) {
+      int? index = listService?.indexWhere((e) => e.itemId == item.itemId);
+      totalAmount -= listService![index!].totalAmount;
+      totalVat -= listService![index].vatAmount;
+      totalAmountVat -= listService![index].amountAfterVat;
+      totalAmount += item.totalAmount;
+      totalVat += item.vatAmount;
+      totalAmountVat += item.amountAfterVat;
+
+      listService![index] = item;
+    }
+
     notifyListeners();
   }
 

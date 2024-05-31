@@ -834,7 +834,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
   Widget _headerWidget() {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
-      width: MediaQuery.of(context).size.width * 0.22,
+      width: 300,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
