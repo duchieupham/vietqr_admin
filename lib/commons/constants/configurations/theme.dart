@@ -56,6 +56,7 @@ class AppColor {
   static const Color RED_NOTI = Color(0xFFF291BB);
   static const Color GREEN_NOTI_1 = Color(0xFFC4FAEE);
   static const Color GREEN_NOTI = Color(0xFF91F2D9);
+  static const Color GREEN_STATUS = Color(0xFF2D9D92);
   static const Color BANNER_DAY1 = Color(0xFF26B0FD);
   static const Color BLUE_DARK = Color(0xFF014C8B);
   static const Color PURPLE_MIDNIGHT = Color(0xFF3D2BFF);

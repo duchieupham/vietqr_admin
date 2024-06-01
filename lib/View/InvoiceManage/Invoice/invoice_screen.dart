@@ -58,7 +58,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.onChangePage(PageInvoice.LIST);
-    selectDate = _model.getPreviousMonth();
+    selectDate = _model.getMonth();
     _model.filterListInvoice(time: selectDate!, page: 1, filter: '');
 
     controller1 = ScrollController();
@@ -441,23 +441,28 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                           height: 50,
                                                           width: 130,
                                                           child: SelectionArea(
-                                                            child: Text(
-                                                              e.status == 0
-                                                                  ? 'Chờ thanh toán'
-                                                                  : 'Đã thanh toán',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: e.status ==
-                                                                          0
+                                                              child: Text(
+                                                            e.status == 0
+                                                                ? 'Chờ thanh toán'
+                                                                : e.status == 1
+                                                                    ? 'Đã thanh toán'
+                                                                    : 'Khoản thu lệch',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: e.status ==
+                                                                      0
+                                                                  ? AppColor
+                                                                      .ORANGE_DARK
+                                                                  : e.status ==
+                                                                          1
                                                                       ? AppColor
-                                                                          .ORANGE_DARK
+                                                                          .GREEN
                                                                       : AppColor
-                                                                          .GREEN),
+                                                                          .GREEN_STATUS,
                                                             ),
-                                                          ),
+                                                          )),
                                                         ),
                                                         Container(
                                                           padding:
@@ -892,7 +897,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 ' VND',
                                 style: TextStyle(
                                     fontSize: 15,
-                                    color: AppColor.RED_TEXT,
+                                    color: AppColor.ORANGE_DARK,
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -970,17 +975,18 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       builder: (context, child, model) {
         return Container(
           padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
-          width: MediaQuery.of(context).size.width *
-              (model.pageType == PageInvoice.LIST ? 0.22 : 0.33),
+          // width: MediaQuery.of(context).size.width *
+          //     (model.pageType == PageInvoice.LIST ? 0.22 : 0.33),
+          width: MediaQuery.of(context).size.width,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Text(
                 "Quản lý hoá đơn",
                 style: TextStyle(fontSize: 15),
               ),
               const Text(
-                "/",
+                "   /   ",
                 style: TextStyle(fontSize: 15),
               ),
               model.pageType == PageInvoice.LIST
@@ -1005,7 +1011,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     ),
               if (model.pageType == PageInvoice.DETAIL) ...[
                 const Text(
-                  "/",
+                  "   /   ",
                   style: TextStyle(fontSize: 15),
                 ),
                 const Text(
@@ -1014,7 +1020,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 ),
               ] else if (model.pageType == PageInvoice.EDIT) ...[
                 const Text(
-                  "/",
+                  "   /   ",
                   style: TextStyle(fontSize: 15),
                 ),
                 const Text(
@@ -1323,7 +1329,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   child: Row(
                     children: [
                       const SizedBox(
-                        width: 40,
+                        width: 60,
                         child: Center(
                           child: Text('Tháng'),
                         ),
