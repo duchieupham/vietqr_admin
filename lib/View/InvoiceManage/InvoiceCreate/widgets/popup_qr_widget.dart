@@ -232,7 +232,7 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  width: double.infinity,
+                                  width: 660,
                                   height: 60,
                                   child: Text(
                                     // widget.dto.invoiceName,
@@ -240,6 +240,8 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 const SizedBox(
@@ -262,8 +264,16 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                 ),
                                 _buildItem('Mã hoá đơn',
                                     model.detailQrDTO!.invoiceNumber),
-                                _buildItem('Tài khoản ngân hàng',
-                                    '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount} - ${model.detailQrDTO?.userBankName}'),
+                                // _buildItem('Tài khoản ngân hàng',
+                                //     '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount} - ${model.detailQrDTO?.userBankName}'),
+                                _buildItem(
+                                  'Tài khoản ngân hàng',
+                                  model.detailQrDTO?.vso != '' &&
+                                          model.detailQrDTO?.midName != ''
+                                      ? '${model.detailQrDTO?.vso} - ${model.detailQrDTO?.midName}'
+                                      : '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount} - ${model.detailQrDTO?.userBankName}',
+                                ),
+
                                 _buildItem(
                                     'Tổng tiền',
                                     StringUtils.formatNumber(

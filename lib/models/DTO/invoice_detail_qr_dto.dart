@@ -10,6 +10,8 @@ class InvoiceDetailQrDTO {
   double vat;
   int vatAmount;
   String invoiceId;
+  String vso;
+  String midName;
 
   InvoiceDetailQrDTO({
     required this.qrCode,
@@ -23,6 +25,8 @@ class InvoiceDetailQrDTO {
     required this.vat,
     required this.vatAmount,
     required this.invoiceId,
+    required this.midName,
+    required this.vso,
   });
 
   factory InvoiceDetailQrDTO.fromJson(Map<String, dynamic> json) {
@@ -38,6 +42,8 @@ class InvoiceDetailQrDTO {
       vat: json['vat'].toDouble(),
       vatAmount: json['vatAmount'],
       invoiceId: json['invoiceId'],
+      vso: json['vso'],
+      midName: json['midName'],
     );
   }
 
@@ -54,6 +60,8 @@ class InvoiceDetailQrDTO {
       'vat': vat,
       'vatAmount': vatAmount,
       'invoiceId': invoiceId,
+      'vso': vso,
+      'midName': midName,
     };
   }
 }
