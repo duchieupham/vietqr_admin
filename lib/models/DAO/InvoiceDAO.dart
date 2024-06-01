@@ -107,7 +107,9 @@ class InvoiceDAO extends BaseDAO {
 
   Future<InvoiceDetailDTO?> getInvoiceDetail(String invoiceId) async {
     try {
-      String url = 'https://api.vietqr.org/vqr/api/invoice/detail/$invoiceId';
+      // String url = 'https://api.vietqr.org/vqr/api/invoice/detail/$invoiceId';
+      String url =
+          'https://dev.vietqr.org/vqr/mock/api/invoice/detail/51bedb46-cc5d-4f67-b0ac-545c4e7b90d6';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -118,6 +120,33 @@ class InvoiceDAO extends BaseDAO {
       }
     } catch (e) {
       LOG.error("Failed to fetch Invoice detail: ${e.toString()}");
+    }
+    return null;
+  }
+
+  Future<InvoiceDetailQrDTO?> requestPaymnet({
+    required String invoiceId,
+    required List<String> itemItemIds,
+    String? bankIdRecharge,
+  }) async {
+    try {
+      Map<String, dynamic> param = {};
+      param['invoiceId'] = invoiceId;
+      param['itemItemIds'] = itemItemIds;
+      param['bankIdRecharge'] = bankIdRecharge;
+
+      String url = 'https://dev.vietqr.org/vqr/mock/api/request-payment';
+      final response = await BaseAPIClient.postAPI(
+        body: param,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return InvoiceDetailQrDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error("Failed to request payment: ${e.toString()}");
     }
     return null;
   }

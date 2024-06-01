@@ -2,6 +2,8 @@ class InvoiceDetailQrDTO {
   String qrCode;
   int totalAmountAfterVat;
   String invoiceName;
+  String midName;
+  String vso;
   String bankAccount;
   String bankShortName;
   String invoiceNumber;
@@ -15,6 +17,8 @@ class InvoiceDetailQrDTO {
     required this.qrCode,
     required this.totalAmountAfterVat,
     required this.invoiceName,
+    required this.midName,
+    required this.vso,
     required this.bankAccount,
     required this.bankShortName,
     required this.invoiceNumber,
@@ -30,6 +34,8 @@ class InvoiceDetailQrDTO {
       qrCode: json['qrCode'],
       totalAmountAfterVat: json['totalAmountAfterVat'],
       invoiceName: json['invoiceName'],
+      midName: json['midName'],
+      vso: json['vso'],
       bankAccount: json['bankAccount'],
       bankShortName: json['bankShortName'],
       invoiceNumber: json['invoiceNumber'],
@@ -39,21 +45,5 @@ class InvoiceDetailQrDTO {
       vatAmount: json['vatAmount'],
       invoiceId: json['invoiceId'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'qrCode': qrCode,
-      'totalAmountAfterVat': totalAmountAfterVat,
-      'invoiceName': invoiceName,
-      'bankAccount': bankAccount,
-      'bankShortName': bankShortName,
-      'invoiceNumber': invoiceNumber,
-      'userBankName': userBankName,
-      'totalAmount': totalAmount,
-      'vat': vat,
-      'vatAmount': vatAmount,
-      'invoiceId': invoiceId,
-    };
   }
 }

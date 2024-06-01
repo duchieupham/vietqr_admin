@@ -93,7 +93,7 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                             const Text(
                               'Mã VietQR hoá đơn thanh toán',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             InkWell(
                               onTap: () {
@@ -262,8 +262,13 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                 ),
                                 _buildItem('Mã hoá đơn',
                                     model.detailQrDTO!.invoiceNumber),
-                                _buildItem('Tài khoản ngân hàng',
-                                    '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount} - ${model.detailQrDTO?.userBankName}'),
+                                if (model.detailQrDTO!.vso.isNotEmpty &&
+                                    model.detailQrDTO!.midName.isNotEmpty)
+                                  _buildItem('Khách hàng thanh toán',
+                                      '${model.detailQrDTO!.vso} - ${model.detailQrDTO!.midName}')
+                                else
+                                  _buildItem('Tài khoản ngân hàng',
+                                      '${model.detailQrDTO?.bankShortName} - ${model.detailQrDTO?.bankAccount} - ${model.detailQrDTO?.userBankName}'),
                                 _buildItem(
                                     'Tổng tiền',
                                     StringUtils.formatNumber(
