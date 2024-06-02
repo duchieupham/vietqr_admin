@@ -185,7 +185,8 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
             model.listInvoiceDetailItem.isEmpty) {
           return const SizedBox.shrink();
         }
-
+        bool isAllApplied = model.listSelectInvoice
+            .every((element) => element.isSelect == true);
         return Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +210,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
                         children: [
                           Checkbox(
                             activeColor: AppColor.BLUE_TEXT,
-                            value: model.isAllApplied,
+                            value: isAllApplied,
                             onChanged: (value) {
                               model.appliedAllItem(value!);
                             },
@@ -269,6 +270,9 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
                   itemBuilder: (context, index) {
                     bool isAlreadyPay =
                         model.listInvoiceDetailItem[index].status == 1;
+                    if (isAlreadyPay) {
+                      model.appliedInvoiceItem(isAlreadyPay, index);
+                    }
                     return _invoiceItemWidget(
                         index: index,
                         dto: model.listSelectInvoice[index],

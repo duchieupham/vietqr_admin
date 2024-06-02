@@ -493,7 +493,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                         bankItem.userBankName.isNotEmpty
                             ? bankItem.userBankName
                             : '-',
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: const TextStyle(fontSize: 12),
                       ),
                     ),

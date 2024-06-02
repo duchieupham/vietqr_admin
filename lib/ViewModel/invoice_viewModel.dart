@@ -26,7 +26,7 @@ enum InvoiceType {
   NONE,
   EMPTY,
   GET_INVOICE_DETAIL,
-  REQUEST_PAYMENt,
+  REQUEST_PAYMENT,
 }
 
 class InvoiceStatus extends BaseModel {
@@ -62,7 +62,7 @@ class InvoiceViewModel extends InvoiceStatus {
   BankItem? selectBank;
 
   int type = 0;
-  int serviceType = 0;
+  int serviceType = 1;
   int? value = 9;
   int? valueStatus = 0;
   int? filterByDate = 1;
@@ -76,7 +76,6 @@ class InvoiceViewModel extends InvoiceStatus {
   int totalEditAmountVat = 0;
 
   bool? isInsert;
-  bool? isAllApplied = false;
 
   MetaDataDTO? metadata;
   MetaDataDTO? createMetaData;
@@ -284,21 +283,39 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void appliedInvoiceItem(bool value, int index) {
     listSelectInvoice[index].isSelect = value;
-    isAllApplied = false;
+
     notifyListeners();
   }
 
   void appliedAllItem(bool value) {
-    isAllApplied = value;
     for (var e in listSelectInvoice) {
-      if (e.invoiceItem.status == 1) {
-        e.isSelect = false;
-      } else {
-        e.isSelect = value;
-      }
+      e.isSelect = value;
     }
     notifyListeners();
   }
+
+  // void appliedInvoiceItem(bool value, int index) {
+  //   listSelectInvoice[index].isSelect = value;
+  //   checkIfAllSelected();
+  //   notifyListeners();
+  // }
+
+  // void appliedAllItem(bool value) {
+  //   isAllApplied = value;
+  //   for (var e in listSelectInvoice) {
+  //     if (e.invoiceItem.status == 1) {
+  //       e.isSelect = false;
+  //     } else {
+  //       e.isSelect = value;
+  //     }
+  //   }
+  //   notifyListeners();
+  // }
+
+  // void checkIfAllSelected() {
+  //   isAllApplied = listSelectInvoice
+  //       .every((item) => item.isSelect || item.invoiceItem.status == 1);
+  // }
 
   DateTime getMonth() {
     DateTime now = DateTime.now();
@@ -416,7 +433,7 @@ class InvoiceViewModel extends InvoiceStatus {
       // setState(ViewStatus.Empty);
       setInvoiceState(
           status: ViewStatus.Loading, request: InvoiceType.GET_INVOICE_DETAIL);
-      isAllApplied = false;
+
       invoiceDetailDTO = await _dao.getInvoiceDetail(id);
       if (invoiceDetailDTO != null) {
         listInvoiceDetailItem = invoiceDetailDTO!.invoiceItemDetailDTOS;
@@ -437,30 +454,32 @@ class InvoiceViewModel extends InvoiceStatus {
       {required String invoiceId}) async {
     try {
       setInvoiceState(
-          status: ViewStatus.Loading, request: InvoiceType.REQUEST_PAYMENt);
+          status: ViewStatus.Loading, request: InvoiceType.REQUEST_PAYMENT);
       final result = await _dao.requestPaymnet(
         invoiceId: invoiceId,
-        itemItemIds: List<String>.from(
-            listSelectInvoice.where((e) => e.isSelect == true).toList().map(
-                  (x) => x.invoiceItem.invoiceItemId,
-                )),
+        itemItemIds: List<String>.from(listSelectInvoice
+            .where((e) => e.isSelect == true && e.invoiceItem.status == 0)
+            .toList()
+            .map(
+              (x) => x.invoiceItem.invoiceItemId,
+            )),
         bankIdRecharge: invoiceDetailDTO!.paymentRequestDTOS
             .firstWhere((element) => element.isChecked == true)
             .bankId,
       );
       if (result != null) {
         setInvoiceState(
-            status: ViewStatus.Completed, request: InvoiceType.REQUEST_PAYMENt);
+            status: ViewStatus.Completed, request: InvoiceType.REQUEST_PAYMENT);
         return result;
       } else {
         setInvoiceState(
-            status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENt);
+            status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENT);
         return null;
       }
     } catch (e) {
       LOG.error(e.toString());
       setInvoiceState(
-          status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENt);
+          status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENT);
     }
     return null;
   }
