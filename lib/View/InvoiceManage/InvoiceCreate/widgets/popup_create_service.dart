@@ -131,6 +131,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             amountAfterVat: _amountController.text.isNotEmpty
                 ? (totalAmount! + vatAmount!).round()
                 : dto.amountAfterVat,
+            timeProcess: dto.timeProcess,
             type: dto.type);
         // model.confirmService(item);
       } else {
@@ -149,6 +150,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             vat: dto.vat,
             vatAmount: vatAmount!.round(),
             amountAfterVat: (totalAmount! + vatAmount!).round(),
+            timeProcess: dto.timeProcess,
             type: dto.type);
       }
       confirmService(item);
@@ -164,6 +166,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
           vat: dto.vat,
           vatAmount: vatAmount!.round(),
           amountAfterVat: (totalAmount! + vatAmount!).round(),
+          timeProcess: dto.timeProcess,
           type: dto.type);
       confirmService(item);
     }

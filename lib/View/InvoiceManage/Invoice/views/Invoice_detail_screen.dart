@@ -60,7 +60,10 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
         }
         bool isEnable = false;
         if (model.listSelectInvoice.isNotEmpty) {
-          isEnable = model.listSelectInvoice.any((x) => x.isSelect == true);
+          isEnable = model.listSelectInvoice.any((x) => x.isSelect == true) &&
+              model.invoiceDetailDTO!.paymentRequestDTOS.any(
+                (x) => x.isChecked,
+              );
         }
         return Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),

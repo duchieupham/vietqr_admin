@@ -27,7 +27,7 @@ class InvoiceDAO extends BaseDAO {
       param['items'] = invoice.invoiceItems.map((e) => e.toJson()).toList();
 
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/update/${invoice.invoiceId}';
+          'https://dev.vietqr.org/vqr/api/invoice/update/${invoice.invoiceId}';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
@@ -44,7 +44,7 @@ class InvoiceDAO extends BaseDAO {
     try {
       Map<String, dynamic> param = {};
       param['invoiceId'] = invoiceId;
-      String url = 'https://api.vietqr.org/vqr/api/invoice/remove';
+      String url = 'https://dev.vietqr.org/vqr/api/invoice/remove';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
@@ -60,7 +60,7 @@ class InvoiceDAO extends BaseDAO {
   Future<InvoiceInfoDTO?> getInvoiceInfo(String invoiceId) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/edit-detail/$invoiceId';
+          'https://dev.vietqr.org/vqr/api/invoice/edit-detail/$invoiceId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -92,7 +92,7 @@ class InvoiceDAO extends BaseDAO {
       params['description'] = description;
       params['items'] = list.map((e) => e.toJson()).toList();
 
-      String url = 'https://api.vietqr.org/vqr/api/invoice/create';
+      String url = 'https://dev.vietqr.org/vqr/api/invoice/create';
       final response = await BaseAPIClient.postAPI(
         body: params,
         url: url,
@@ -108,8 +108,7 @@ class InvoiceDAO extends BaseDAO {
   Future<InvoiceDetailDTO?> getInvoiceDetail(String invoiceId) async {
     try {
       // String url = 'https://api.vietqr.org/vqr/api/invoice/detail/$invoiceId';
-      String url =
-          'https://dev.vietqr.org/vqr/mock/api/invoice/detail/51bedb46-cc5d-4f67-b0ac-545c4e7b90d6';
+      String url = 'https://dev.vietqr.org/vqr/api/invoice/detail/$invoiceId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -135,7 +134,7 @@ class InvoiceDAO extends BaseDAO {
       param['itemItemIds'] = itemItemIds;
       param['bankIdRecharge'] = bankIdRecharge;
 
-      String url = 'https://dev.vietqr.org/vqr/mock/api/request-payment';
+      String url = 'https://dev.vietqr.org/vqr/api/request-payment';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
@@ -154,7 +153,7 @@ class InvoiceDAO extends BaseDAO {
   Future<InvoiceDetailQrDTO?> getDetailQr(String invoiceId) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/qr-detail/$invoiceId';
+          'https://dev.vietqr.org/vqr/api/invoice/qr-detail/$invoiceId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -178,7 +177,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
+          'https://dev.vietqr.org/vqr/api/invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -203,7 +202,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/invoice-item?bankId=$bankId&merchantId=${merchantId ?? ''}&type=$type&time=$time&vat=$vat';
+          'https://dev.vietqr.org/vqr/api/invoice/invoice-item?bankId=$bankId&merchantId=${merchantId ?? ''}&type=$type&time=$time&vat=$vat';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -225,7 +224,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/merchant-list?&type=1&value=$value&page=$page&size=${size ?? 20}';
+          'https://dev.vietqr.org/vqr/api/invoice/merchant-list?&type=1&value=$value&page=$page&size=${size ?? 20}';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -249,7 +248,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/invoice/bank-account-list?merchantId=${merchantId ?? ''}&page=$page&size=${size ?? 20}&type=1&value=$value';
+          'https://dev.vietqr.org/vqr/api/invoice/bank-account-list?merchantId=${merchantId ?? ''}&page=$page&size=${size ?? 20}&type=1&value=$value';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -271,7 +270,7 @@ class InvoiceDAO extends BaseDAO {
   }) async {
     try {
       String url =
-          'https://api.vietqr.org/vqr/api/admin/bank-detail?bankId=$bankId&merchantId=${merchantId ?? ''}';
+          'https://dev.vietqr.org/vqr/api/admin/bank-detail?bankId=$bankId&merchantId=${merchantId ?? ''}';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

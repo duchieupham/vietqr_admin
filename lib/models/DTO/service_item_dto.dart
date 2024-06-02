@@ -11,6 +11,7 @@ class ServiceItemDTO {
   double vat;
   int vatAmount;
   int amountAfterVat;
+  String? timeProcess;
   int type;
 
   ServiceItemDTO({
@@ -24,6 +25,7 @@ class ServiceItemDTO {
     required this.vat,
     required this.vatAmount,
     required this.amountAfterVat,
+    required this.timeProcess,
     required this.type,
   });
 
@@ -38,6 +40,7 @@ class ServiceItemDTO {
       totalAmount: json['totalAmount'],
       vat: json['vat'].toDouble(),
       vatAmount: json['vatAmount'],
+      timeProcess: json['timeProcess'],
       amountAfterVat: json['amountAfterVat'],
       type: json['type'],
     );
@@ -54,6 +57,7 @@ class ServiceItemDTO {
       'vat': vat,
       'vatAmount': vatAmount,
       'amountAfterVat': amountAfterVat,
+      'timeProcess': timeProcess,
       'type': type,
     };
   }

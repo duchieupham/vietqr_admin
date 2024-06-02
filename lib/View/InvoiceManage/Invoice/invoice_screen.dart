@@ -885,7 +885,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '${model.invoiceDTO!.extraData.pendingCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.pendingFee)}',
+                                '${model.invoiceDTO!.extraData.pendingCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.pendingAmount)}',
                                 // StringUtils.formatNumberWithOutVND(
                                 //     model.invoiceDTO!.extraData.pendingFee),
                                 style: const TextStyle(
@@ -941,7 +941,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '${model.invoiceDTO!.extraData.completeCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.completeFee)}',
+                                '${model.invoiceDTO!.extraData.completeCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.completeAmount)}',
 
                                 // StringUtils.formatNumberWithOutVND(
                                 //     model.invoiceDTO!.extraData.completeFee),

@@ -110,36 +110,40 @@ class InvoiceItem {
 
 class InvoiceExtraData {
   String month;
-  int pendingFee;
+  int pendingAmount;
   int pendingCount;
-  int completeFee;
+  int completeAmount;
   int completeCount;
+  int unFullyPaidCount;
 
   InvoiceExtraData({
     required this.month,
-    required this.pendingFee,
+    required this.pendingAmount,
     required this.pendingCount,
-    required this.completeFee,
+    required this.completeAmount,
     required this.completeCount,
+    required this.unFullyPaidCount,
   });
 
   factory InvoiceExtraData.fromJson(Map<String, dynamic> json) {
     return InvoiceExtraData(
       month: json['month'],
-      pendingFee: json['pendingFee'],
+      pendingAmount: json['pendingAmount'],
       pendingCount: json['pendingCount'],
-      completeFee: json['completeFee'],
+      completeAmount: json['completeAmount'],
       completeCount: json['completeCount'],
+      unFullyPaidCount: json['unFullyPaidCount'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'month': month,
-      'pendingFee': pendingFee,
+      'pendingAmount': pendingAmount,
       'pendingCount': pendingCount,
-      'completeFee': completeFee,
+      'completeAmount': completeAmount,
       'completeCount': completeCount,
+      'unFullyPaidCount': unFullyPaidCount,
     };
   }
 }

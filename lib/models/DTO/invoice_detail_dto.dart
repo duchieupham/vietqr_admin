@@ -197,8 +197,8 @@ class InvoiceDetailDTO {
       vatAmount: json['vatAmount'],
       totalAmount: json['totalAmount'],
       totalAmountAfterVat: json['totalAmountAfterVat'],
-      pendingAmount: json['pendingAmount'],
-      completeAmount: json['completeAmount'],
+      pendingAmount: json['pendingAmount'] ?? 0,
+      completeAmount: json['completeAmount'] ?? 0,
       status: json['status'],
     );
   }
