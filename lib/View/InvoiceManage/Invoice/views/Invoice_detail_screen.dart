@@ -281,10 +281,10 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                                             index]
                                                         .status ==
                                                     1;
-                                                // if (isAlreadyPay) {
-                                                //   model.appliedInvoiceItem(
-                                                //       isAlreadyPay, index);
-                                                // }
+                                                if (isAlreadyPay) {
+                                                  model.appliedInvoiceItem(
+                                                      isAlreadyPay, index);
+                                                }
                                                 return MapEntry(
                                                   index,
                                                   _buildItemListService(e,
@@ -322,6 +322,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                   itemBuilder: (context, index) {
                                     final listPaymentBank = model
                                         .invoiceDetailDTO!.paymentRequestDTOS;
+
                                     return SelectBankRecieveItem(
                                       dto: listPaymentBank[index],
                                       onChange: (value) {
@@ -737,9 +738,11 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               children: [
                 ScopedModelDescendant<InvoiceViewModel>(
                   builder: (context, child, model) {
+                    bool isAllApplied = model.listSelectInvoice
+                        .every((element) => element.isSelect == true);
                     return Checkbox(
                       activeColor: AppColor.BLUE_TEXT,
-                      value: model.isAllApplied,
+                      value: isAllApplied,
                       onChanged: (value) {
                         model.appliedAllItem(value!);
                       },
@@ -996,13 +999,18 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.invoiceItem.status == 0
                     ? 'Chưa thanh toán'
-                    : 'Đã thanh toán',
+                    : dto.invoiceItem.status == 1
+                        ? 'Đã thanh toán'
+                        : 'Chưa thanh toán hết',
                 style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: dto.invoiceItem.status == 0
-                        ? AppColor.ORANGE
-                        : AppColor.GREEN),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: dto.invoiceItem.status == 0
+                      ? AppColor.ORANGE
+                      : dto.invoiceItem.status == 1
+                          ? AppColor.GREEN
+                          : AppColor.GREEN_STATUS,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1026,7 +1034,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
         color = AppColor.GREEN;
         break;
       case 3:
-        status = 'Chưa thanh toán';
+        status = 'Chưa TT hết';
         color = AppColor.GREEN_2D9D92;
         break;
       default:
@@ -1187,6 +1195,11 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               context: context,
                               // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
                               builder: (context) => PopupQrCodeInvoice(
+                                showButton: false,
+                                onPop: (id) {
+                                  Navigator.of(context).pop();
+                                  _model.getInvoiceDetail(id);
+                                },
                                 invoiceId: result.invoiceId,
                               ),
                             );

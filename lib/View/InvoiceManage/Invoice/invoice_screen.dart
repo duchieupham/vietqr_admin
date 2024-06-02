@@ -92,7 +92,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     return await showDialog(
       context: context,
       // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
-      builder: (context) => PopupPaymentRequestWidget(dto: dto),
+      builder: (context) => PopupPaymentRequestWidget(
+        dto: dto,
+        onPop: (id) {
+          _model.onChangePage(PageInvoice.DETAIL);
+          selectInvoiceId = id;
+          setState(() {});
+        },
+      ),
     );
   }
 
@@ -200,8 +207,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 10),
-                          _statisticInvoice(),
+                          const SizedBox(height: 20),
+                          statisticInvoice(),
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -248,10 +255,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         },
                         callback: () {
                           _model.onChangePage(PageInvoice.LIST);
-
-                          // setState(() {
-                          //   pageType = PageInvoice.LIST;
-                          // });
                           _model.filterListInvoice(
                               time: selectDate!, page: 1, filter: textInput()!);
                         },
@@ -273,7 +276,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         if (model.status == ViewStatus.Loading) {
           return const Expanded(child: Center(child: Text('Đang tải...')));
         }
-        if (model.status == ViewStatus.Error) {
+        if (model.status == ViewStatus.Error &&
+            model.request != InvoiceType.REQUEST_PAYMENT) {
           return const SizedBox.shrink();
         }
         List<InvoiceItem>? list = model.invoiceDTO?.items;
@@ -417,7 +421,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .only(
+                                                                      .only(
                                                                   right: 10),
                                                           alignment:
                                                               Alignment.center,
@@ -446,7 +450,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                 ? 'Chờ thanh toán'
                                                                 : e.status == 1
                                                                     ? 'Đã thanh toán'
-                                                                    : 'Khoản thu lệch',
+                                                                    : 'Chưa TT hết',
                                                             textAlign: TextAlign
                                                                 .center,
                                                             style: TextStyle(
@@ -467,7 +471,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .symmetric(
+                                                                      .symmetric(
                                                                   horizontal:
                                                                       8),
                                                           alignment: Alignment
@@ -495,9 +499,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                             child: Row(
                                                               children: [
                                                                 Visibility(
-                                                                  visible:
+                                                                  visible: e.status ==
+                                                                          0 ||
                                                                       e.status ==
-                                                                          0,
+                                                                          3,
                                                                   child:
                                                                       Tooltip(
                                                                     message:
@@ -519,9 +524,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -539,9 +543,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                   ),
                                                                 ),
                                                                 Visibility(
-                                                                  visible:
+                                                                  visible: e.status ==
+                                                                          0 ||
                                                                       e.status ==
-                                                                          0,
+                                                                          3,
                                                                   child:
                                                                       const SizedBox(
                                                                           width:
@@ -575,8 +580,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets
-                                                                              .all(
+                                                                          const EdgeInsets.all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -595,18 +599,20 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                   ),
                                                                 ),
                                                                 Visibility(
-                                                                  visible:
+                                                                  visible: e.status ==
+                                                                          0 ||
                                                                       e.status ==
-                                                                          0,
+                                                                          3,
                                                                   child:
                                                                       const SizedBox(
                                                                           width:
                                                                               10),
                                                                 ),
                                                                 Visibility(
-                                                                  visible:
+                                                                  visible: e.status ==
+                                                                          0 ||
                                                                       e.status ==
-                                                                          0,
+                                                                          3,
                                                                   child:
                                                                       Tooltip(
                                                                     message:
@@ -635,9 +641,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -680,8 +685,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets
-                                                                              .all(
+                                                                          const EdgeInsets.all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -746,8 +750,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets
-                                                                              .all(
+                                                                          const EdgeInsets.all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .RED_TEXT
@@ -789,6 +792,163 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           child: Text("Không có hóa đơn"),
                         ),
                 ),
+              )
+            : const SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget statisticInvoice() {
+    return ScopedModelDescendant<InvoiceViewModel>(
+      builder: (context, child, model) {
+        return model.invoiceDTO != null
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_DADADA),
+                    )),
+                    height: 40,
+                    width: 980,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: const Text(
+                            'Tháng',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: const Text(
+                            'HĐ chưa TT',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 250,
+                          child: const Text(
+                            'Số tiền chưa TT (VND)',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: const Text(
+                            'HĐ đã TT',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 250,
+                          child: const Text(
+                            'Số tiền đã TT (VND)',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: const Text(
+                            'HĐ lệch TT',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: Text(
+                            DateFormat('MM/yyyy').format(selectDate!),
+                            style: const TextStyle(fontSize: 13),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: Text(
+                            '${model.invoiceDTO!.extraData.pendingCount}',
+                            style: const TextStyle(fontSize: 13),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 250,
+                          child: Text(
+                            StringUtils.formatNumberWithOutVND(
+                                model.invoiceDTO!.extraData.pendingFee),
+                            style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColor.ORANGE_DARK,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: Text(
+                            '${model.invoiceDTO!.extraData.completeCount}',
+                            style: const TextStyle(fontSize: 13),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 250,
+                          child: Text(
+                            StringUtils.formatNumberWithOutVND(
+                                model.invoiceDTO!.extraData.completeFee),
+                            style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.GREEN),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: 120,
+                          child: Text(
+                            DateFormat('MM/yyyy').format(selectDate!),
+                            style: const TextStyle(fontSize: 13),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               )
             : const SizedBox.shrink();
       },

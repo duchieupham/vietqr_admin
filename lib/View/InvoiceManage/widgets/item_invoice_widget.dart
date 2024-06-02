@@ -171,7 +171,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             child: SelectionArea(
               child: Text(
                 dto.fullName.isNotEmpty ? dto.fullName : '-',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),

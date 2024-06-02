@@ -16,7 +16,13 @@ import '../../../../commons/widget/repaint_boundary_widget.dart';
 
 class PopupQrCodeInvoice extends StatefulWidget {
   final String invoiceId;
-  const PopupQrCodeInvoice({super.key, required this.invoiceId});
+  final Function(String) onPop;
+  final bool showButton;
+  const PopupQrCodeInvoice(
+      {super.key,
+      required this.invoiceId,
+      required this.onPop,
+      this.showButton = true});
 
   @override
   State<PopupQrCodeInvoice> createState() => _PopupQrCodeInvoiceState();
@@ -281,6 +287,26 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                     'Tổng tiền thanh toán',
                                     StringUtils.formatNumber(model
                                         .detailQrDTO?.totalAmountAfterVat)),
+                                const Spacer(),
+                                if (widget.showButton)
+                                  Center(
+                                    child: MButtonWidget(
+                                      onTap: () {
+                                        // _model.onChangePage(PageInvoice.DETAIL);
+                                        // Navigator.of(context)
+                                        //     .pop(widget.invoiceId);
+                                        widget.onPop(widget.invoiceId);
+                                        Navigator.of(context).pop();
+                                      },
+                                      title: 'Chi tiết hoá đơn',
+                                      isEnable: true,
+                                      margin: EdgeInsets.only(bottom: 50),
+                                      width: 400,
+                                      border:
+                                          Border.all(color: AppColor.BLUE_TEXT),
+                                      height: 50,
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
