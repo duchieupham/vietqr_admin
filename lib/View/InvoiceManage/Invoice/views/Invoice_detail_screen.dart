@@ -1184,6 +1184,11 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               context: context,
                               // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
                               builder: (context) => PopupQrCodeInvoice(
+                                showButton: false,
+                                onPop: (id) {
+                                  Navigator.of(context).pop();
+                                  _model.getInvoiceDetail(id);
+                                },
                                 invoiceId: result.invoiceId,
                               ),
                             );

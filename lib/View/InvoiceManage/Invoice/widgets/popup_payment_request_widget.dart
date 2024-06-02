@@ -17,7 +17,9 @@ import 'bank_account_item.dart';
 
 class PopupPaymentRequestWidget extends StatefulWidget {
   final InvoiceItem dto;
-  const PopupPaymentRequestWidget({super.key, required this.dto});
+  final Function(String) onPop;
+  const PopupPaymentRequestWidget(
+      {super.key, required this.dto, required this.onPop});
 
   @override
   State<PopupPaymentRequestWidget> createState() =>
@@ -157,6 +159,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
                     await showDialog(
                       context: context,
                       builder: (context) => PopupQrCodeInvoice(
+                        onPop: widget.onPop,
                         invoiceId: result.invoiceId,
                       ),
                     );
