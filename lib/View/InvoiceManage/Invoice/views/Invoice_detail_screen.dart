@@ -362,8 +362,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
         ),
       ),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
@@ -693,7 +693,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                '8',
+                dto.vat.toString(),
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
                 maxLines: 2,
