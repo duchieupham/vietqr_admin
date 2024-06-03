@@ -424,7 +424,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .only(
+                                                                      .only(
                                                                   right: 10),
                                                           alignment:
                                                               Alignment.center,
@@ -474,7 +474,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .symmetric(
+                                                                      .symmetric(
                                                                   horizontal:
                                                                       8),
                                                           alignment: Alignment
@@ -527,9 +527,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -584,8 +583,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets
-                                                                              .all(
+                                                                          const EdgeInsets.all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -646,9 +644,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0),
+                                                                        padding:
+                                                                            const EdgeInsets.all(0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -691,8 +688,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets
-                                                                              .all(
+                                                                          const EdgeInsets.all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -757,8 +753,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets
-                                                                              .all(
+                                                                          const EdgeInsets.all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .RED_TEXT
@@ -948,7 +943,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           alignment: Alignment.centerLeft,
                           width: 120,
                           child: Text(
-                            DateFormat('MM/yyyy').format(selectDate!),
+                            '${model.invoiceDTO!.extraData.unFullyPaidCount}',
                             style: const TextStyle(fontSize: 13),
                             textAlign: TextAlign.left,
                           ),
