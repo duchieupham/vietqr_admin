@@ -62,7 +62,8 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
-    _model.getQrDetail(widget.invoiceId);
+    // _model.getQrDetail(widget.invoiceId);
+    _model.requestPayment(invoiceId: widget.invoiceId);
   }
 
   @override

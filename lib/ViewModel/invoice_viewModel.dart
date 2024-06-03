@@ -455,7 +455,7 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setInvoiceState(
           status: ViewStatus.Loading, request: InvoiceType.REQUEST_PAYMENT);
-      final result = await _dao.requestPaymnet(
+      detailQrDTO = await _dao.requestPaymnet(
         invoiceId: invoiceId,
         itemItemIds: List<String>.from(listSelectInvoice
             .where((e) => e.isSelect == true && e.invoiceItem.status == 0)
@@ -467,10 +467,10 @@ class InvoiceViewModel extends InvoiceStatus {
             .firstWhere((element) => element.isChecked == true)
             .bankId,
       );
-      if (result != null) {
+      if (detailQrDTO != null) {
         setInvoiceState(
             status: ViewStatus.Completed, request: InvoiceType.REQUEST_PAYMENT);
-        return result;
+        return detailQrDTO;
       } else {
         setInvoiceState(
             status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENT);
