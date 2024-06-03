@@ -147,8 +147,8 @@ class InvoiceDetailDTO {
   int vatAmount;
   int totalAmount;
   int totalAmountAfterVat;
-  int pendingAmount;
-  int completeAmount;
+  int totalUnpaid;
+  int totalPaid;
   int status;
 
   InvoiceDetailDTO({
@@ -163,8 +163,8 @@ class InvoiceDetailDTO {
     required this.vatAmount,
     required this.totalAmount,
     required this.totalAmountAfterVat,
-    required this.pendingAmount,
-    required this.completeAmount,
+    required this.totalUnpaid,
+    required this.totalPaid,
     required this.status,
   });
 
@@ -197,8 +197,8 @@ class InvoiceDetailDTO {
       vatAmount: json['vatAmount'],
       totalAmount: json['totalAmount'],
       totalAmountAfterVat: json['totalAmountAfterVat'],
-      pendingAmount: json['pendingAmount'] ?? 0,
-      completeAmount: json['completeAmount'] ?? 0,
+      totalUnpaid: json['totalUnpaid'] ?? 0,
+      totalPaid: json['totalPaid'] ?? 0,
       status: json['status'],
     );
   }

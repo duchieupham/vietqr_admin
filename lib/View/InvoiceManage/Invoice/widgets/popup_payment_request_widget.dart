@@ -52,8 +52,13 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
                 builder: (context, child, model) {
                   bool isEnable = false;
                   if (model.listSelectInvoice.isNotEmpty) {
-                    isEnable =
-                        model.listSelectInvoice.any((x) => x.isSelect == true);
+                    isEnable = model.listSelectInvoice
+                            .any((x) => x.isSelect == true) &&
+                        model.invoiceDetailDTO!.paymentRequestDTOS
+                            .any((x) => x.isChecked);
+                  }
+                  if (model.invoiceDetailDTO == null) {
+                    return const SizedBox.shrink();
                   }
                   return Stack(
                     children: [
@@ -71,7 +76,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
-                          _buildInvoiceDetailWidget(),
+                          _buildInvoiceDetailWidget(model.invoiceDetailDTO!),
                           const MySeparator(color: AppColor.GREY_DADADA),
                           const SizedBox(height: 30),
                           const Text(
@@ -395,22 +400,22 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
     );
   }
 
-  Widget _buildInvoiceDetailWidget() {
+  Widget _buildInvoiceDetailWidget(InvoiceDetailDTO dto) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 30),
         _itemTitleWidget(),
-        _invoiceDetailWidget(),
+        _invoiceDetailWidget(dto),
         const SizedBox(height: 30),
       ],
     );
   }
 
-  Widget _invoiceDetailWidget() {
+  Widget _invoiceDetailWidget(InvoiceDetailDTO dto) {
     Color color = AppColor.WHITE;
     String status = '';
-    switch (widget.dto.status) {
+    switch (dto.status) {
       case 0:
         status = 'Chưa thanh toán';
         color = AppColor.ORANGE_DARK;
@@ -440,7 +445,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
             padding: const EdgeInsets.only(right: 4),
             child: SelectionArea(
               child: Text(
-                widget.dto.invoiceName,
+                dto.invoiceName,
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
                 overflow: TextOverflow.ellipsis,
@@ -466,7 +471,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                StringUtils.formatAmount(widget.dto.amount),
+                StringUtils.formatAmount(dto.totalAmountAfterVat),
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                     fontSize: 12,
@@ -493,7 +498,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                StringUtils.formatAmount(3500000),
+                StringUtils.formatAmount(dto.totalUnpaid),
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                     fontSize: 12,
@@ -508,7 +513,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                StringUtils.formatAmount(3500000),
+                StringUtils.formatAmount(dto.totalPaid),
                 textAlign: TextAlign.left,
                 style: const TextStyle(
                     fontSize: 12,

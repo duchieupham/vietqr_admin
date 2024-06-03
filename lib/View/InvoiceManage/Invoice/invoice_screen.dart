@@ -280,7 +280,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             model.request != InvoiceType.REQUEST_PAYMENT) {
           return const SizedBox.shrink();
         }
-        List<InvoiceItem>? list = model.invoiceDTO?.items;
+        // List<InvoiceItem>? list = model.invoiceDTO?.items;
+        InvoiceDTO? invoiceDTO = model.invoiceDTO;
+
         List<Widget> buildItemList(
             List<InvoiceItem>? list, MetaDataDTO metadata) {
           if (list == null || list.isEmpty) {
@@ -305,11 +307,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         }
 
         MetaDataDTO metadata = model.metadata!;
-        return list != null
+        return invoiceDTO != null
             ? Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                  child: list.isNotEmpty
+                  child: invoiceDTO.items.isNotEmpty
                       ? SizedBox(
                           width: MediaQuery.of(context).size.width - 220,
                           child: Stack(
@@ -325,7 +327,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                       child: Column(
                                         children: [
                                           const TitleItemInvoiceWidget(),
-                                          ...buildItemList(list, metadata)
+                                          ...buildItemList(
+                                              invoiceDTO.items, metadata)
                                         ],
                                       ),
                                     ),
@@ -412,7 +415,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                   ],
                                                 ),
                                               ),
-                                              ...list.map(
+                                              ...invoiceDTO.items.map(
                                                 (e) {
                                                   return Container(
                                                     alignment: Alignment.center,
@@ -421,7 +424,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   right: 10),
                                                           alignment:
                                                               Alignment.center,
@@ -471,7 +474,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   horizontal:
                                                                       8),
                                                           alignment: Alignment
@@ -524,8 +527,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding:
-                                                                            const EdgeInsets.all(0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -580,7 +584,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          const EdgeInsets
+                                                                              .all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -641,8 +646,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding:
-                                                                            const EdgeInsets.all(0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -685,7 +691,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          const EdgeInsets
+                                                                              .all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -750,7 +757,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          const EdgeInsets
+                                                                              .all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .RED_TEXT
@@ -906,7 +914,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           width: 250,
                           child: Text(
                             StringUtils.formatNumberWithOutVND(
-                                model.invoiceDTO!.extraData.pendingFee),
+                                model.invoiceDTO!.extraData.pendingAmount),
                             style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColor.ORANGE_DARK,
@@ -928,7 +936,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           width: 250,
                           child: Text(
                             StringUtils.formatNumberWithOutVND(
-                                model.invoiceDTO!.extraData.completeFee),
+                                model.invoiceDTO!.extraData.completeAmount),
                             style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,

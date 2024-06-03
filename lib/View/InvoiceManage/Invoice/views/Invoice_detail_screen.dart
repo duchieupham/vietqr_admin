@@ -1112,7 +1112,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          StringUtils.formatNumber(dto.pendingAmount),
+                          StringUtils.formatNumber(dto.totalUnpaid),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -1132,7 +1132,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          StringUtils.formatNumber(dto.completeAmount),
+                          StringUtils.formatNumber(dto.totalPaid),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

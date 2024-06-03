@@ -134,7 +134,7 @@ class InvoiceDAO extends BaseDAO {
       param['itemItemIds'] = itemItemIds;
       param['bankIdRecharge'] = bankIdRecharge;
 
-      String url = 'https://dev.vietqr.org/vqr/api/request-payment';
+      String url = 'https://dev.vietqr.org/vqr/api/invoice/request-payment';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
