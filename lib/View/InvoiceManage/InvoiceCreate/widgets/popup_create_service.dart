@@ -47,6 +47,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.resetConfirmService();
+    _model.selectServiceType(1);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initData();
     });
@@ -431,14 +432,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                         ),
                         items: const [
                           DropdownMenuItem<int>(
-                              value: 0,
-                              child: Text(
-                                "Phí thường niên / duy trì",
-                              )),
-                          DropdownMenuItem<int>(
                               value: 1,
                               child: Text(
                                 "Phí giao dịch",
+                              )),
+                          DropdownMenuItem<int>(
+                              value: 0,
+                              child: Text(
+                                "Phí thường niên / duy trì",
                               )),
                           DropdownMenuItem<int>(
                               value: 9,
