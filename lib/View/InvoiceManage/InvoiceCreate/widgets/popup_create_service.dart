@@ -116,7 +116,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         item = ServiceItemDTO(
             itemId: dto.itemId,
             content: dto.content,
-            time: dto.time,
+            // time: dto.time,
             unit: dto.unit,
             quantity: dto.quantity,
             amount: _amountController.text.isNotEmpty
@@ -142,7 +142,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
 
         item = ServiceItemDTO(
             itemId: dto.itemId,
-            time: dto.time,
+            // time: dto.time,
             content: _contentController.text,
             unit: _unitController.text,
             quantity: int.parse(_quantityController.text),
@@ -158,7 +158,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     } else {
       item = ServiceItemDTO(
           itemId: dto.itemId,
-          time: dto.time,
+          // time: dto.time,
           content: _contentController.text,
           unit: _unitController.text,
           quantity: int.parse(_quantityController.text),
@@ -590,7 +590,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(widget.dto!.time,
+                                        Text(widget.dto!.timeProcess!,
                                             style:
                                                 const TextStyle(fontSize: 15)),
                                         const Icon(

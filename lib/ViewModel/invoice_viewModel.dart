@@ -393,7 +393,9 @@ class InvoiceViewModel extends InvoiceStatus {
           description: description,
           list: listService!);
       if (result!) {
-        setState(ViewStatus.Completed);
+        setState(
+          ViewStatus.Completed,
+        );
       } else {
         setState(ViewStatus.Error);
       }

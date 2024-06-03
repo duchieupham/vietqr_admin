@@ -4,7 +4,7 @@ class ServiceItemDTO {
   String itemId;
   String content;
   String unit;
-  String time;
+  // String time;
   int quantity;
   int amount;
   int totalAmount;
@@ -17,7 +17,7 @@ class ServiceItemDTO {
   ServiceItemDTO({
     required this.itemId,
     required this.content,
-    required this.time,
+    // required this.time,
     required this.unit,
     required this.quantity,
     required this.amount,
@@ -33,7 +33,7 @@ class ServiceItemDTO {
     return ServiceItemDTO(
       itemId: json['itemId'],
       content: json['content'],
-      time: json['time'],
+      // time: json['time'],
       unit: json['unit'],
       quantity: json['quantity'],
       amount: json['amount'],
