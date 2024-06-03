@@ -107,9 +107,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void selectServiceType(int value) async {
     serviceType = value;
-    // if (value == 9) {
-    //   await getService();
-    // }
+    isInsert = null;
     notifyListeners();
   }
 
