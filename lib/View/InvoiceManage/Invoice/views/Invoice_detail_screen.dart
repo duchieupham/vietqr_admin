@@ -362,7 +362,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
           bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
         ),
       ),
-      child: const Row(
+      child: Row(
         children: [
           BuildItemlTitle(
               title: 'STT',
@@ -566,7 +566,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
         ),
       ),
       child: Row(
-        children: const [
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
