@@ -1036,7 +1036,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         return SelectBankRecieveItem(
                           dto: listPaymentBank[index],
                           onChange: (value) {
-                            model.selectPayment(index);
+                            model.selectPaymentRequest(index);
                           },
                         );
                       },
@@ -1044,7 +1044,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                           const SizedBox(width: 20),
                       itemCount: model.listPaymentRequest.length),
                 ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 200),
             ],
           ),
         );
