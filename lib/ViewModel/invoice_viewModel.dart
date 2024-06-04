@@ -548,6 +548,7 @@ class InvoiceViewModel extends InvoiceStatus {
           time: serviceType == 9 ? '' : time);
       if (result is ServiceItemDTO) {
         serviceItemDTO = result;
+        responseMsg = null;
       } else {
         responseMsg = result;
       }
