@@ -12,6 +12,7 @@ import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
+import 'package:vietqr_admin/main.dart';
 import 'dart:html' as html;
 
 import '../../../ViewModel/invoice_viewModel.dart';
@@ -21,7 +22,8 @@ import '../../../models/DTO/bank_detail_dto.dart';
 import '../../../models/DTO/service_item_dto.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
-  const CreateInvoiceScreen({super.key});
+  final Function(String, String) onCreate;
+  const CreateInvoiceScreen({super.key, required this.onCreate});
 
   @override
   State<CreateInvoiceScreen> createState() => _CreateInvoiceScreenState();
@@ -35,6 +37,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   bool? isErrorInvoiceName = false;
   bool? isErrorDescription = false;
   bool? isCreateSuccess = false;
+  // final GlobalKey<_CreateInvoiceScreenState> myWidgetKey = GlobalKey();
   final _horizontal = ScrollController();
 
   late InvoiceViewModel _model;
@@ -74,6 +77,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final router = GoRouter.of(context);
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
@@ -103,13 +107,14 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   ),
                 ),
               ),
-              bottomWidget(),
+              bottomWidget(router),
             ],
           )),
     );
   }
 
-  Widget bottomWidget() {
+  Widget bottomWidget(GoRouter router) {
+    // final GlobalKey<> myWidgetKey = GlobalKey();
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return Container(
@@ -220,14 +225,20 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   if (isErrorDescription == false &&
                       isErrorInvoiceName == false &&
                       model.listService!.isNotEmpty) {
-                    bool? result = await model.createInvoice(
-                        invoiceName: _invoiceTextController.text,
-                        description: _descriptionTextController.text);
-                    if (result!) {
-                      html.window.location.href = '/invoice-list';
-
-                      // html.window.location.href = '/invoice-list';
-                    }
+                    widget.onCreate(_invoiceTextController.text,
+                        _descriptionTextController.text);
+                    // await model
+                    //     .createInvoice(
+                    //         invoiceName: _invoiceTextController.text,
+                    //         description: _descriptionTextController.text)
+                    //     .then(
+                    //   (value) {
+                    //     if (value == true) {
+                    //       // onTapMenu(Invoice.LIST);
+                    //       context.go('/invoice-list');
+                    //     }
+                    //   },
+                    // );
                   }
                 },
               ),

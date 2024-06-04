@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
+import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'dart:html' as html;
 
 import '../../commons/constants/enum/type_menu_home.dart';
@@ -23,9 +25,13 @@ class InvoiceManageScreen extends StatefulWidget {
 
 class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
   Invoice type = Invoice.LIST;
+  late InvoiceViewModel _model;
+
   @override
   void initState() {
     super.initState();
+    _model = Get.find<InvoiceViewModel>();
+
     type = widget.type;
     setState(() {});
   }
@@ -67,7 +73,19 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
     if (type == Invoice.LIST) {
       return const InvoiceScreen();
     } else {
-      return const CreateInvoiceScreen();
+      return CreateInvoiceScreen(
+        onCreate: (invoice, desciption) async {
+          await _model
+              .createInvoice(invoiceName: invoice, description: desciption)
+              .then(
+            (value) {
+              if (value == true) {
+                onTapMenu(Invoice.LIST);
+              }
+            },
+          );
+        },
+      );
     }
   }
 }
