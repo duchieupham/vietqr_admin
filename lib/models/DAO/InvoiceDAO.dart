@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
+import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 
 import '../../commons/constants/utils/base_api.dart';
 import '../../commons/constants/utils/log.dart';
@@ -213,7 +214,7 @@ class InvoiceDAO extends BaseDAO {
     return null;
   }
 
-  Future<ServiceItemDTO?> getServiceItem({
+  Future<dynamic> getServiceItem({
     int? type,
     String? bankId,
     String? merchantId,
@@ -230,6 +231,9 @@ class InvoiceDAO extends BaseDAO {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         return ServiceItemDTO.fromJson(data);
+      } else {
+        var data = jsonDecode(response.body);
+        return ResponseMessageDTO.fromJson(data);
       }
     } catch (e) {
       LOG.error(e.toString());

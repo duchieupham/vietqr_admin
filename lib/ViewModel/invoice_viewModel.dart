@@ -8,6 +8,7 @@ import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 
 import '../commons/constants/utils/log.dart';
 import '../models/DAO/index.dart';
@@ -50,6 +51,7 @@ class InvoiceViewModel extends InvoiceStatus {
   BankDetailDTO? bankDetail;
   List<ServiceItemDTO>? listService = [];
   ServiceItemDTO? serviceItemDTO;
+  ResponseMessageDTO? responseMsg;
 
   InvoiceDetailQrDTO? detailQrDTO;
   InvoiceDetailDTO? invoiceDetailDTO;
@@ -269,6 +271,7 @@ class InvoiceViewModel extends InvoiceStatus {
   void resetConfirmService() {
     serviceItemDTO = null;
     isInsert = null;
+    responseMsg = null;
     notifyListeners();
   }
 
@@ -537,12 +540,17 @@ class InvoiceViewModel extends InvoiceStatus {
   Future<void> getService({String? time}) async {
     try {
       setState(ViewStatus.Loading);
-      serviceItemDTO = await _dao.getServiceItem(
+      final result = await _dao.getServiceItem(
           vat: bankDetail?.vat,
           type: serviceType,
           bankId: bankDetail?.bankId,
           merchantId: type == 0 ? selectMerchantItem?.merchantId : '',
           time: serviceType == 9 ? '' : time);
+      if (result is ServiceItemDTO) {
+        serviceItemDTO = result;
+      } else {
+        responseMsg = result;
+      }
       if (vatTextController.text.isNotEmpty) {
         serviceItemDTO?.vat = double.parse(vatTextController.text);
         double vat = serviceItemDTO!.vat / 100;

@@ -254,7 +254,19 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                   ),
                                   const SizedBox(height: 30),
                                   _serivceSelectWidget(),
+                                  if (model.responseMsg != null) ...[
+                                    const SizedBox(height: 20),
+                                    const Text(
+                                      'Phí giao dịch này đã được thêm vào một hoá đơn khác. ',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.RED_TEXT),
+                                    )
+                                  ],
+
                                   const SizedBox(height: 45),
+
                                   if (widget.isEdit == true) ...[
                                     Scrollbar(
                                       controller: _horizontal2,
