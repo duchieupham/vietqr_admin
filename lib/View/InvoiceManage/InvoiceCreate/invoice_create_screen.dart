@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
@@ -41,6 +42,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _model.getListRequestPayment();
     _model.clear();
   }
 
@@ -1011,6 +1013,38 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               model.bankDetail != null
                   ? _buttonAddIvoiceItem()
                   : const SizedBox.shrink(),
+              const SizedBox(height: 30),
+              const MySeparator(color: AppColor.GREY_DADADA),
+              const SizedBox(height: 30),
+              const SizedBox(
+                width: double.infinity,
+                height: 20,
+                child: Text(
+                  'Tài khoản nhận tiền',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 30),
+              if (model.listPaymentRequest.isNotEmpty)
+                SizedBox(
+                  height: 70,
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final listPaymentBank = model.listPaymentRequest;
+
+                        return SelectBankRecieveItem(
+                          dto: listPaymentBank[index],
+                          onChange: (value) {
+                            model.selectPayment(index);
+                          },
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 20),
+                      itemCount: model.listPaymentRequest.length),
+                ),
+              const SizedBox(height: 100),
             ],
           ),
         );
