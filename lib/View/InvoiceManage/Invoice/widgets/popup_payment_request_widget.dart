@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_qr_widget.dart';
@@ -546,8 +545,8 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
           color: AppColor.WHITE,
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'Hoá đơn',
               textAlign: TextAlign.center,

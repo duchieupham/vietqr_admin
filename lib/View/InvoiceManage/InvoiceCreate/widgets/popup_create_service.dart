@@ -210,7 +210,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 50),
-                          Column(),
+                          const Column(),
                           const Text(
                             'Thông tin khách hàng thanh toán',
                             style: TextStyle(

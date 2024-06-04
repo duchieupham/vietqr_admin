@@ -20,7 +20,6 @@ import '../../../commons/widget/dialog_widget.dart';
 import '../../../commons/widget/separator_widget.dart';
 import '../../../main.dart';
 import '../../../models/DTO/metadata_dto.dart';
-import 'widgets/popup_qr_widget.dart';
 import '../InvoiceCreate/widgets/popup_select_widget.dart';
 import '../widgets/item_invoice_widget.dart';
 import '../widgets/title_invoice_widget.dart';

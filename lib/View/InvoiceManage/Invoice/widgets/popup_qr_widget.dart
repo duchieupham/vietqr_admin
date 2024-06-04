@@ -299,7 +299,7 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                       },
                                       title: 'Chi tiết hoá đơn',
                                       isEnable: true,
-                                      margin: EdgeInsets.only(bottom: 50),
+                                      margin: const EdgeInsets.only(bottom: 50),
                                       width: 400,
                                       border:
                                           Border.all(color: AppColor.BLUE_TEXT),

@@ -177,7 +177,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                     onTap: widget.onEdit,
                     title: 'Cập nhật thông tin',
                     isEnable: true,
-                    margin: EdgeInsets.symmetric(horizontal: 30),
+                    margin: const EdgeInsets.symmetric(horizontal: 30),
                     width: 350,
                     height: 50,
                   ),
