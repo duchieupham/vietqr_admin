@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
@@ -91,7 +92,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
       selectDate = result;
     });
     await _model.getService(time: DateFormat('yyyy-MM').format(result));
-    }
+  }
 
   void onConfirmService(bool hasSelect,
       {required ServiceItemDTO dto,
@@ -204,103 +205,119 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${widget.isEdit == true ? 'Chỉnh sửa' : 'Thêm mới'} danh mục hàng hoá / dịch vụ',
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 50),
-                          const Column(),
-                          const Text(
-                            'Thông tin khách hàng thanh toán',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 45),
-                          Scrollbar(
-                            controller: _horizontal,
+                          Expanded(
                             child: SingleChildScrollView(
-                              controller: _horizontal,
-                              scrollDirection: Axis.horizontal,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  _itemTitleWidget(false),
-                                  _buildBankItem(
-                                      dto: model.bankDetail,
-                                      textAmount: model.vatTextController.text),
+                                  Text(
+                                    '${widget.isEdit == true ? 'Chỉnh sửa' : 'Thêm mới'} danh mục hàng hoá / dịch vụ',
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 50),
+                                  const Column(),
+                                  const Text(
+                                    'Thông tin khách hàng thanh toán',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 45),
+                                  Scrollbar(
+                                    controller: _horizontal,
+                                    child: SingleChildScrollView(
+                                      controller: _horizontal,
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(
+                                        children: [
+                                          _itemTitleWidget(false),
+                                          _buildBankItem(
+                                              dto: model.bankDetail,
+                                              textAmount:
+                                                  model.vatTextController.text),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const MySeparator(
+                                    color: AppColor.GREY_DADADA,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  const Text(
+                                    'Thông tin hàng hoá / dịch vụ',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  _serivceSelectWidget(),
+                                  const SizedBox(height: 45),
+                                  if (widget.isEdit == true) ...[
+                                    Scrollbar(
+                                      controller: _horizontal2,
+                                      child: SingleChildScrollView(
+                                        controller: _horizontal2,
+                                        scrollDirection: Axis.horizontal,
+                                        child: Column(
+                                          children: [
+                                            _itemTitleWidget(true),
+                                            _buildItem(
+                                                item: widget.dto,
+                                                type: widget.dto?.type)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    if (model.status == ViewStatus.Loading) ...[
+                                      const CircularProgressIndicator(),
+                                    ] else if (model.serviceItemDTO !=
+                                        null) ...[
+                                      Scrollbar(
+                                        controller: _horizontal2,
+                                        child: SingleChildScrollView(
+                                          controller: _horizontal2,
+                                          scrollDirection: Axis.horizontal,
+                                          child: Column(
+                                            children: [
+                                              _itemTitleWidget(true),
+                                              model.serviceItemDTO?.type ==
+                                                      model.serviceType
+                                                  ? _buildItem(
+                                                      item:
+                                                          model.serviceItemDTO,
+                                                      type: model.serviceType)
+                                                  : const SizedBox.shrink(),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ] else
+                                      const SizedBox.shrink(),
+                                  ],
+                                  // const Spacer(),
+
+                                  Visibility(
+                                      visible: model.isInsert == null
+                                          ? false
+                                          : !model.isInsert!,
+                                      child: const Center(
+                                        child: Text(
+                                          'Dịch vụ này đã được thêm!',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColor.RED_TEXT),
+                                        ),
+                                      )),
+                                  const SizedBox(height: 20),
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
-                          const MySeparator(
-                            color: AppColor.GREY_DADADA,
-                          ),
-                          const SizedBox(height: 30),
-                          const Text(
-                            'Thông tin hàng hoá / dịch vụ',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 30),
-                          _serivceSelectWidget(),
-                          const SizedBox(height: 45),
-                          if (widget.isEdit == true) ...[
-                            Scrollbar(
-                              controller: _horizontal2,
-                              child: SingleChildScrollView(
-                                controller: _horizontal2,
-                                scrollDirection: Axis.horizontal,
-                                child: Column(
-                                  children: [
-                                    _itemTitleWidget(true),
-                                    _buildItem(
-                                        item: widget.dto,
-                                        type: widget.dto?.type)
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ] else ...[
-                            if (model.status == ViewStatus.Loading) ...[
-                              const CircularProgressIndicator(),
-                            ] else if (model.serviceItemDTO != null) ...[
-                              Scrollbar(
-                                controller: _horizontal2,
-                                child: SingleChildScrollView(
-                                  controller: _horizontal2,
-                                  scrollDirection: Axis.horizontal,
-                                  child: Column(
-                                    children: [
-                                      _itemTitleWidget(true),
-                                      model.serviceItemDTO?.type ==
-                                              model.serviceType
-                                          ? _buildItem(
-                                              item: model.serviceItemDTO,
-                                              type: model.serviceType)
-                                          : const SizedBox.shrink(),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ] else
-                              const SizedBox.shrink(),
-                          ],
-                          const Spacer(),
-                          Visibility(
-                              visible: model.isInsert == null
-                                  ? false
-                                  : !model.isInsert!,
-                              child: const Center(
-                                child: Text(
-                                  'Dịch vụ này đã được thêm!',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.RED_TEXT),
-                                ),
-                              )),
-                          const SizedBox(height: 20),
                           Container(
                             alignment: Alignment.center,
                             child: InkWell(

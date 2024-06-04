@@ -178,7 +178,6 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                               ),
                                             )
                                             .values
-                                            
                                       ],
                                     ),
                                   ),
@@ -226,7 +225,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                               ),
                                             )
                                             .values
-                                            
+
                                         // _buildItemServiceInfo(),
                                       ],
                                     ),
@@ -270,28 +269,24 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                           child: CircularProgressIndicator(),
                                         )
                                       else
-                                        ...model.listSelectInvoice
-                                            .asMap()
-                                            .map(
-                                              (index, e) {
-                                                bool isAlreadyPay = model
-                                                        .listInvoiceDetailItem[
-                                                            index]
-                                                        .status ==
-                                                    1;
-                                                if (isAlreadyPay) {
-                                                  model.appliedInvoiceItem(
-                                                      isAlreadyPay, index);
-                                                }
-                                                return MapEntry(
-                                                  index,
-                                                  _buildItemListService(e,
-                                                      index + 1, isAlreadyPay),
-                                                );
-                                              },
-                                            )
-                                            .values
-                                            
+                                        ...model.listSelectInvoice.asMap().map(
+                                          (index, e) {
+                                            bool isAlreadyPay = model
+                                                    .listInvoiceDetailItem[
+                                                        index]
+                                                    .status ==
+                                                1;
+                                            if (isAlreadyPay) {
+                                              model.appliedInvoiceItem(
+                                                  isAlreadyPay, index);
+                                            }
+                                            return MapEntry(
+                                              index,
+                                              _buildItemListService(
+                                                  e, index + 1, isAlreadyPay),
+                                            );
+                                          },
+                                        ).values
                                     ],
                                   ),
                                 ),

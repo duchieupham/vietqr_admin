@@ -55,6 +55,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<InvoiceInfoItem>? listInvoiceItem = [];
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
+  List<PaymentRequestDTO> listPaymentRequest = [];
 
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
@@ -443,6 +444,14 @@ class InvoiceViewModel extends InvoiceStatus {
       LOG.error(e.toString());
       setInvoiceState(
           status: ViewStatus.Error, request: InvoiceType.GET_INVOICE_DETAIL);
+    }
+  }
+
+  Future<void> getListRequestPayment() async {
+    try {
+      listPaymentRequest = await _dao.getListPaymentRequest();
+    } catch (e) {
+      LOG.error(e.toString());
     }
   }
 
