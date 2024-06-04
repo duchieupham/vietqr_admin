@@ -94,7 +94,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _headerWidget(),
-                      const Divider(),
+                      const Divider(
+                        color: AppColor.GREY_DADADA,
+                      ),
                       Expanded(
                         child: ListView(
                           children: [_bodyWidget()],

@@ -181,7 +181,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _headerWidget(),
-                  const Divider(),
+                  const Divider(
+                    color: AppColor.GREY_DADADA,
+                  ),
                   if (model.pageType == PageInvoice.LIST) ...[
                     Container(
                       padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -422,7 +424,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   right: 10),
                                                           alignment:
                                                               Alignment.center,
@@ -472,7 +474,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   horizontal:
                                                                       8),
                                                           alignment: Alignment
@@ -525,8 +527,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding:
-                                                                            const EdgeInsets.all(0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -581,7 +584,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          const EdgeInsets
+                                                                              .all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -642,8 +646,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                             100,
                                                                         alignment:
                                                                             Alignment.center,
-                                                                        padding:
-                                                                            const EdgeInsets.all(0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            0),
                                                                         bgColor: AppColor
                                                                             .BLUE_TEXT
                                                                             .withOpacity(0.3),
@@ -686,7 +691,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          const EdgeInsets
+                                                                              .all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .BLUE_TEXT
@@ -751,7 +757,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                           Alignment
                                                                               .center,
                                                                       padding:
-                                                                          const EdgeInsets.all(
+                                                                          const EdgeInsets
+                                                                              .all(
                                                                               0),
                                                                       bgColor: AppColor
                                                                           .RED_TEXT
@@ -1546,7 +1553,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   },
                   child: Container(
                     height: 40,
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     decoration: BoxDecoration(
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
