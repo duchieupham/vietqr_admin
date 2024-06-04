@@ -1169,37 +1169,38 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                   ],
                 ),
                 const SizedBox(width: 12),
-                MButtonWidget(
-                  margin: EdgeInsets.zero,
-                  padding: EdgeInsets.zero,
-                  colorDisableBgr: AppColor.GREY_DADADA,
-                  width: 250,
-                  height: 50,
-                  title: 'Yêu cầu thanh toán',
-                  radius: 5,
-                  isEnable: isEnable,
-                  onTap: isEnable
-                      ? () async {
-                          final result = await _model.requestPayment(
-                              invoiceId: dto.invoiceId);
-                          if (result != null) {
-                            if (!mounted) return;
-                            await showDialog(
-                              context: context,
-                              // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
-                              builder: (context) => PopupQrCodeInvoice(
-                                showButton: false,
-                                onPop: (id) {
-                                  Navigator.of(context).pop();
-                                  _model.getInvoiceDetail(id);
-                                },
-                                invoiceId: result.invoiceId,
-                              ),
-                            );
+                if (dto.status == 0 || dto.status == 3)
+                  MButtonWidget(
+                    margin: EdgeInsets.zero,
+                    padding: EdgeInsets.zero,
+                    colorDisableBgr: AppColor.GREY_DADADA,
+                    width: 250,
+                    height: 50,
+                    title: 'Yêu cầu thanh toán',
+                    radius: 5,
+                    isEnable: isEnable,
+                    onTap: isEnable
+                        ? () async {
+                            final result = await _model.requestPayment(
+                                invoiceId: dto.invoiceId);
+                            if (result != null) {
+                              if (!mounted) return;
+                              await showDialog(
+                                context: context,
+                                // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
+                                builder: (context) => PopupQrCodeInvoice(
+                                  showButton: false,
+                                  onPop: (id) {
+                                    Navigator.of(context).pop();
+                                    _model.getInvoiceDetail(id);
+                                  },
+                                  invoiceId: result.invoiceId,
+                                ),
+                              );
+                            }
                           }
-                        }
-                      : null,
-                ),
+                        : null,
+                  ),
               ],
             ),
           ),
