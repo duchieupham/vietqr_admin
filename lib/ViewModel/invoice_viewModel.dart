@@ -535,7 +535,7 @@ class InvoiceViewModel extends InvoiceStatus {
       if (result is ServiceItemDTO) {
         serviceItemDTO = result;
       } else {
-        responseMsg = responseMsg;
+        responseMsg = result;
       }
       if (vatTextController.text.isNotEmpty) {
         serviceItemDTO?.vat = double.parse(vatTextController.text);
