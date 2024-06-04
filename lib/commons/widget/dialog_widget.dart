@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:vietqr_admin/commons/constants/configurations/app_image.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/utils/image_utils.dart';
 import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/main.dart';
 
@@ -154,6 +156,87 @@ class DialogWidget {
             );
           }).then((value) => isPopLoading = false);
     }
+  }
+
+  openMsgCustomDialog(
+      {required String title,
+      required String msg,
+      VoidCallback? function,
+      BuildContext? context,
+      Color? titleColor,
+      Color? msgColor}) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context ?? NavigationService.navigatorKey.currentContext!,
+      builder: (BuildContext context) {
+        return Material(
+          color: AppColor.TRANSPARENT,
+          child: Center(
+            child: Container(
+              width: 300,
+              height: 300,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image(
+                    image: ImageUtils.instance
+                        .getImageNetWork(AppImages.icWarning),
+                    width: 80,
+                    height: 80,
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: titleColor),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  SizedBox(
+                    width: 250,
+                    height: 60,
+                    child: Text(
+                      msg,
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: msgColor,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 30)),
+                  ButtonWidget(
+                    width: 250,
+                    height: 40,
+                    text: 'Đóng',
+                    textColor: AppColor.WHITE,
+                    bgColor: AppColor.BLUE_TEXT,
+                    borderRadius: 5,
+                    function: function != null
+                        ? () {
+                            Navigator.pop(context);
+                            function();
+                          }
+                        : () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   openMsgDialog(
