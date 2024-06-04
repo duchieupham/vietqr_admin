@@ -61,7 +61,8 @@ dependencies:
   scoped_model: ^2.0.0
   image_downloader_web: ^2.0.2
   flutter_localization: ^0.2.0
-
+  toastification: ^2.0.0
+  
   # flutter_web_plugins: any
   # flutter_localizations: any
   # async: any
