@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'dart:html' as html;
 
@@ -78,6 +79,21 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
               .then(
             (value) {
               if (value == true) {
+                toastification.show(
+                  context: context,
+                  type: ToastificationType.success,
+                  style: ToastificationStyle.flat,
+                  title: const Text(
+                    'Tạo hóa đơn thành công',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  showProgressBar: false,
+                  alignment: Alignment.topRight,
+                  autoCloseDuration: const Duration(seconds: 5),
+                  boxShadow: highModeShadow,
+                  dragToClose: true,
+                  pauseOnHover: true,
+                );
                 onTapMenu(Invoice.LIST);
               }
             },

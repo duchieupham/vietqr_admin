@@ -16,7 +16,7 @@ class SelectBankRecieveItem extends StatelessWidget {
       builder: (context, child, model) {
         return Container(
           width: 300,
-          height: 50,
+          // height: 50,
           padding: const EdgeInsets.only(top: 8, bottom: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +29,7 @@ class SelectBankRecieveItem extends StatelessWidget {
                   onChange(value!);
                 },
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

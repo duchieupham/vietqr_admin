@@ -128,7 +128,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: 50,
+                height: 60,
                 child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
