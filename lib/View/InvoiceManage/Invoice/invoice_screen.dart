@@ -41,6 +41,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   late ScrollController controller1;
   late ScrollController controller2;
+  final controller3 = ScrollController();
+  final controller4 = ScrollController();
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
   String? selectInvoiceId;
@@ -810,153 +812,169 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return model.invoiceDTO != null
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_DADADA),
-                    )),
-                    height: 40,
-                    width: 980,
-                    child: Row(
+            ? Scrollbar(
+                controller: controller3,
+                child: SingleChildScrollView(
+                  controller: controller3,
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: const Text(
-                            'Tháng',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
+                          decoration: const BoxDecoration(
+                              border: Border(
+                            bottom: BorderSide(color: AppColor.GREY_DADADA),
+                          )),
+                          height: 40,
+                          width: 980,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: const Text(
+                                  'Tháng',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: const Text(
+                                  'HĐ chưa TT',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 250,
+                                child: const Text(
+                                  'Số tiền chưa TT (VND)',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: const Text(
+                                  'HĐ đã TT',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 250,
+                                child: const Text(
+                                  'Số tiền đã TT (VND)',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: const Text(
+                                  'HĐ lệch TT',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: const Text(
-                            'HĐ chưa TT',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 250,
-                          child: const Text(
-                            'Số tiền chưa TT (VND)',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: const Text(
-                            'HĐ đã TT',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 250,
-                          child: const Text(
-                            'Số tiền đã TT (VND)',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: const Text(
-                            'HĐ lệch TT',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: Text(
+                                  DateFormat('MM/yyyy').format(selectDate!),
+                                  style: const TextStyle(fontSize: 13),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: Text(
+                                  '${model.invoiceDTO!.extraData.pendingCount}',
+                                  style: const TextStyle(fontSize: 13),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 250,
+                                child: Text(
+                                  StringUtils.formatNumberWithOutVND(model
+                                      .invoiceDTO!.extraData.pendingAmount),
+                                  style: const TextStyle(
+                                      fontSize: 13,
+                                      color: AppColor.ORANGE_DARK,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: Text(
+                                  '${model.invoiceDTO!.extraData.completeCount}',
+                                  style: const TextStyle(fontSize: 13),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 250,
+                                child: Text(
+                                  StringUtils.formatNumberWithOutVND(model
+                                      .invoiceDTO!.extraData.completeAmount),
+                                  style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.GREEN),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 120,
+                                child: Text(
+                                  '${model.invoiceDTO!.extraData.unFullyPaidCount}',
+                                  style: const TextStyle(fontSize: 13),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: Text(
-                            DateFormat('MM/yyyy').format(selectDate!),
-                            style: const TextStyle(fontSize: 13),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: Text(
-                            '${model.invoiceDTO!.extraData.pendingCount}',
-                            style: const TextStyle(fontSize: 13),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 250,
-                          child: Text(
-                            StringUtils.formatNumberWithOutVND(
-                                model.invoiceDTO!.extraData.pendingAmount),
-                            style: const TextStyle(
-                                fontSize: 13,
-                                color: AppColor.ORANGE_DARK,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: Text(
-                            '${model.invoiceDTO!.extraData.completeCount}',
-                            style: const TextStyle(fontSize: 13),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 250,
-                          child: Text(
-                            StringUtils.formatNumberWithOutVND(
-                                model.invoiceDTO!.extraData.completeAmount),
-                            style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.GREEN),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          width: 120,
-                          child: Text(
-                            '${model.invoiceDTO!.extraData.unFullyPaidCount}',
-                            style: const TextStyle(fontSize: 13),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               )
             : const SizedBox.shrink();
       },
@@ -1206,398 +1224,418 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   Widget _filterWidget() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
-        return Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Tìm kiếm theo",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  height: 40,
-                  width: model.value == 9 ? 250 : 500,
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColor.GREY_DADADA)),
-                  child: Row(
+        return Scrollbar(
+          controller: controller4,
+          child: SingleChildScrollView(
+            controller: controller4,
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 40,
-                        width: 220,
-                        child: DropdownButton<int>(
-                          isExpanded: true,
-                          value: model.value,
-                          underline: const SizedBox.shrink(),
-                          icon: const RotatedBox(
-                            quarterTurns: 5,
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 12,
-                            ),
-                          ),
-                          items: const [
-                            DropdownMenuItem<int>(
-                                value: 9,
-                                child: Text(
-                                  "Tất cả (mặc định)",
-                                )),
-                            DropdownMenuItem<int>(
-                                value: 0,
-                                child: Text(
-                                  "Đại lý",
-                                )),
-                            DropdownMenuItem<int>(
-                                value: 1,
-                                child: Text(
-                                  "Mã hoá đơn",
-                                )),
-                            DropdownMenuItem<int>(
-                                value: 2,
-                                child: Text(
-                                  "Số TK ngân hàng",
-                                )),
-                            DropdownMenuItem<int>(
-                                value: 3,
-                                child: Text(
-                                  "Tài khoản VietQR",
-                                )),
-                            DropdownMenuItem<int>(
-                                value: 4,
-                                child: Text(
-                                  "Trạng thái",
-                                )),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              type = value;
-                            });
-                            model.changeTypeInvoice(value);
-                          },
-                        ),
+                      const Text(
+                        "Tìm kiếm theo",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.normal),
                       ),
-                      if (model.value != null && model.value == 0)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 8),
-                              const SizedBox(
-                                height: 40,
-                                child: VerticalDivider(
-                                  thickness: 1,
-                                  color: AppColor.GREY_DADADA,
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 40,
+                        width: model.value == 9 ? 250 : 500,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColor.GREY_DADADA)),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              height: 40,
+                              width: 220,
+                              child: DropdownButton<int>(
+                                isExpanded: true,
+                                value: model.value,
+                                underline: const SizedBox.shrink(),
+                                icon: const RotatedBox(
+                                  quarterTurns: 5,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 12,
+                                  ),
+                                ),
+                                items: const [
+                                  DropdownMenuItem<int>(
+                                      value: 9,
+                                      child: Text(
+                                        "Tất cả (mặc định)",
+                                      )),
+                                  DropdownMenuItem<int>(
+                                      value: 0,
+                                      child: Text(
+                                        "Đại lý",
+                                      )),
+                                  DropdownMenuItem<int>(
+                                      value: 1,
+                                      child: Text(
+                                        "Mã hoá đơn",
+                                      )),
+                                  DropdownMenuItem<int>(
+                                      value: 2,
+                                      child: Text(
+                                        "Số TK ngân hàng",
+                                      )),
+                                  DropdownMenuItem<int>(
+                                      value: 3,
+                                      child: Text(
+                                        "Tài khoản VietQR",
+                                      )),
+                                  DropdownMenuItem<int>(
+                                      value: 4,
+                                      child: Text(
+                                        "Trạng thái",
+                                      )),
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    type = value;
+                                  });
+                                  model.changeTypeInvoice(value);
+                                },
+                              ),
+                            ),
+                            if (model.value != null && model.value == 0)
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    const SizedBox(
+                                      height: 40,
+                                      child: VerticalDivider(
+                                        thickness: 1,
+                                        color: AppColor.GREY_DADADA,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await model.getMerchant('',
+                                            isGetList: true);
+                                        onSelectMerchant();
+                                      },
+                                      child: SizedBox(
+                                        width: 234,
+                                        // padding: const EdgeInsets.symmetric(
+                                        //     horizontal: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              model.selectMerchantItem != null
+                                                  ? model.selectMerchantItem!
+                                                      .merchantName
+                                                  : 'Chọn đại lý',
+                                              style: const TextStyle(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  color: AppColor.GREY_TEXT,
+                                                  fontSize: 15),
+                                            ),
+                                            const Icon(
+                                              Icons.keyboard_arrow_down,
+                                              size: 20,
+                                              color: AppColor.GREY_TEXT,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              InkWell(
-                                onTap: () async {
-                                  await model.getMerchant('', isGetList: true);
-                                  onSelectMerchant();
+                            if (model.value != null && model.value == 1)
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    const SizedBox(
+                                      height: 40,
+                                      child: VerticalDivider(
+                                        thickness: 1,
+                                        color: AppColor.GREY_DADADA,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 234,
+                                      child: TextField(
+                                        controller: _invoiceController,
+                                        decoration: const InputDecoration(
+                                          contentPadding:
+                                              EdgeInsets.only(bottom: 8),
+                                          border: InputBorder.none,
+                                          hintText: 'Nhập mã hoá đơn',
+                                          hintStyle: TextStyle(
+                                              fontSize: 15,
+                                              color: AppColor.GREY_TEXT),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (model.value != null && model.value == 2)
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    const SizedBox(
+                                      height: 40,
+                                      child: VerticalDivider(
+                                        thickness: 1,
+                                        color: AppColor.GREY_DADADA,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 234,
+                                      // padding: const EdgeInsets.symmetric(
+                                      //     horizontal: 10),
+                                      child: TextField(
+                                        controller: _bankController,
+                                        decoration: const InputDecoration(
+                                          contentPadding:
+                                              EdgeInsets.only(bottom: 8),
+
+                                          // contentPadding:
+                                          //     EdgeInsets.only(bottom: 0),
+                                          border: InputBorder.none,
+                                          hintText: 'Nhập số TK ngân hàng',
+                                          hintStyle: TextStyle(
+                                              fontSize: 15,
+                                              color: AppColor.GREY_TEXT),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (model.value != null && model.value == 3)
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    const SizedBox(
+                                      height: 40,
+                                      child: VerticalDivider(
+                                        thickness: 1,
+                                        color: AppColor.GREY_DADADA,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 234,
+                                      // padding: const EdgeInsets.symmetric(
+                                      //     horizontal: 10),
+                                      child: TextField(
+                                        controller: _accController,
+                                        decoration: const InputDecoration(
+                                          contentPadding:
+                                              EdgeInsets.only(bottom: 8),
+
+                                          // contentPadding:
+                                          //     EdgeInsets.only(bottom: 0),
+                                          border: InputBorder.none,
+                                          hintText: 'Nhập TK VietQR',
+                                          hintStyle: TextStyle(
+                                              fontSize: 15,
+                                              color: AppColor.GREY_TEXT),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (model.value != null && model.value == 4)
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    const SizedBox(
+                                      height: 40,
+                                      child: VerticalDivider(
+                                        thickness: 1,
+                                        color: AppColor.GREY_DADADA,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 234,
+                                      height: 40,
+                                      // padding: const EdgeInsets.symmetric(
+                                      //     horizontal: 10),
+                                      child: DropdownButton<int>(
+                                        isExpanded: true,
+                                        value: model.valueStatus,
+                                        underline: const SizedBox.shrink(),
+                                        icon: const RotatedBox(
+                                          quarterTurns: 5,
+                                          child: Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 12,
+                                          ),
+                                        ),
+                                        items: const [
+                                          DropdownMenuItem<int>(
+                                              value: 0,
+                                              child: Text(
+                                                "Chờ thanh toán",
+                                              )),
+                                          DropdownMenuItem<int>(
+                                              value: 1,
+                                              child: Text(
+                                                "Đã thanh toán",
+                                              )),
+                                        ],
+                                        onChanged: (value) {
+                                          setState(() {
+                                            status = value.toString();
+                                          });
+                                          model.changeStatus(value);
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Thời gian",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.normal),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        width: 300,
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColor.GREY_DADADA)),
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 60,
+                              child: Center(
+                                child: Text('Tháng'),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const SizedBox(
+                              height: 40,
+                              child: VerticalDivider(
+                                thickness: 1,
+                                color: AppColor.GREY_DADADA,
+                              ),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  _onPickMonth(model.getMonth());
                                 },
-                                child: SizedBox(
-                                  width: 234,
-                                  // padding: const EdgeInsets.symmetric(
-                                  //     horizontal: 10),
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        model.selectMerchantItem != null
-                                            ? model.selectMerchantItem!
-                                                .merchantName
-                                            : 'Chọn đại lý',
-                                        style: const TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: AppColor.GREY_TEXT,
-                                            fontSize: 15),
+                                        (selectDate == null
+                                            ? '${model.getMonth().month}/${model.getMonth().year}'
+                                            : '${selectDate?.month}/${selectDate?.year}'),
+                                        style: const TextStyle(fontSize: 15),
                                       ),
-                                      const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 20,
-                                        color: AppColor.GREY_TEXT,
-                                      ),
+                                      const Icon(Icons.calendar_month_outlined)
                                     ],
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      if (model.value != null && model.value == 1)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 8),
-                              const SizedBox(
-                                height: 40,
-                                child: VerticalDivider(
-                                  thickness: 1,
-                                  color: AppColor.GREY_DADADA,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 234,
-                                child: TextField(
-                                  controller: _invoiceController,
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.only(bottom: 8),
-                                    border: InputBorder.none,
-                                    hintText: 'Nhập mã hoá đơn',
-                                    hintStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: AppColor.GREY_TEXT),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      if (model.value != null && model.value == 2)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 8),
-                              const SizedBox(
-                                height: 40,
-                                child: VerticalDivider(
-                                  thickness: 1,
-                                  color: AppColor.GREY_DADADA,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 234,
-                                // padding: const EdgeInsets.symmetric(
-                                //     horizontal: 10),
-                                child: TextField(
-                                  controller: _bankController,
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.only(bottom: 8),
-
-                                    // contentPadding:
-                                    //     EdgeInsets.only(bottom: 0),
-                                    border: InputBorder.none,
-                                    hintText: 'Nhập số TK ngân hàng',
-                                    hintStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: AppColor.GREY_TEXT),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      if (model.value != null && model.value == 3)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 8),
-                              const SizedBox(
-                                height: 40,
-                                child: VerticalDivider(
-                                  thickness: 1,
-                                  color: AppColor.GREY_DADADA,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 234,
-                                // padding: const EdgeInsets.symmetric(
-                                //     horizontal: 10),
-                                child: TextField(
-                                  controller: _accController,
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.only(bottom: 8),
-
-                                    // contentPadding:
-                                    //     EdgeInsets.only(bottom: 0),
-                                    border: InputBorder.none,
-                                    hintText: 'Nhập TK VietQR',
-                                    hintStyle: TextStyle(
-                                        fontSize: 15,
-                                        color: AppColor.GREY_TEXT),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      if (model.value != null && model.value == 4)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 8),
-                              const SizedBox(
-                                height: 40,
-                                child: VerticalDivider(
-                                  thickness: 1,
-                                  color: AppColor.GREY_DADADA,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 234,
-                                height: 40,
-                                // padding: const EdgeInsets.symmetric(
-                                //     horizontal: 10),
-                                child: DropdownButton<int>(
-                                  isExpanded: true,
-                                  value: model.valueStatus,
-                                  underline: const SizedBox.shrink(),
-                                  icon: const RotatedBox(
-                                    quarterTurns: 5,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 12,
-                                    ),
-                                  ),
-                                  items: const [
-                                    DropdownMenuItem<int>(
-                                        value: 0,
-                                        child: Text(
-                                          "Chờ thanh toán",
-                                        )),
-                                    DropdownMenuItem<int>(
-                                        value: 1,
-                                        child: Text(
-                                          "Đã thanh toán",
-                                        )),
-                                  ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      status = value.toString();
-                                    });
-                                    model.changeStatus(value);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 15),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Thời gian",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  width: 300,
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColor.GREY_DADADA)),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 60,
-                        child: Center(
-                          child: Text('Tháng'),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const SizedBox(
-                        height: 40,
-                        child: VerticalDivider(
-                          thickness: 1,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            _onPickMonth(model.getMonth());
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  (selectDate == null
-                                      ? '${model.getMonth().month}/${model.getMonth().year}'
-                                      : '${selectDate?.month}/${selectDate?.year}'),
-                                  style: const TextStyle(fontSize: 15),
-                                ),
-                                const Icon(Icons.calendar_month_outlined)
-                              ],
                             ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 30),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Thời gian",
+                        style: TextStyle(fontSize: 15, color: AppColor.WHITE),
+                      ),
+                      const SizedBox(height: 10),
+                      InkWell(
+                        onTap: () async {
+                          await model.filterListInvoice(
+                              time: selectDate!, page: 1, filter: textInput()!);
+                        },
+                        child: Container(
+                          height: 40,
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          decoration: BoxDecoration(
+                            color: AppColor.BLUE_TEXT,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search,
+                                size: 15,
+                                color: AppColor.WHITE,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "Tìm kiếm",
+                                style: TextStyle(
+                                    color: AppColor.WHITE, fontSize: 15),
+                              )
+                            ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 30),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Thời gian",
-                  style: TextStyle(fontSize: 15, color: AppColor.WHITE),
-                ),
-                const SizedBox(height: 10),
-                InkWell(
-                  onTap: () async {
-                    await model.filterListInvoice(
-                        time: selectDate!, page: 1, filter: textInput()!);
-                  },
-                  child: Container(
-                    height: 40,
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    decoration: BoxDecoration(
-                      color: AppColor.BLUE_TEXT,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search,
-                          size: 15,
-                          color: AppColor.WHITE,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          "Tìm kiếm",
-                          style: TextStyle(color: AppColor.WHITE, fontSize: 15),
-                        )
-                      ],
+                  const SizedBox(width: 30),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: InkWell(
+                      onTap: () {
+                        context.go('/create-invoice');
+                      },
+                      child: MButtonWidget(
+                        title: 'Tạo mới hoá đơn',
+                        isEnable: true,
+                        margin: EdgeInsets.zero,
+                        width: 150,
+                        colorEnableBgr: AppColor.WHITE,
+                        colorEnableText: AppColor.BLUE_TEXT,
+                        border: Border.all(color: AppColor.BLUE_TEXT),
+                        radius: 10,
+                        height: 40,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 30),
-            Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: InkWell(
-                onTap: () {
-                  context.go('/create-invoice');
-                },
-                child: MButtonWidget(
-                  title: 'Tạo mới hoá đơn',
-                  isEnable: true,
-                  margin: EdgeInsets.zero,
-                  width: 150,
-                  colorEnableBgr: AppColor.WHITE,
-                  colorEnableText: AppColor.BLUE_TEXT,
-                  border: Border.all(color: AppColor.BLUE_TEXT),
-                  radius: 10,
-                  height: 40,
-                ),
+                ],
               ),
             ),
-          ],
+          ),
         );
       },
     );
