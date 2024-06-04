@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
@@ -152,7 +151,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
     });
     _model.filterListMerchant(
         time: selectDate!, page: 1, value: searchValue ?? '');
-    }
+  }
 
   @override
   Widget build(BuildContext context) {

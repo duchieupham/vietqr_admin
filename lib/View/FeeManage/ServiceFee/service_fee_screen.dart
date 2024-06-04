@@ -110,7 +110,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
       selectDate = result;
     });
     _model.filterListServiceFee(time: selectDate!, page: 1);
-    }
+  }
 
   @override
   Widget build(BuildContext context) {

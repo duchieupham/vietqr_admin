@@ -81,7 +81,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
     });
     _model.filterUserRecharge(
         page: 1, value: searchValue!.isEmpty ? searchValue! : '');
-    }
+  }
 
   @override
   void dispose() {

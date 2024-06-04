@@ -339,8 +339,7 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                                 ),
                                                 const Visibility(
                                                   visible: true,
-                                                  child:
-                                                      SizedBox(width: 10),
+                                                  child: SizedBox(width: 10),
                                                 ),
                                                 const SizedBox(width: 10),
                                                 Tooltip(

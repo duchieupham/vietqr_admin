@@ -133,7 +133,7 @@ class _SystemTransStatisticsScreenState
       selectDate = result;
     });
     _model.filterListSystemTransaction(time: selectDate!, page: 1);
-    }
+  }
 
   void _onPickYear(DateTime dateTime) async {
     // Hiển thị dialog chỉ để chọn năm.
@@ -155,7 +155,7 @@ class _SystemTransStatisticsScreenState
       selectDate = result;
     });
     _model.filterListSystemTransaction(time: selectDate!, page: 1);
-    }
+  }
 
   @override
   Widget build(BuildContext context) {

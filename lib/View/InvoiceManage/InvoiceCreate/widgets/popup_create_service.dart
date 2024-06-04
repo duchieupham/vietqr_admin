@@ -35,6 +35,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
   double? totalAmount;
   double? vatAmount;
   String? amountInput;
+  final _horizontal = ScrollController();
+  final _horizontal2 = ScrollController();
 
   DateTime? selectDate;
 
@@ -43,6 +45,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.resetConfirmService();
+    _model.selectServiceType(1);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initData();
     });
@@ -107,7 +110,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         item = ServiceItemDTO(
             itemId: dto.itemId,
             content: dto.content,
-            time: dto.time,
+            // time: dto.time,
             unit: dto.unit,
             quantity: dto.quantity,
             amount: _amountController.text.isNotEmpty
@@ -123,6 +126,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             amountAfterVat: _amountController.text.isNotEmpty
                 ? (totalAmount! + vatAmount!).round()
                 : dto.amountAfterVat,
+            timeProcess: dto.timeProcess,
             type: dto.type);
         // model.confirmService(item);
       } else {
@@ -132,7 +136,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
 
         item = ServiceItemDTO(
             itemId: dto.itemId,
-            time: dto.time,
+            // time: dto.time,
             content: _contentController.text,
             unit: _unitController.text,
             quantity: int.parse(_quantityController.text),
@@ -141,13 +145,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             vat: dto.vat,
             vatAmount: vatAmount!.round(),
             amountAfterVat: (totalAmount! + vatAmount!).round(),
+            timeProcess: dto.timeProcess,
             type: dto.type);
       }
       confirmService(item);
     } else {
       item = ServiceItemDTO(
           itemId: dto.itemId,
-          time: dto.time,
+          // time: dto.time,
           content: _contentController.text,
           unit: _unitController.text,
           quantity: int.parse(_quantityController.text),
@@ -156,6 +161,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
           vat: dto.vat,
           vatAmount: vatAmount!.round(),
           amountAfterVat: (totalAmount! + vatAmount!).round(),
+          timeProcess: dto.timeProcess,
           type: dto.type);
       confirmService(item);
     }
@@ -169,8 +175,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           color: AppColor.WHITE,
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.75,
+          width: 1070,
+          height: 700,
           child: ScopedModel<InvoiceViewModel>(
               model: _model,
               child: ScopedModelDescendant<InvoiceViewModel>(
@@ -204,16 +210,28 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 50),
+                          Column(),
                           const Text(
                             'Thông tin khách hàng thanh toán',
                             style: TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 45),
-                          _itemTitleWidget(false),
-                          _buildBankItem(
-                              dto: model.bankDetail,
-                              textAmount: model.vatTextController.text),
+                          Scrollbar(
+                            controller: _horizontal,
+                            child: SingleChildScrollView(
+                              controller: _horizontal,
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                children: [
+                                  _itemTitleWidget(false),
+                                  _buildBankItem(
+                                      dto: model.bankDetail,
+                                      textAmount: model.vatTextController.text),
+                                ],
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 20),
                           const MySeparator(
                             color: AppColor.GREY_DADADA,
@@ -228,18 +246,43 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                           _serivceSelectWidget(),
                           const SizedBox(height: 45),
                           if (widget.isEdit == true) ...[
-                            _itemTitleWidget(true),
-                            _buildItem(item: widget.dto, type: widget.dto?.type)
+                            Scrollbar(
+                              controller: _horizontal2,
+                              child: SingleChildScrollView(
+                                controller: _horizontal2,
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  children: [
+                                    _itemTitleWidget(true),
+                                    _buildItem(
+                                        item: widget.dto,
+                                        type: widget.dto?.type)
+                                  ],
+                                ),
+                              ),
+                            ),
                           ] else ...[
                             if (model.status == ViewStatus.Loading) ...[
                               const CircularProgressIndicator(),
                             ] else if (model.serviceItemDTO != null) ...[
-                              _itemTitleWidget(true),
-                              model.serviceItemDTO?.type == model.serviceType
-                                  ? _buildItem(
-                                      item: model.serviceItemDTO,
-                                      type: model.serviceType)
-                                  : const SizedBox.shrink()
+                              Scrollbar(
+                                controller: _horizontal2,
+                                child: SingleChildScrollView(
+                                  controller: _horizontal2,
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(
+                                    children: [
+                                      _itemTitleWidget(true),
+                                      model.serviceItemDTO?.type ==
+                                              model.serviceType
+                                          ? _buildItem(
+                                              item: model.serviceItemDTO,
+                                              type: model.serviceType)
+                                          : const SizedBox.shrink(),
+                                    ],
+                                  ),
+                                ),
+                              )
                             ] else
                               const SizedBox.shrink(),
                           ],
@@ -383,14 +426,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                         ),
                         items: const [
                           DropdownMenuItem<int>(
-                              value: 0,
-                              child: Text(
-                                "Phí thường niên / duy trì",
-                              )),
-                          DropdownMenuItem<int>(
                               value: 1,
                               child: Text(
                                 "Phí giao dịch",
+                              )),
+                          DropdownMenuItem<int>(
+                              value: 0,
+                              child: Text(
+                                "Phí thường niên / duy trì",
                               )),
                           DropdownMenuItem<int>(
                               value: 9,
@@ -459,7 +502,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  _onPickMonth(model.getMonth());
+                                  _onPickMonth(model.getPreviousMonth());
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.only(left: 4),
@@ -541,7 +584,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(widget.dto!.time,
+                                        Text(widget.dto!.timeProcess!,
                                             style:
                                                 const TextStyle(fontSize: 15)),
                                         const Icon(

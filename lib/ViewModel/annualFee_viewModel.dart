@@ -63,7 +63,9 @@ class AnnualFeeAfterViewModel extends BaseModel {
     try {
       String formattedDate = '';
       formattedDate = DateFormat('yyyy-MM').format(time);
-      setState(ViewStatus.Loading);
+      setState(
+        ViewStatus.Loading,
+      );
       annualFeeAfterDTO = await _dao.filterAnnualFeeAfterList(
           time: formattedDate,
           page: page,

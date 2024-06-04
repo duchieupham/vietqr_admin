@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:scoped_model/scoped_model.dart';
+
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
@@ -13,11 +14,11 @@ import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
 import '../../../ViewModel/invoice_viewModel.dart';
 import '../../../commons/constants/configurations/theme.dart';
-import '../../../commons/widget/dialog_widget.dart';
 import '../../../models/DTO/service_item_dto.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
-  const CreateInvoiceScreen({super.key});
+  final Function(String, String) onCreate;
+  const CreateInvoiceScreen({super.key, required this.onCreate});
 
   @override
   State<CreateInvoiceScreen> createState() => _CreateInvoiceScreenState();
@@ -31,6 +32,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   bool? isErrorInvoiceName = false;
   bool? isErrorDescription = false;
   bool? isCreateSuccess = false;
+  // final GlobalKey<_CreateInvoiceScreenState> myWidgetKey = GlobalKey();
+  final _horizontal = ScrollController();
 
   late InvoiceViewModel _model;
 
@@ -69,6 +72,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final router = GoRouter.of(context);
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
@@ -98,13 +102,14 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   ),
                 ),
               ),
-              bottomWidget(),
+              bottomWidget(router),
             ],
           )),
     );
   }
 
-  Widget bottomWidget() {
+  Widget bottomWidget(GoRouter router) {
+    // final GlobalKey<> myWidgetKey = GlobalKey();
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return Container(
@@ -119,110 +124,116 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               ))),
           child: Row(
             children: [
-              SizedBox(
-                width: 250,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tổng tiền hàng",
-                        style: TextStyle(fontSize: 15),
+              Expanded(
+                  child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Tổng tiền hàng",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            StringUtils.formatNumber(model.totalAmount),
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
-                      const SizedBox(
-                        height: 5,
+                    ),
+                    const SizedBox(width: 110),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "VAT",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            StringUtils.formatNumber(model.totalVat),
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
-                      Text(
-                        StringUtils.formatNumber(model.totalAmount),
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 110),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Tổng tiền thanh toán (bao gồm VAT)",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            StringUtils.formatNumber(model.totalAmountVat),
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.BLUE_TEXT),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(
-                width: 250,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "VAT",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        StringUtils.formatNumber(model.totalVat),
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 350,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tổng tiền thanh toán (bao gồm VAT)",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        StringUtils.formatNumber(model.totalAmountVat),
-                        style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.BLUE_TEXT),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const Spacer(),
+              )),
               MButtonWidget(
                 title: 'Tạo hoá đơn',
                 colorDisableBgr: AppColor.GREY_DADADA,
-                isEnable: model.totalAmountVat != 0 ? true : false,
+                isEnable: (model.totalAmountVat != 0 &&
+                        model.listService!.isNotEmpty &&
+                        _invoiceTextController.text.isNotEmpty)
+                    ? true
+                    : false,
                 width: 350,
                 height: 50,
                 onTap: () async {
                   setState(() {
                     isErrorInvoiceName =
                         _invoiceTextController.text.isEmpty ? true : false;
-                    isErrorDescription =
-                        _descriptionTextController.text.isEmpty ? true : false;
+                    // isErrorDescription =
+                    //     _descriptionTextController.text.isEmpty ? true : false;
                   });
 
                   if (isErrorDescription == false &&
                       isErrorInvoiceName == false &&
                       model.listService!.isNotEmpty) {
-                    bool? result = await model.createInvoice(
-                        invoiceName: _invoiceTextController.text,
-                        description: _descriptionTextController.text);
-                    if (result!) {
-                      DialogWidget.instance.openMsgSuccessDialog(
-                        title: 'Tạo hóa đơn thành công',
-                        function: () {
-                          Navigator.of(context).pop();
-                          context.go('/invoice-list');
-                        },
-                      );
-                    }
+                    widget.onCreate(_invoiceTextController.text,
+                        _descriptionTextController.text);
+                    // await model
+                    //     .createInvoice(
+                    //         invoiceName: _invoiceTextController.text,
+                    //         description: _descriptionTextController.text)
+                    //     .then(
+                    //   (value) {
+                    //     if (value == true) {
+                    //       // onTapMenu(Invoice.LIST);
+                    //       context.go('/invoice-list');
+                    //     }
+                    //   },
+                    // );
                   }
                 },
               ),
@@ -337,6 +348,13 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: TextField(
                               controller: _invoiceTextController,
+                              onChanged: (value) {
+                                _invoiceTextController.value = TextEditingValue(
+                                    text: value,
+                                    selection: TextSelection.collapsed(
+                                        offset: value.length));
+                                setState(() {});
+                              },
                               decoration: InputDecoration(
                                 contentPadding:
                                     const EdgeInsets.only(bottom: 10),
@@ -976,11 +994,18 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 //     border: Border(
                 //         bottom: BorderSide(color: AppColor.GREY_TEXT, width: 0.5))),
                 width: 1360,
-                child: Column(
-                  children: [
-                    _itemTitleWidget(),
-                    ...buildItemList(model.listService),
-                  ],
+                child: Scrollbar(
+                  controller: _horizontal,
+                  child: SingleChildScrollView(
+                    controller: _horizontal,
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      children: [
+                        _itemTitleWidget(),
+                        ...buildItemList(model.listService),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               model.bankDetail != null

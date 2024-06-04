@@ -2,7 +2,6 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../commons/constants/enum/view_status.dart';
 
-
 class BaseModel extends Model {
   ViewStatus _status = ViewStatus.Completed;
   String? _msg;

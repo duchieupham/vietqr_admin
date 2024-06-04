@@ -32,6 +32,8 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
   double? totalAmount;
   double? vatAmount;
   String? amountInput;
+  final controller1 = ScrollController();
+  final controller2 = ScrollController();
 
   late InvoiceViewModel _model;
 
@@ -133,77 +135,103 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
 
                   return Stack(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Chỉnh sửa danh mục hàng hoá / dịch vụ',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 50),
-                          const Text(
-                            'Thông tin khách hàng thanh toán',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 45),
-                          _itemTitleWidget(false),
-                          _buildBankItem(
-                              dto: model.bankDetail,
-                              textAmount: model.vatTextController.text),
-                          const SizedBox(height: 20),
-                          const MySeparator(
-                            color: AppColor.GREY_DADADA,
-                          ),
-                          const SizedBox(height: 30),
-                          const Text(
-                            'Thông tin hàng hoá / dịch vụ',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 30),
-                          _serivceWidget(widget.invoiceItem),
-                          const SizedBox(height: 45),
-                          _itemTitleWidget(true),
-                          _buildItem(),
-                          const Spacer(),
-                          const SizedBox(height: 20),
-                          Container(
-                            alignment: Alignment.center,
-                            child: InkWell(
-                              onTap: hasSelect == true
-                                  ? () {
-                                      confirmEdit(
-                                        onEdit: (item) {
-                                          Navigator.of(context).pop();
-                                          model.confirmEditInvoiceItem(item);
-                                        },
-                                      );
-                                    }
-                                  : null,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.18,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: hasSelect == true
-                                        ? AppColor.BLUE_TEXT
-                                        : AppColor.GREY_DADADA,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Center(
-                                  child: Text(
-                                    'Xác nhận',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: hasSelect == true
-                                            ? AppColor.WHITE
-                                            : AppColor.BLACK),
-                                  ),
+                      SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Chỉnh sửa danh mục hàng hoá / dịch vụ',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 50),
+                            const Text(
+                              'Thông tin khách hàng thanh toán',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 45),
+                            Scrollbar(
+                              controller: controller1,
+                              child: SingleChildScrollView(
+                                controller: controller1,
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  children: [
+                                    _itemTitleWidget(false),
+                                    _buildBankItem(
+                                        dto: model.bankDetail,
+                                        textAmount:
+                                            model.vatTextController.text),
+                                  ],
                                 ),
                               ),
                             ),
-                          )
-                        ],
+                            const SizedBox(height: 20),
+                            const MySeparator(
+                              color: AppColor.GREY_DADADA,
+                            ),
+                            const SizedBox(height: 30),
+                            const Text(
+                              'Thông tin hàng hoá / dịch vụ',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 30),
+                            _serivceWidget(widget.invoiceItem),
+                            const SizedBox(height: 45),
+                            Scrollbar(
+                              controller: controller2,
+                              child: SingleChildScrollView(
+                                controller: controller2,
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  children: [
+                                    _itemTitleWidget(true),
+                                    _buildItem(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // const Spacer(),
+                            const SizedBox(height: 20),
+                            Container(
+                              alignment: Alignment.center,
+                              child: InkWell(
+                                onTap: hasSelect == true
+                                    ? () {
+                                        confirmEdit(
+                                          onEdit: (item) {
+                                            Navigator.of(context).pop();
+                                            model.confirmEditInvoiceItem(item);
+                                          },
+                                        );
+                                      }
+                                    : null,
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.18,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color: hasSelect == true
+                                          ? AppColor.BLUE_TEXT
+                                          : AppColor.GREY_DADADA,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Center(
+                                    child: Text(
+                                      'Xác nhận',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: hasSelect == true
+                                              ? AppColor.WHITE
+                                              : AppColor.BLACK),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                       Positioned(
                         top: 0,
