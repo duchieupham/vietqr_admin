@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:go_router/go_router.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/setup.dart';
 import 'package:vietqr_admin/feature/login/views/login.dart';
@@ -305,23 +305,31 @@ class _VietQRAdmin extends State<VietQRAdmin> {
         providers: [
           ChangeNotifierProvider(create: (context) => MenuProvider()),
         ],
-        child: MaterialApp.router(
-          onGenerateTitle: (context) => 'VietQR VN - Admin',
-          routerConfig: _router,
-          themeMode: ThemeMode.light,
-          darkTheme: DefaultThemeData(context: context).darkTheme,
-          theme: DefaultThemeData(context: context).lightTheme,
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            MonthYearPickerLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            //  Locale('en'), // English
-            Locale('vi'), // Vietnamese
-          ],
+        child: ToastificationWrapper(
+          child: ToastificationConfigProvider(
+            config: const ToastificationConfig(
+              itemWidth: 350,
+              animationDuration: Duration(milliseconds: 200),
+            ),
+            child: MaterialApp.router(
+              onGenerateTitle: (context) => 'VietQR VN - Admin',
+              routerConfig: _router,
+              themeMode: ThemeMode.light,
+              darkTheme: DefaultThemeData(context: context).darkTheme,
+              theme: DefaultThemeData(context: context).lightTheme,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                // MonthYearPickerLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                //  Locale('en'), // English
+                Locale('vi'), // Vietnamese
+              ],
+            ),
+          ),
         ),
       ),
     );

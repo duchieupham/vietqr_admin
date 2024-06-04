@@ -25,7 +25,7 @@ class SynthesisReportProvider with ChangeNotifier {
 
   DateTime _timeCurrent = DateTime.now();
   DateTime get timeCurrent => _timeCurrent;
-  BankAccountDTO _bankAccountDTO = BankAccountDTO();
+  BankAccountDTO _bankAccountDTO = const BankAccountDTO();
   BankAccountDTO get bankAccountDTO => _bankAccountDTO;
 
   final MerchantRepository merchantRepository = const MerchantRepository();

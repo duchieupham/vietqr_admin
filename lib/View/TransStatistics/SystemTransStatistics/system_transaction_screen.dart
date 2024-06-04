@@ -129,14 +129,10 @@ class _SystemTransStatisticsScreenState
         );
       },
     );
-    if (result != null) {
-      setState(() {
-        selectDate = result;
-      });
-      _model.filterListSystemTransaction(time: selectDate!, page: 1);
-    } else {
-      selectDate = _model.getPreviousYear();
-    }
+    setState(() {
+      selectDate = result;
+    });
+    _model.filterListSystemTransaction(time: selectDate!, page: 1);
   }
 
   void _onPickYear(DateTime dateTime) async {
@@ -155,14 +151,10 @@ class _SystemTransStatisticsScreenState
         );
       },
     );
-    if (result != null) {
-      setState(() {
-        selectDate = result;
-      });
-      _model.filterListSystemTransaction(time: selectDate!, page: 1);
-    } else {
-      selectDate = _model.getPreviousYear();
-    }
+    setState(() {
+      selectDate = result;
+    });
+    _model.filterListSystemTransaction(time: selectDate!, page: 1);
   }
 
   @override
@@ -228,10 +220,10 @@ class _SystemTransStatisticsScreenState
   Widget _headerWidget() {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 25, 30, 10),
-      width: 300,
-      child: Row(
+      width: MediaQuery.of(context).size.width * 0.22,
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Thống kê GD",
             style: TextStyle(fontSize: 15),
@@ -298,10 +290,11 @@ class _SystemTransStatisticsScreenState
                           ],
                           onChanged: (value) {
                             model.changeTime(value);
-                            if (value == 1)
+                            if (value == 1) {
                               selectDate = model.getPreviousMonth();
-                            else
+                            } else {
                               selectDate = model.getPreviousYear();
+                            }
                           },
                         ),
                       ),
@@ -372,9 +365,9 @@ class _SystemTransStatisticsScreenState
                       color: AppColor.BLUE_TEXT,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           size: 15,

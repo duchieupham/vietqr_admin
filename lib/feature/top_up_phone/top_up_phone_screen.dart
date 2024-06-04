@@ -21,7 +21,7 @@ import '../../models/DTO/transaction_vnpt_dto.dart';
 import '../../models/DTO/vnpt_transaction_static.dart';
 
 class TopUpPhoneScreen extends StatelessWidget {
-  const TopUpPhoneScreen({Key? key}) : super(key: key);
+  const TopUpPhoneScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class TopUpPhoneScreen extends StatelessWidget {
 }
 
 class _TopUpPhoneScreen extends StatefulWidget {
-  const _TopUpPhoneScreen({Key? key}) : super(key: key);
+  const _TopUpPhoneScreen();
 
   @override
   State<_TopUpPhoneScreen> createState() => _TopUpPhoneScreenState();
@@ -130,7 +130,7 @@ class _TopUpPhoneScreenState extends State<_TopUpPhoneScreen> {
                             ...listTransactionVNPTDTO.map((e) {
                               int index = listTransactionVNPTDTO.indexOf(e);
                               return _buildItem(e, index + 1);
-                            }).toList(),
+                            }),
                           ],
                         )),
                   )),

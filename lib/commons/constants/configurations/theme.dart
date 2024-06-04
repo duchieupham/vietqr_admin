@@ -32,6 +32,8 @@ class AppColor {
   static const Color SUCCESS_STATUS = Color(0xFF06B271);
   static const Color GREEN = Color(0xFF00CA28);
   static const Color DARK_GREEN = Color(0xFF0D5F34);
+  static const Color GREEN_2D9D92 = Color(0xFF2D9D92);
+
   static const Color BLUE_LIGHT = Color(0xFF96D8FF);
   static const Color DARK_PURPLE = Color(0xFF7951F8);
   static const Color VERY_PERI = Color(0xFF6868AC);
@@ -54,6 +56,7 @@ class AppColor {
   static const Color RED_NOTI = Color(0xFFF291BB);
   static const Color GREEN_NOTI_1 = Color(0xFFC4FAEE);
   static const Color GREEN_NOTI = Color(0xFF91F2D9);
+  static const Color GREEN_STATUS = Color(0xFF2D9D92);
   static const Color BANNER_DAY1 = Color(0xFF26B0FD);
   static const Color BLUE_DARK = Color(0xFF014C8B);
   static const Color PURPLE_MIDNIGHT = Color(0xFF3D2BFF);
@@ -93,11 +96,11 @@ class DefaultThemeData {
       scaffoldBackgroundColor: AppColor.BLACK,
       colorScheme: const ColorScheme.dark(primary: AppColor.BLUE_TEXT),
       canvasColor: AppColor.GREY_HIGHLIGHT,
-      buttonColor: AppColor.BLACK_BUTTON,
+      // buttonColor: AppColor.BLACK_BUTTON,
       primaryColor: AppColor.BLACK,
-      accentColor: AppColor.GREY_LIGHT,
+      // accentColor: AppColor.GREY_LIGHT,
       hoverColor: AppColor.TRANSPARENT,
-      toggleableActiveColor: AppColor.BLACK_LIGHT,
+      // toggleableActiveColor: AppColor.BLACK_LIGHT,
       //  focusColor: DefaultTheme.BLUE_TEXT,
       cardColor: AppColor.BLACK_BUTTON,
       shadowColor: AppColor.BLACK_LIGHT,
@@ -123,12 +126,12 @@ class DefaultThemeData {
       scaffoldBackgroundColor: AppColor.GREY_BG,
       colorScheme: const ColorScheme.light(primary: AppColor.BLUE_TEXT),
       canvasColor: AppColor.GREY_BG,
-      buttonColor: AppColor.GREY_VIEW,
+      // buttonColor: AppColor.GREY_VIEW,
       primaryColor: AppColor.WHITE,
       hoverColor: AppColor.TRANSPARENT,
-      toggleableActiveColor: AppColor.WHITE,
+      // toggleableActiveColor: AppColor.WHITE,
       // focusColor: DefaultTheme.BLUE_DARK,
-      accentColor: AppColor.GREY_TEXT,
+      // accentColor: AppColor.GREY_TEXT,
       cardColor: AppColor.WHITE,
       shadowColor: AppColor.GREY_TOP_TAB_BAR,
       indicatorColor: AppColor.DARK_PINK,

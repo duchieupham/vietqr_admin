@@ -16,7 +16,7 @@ import 'package:vietqr_admin/feature/list_merchant/annual_fee/state/annual_fee_s
 import '../../../models/DTO/annual_fee_dto.dart';
 
 class AnnualFeeScreen extends StatefulWidget {
-  const AnnualFeeScreen({Key? key}) : super(key: key);
+  const AnnualFeeScreen({super.key});
 
   @override
   State<AnnualFeeScreen> createState() => _AnnualFeeScreenState();
@@ -92,7 +92,7 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
                   ...listAnnualFee.map((e) {
                     int i = listAnnualFee.indexOf(e);
                     return _buildItem(i, e);
-                  }).toList()
+                  })
                 ],
               ),
             ),
@@ -103,8 +103,8 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
   }
 
   Widget _buildTitleItem() {
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         SizedBox(
           width: 50,
           child: Padding(
@@ -527,9 +527,9 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
         height: 45,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(color: AppColor.BLUE_TEXT.withOpacity(0.2)),
-        child: Row(
+        child: const Row(
           children: [
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 'Phí thuê bao',
@@ -539,7 +539,7 @@ class _AnnualFeeScreenState extends State<AnnualFeeScreen> {
                     decoration: TextDecoration.underline),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               width: 24,
             ),
             // Container(

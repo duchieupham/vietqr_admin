@@ -34,7 +34,7 @@ class ListConnectScreen extends StatelessWidget {
 }
 
 class _ListConnectScreen extends StatefulWidget {
-  const _ListConnectScreen({Key? key}) : super(key: key);
+  const _ListConnectScreen();
 
   @override
   State<_ListConnectScreen> createState() => _ListConnectScreenState();
@@ -93,8 +93,8 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                           color: AppColor.BLUE_TEXT.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             Icon(
                               Icons.arrow_back_ios,
                               color: AppColor.BLUE_TEXT,
@@ -301,7 +301,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                           int index = result.indexOf(e) + 1;
 
                           return _buildItem(e, index);
-                        }).toList(),
+                        }),
                       ],
                     ),
                   ),

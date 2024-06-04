@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../commons/constants/configurations/theme.dart';
-import '../../../commons/constants/utils/image_utils.dart';
 
 class ItemMenuHome extends StatefulWidget {
   final String title;
@@ -19,7 +18,7 @@ class ItemMenuHome extends StatefulWidget {
   final bool bold;
 
   const ItemMenuHome(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.onTap,
       this.pathImage,
@@ -34,8 +33,7 @@ class ItemMenuHome extends StatefulWidget {
       this.isDefaultColor = false,
       this.isFirst = false,
       this.bold = false,
-      this.paddingIcon = EdgeInsets.zero})
-      : super(key: key);
+      this.paddingIcon = EdgeInsets.zero});
 
   @override
   State<ItemMenuHome> createState() => _ItemMenuHomeState();

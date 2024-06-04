@@ -9,7 +9,7 @@ class InsertBankAccountFeeProvider with ChangeNotifier {
   MerchantBankAccount _valueSubItem = const MerchantBankAccount();
   MerchantBankAccount get valueSubItem => _valueSubItem;
 
-  List<MerchantBankAccount> _listValueSubItem = [];
+  final List<MerchantBankAccount> _listValueSubItem = [];
   List<MerchantBankAccount> get listValueSubItem => _listValueSubItem;
 
   changeValueRatio(MerchantFee merchantFee) {

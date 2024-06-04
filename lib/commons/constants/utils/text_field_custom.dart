@@ -44,7 +44,7 @@ class MTextFieldCustom extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
 
   const MTextFieldCustom({
-    Key? key,
+    super.key,
     required this.hintText,
     this.controller,
     this.fillColor,
@@ -77,7 +77,7 @@ class MTextFieldCustom extends StatefulWidget {
     this.value,
     this.hintColor,
     this.contentPadding,
-  }) : super(key: key);
+  });
 
   @override
   State<MTextFieldCustom> createState() => _TextFieldWidgetState();

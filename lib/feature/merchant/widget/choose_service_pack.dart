@@ -19,11 +19,10 @@ class ChooseServicePackPopup extends StatefulWidget {
   final String bankID;
   final Function onSuccess;
   const ChooseServicePackPopup(
-      {Key? key,
+      {super.key,
       required this.bankAccount,
       required this.bankID,
-      required this.onSuccess})
-      : super(key: key);
+      required this.onSuccess});
 
   @override
   State<ChooseServicePackPopup> createState() => _ServicePackScreenState();
@@ -123,7 +122,7 @@ class _ServicePackScreenState extends State<ChooseServicePackPopup> {
                                         int index = listServicePack.indexOf(e);
 
                                         return _buildItem(e, provider, index);
-                                      }).toList(),
+                                      }),
                                     ],
                                   ))),
                         ),
@@ -207,7 +206,7 @@ class _ServicePackScreenState extends State<ChooseServicePackPopup> {
                                     )
                                 ],
                               );
-                            }).toList(),
+                            }),
                           ],
                         ),
                       )

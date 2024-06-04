@@ -19,11 +19,10 @@ class InsertBankAccountFeePopup extends StatefulWidget {
   final String merchantName;
   final String serviceFeeId;
   const InsertBankAccountFeePopup(
-      {Key? key,
+      {super.key,
       required this.servicePackBloc,
       this.merchantName = '',
-      required this.serviceFeeId})
-      : super(key: key);
+      required this.serviceFeeId});
 
   @override
   State<InsertBankAccountFeePopup> createState() =>
@@ -110,11 +109,11 @@ class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
                     ),
                   ),
                   if (listMerchantValue.isEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: Column(
-                        children: const [
+                        children: [
                           SizedBox(
                             height: 40,
                           ),
@@ -201,7 +200,7 @@ class _CreateServicePackPopupState extends State<InsertBankAccountFeePopup> {
           if (dto.bankAccounts?.isNotEmpty ?? false)
             ...dto.bankAccounts!.map((e) {
               return _buildItemBankAccount(e, provider, dto);
-            }).toList()
+            })
         ],
       ),
     );

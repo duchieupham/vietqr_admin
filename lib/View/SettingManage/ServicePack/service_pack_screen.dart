@@ -22,7 +22,7 @@ import 'package:vietqr_admin/View/SettingManage/ServicePack/widget/insert_bank_a
 import '../../../models/DTO/service_pack_dto.dart';
 
 class ServicePackScreen extends StatefulWidget {
-  const ServicePackScreen({Key? key}) : super(key: key);
+  const ServicePackScreen({super.key});
 
   @override
   State<ServicePackScreen> createState() => _ServicePackScreenState();
@@ -121,7 +121,7 @@ class _ServicePackScreenState extends State<ServicePackScreen> {
                                       int index = listServicePack.indexOf(e);
 
                                       return _buildItem(e, provider, index);
-                                    }).toList(),
+                                    }),
                                   ],
                                 ))),
                       ));

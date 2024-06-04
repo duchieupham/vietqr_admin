@@ -12,7 +12,7 @@ class ButtonWidget extends StatelessWidget {
   final double sizeTitle;
   final EdgeInsets padding;
   const ButtonWidget({
-    Key? key,
+    super.key,
     this.width,
     required this.text,
     required this.textColor,
@@ -22,7 +22,7 @@ class ButtonWidget extends StatelessWidget {
     this.borderRadius,
     this.padding = EdgeInsets.zero,
     this.sizeTitle = 14,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

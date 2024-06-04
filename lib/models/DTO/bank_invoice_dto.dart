@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class BankInvoiceDTO {
   List<BankItem> items;

@@ -44,7 +44,7 @@ class MerchantProvider with ChangeNotifier {
 
   DateTime get fromDate => _formDate;
 
-  BankAccountDTO _bankAccountDTO = BankAccountDTO();
+  BankAccountDTO _bankAccountDTO = const BankAccountDTO();
 
   BankAccountDTO get bankAccountDTO => _bankAccountDTO;
 
@@ -161,7 +161,9 @@ class MerchantProvider with ChangeNotifier {
       updateFromDate(endDate);
       updateToDate(fromDate);
     } else if (value.id == TypeTimeFilter.THREE_MONTH_LAST_DAY.id) {
-      DateTime endDate = Jiffy(fromDate).subtract(months: 3).dateTime;
+      // DateTime endDate = Jiffy(fromDate).subtract(months: 3).dateTime;
+      DateTime endDate =
+          Jiffy.parseFromDateTime(fromDate).subtract(months: 3).dateTime;
       fromDate = fromDate
           .add(const Duration(days: 1))
           .subtract(const Duration(seconds: 1));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ActiveFeeDetail extends StatefulWidget {
-  const ActiveFeeDetail({Key? key}) : super(key: key);
+  const ActiveFeeDetail({super.key});
 
   @override
   State<ActiveFeeDetail> createState() => _ActiveFeeDetailState();

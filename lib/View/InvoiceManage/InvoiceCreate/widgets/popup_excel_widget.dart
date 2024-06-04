@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
@@ -152,8 +151,8 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
               top: BorderSide(color: AppColor.GREY_DADADA, width: 1))),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'Số tài khoản',
               textAlign: TextAlign.center,
@@ -216,11 +215,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 '0541103612005\nMBBank',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
               ),
             ),
           ),
@@ -228,11 +227,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 220,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 'Cong Ty Co Phan Dau Tu... ajsdnkas saskdn askndas sndasdnkasd asdasd asd asd heha ahsd axnz',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -242,11 +241,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 'VietQR Pro',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -256,11 +255,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 'VQR5_PT',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -270,11 +269,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 '0',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -284,11 +283,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 '0,8',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -298,11 +297,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 '8',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -312,11 +311,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 190,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 'Chỉ GD đối soát',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -334,8 +333,8 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
           border: Border(
         bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
       )),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,
@@ -395,11 +394,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 50,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 '1',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
               ),
             ),
           ),
@@ -407,11 +406,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Text(
                 '03/2024',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -421,7 +420,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -429,14 +428,14 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                   Text(
                     '12,540 GD',
                     // textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '2,046,300,000',
                     // textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -449,7 +448,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -457,14 +456,14 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                   Text(
                     '12,000 GD',
                     // textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '2,000,000,000',
                     // textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -477,7 +476,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -485,14 +484,14 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                   Text(
                     '540 GD',
                     // textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '46,300,000',
                     // textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -505,7 +504,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: const SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -513,14 +512,14 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                   Text(
                     '12,000 GD',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '2,000,000,000',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -536,8 +535,8 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             child: SelectionArea(
               child: InkWell(
                 onTap: () {},
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Text(
                       'Xuất Excel',
                       style: TextStyle(

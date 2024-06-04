@@ -9,8 +9,7 @@ class UpdateWebhookPopup extends StatefulWidget {
   final WebHookDTO dto;
   final Function(Map<String, dynamic> param) update;
 
-  const UpdateWebhookPopup({Key? key, required this.dto, required this.update})
-      : super(key: key);
+  const UpdateWebhookPopup({super.key, required this.dto, required this.update});
 
   @override
   State<UpdateWebhookPopup> createState() => _UpdateWebhookPopupState();

@@ -6,10 +6,10 @@ class ServicePackProvider with ChangeNotifier {
   List<ServicePackDTO> _listServicePack = [];
   List<ServicePackDTO> get listServicePack => _listServicePack;
 
-  List<Map<String, dynamic>> _itemHasExpand = [];
+  final List<Map<String, dynamic>> _itemHasExpand = [];
   List<Map<String, dynamic>> get itemHasExpand => _itemHasExpand;
 
-  List<Map<String, dynamic>> _itemHasFormInsert = [];
+  final List<Map<String, dynamic>> _itemHasFormInsert = [];
   List<Map<String, dynamic>> get itemHasFormInsert => _itemHasFormInsert;
 
   init(List<ServicePackDTO> value) {

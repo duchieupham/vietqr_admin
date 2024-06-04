@@ -9,7 +9,7 @@ import '../../../models/DTO/qr_code_dto.dart';
 
 class QRTopUp extends StatelessWidget {
   final QRCodeTDTO qrCodeTDTO;
-  const QRTopUp({Key? key, required this.qrCodeTDTO}) : super(key: key);
+  const QRTopUp({super.key, required this.qrCodeTDTO});
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,13 @@ class QRTopUp extends StatelessWidget {
           fit: BoxFit.fitWidth,
         ),
         Expanded(
-          child: QrImage(
+          child: QrImageView(
             data: qrCodeTDTO.qrCode,
             version: QrVersions.auto,
             embeddedImage:
                 const AssetImage('assets/images/ic-viet-qr-small.png'),
-            embeddedImageStyle: QrEmbeddedImageStyle(
-              size: const Size(25, 25),
+            embeddedImageStyle: const QrEmbeddedImageStyle(
+              size: Size(25, 25),
             ),
           ),
         ),

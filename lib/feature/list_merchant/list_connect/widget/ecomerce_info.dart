@@ -7,7 +7,7 @@ import '../../../../models/DTO/ecomerce_dto.dart';
 
 class EcomerceInfo extends StatelessWidget {
   final EcomerceDTO dto;
-  const EcomerceInfo({Key? key, required this.dto}) : super(key: key);
+  const EcomerceInfo({super.key, required this.dto});
 
   @override
   Widget build(BuildContext context) {

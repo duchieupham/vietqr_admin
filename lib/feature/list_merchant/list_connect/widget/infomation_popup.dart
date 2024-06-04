@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
@@ -10,13 +9,14 @@ import 'package:vietqr_admin/feature/list_merchant/list_connect/provider/statist
 import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_connect_state.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
+import '../../../../commons/widget/dialog_pick_month.dart';
 import '../../../../models/DTO/api_service_dto.dart';
 import '../../../../models/DTO/bank_account_dto.dart';
 import '../../../../models/DTO/statistic_dto.dart';
 import '../events/info_connect_event.dart';
 
 class InformationPopup extends StatefulWidget {
-  const InformationPopup({Key? key}) : super(key: key);
+  const InformationPopup({super.key});
 
   @override
   State<InformationPopup> createState() => _InformationPopupState();
@@ -161,13 +161,27 @@ class _InformationPopupState extends State<InformationPopup> {
                       ),
                       InkWell(
                         onTap: () async {
-                          final selected = await showMonthYearPicker(
+                          // final selected = await showMonthYearPicker(
+                          //   context: context,
+                          //   initialDate: provider.month,
+                          //   firstDate: DateTime(2022),
+                          //   lastDate: DateTime(20240),
+                          // );
+                          DateTime selected = await showDialog(
+                            barrierDismissible: false,
                             context: context,
-                            initialDate: provider.month,
-                            firstDate: DateTime(2022),
-                            lastDate: DateTime(20240),
+                            builder: (BuildContext context) {
+                              return Material(
+                                color: AppColor.TRANSPARENT,
+                                child: Center(
+                                  child: DialogPickDate(
+                                    dateTime: provider.month,
+                                  ),
+                                ),
+                              );
+                            },
                           );
-                          provider.updateMonth(selected!);
+                          provider.updateMonth(selected);
                           infoConnectBloc.add(GetStatisticEvent(param: {
                             'type': 0,
                             'customerSyncId': Session.instance.connectDTO.id,

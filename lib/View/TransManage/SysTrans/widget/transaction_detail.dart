@@ -13,7 +13,7 @@ import '../../../../models/DTO/transaction_detail_dto.dart';
 import '../../../../models/DTO/transaction_log_dto.dart';
 
 class TransactionDetailScreen extends StatelessWidget {
-  TransactionDetailScreen({Key? key}) : super(key: key);
+  TransactionDetailScreen({super.key});
 
   TransactionDetailDTO transactionDetailDTO = const TransactionDetailDTO();
   List<TransactionLogDTO> listLog = [];
@@ -175,7 +175,7 @@ class TransactionDetailScreen extends StatelessWidget {
         ),
         ...listLog.map((e) {
           return _buildItemLog(e);
-        }).toList()
+        })
       ],
     );
   }

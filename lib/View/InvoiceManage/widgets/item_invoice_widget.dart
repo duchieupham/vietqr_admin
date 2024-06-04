@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
-import 'package:vietqr_admin/models/DTO/service_fee_dto.dart';
 
 import '../../../../commons/constants/configurations/theme.dart';
 import '../../../../commons/constants/utils/string_utils.dart';
-import '../../../../models/DTO/merchant_dto.dart';
 
 class ItemInvoiceWidget extends StatelessWidget {
   final int index;
@@ -16,15 +12,13 @@ class ItemInvoiceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDateTimePaid = dto.timePaid != null &&
-            dto.timePaid.toString().isNotEmpty
+    String formattedDateTimePaid = dto.timePaid.toString().isNotEmpty
         ? DateFormat('yyyy-MM-dd HH:mm:ss')
             .format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))
         : '-';
-    String formattedDateTimeCreated = dto.timeCreated != null &&
-            dto.timeCreated.toString().isNotEmpty
+    String formattedDateTimeCreated = dto.timeCreated.toString().isNotEmpty
         ? DateFormat('yyyy-MM-dd HH:mm:ss')
-            .format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))
+            .format(DateTime.fromMillisecondsSinceEpoch(dto.timeCreated * 1000))
         : '-';
     return Container(
       // color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
@@ -50,25 +44,6 @@ class ItemInvoiceWidget extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            alignment: Alignment.centerRight,
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                    right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 50,
-            width: 120,
-            child: SelectionArea(
-              child: Text(
-                dto.timePaid.toString().isNotEmpty
-                    ? formattedDateTimePaid
-                    : '-',
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
             alignment:
                 dto.vso.isNotEmpty ? Alignment.centerLeft : Alignment.center,
             decoration: const BoxDecoration(
@@ -82,6 +57,45 @@ class ItemInvoiceWidget extends StatelessWidget {
                 dto.vso.isNotEmpty ? dto.vso : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerRight,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                StringUtils.formatNumberWithOutVND(dto.amount.toString()),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: dto.status == 1
+                        ? AppColor.GREEN
+                        : AppColor.ORANGE_DARK),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.centerRight,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
+            width: 120,
+            child: SelectionArea(
+              child: Text(
+                dto.timePaid.toString() != '0' ? formattedDateTimePaid : '-',
+                textAlign: TextAlign.right,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
@@ -141,28 +155,6 @@ class ItemInvoiceWidget extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            alignment: Alignment.centerRight,
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                    right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 50,
-            width: 150,
-            child: SelectionArea(
-              child: Text(
-                StringUtils.formatNumber(dto.amount.toString()),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: dto.status == 1
-                        ? AppColor.GREEN
-                        : AppColor.ORANGE_DARK),
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
             alignment: Alignment.centerLeft,
             decoration: const BoxDecoration(
                 border: Border(
@@ -173,7 +165,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             child: SelectionArea(
               child: Text(
                 dto.fullName.isNotEmpty ? dto.fullName : '-',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
@@ -251,7 +243,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             width: 120,
             child: SelectionArea(
               child: Text(
-                dto.timeCreated.toString().isNotEmpty
+                dto.timeCreated.toString() != '0'
                     ? formattedDateTimeCreated
                     : '-',
                 textAlign: TextAlign.end,

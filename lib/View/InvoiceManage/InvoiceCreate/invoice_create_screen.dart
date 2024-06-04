@@ -4,23 +4,22 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
+
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
-import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
-import 'dart:html' as html;
 
 import '../../../ViewModel/invoice_viewModel.dart';
 import '../../../commons/constants/configurations/theme.dart';
-import '../../../commons/widget/dialog_widget.dart';
-import '../../../models/DTO/bank_detail_dto.dart';
 import '../../../models/DTO/service_item_dto.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
-  const CreateInvoiceScreen({super.key});
+  final Function(String, String) onCreate;
+  const CreateInvoiceScreen({super.key, required this.onCreate});
 
   @override
   State<CreateInvoiceScreen> createState() => _CreateInvoiceScreenState();
@@ -34,6 +33,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   bool? isErrorInvoiceName = false;
   bool? isErrorDescription = false;
   bool? isCreateSuccess = false;
+  // final GlobalKey<_CreateInvoiceScreenState> myWidgetKey = GlobalKey();
   final _horizontal = ScrollController();
 
   late InvoiceViewModel _model;
@@ -42,6 +42,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _model.getListRequestPayment();
     _model.clear();
   }
 
@@ -73,6 +74,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final router = GoRouter.of(context);
     return Scaffold(
       backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel(
@@ -92,7 +94,9 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _headerWidget(),
-                      const Divider(),
+                      const Divider(
+                        color: AppColor.GREY_DADADA,
+                      ),
                       Expanded(
                         child: ListView(
                           children: [_bodyWidget()],
@@ -102,13 +106,14 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   ),
                 ),
               ),
-              bottomWidget(),
+              bottomWidget(router),
             ],
           )),
     );
   }
 
-  Widget bottomWidget() {
+  Widget bottomWidget(GoRouter router) {
+    // final GlobalKey<> myWidgetKey = GlobalKey();
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return Container(
@@ -219,18 +224,20 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   if (isErrorDescription == false &&
                       isErrorInvoiceName == false &&
                       model.listService!.isNotEmpty) {
-                    bool? result = await model.createInvoice(
-                        invoiceName: _invoiceTextController.text,
-                        description: _descriptionTextController.text);
-                    if (result!) {
-                      DialogWidget.instance.openMsgSuccessDialog(
-                        title: 'Tạo hóa đơn thành công',
-                        function: () {
-                          Navigator.of(context).pop();
-                          context.go('/invoice-list');
-                        },
-                      );
-                    }
+                    widget.onCreate(_invoiceTextController.text,
+                        _descriptionTextController.text);
+                    // await model
+                    //     .createInvoice(
+                    //         invoiceName: _invoiceTextController.text,
+                    //         description: _descriptionTextController.text)
+                    //     .then(
+                    //   (value) {
+                    //     if (value == true) {
+                    //       // onTapMenu(Invoice.LIST);
+                    //       context.go('/invoice-list');
+                    //     }
+                    //   },
+                    // );
                   }
                 },
               ),
@@ -1008,6 +1015,38 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               model.bankDetail != null
                   ? _buttonAddIvoiceItem()
                   : const SizedBox.shrink(),
+              const SizedBox(height: 30),
+              const MySeparator(color: AppColor.GREY_DADADA),
+              const SizedBox(height: 30),
+              const SizedBox(
+                width: double.infinity,
+                height: 20,
+                child: Text(
+                  'Tài khoản nhận tiền',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 30),
+              if (model.listPaymentRequest.isNotEmpty)
+                SizedBox(
+                  height: 70,
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final listPaymentBank = model.listPaymentRequest;
+
+                        return SelectBankRecieveItem(
+                          dto: listPaymentBank[index],
+                          onChange: (value) {
+                            model.selectPaymentRequest(index);
+                          },
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 20),
+                      itemCount: model.listPaymentRequest.length),
+                ),
+              const SizedBox(height: 200),
             ],
           ),
         );
@@ -1018,10 +1057,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   Widget _headerWidget() {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 25, 30, 10),
-      width: 300,
-      child: Row(
+      width: MediaQuery.of(context).size.width * 0.22,
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
             "Quản lý hoá đơn",
             style: TextStyle(fontSize: 15),
@@ -1046,8 +1085,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           color: AppColor.WHITE,
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           BuildItemlTitle(
               title: 'STT',
               textAlign: TextAlign.center,

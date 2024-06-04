@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
+import 'package:toastification/toastification.dart';
+import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'dart:html' as html;
 
 import '../../commons/constants/enum/type_menu_home.dart';
@@ -23,9 +25,13 @@ class InvoiceManageScreen extends StatefulWidget {
 
 class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
   Invoice type = Invoice.LIST;
+  late InvoiceViewModel _model;
+
   @override
   void initState() {
     super.initState();
+    _model = Get.find<InvoiceViewModel>();
+
     type = widget.type;
     setState(() {});
   }
@@ -67,7 +73,39 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
     if (type == Invoice.LIST) {
       return const InvoiceScreen();
     } else {
-      return const CreateInvoiceScreen();
+      return CreateInvoiceScreen(
+        onCreate: (invoice, desciption) async {
+          await _model
+              .createInvoice(invoiceName: invoice, description: desciption)
+              .then(
+            (value) {
+              if (value == true) {
+                toastification.show(
+                  context: context,
+                  type: ToastificationType.success,
+                  style: ToastificationStyle.flat,
+                  title: const Text(
+                    'Tạo hóa đơn thành công',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  showProgressBar: false,
+                  alignment: Alignment.topRight,
+                  autoCloseDuration: const Duration(seconds: 5),
+                  boxShadow: highModeShadow,
+                  dragToClose: true,
+                  pauseOnHover: true,
+                );
+                onTapMenu(Invoice.LIST);
+              } else {
+                DialogWidget.instance.openMsgDialog(
+                    title: "Không thể tạo hoá đơn",
+                    msg:
+                        'Hoá đơn chứa danh mục hàng hoá\nđã tồn tại trong hoá đơn khác.');
+              }
+            },
+          );
+        },
+      );
     }
   }
 }

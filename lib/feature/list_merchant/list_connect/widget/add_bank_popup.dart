@@ -12,11 +12,10 @@ class AddBankPopup extends StatelessWidget {
   final InfoConnectBloc bloc;
 
   const AddBankPopup(
-      {Key? key,
+      {super.key,
       required this.customerSyncId,
       required this.accountCustomerId,
-      required this.bloc})
-      : super(key: key);
+      required this.bloc});
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +114,8 @@ class AddBankPopup extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
           color: AppColor.BANK_CARD_COLOR_3.withOpacity(0.15)),
-      child: Row(
-        children: const [
+      child: const Row(
+        children: [
           Text(
             'Ngân hàng',
             style: TextStyle(fontSize: 12),

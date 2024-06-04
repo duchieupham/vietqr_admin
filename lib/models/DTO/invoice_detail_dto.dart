@@ -1,73 +1,3 @@
-import 'dart:convert';
-
-class InvoiceDetailDTO {
-  List<CustomerDetailDTO> customerDetailDTOS;
-  List<FeePackageDetailDTO> feePackageDetailDTOS;
-  List<InvoiceItemDetailDTO> invoiceItemDetailDTOS;
-  String invoiceId;
-  String invoiceName;
-  String invoiceDescription;
-  double vat;
-  int vatAmount;
-  int totalAmount;
-  int totalAmountAfterVat;
-  int status;
-
-  InvoiceDetailDTO({
-    required this.customerDetailDTOS,
-    required this.feePackageDetailDTOS,
-    required this.invoiceItemDetailDTOS,
-    required this.invoiceId,
-    required this.invoiceName,
-    required this.invoiceDescription,
-    required this.vat,
-    required this.vatAmount,
-    required this.totalAmount,
-    required this.totalAmountAfterVat,
-    required this.status,
-  });
-
-  factory InvoiceDetailDTO.fromJson(Map<String, dynamic> json) {
-    return InvoiceDetailDTO(
-      customerDetailDTOS: List<CustomerDetailDTO>.from(
-          json['customerDetailDTOS'].map((x) => CustomerDetailDTO.fromJson(x))),
-      feePackageDetailDTOS: List<FeePackageDetailDTO>.from(
-          json['feePackageDetailDTOS']
-              .map((x) => FeePackageDetailDTO.fromJson(x))),
-      invoiceItemDetailDTOS: List<InvoiceItemDetailDTO>.from(
-          json['invoiceItemDetailDTOS']
-              .map((x) => InvoiceItemDetailDTO.fromJson(x))),
-      invoiceId: json['invoiceId'],
-      invoiceName: json['invoiceName'],
-      invoiceDescription: json['invoiceDescription'] ?? "",
-      vat: json['vat'].toDouble(),
-      vatAmount: json['vatAmount'],
-      totalAmount: json['totalAmount'],
-      totalAmountAfterVat: json['totalAmountAfterVat'],
-      status: json['status'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'customerDetailDTOS':
-          List<dynamic>.from(customerDetailDTOS.map((x) => x.toJson())),
-      'feePackageDetailDTOS':
-          List<dynamic>.from(feePackageDetailDTOS.map((x) => x.toJson())),
-      'invoiceItemDetailDTOS':
-          List<dynamic>.from(invoiceItemDetailDTOS.map((x) => x.toJson())),
-      'invoiceId': invoiceId,
-      'invoiceName': invoiceName,
-      'invoiceDescription': invoiceDescription,
-      'vat': vat,
-      'vatAmount': vatAmount,
-      'totalAmount': totalAmount,
-      'totalAmountAfterVat': totalAmountAfterVat,
-      'status': status,
-    };
-  }
-}
-
 class CustomerDetailDTO {
   String vso;
   String merchantName;
@@ -104,20 +34,6 @@ class CustomerDetailDTO {
       email: json['email'] ?? '',
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'vso': vso,
-      'merchantName': merchantName,
-      'platform': platform,
-      'bankShortName': bankShortName,
-      'bankAccount': bankAccount,
-      'userBankName': userBankName,
-      'connectionType': connectionType,
-      'phoneNo': phoneNo,
-      'email': email,
-    };
-  }
 }
 
 class FeePackageDetailDTO {
@@ -126,6 +42,7 @@ class FeePackageDetailDTO {
   int fixFee;
   double percentFee;
   int recordType;
+  double vat;
 
   FeePackageDetailDTO({
     required this.feePackage,
@@ -133,6 +50,7 @@ class FeePackageDetailDTO {
     required this.fixFee,
     required this.percentFee,
     required this.recordType,
+    required this.vat,
   });
 
   factory FeePackageDetailDTO.fromJson(Map<String, dynamic> json) {
@@ -140,19 +58,10 @@ class FeePackageDetailDTO {
       feePackage: json['feePackage'],
       annualFee: json['annualFee'],
       fixFee: json['fixFee'],
-      percentFee: json['percentFee'].toDouble(),
+      percentFee: json['percentFee'],
       recordType: json['recordType'],
+      vat: json['vat'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'feePackage': feePackage,
-      'annualFee': annualFee,
-      'fixFee': fixFee,
-      'percentFee': percentFee,
-      'recordType': recordType,
-    };
   }
 }
 
@@ -164,8 +73,10 @@ class InvoiceItemDetailDTO {
   int amount;
   int totalAmount;
   double vat;
+  int type;
   int vatAmount;
   int totalAmountAfterVat;
+  int status;
 
   InvoiceItemDetailDTO({
     required this.invoiceItemId,
@@ -175,8 +86,10 @@ class InvoiceItemDetailDTO {
     required this.amount,
     required this.totalAmount,
     required this.vat,
+    required this.type,
     required this.vatAmount,
     required this.totalAmountAfterVat,
+    required this.status,
   });
 
   factory InvoiceItemDetailDTO.fromJson(Map<String, dynamic> json) {
@@ -187,23 +100,106 @@ class InvoiceItemDetailDTO {
       quantity: json['quantity'],
       amount: json['amount'],
       totalAmount: json['totalAmount'],
-      vat: json['vat'].toDouble(),
+      vat: json['vat'],
+      type: json['type'],
       vatAmount: json['vatAmount'],
       totalAmountAfterVat: json['totalAmountAfterVat'],
+      status: json['status'],
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'invoiceItemId': invoiceItemId,
-      'invoiceItemName': invoiceItemName,
-      'unit': unit,
-      'quantity': quantity,
-      'amount': amount,
-      'totalAmount': totalAmount,
-      'vat': vat,
-      'vatAmount': vatAmount,
-      'totalAmountAfterVat': totalAmountAfterVat,
-    };
+class PaymentRequestDTO {
+  String bankId;
+  String bankAccount;
+  String bankShortName;
+  String userBankName;
+  bool isChecked;
+
+  PaymentRequestDTO({
+    required this.bankId,
+    required this.bankAccount,
+    required this.bankShortName,
+    required this.userBankName,
+    required this.isChecked,
+  });
+
+  factory PaymentRequestDTO.fromJson(Map<String, dynamic> json) {
+    return PaymentRequestDTO(
+      bankId: json['bankId'],
+      bankAccount: json['bankAccount'],
+      bankShortName: json['bankShortName'],
+      userBankName: json['userBankName'],
+      isChecked: json['isChecked'],
+    );
+  }
+}
+
+class InvoiceDetailDTO {
+  List<CustomerDetailDTO> customerDetailDTOS;
+  List<FeePackageDetailDTO> feePackageDetailDTOS;
+  List<InvoiceItemDetailDTO> invoiceItemDetailDTOS;
+  List<PaymentRequestDTO> paymentRequestDTOS;
+  String invoiceId;
+  String invoiceName;
+  String invoiceDescription;
+  double vat;
+  int vatAmount;
+  int totalAmount;
+  int totalAmountAfterVat;
+  int totalUnpaid;
+  int totalPaid;
+  int status;
+
+  InvoiceDetailDTO({
+    required this.customerDetailDTOS,
+    required this.feePackageDetailDTOS,
+    required this.invoiceItemDetailDTOS,
+    required this.paymentRequestDTOS,
+    required this.invoiceId,
+    required this.invoiceName,
+    required this.invoiceDescription,
+    required this.vat,
+    required this.vatAmount,
+    required this.totalAmount,
+    required this.totalAmountAfterVat,
+    required this.totalUnpaid,
+    required this.totalPaid,
+    required this.status,
+  });
+
+  factory InvoiceDetailDTO.fromJson(Map<String, dynamic> json) {
+    return InvoiceDetailDTO(
+      customerDetailDTOS: (json['customerDetailDTOS'] as List).isNotEmpty
+          ? (json['customerDetailDTOS'] as List)
+              .map((i) => CustomerDetailDTO.fromJson(i))
+              .toList()
+          : [],
+      feePackageDetailDTOS: (json['feePackageDetailDTOS'] as List).isNotEmpty
+          ? (json['feePackageDetailDTOS'] as List)
+              .map((i) => FeePackageDetailDTO.fromJson(i))
+              .toList()
+          : [],
+      invoiceItemDetailDTOS: (json['invoiceItemDetailDTOS'] as List).isNotEmpty
+          ? (json['invoiceItemDetailDTOS'] as List)
+              .map((i) => InvoiceItemDetailDTO.fromJson(i))
+              .toList()
+          : [],
+      paymentRequestDTOS: (json['paymentRequestDTOS'] as List).isNotEmpty
+          ? (json['paymentRequestDTOS'] as List)
+              .map((i) => PaymentRequestDTO.fromJson(i))
+              .toList()
+          : [],
+      invoiceId: json['invoiceId'],
+      invoiceName: json['invoiceName'],
+      invoiceDescription: json['invoiceDescription'],
+      vat: json['vat'],
+      vatAmount: json['vatAmount'],
+      totalAmount: json['totalAmount'],
+      totalAmountAfterVat: json['totalAmountAfterVat'],
+      totalUnpaid: json['totalUnpaid'] ?? 0,
+      totalPaid: json['totalPaid'] ?? 0,
+      status: json['status'],
+    );
   }
 }

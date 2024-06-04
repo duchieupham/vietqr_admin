@@ -112,8 +112,8 @@ class BaseAPIClient {
   }) async {
     final Uri uri = Uri.parse(url);
     final request = http.MultipartRequest('POST', uri);
-    final String _token = AccountHelper.instance.getToken();
-    request.headers['Authorization'] = 'Bearer $_token';
+    final String token = AccountHelper.instance.getToken();
+    request.headers['Authorization'] = 'Bearer $token';
     if (fields.isNotEmpty) {
       for (String key in fields.keys) {
         request.fields[key] = fields[key];
@@ -132,8 +132,7 @@ class BaseAPIClient {
 
   static Map<String, String>? _getHeader(
       {AuthenticationType? type,
-      Map<String, String>? header,
-      String? clientMessageId}) {
+      Map<String, String>? header}) {
     Map<String, String>? result = {};
     type ??= AuthenticationType.NONE;
     final String token = AccountHelper.instance.getToken();

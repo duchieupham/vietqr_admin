@@ -19,7 +19,7 @@ import 'provider/new_connect_provider.dart';
 import 'state/new_connect_state.dart';
 
 class NewConnectScreen extends StatelessWidget {
-  const NewConnectScreen({Key? key}) : super(key: key);
+  const NewConnectScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -810,8 +810,8 @@ class NewConnectScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
                               color: AppColor.GREY_BUTTON),
-                          child: Row(
-                            children: const [
+                          child: const Row(
+                            children: [
                               Text(
                                 'Mật khẩu: ',
                                 style: TextStyle(
@@ -840,8 +840,8 @@ class NewConnectScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             color: AppColor.GREY_BUTTON),
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             Text(
                               'Username: ',
                               style: TextStyle(
@@ -860,8 +860,8 @@ class NewConnectScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             color: AppColor.GREY_BUTTON),
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             Text(
                               'Mật khẩu: ',
                               style: TextStyle(

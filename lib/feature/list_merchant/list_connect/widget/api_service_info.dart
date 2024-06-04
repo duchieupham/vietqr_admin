@@ -7,7 +7,7 @@ import '../../../../models/DTO/api_service_dto.dart';
 
 class ApiServiceInfo extends StatelessWidget {
   final ApiServiceDTO dto;
-  const ApiServiceInfo({Key? key, required this.dto}) : super(key: key);
+  const ApiServiceInfo({super.key, required this.dto});
 
   @override
   Widget build(BuildContext context) {

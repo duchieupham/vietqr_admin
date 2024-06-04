@@ -13,8 +13,7 @@ import 'package:vietqr_admin/View/SettingManage/ServicePack/state/service_pack_s
 
 class CreateServicePackPopup extends StatefulWidget {
   final ServicePackBloc servicePackBloc;
-  const CreateServicePackPopup({Key? key, required this.servicePackBloc})
-      : super(key: key);
+  const CreateServicePackPopup({super.key, required this.servicePackBloc});
 
   @override
   State<CreateServicePackPopup> createState() => _CreateServicePackPopupState();

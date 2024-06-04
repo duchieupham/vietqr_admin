@@ -78,7 +78,7 @@ class _SaleReportState extends State<ServiceFee> {
                             ...listActiveFee.map((e) {
                               int i = listActiveFee.indexOf(e);
                               return _buildItem(i, e);
-                            }).toList()
+                            })
                           ],
                         ),
                       ),

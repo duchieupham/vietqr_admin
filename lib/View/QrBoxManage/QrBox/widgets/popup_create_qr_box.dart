@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/ViewModel/qr_box_viewModel.dart';
@@ -390,7 +388,7 @@ class _PopupCreateQrBoxWidgetState extends State<PopupCreateQrBoxWidget> {
           color: AppColor.WHITE,
           border: Border(
               bottom: BorderSide(color: AppColor.GREY_DADADA, width: 0.5))),
-      child: Row(children: const [
+      child: const Row(children: [
         BuildItemlTitle(
             title: 'Mã QR Box',
             textAlign: TextAlign.left,

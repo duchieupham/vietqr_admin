@@ -1,22 +1,22 @@
-import 'dart:convert';
 
 class ServiceItemDTO {
   String itemId;
   String content;
   String unit;
-  String time;
+  // String time;
   int quantity;
   int amount;
   int totalAmount;
   double vat;
   int vatAmount;
   int amountAfterVat;
+  String? timeProcess;
   int type;
 
   ServiceItemDTO({
     required this.itemId,
     required this.content,
-    required this.time,
+    // required this.time,
     required this.unit,
     required this.quantity,
     required this.amount,
@@ -24,6 +24,7 @@ class ServiceItemDTO {
     required this.vat,
     required this.vatAmount,
     required this.amountAfterVat,
+    required this.timeProcess,
     required this.type,
   });
 
@@ -31,13 +32,14 @@ class ServiceItemDTO {
     return ServiceItemDTO(
       itemId: json['itemId'],
       content: json['content'],
-      time: json['time'],
+      // time: json['time'],
       unit: json['unit'],
       quantity: json['quantity'],
       amount: json['amount'],
       totalAmount: json['totalAmount'],
       vat: json['vat'].toDouble(),
       vatAmount: json['vatAmount'],
+      timeProcess: json['timeProcess'],
       amountAfterVat: json['amountAfterVat'],
       type: json['type'],
     );
@@ -54,6 +56,7 @@ class ServiceItemDTO {
       'vat': vat,
       'vatAmount': vatAmount,
       'amountAfterVat': amountAfterVat,
+      'timeProcess': timeProcess,
       'type': type,
     };
   }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
@@ -47,6 +46,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.resetConfirmService();
+    _model.selectServiceType(1);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initData();
     });
@@ -88,14 +88,10 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         );
       },
     );
-    if (result != null) {
-      setState(() {
-        selectDate = result;
-      });
-      await _model.getService(time: DateFormat('yyyy-MM').format(result));
-    } else {
-      selectDate = null;
-    }
+    setState(() {
+      selectDate = result;
+    });
+    await _model.getService(time: DateFormat('yyyy-MM').format(result));
   }
 
   void onConfirmService(bool hasSelect,
@@ -115,7 +111,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
         item = ServiceItemDTO(
             itemId: dto.itemId,
             content: dto.content,
-            time: dto.time,
+            // time: dto.time,
             unit: dto.unit,
             quantity: dto.quantity,
             amount: _amountController.text.isNotEmpty
@@ -131,6 +127,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             amountAfterVat: _amountController.text.isNotEmpty
                 ? (totalAmount! + vatAmount!).round()
                 : dto.amountAfterVat,
+            timeProcess: dto.timeProcess,
             type: dto.type);
         // model.confirmService(item);
       } else {
@@ -140,7 +137,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
 
         item = ServiceItemDTO(
             itemId: dto.itemId,
-            time: dto.time,
+            // time: dto.time,
             content: _contentController.text,
             unit: _unitController.text,
             quantity: int.parse(_quantityController.text),
@@ -149,13 +146,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             vat: dto.vat,
             vatAmount: vatAmount!.round(),
             amountAfterVat: (totalAmount! + vatAmount!).round(),
+            timeProcess: dto.timeProcess,
             type: dto.type);
       }
       confirmService(item);
     } else {
       item = ServiceItemDTO(
           itemId: dto.itemId,
-          time: dto.time,
+          // time: dto.time,
           content: _contentController.text,
           unit: _unitController.text,
           quantity: int.parse(_quantityController.text),
@@ -164,6 +162,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
           vat: dto.vat,
           vatAmount: vatAmount!.round(),
           amountAfterVat: (totalAmount! + vatAmount!).round(),
+          timeProcess: dto.timeProcess,
           type: dto.type);
       confirmService(item);
     }
@@ -206,103 +205,131 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${widget.isEdit == true ? 'Chỉnh sửa' : 'Thêm mới'} danh mục hàng hoá / dịch vụ',
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 50),
-                          Column(),
-                          const Text(
-                            'Thông tin khách hàng thanh toán',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 45),
-                          Scrollbar(
-                            controller: _horizontal,
+                          Expanded(
                             child: SingleChildScrollView(
-                              controller: _horizontal,
-                              scrollDirection: Axis.horizontal,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  _itemTitleWidget(false),
-                                  _buildBankItem(
-                                      dto: model.bankDetail,
-                                      textAmount: model.vatTextController.text),
+                                  Text(
+                                    '${widget.isEdit == true ? 'Chỉnh sửa' : 'Thêm mới'} danh mục hàng hoá / dịch vụ',
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 50),
+                                  const Column(),
+                                  const Text(
+                                    'Thông tin khách hàng thanh toán',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 45),
+                                  Scrollbar(
+                                    controller: _horizontal,
+                                    child: SingleChildScrollView(
+                                      controller: _horizontal,
+                                      scrollDirection: Axis.horizontal,
+                                      child: Column(
+                                        children: [
+                                          _itemTitleWidget(false),
+                                          _buildBankItem(
+                                              dto: model.bankDetail,
+                                              textAmount:
+                                                  model.vatTextController.text),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const MySeparator(
+                                    color: AppColor.GREY_DADADA,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  const Text(
+                                    'Thông tin hàng hoá / dịch vụ',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  _serivceSelectWidget(),
+                                  if (model.responseMsg != null) ...[
+                                    const SizedBox(height: 20),
+                                    const Text(
+                                      'Phí giao dịch này đã được thêm vào một hoá đơn khác. ',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.RED_TEXT),
+                                    )
+                                  ],
+
+                                  const SizedBox(height: 45),
+
+                                  if (widget.isEdit == true) ...[
+                                    Scrollbar(
+                                      controller: _horizontal2,
+                                      child: SingleChildScrollView(
+                                        controller: _horizontal2,
+                                        scrollDirection: Axis.horizontal,
+                                        child: Column(
+                                          children: [
+                                            _itemTitleWidget(true),
+                                            _buildItem(
+                                                item: widget.dto,
+                                                type: widget.dto?.type)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    if (model.status == ViewStatus.Loading) ...[
+                                      const CircularProgressIndicator(),
+                                    ] else if (model.serviceItemDTO !=
+                                        null) ...[
+                                      Scrollbar(
+                                        controller: _horizontal2,
+                                        child: SingleChildScrollView(
+                                          controller: _horizontal2,
+                                          scrollDirection: Axis.horizontal,
+                                          child: Column(
+                                            children: [
+                                              _itemTitleWidget(true),
+                                              model.serviceItemDTO?.type ==
+                                                      model.serviceType
+                                                  ? _buildItem(
+                                                      item:
+                                                          model.serviceItemDTO,
+                                                      type: model.serviceType)
+                                                  : const SizedBox.shrink(),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ] else
+                                      const SizedBox.shrink(),
+                                  ],
+                                  // const Spacer(),
+
+                                  Visibility(
+                                      visible: model.isInsert == null
+                                          ? false
+                                          : !model.isInsert!,
+                                      child: const Center(
+                                        child: Text(
+                                          'Dịch vụ này đã được thêm!',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColor.RED_TEXT),
+                                        ),
+                                      )),
+                                  const SizedBox(height: 20),
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20),
-                          const MySeparator(
-                            color: AppColor.GREY_DADADA,
-                          ),
-                          const SizedBox(height: 30),
-                          const Text(
-                            'Thông tin hàng hoá / dịch vụ',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 30),
-                          _serivceSelectWidget(),
-                          const SizedBox(height: 45),
-                          if (widget.isEdit == true) ...[
-                            Scrollbar(
-                              controller: _horizontal2,
-                              child: SingleChildScrollView(
-                                controller: _horizontal2,
-                                scrollDirection: Axis.horizontal,
-                                child: Column(
-                                  children: [
-                                    _itemTitleWidget(true),
-                                    _buildItem(
-                                        item: widget.dto,
-                                        type: widget.dto?.type)
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ] else ...[
-                            if (model.status == ViewStatus.Loading) ...[
-                              const CircularProgressIndicator(),
-                            ] else if (model.serviceItemDTO != null) ...[
-                              Scrollbar(
-                                controller: _horizontal2,
-                                child: SingleChildScrollView(
-                                  controller: _horizontal2,
-                                  scrollDirection: Axis.horizontal,
-                                  child: Column(
-                                    children: [
-                                      _itemTitleWidget(true),
-                                      model.serviceItemDTO?.type ==
-                                              model.serviceType
-                                          ? _buildItem(
-                                              item: model.serviceItemDTO,
-                                              type: model.serviceType)
-                                          : const SizedBox.shrink(),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ] else
-                              const SizedBox.shrink(),
-                          ],
-                          const Spacer(),
-                          Visibility(
-                              visible: model.isInsert == null
-                                  ? false
-                                  : !model.isInsert!,
-                              child: const Center(
-                                child: Text(
-                                  'Dịch vụ này đã được thêm!',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.RED_TEXT),
-                                ),
-                              )),
-                          const SizedBox(height: 20),
                           Container(
                             alignment: Alignment.center,
                             child: InkWell(
@@ -428,14 +455,14 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                         ),
                         items: const [
                           DropdownMenuItem<int>(
-                              value: 0,
-                              child: Text(
-                                "Phí thường niên / duy trì",
-                              )),
-                          DropdownMenuItem<int>(
                               value: 1,
                               child: Text(
                                 "Phí giao dịch",
+                              )),
+                          DropdownMenuItem<int>(
+                              value: 0,
+                              child: Text(
+                                "Phí thường niên / duy trì",
                               )),
                           DropdownMenuItem<int>(
                               value: 9,
@@ -586,7 +613,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(widget.dto!.time,
+                                        Text(widget.dto!.timeProcess!,
                                             style:
                                                 const TextStyle(fontSize: 15)),
                                         const Icon(

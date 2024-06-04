@@ -14,7 +14,7 @@ import 'package:vietqr_admin/feature/login/states/login_state.dart';
 import '../events/login_event.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   State<StatefulWidget> createState() => _Login();
