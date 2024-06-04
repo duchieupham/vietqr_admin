@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
@@ -278,6 +280,14 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
+  void selectPaymentRequest(int index) {
+    for (var e in listPaymentRequest) {
+      e.isChecked = false;
+    }
+    listPaymentRequest[index].isChecked = true;
+    notifyListeners();
+  }
+
   void appliedInvoiceItem(bool value, int index) {
     listSelectInvoice[index].isSelect = value;
 
@@ -381,6 +391,9 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setState(ViewStatus.Loading);
       bool? result = await _dao.createInvoice(
+          bankIdRecharge: listPaymentRequest
+              .firstWhere((element) => element.isChecked == true)
+              .bankId,
           vat: vatTextController.text.isNotEmpty
               ? double.parse(vatTextController.text)
               : double.parse(bankDetail!.vat.toString()),
@@ -450,6 +463,7 @@ class InvoiceViewModel extends InvoiceStatus {
   Future<void> getListRequestPayment() async {
     try {
       listPaymentRequest = await _dao.getListPaymentRequest();
+      notifyListeners();
     } catch (e) {
       LOG.error(e.toString());
     }

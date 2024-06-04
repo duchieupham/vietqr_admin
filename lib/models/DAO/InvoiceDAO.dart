@@ -81,6 +81,7 @@ class InvoiceDAO extends BaseDAO {
       required String? merchantId,
       required String invoiceName,
       required String description,
+      required String bankIdRecharge,
       required List<ServiceItemDTO> list}) async {
     try {
       Map<String, dynamic> params = {};
@@ -90,6 +91,8 @@ class InvoiceDAO extends BaseDAO {
       params['merchantId'] = merchantId ?? '';
       params['invoiceName'] = invoiceName;
       params['description'] = description;
+      params['bankIdRecharge'] = bankIdRecharge;
+
       params['items'] = list.map((e) => e.toJson()).toList();
 
       String url = 'https://dev.vietqr.org/vqr/api/invoice/create';
