@@ -777,7 +777,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
-            width: 200,
+            width: 250,
             padding: const EdgeInsets.only(right: 8),
             color: type == 9 ? AppColor.WHITE : AppColor.GREY_DADADA,
             child: type == 9
@@ -796,6 +796,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                 : SelectionArea(
                     child: Text(
                       item!.content,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: const TextStyle(fontSize: 12),
@@ -1059,7 +1060,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                 BuildItemlTitle(
                     title: 'Nội dung hoá đơn thanh toán',
                     textAlign: TextAlign.left,
-                    width: 200,
+                    width: 250,
                     height: 50,
                     alignment: Alignment.centerLeft),
                 BuildItemlTitle(

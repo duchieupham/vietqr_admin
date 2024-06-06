@@ -1180,6 +1180,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             child: SelectionArea(
               child: Text(
                 item.content,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
