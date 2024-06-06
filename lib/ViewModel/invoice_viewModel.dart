@@ -450,6 +450,19 @@ class InvoiceViewModel extends InvoiceStatus {
     return false;
   }
 
+  Future<bool?> exportExcel(String id) async {
+    try {
+      setState(ViewStatus.Loading);
+      bool? result = await _dao.exportExcel(id);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
+
   List<SelectInvoiceItem> mapToSelectInvoiceItems(
       List<InvoiceItemDetailDTO> invoiceItems) {
     return invoiceItems

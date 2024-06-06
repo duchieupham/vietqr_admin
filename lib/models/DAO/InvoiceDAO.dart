@@ -63,6 +63,25 @@ class InvoiceDAO extends BaseDAO {
     return false;
   }
 
+  Future<bool?> exportExcel(String invoiceItemId) async {
+    try {
+      Map<String, dynamic> param = {};
+      param['invoiceItemId'] = invoiceItemId;
+      // String url = '${EnvConfig.instance.getBaseUrl()}invoice/remove';
+      String url =
+          'https://dev.vietqr.org/vqr/api/invoice/export-excel/$invoiceItemId';
+      final response = await BaseAPIClient.postAPI(
+        body: param,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
   Future<InvoiceInfoDTO?> getInvoiceInfo(String invoiceId) async {
     try {
       String url =

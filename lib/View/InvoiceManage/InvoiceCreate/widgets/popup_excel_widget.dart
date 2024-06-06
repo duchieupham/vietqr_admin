@@ -20,6 +20,9 @@ class PopupExcelInvoice extends StatefulWidget {
 
 class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
   late InvoiceViewModel _model;
+  final controller1 = ScrollController();
+  final controller2 = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -87,12 +90,19 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                           const SizedBox(height: 30),
                           SizedBox(
                             width: 1160,
-                            child: Column(
-                              children: [
-                                _itemTitleWidget(),
-                                if (model.invoiceExcelDTO != null)
-                                  _buildItem(model.invoiceExcelDTO!),
-                              ],
+                            child: Scrollbar(
+                              controller: controller1,
+                              child: SingleChildScrollView(
+                                controller: controller1,
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  children: [
+                                    _itemTitleWidget(),
+                                    if (model.invoiceExcelDTO != null)
+                                      _buildItem(model.invoiceExcelDTO!),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(height: 30),
@@ -111,30 +121,37 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                           ),
                           const SizedBox(height: 30),
                           SizedBox(
-                            height: 350,
+                            // height: 350,
                             width: 1000,
-                            child: Column(
-                              children: [
-                                _itemTitleInfoTransactionWidget(),
-                                if (model.invoiceExcelDTO != null &&
-                                    model.invoiceExcelDTO!.transactions
-                                        .isNotEmpty)
-                                  ...model.invoiceExcelDTO!.transactions
-                                      .asMap()
-                                      .map(
-                                        (index, x) {
-                                          return MapEntry(
-                                            index,
-                                            _buildItemInfoTransaction(
-                                              index + 1,
-                                              x,
-                                            ),
-                                          );
-                                        },
-                                      )
-                                      .values
-                                      .toList()
-                              ],
+                            child: Scrollbar(
+                              controller: controller2,
+                              child: SingleChildScrollView(
+                                controller: controller2,
+                                scrollDirection: Axis.horizontal,
+                                child: Column(
+                                  children: [
+                                    _itemTitleInfoTransactionWidget(),
+                                    if (model.invoiceExcelDTO != null &&
+                                        model.invoiceExcelDTO!.transactions
+                                            .isNotEmpty)
+                                      ...model.invoiceExcelDTO!.transactions
+                                          .asMap()
+                                          .map(
+                                            (index, x) {
+                                              return MapEntry(
+                                                index,
+                                                _buildItemInfoTransaction(
+                                                  index + 1,
+                                                  x,
+                                                ),
+                                              );
+                                            },
+                                          )
+                                          .values
+                                          .toList()
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -540,7 +557,9 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             width: 200,
             child: SelectionArea(
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  _model.exportExcel(dto.invoiceItemId);
+                },
                 child: const Row(
                   children: [
                     Text(
