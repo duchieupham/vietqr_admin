@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_edit_invoice_widget.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
@@ -43,6 +44,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.getInvoiceInfo(widget.invoiceId);
+    _model.getInvoiceDetail(widget.invoiceId);
     _model.clear();
   }
 
@@ -199,7 +201,9 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
           );
         }
 
-        if (model.status == ViewStatus.Error && model.invoiceInfo == null) {
+        if (model.status == ViewStatus.Error &&
+            model.invoiceInfo == null &&
+            model.invoiceDetailDTO == null) {
           return const SizedBox.shrink();
         }
 
@@ -280,7 +284,9 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               width: 350,
                               height: 40,
                               padding: const EdgeInsets.only(
-                                  left: 10, bottom: 8, top: 4),
+                                left: 10,
+                                bottom: 0,
+                              ),
                               decoration: BoxDecoration(
                                 color:
                                     Colors.white, // Changed to white background
@@ -353,8 +359,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              padding: const EdgeInsets.only(
-                                  left: 10, bottom: 8, top: 4),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Center(
                                 child: TextField(
                                   controller: _descriptionTextController,
@@ -916,6 +921,40 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
+                const MySeparator(color: AppColor.GREY_DADADA),
+                const SizedBox(height: 30),
+                const SizedBox(
+                  width: double.infinity,
+                  height: 20,
+                  child: Text(
+                    'Tài khoản nhận tiền',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                if (model.invoiceDetailDTO != null &&
+                    model.invoiceDetailDTO!.paymentRequestDTOS.isNotEmpty)
+                  SizedBox(
+                    height: 70,
+                    child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final listPaymentBank =
+                              model.invoiceDetailDTO!.paymentRequestDTOS;
+
+                          return SelectBankRecieveItem(
+                            dto: listPaymentBank[index],
+                            onChange: (value) {
+                              model.selectPayment(index);
+                            },
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: 20),
+                        itemCount:
+                            model.invoiceDetailDTO!.paymentRequestDTOS.length),
+                  ),
+                const SizedBox(height: 100),
               ],
             ),
           ),

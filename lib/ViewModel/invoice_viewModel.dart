@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
@@ -60,6 +61,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
   List<PaymentRequestDTO> listPaymentRequest = [];
+  InvoiceExcelDTO? invoiceExcelDTO;
 
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
@@ -357,6 +359,9 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setState(ViewStatus.Empty);
       bool? result = await _dao.editInvoice(
+          bankIdRecharge: invoiceDetailDTO!.paymentRequestDTOS
+              .firstWhere((element) => element.isChecked == true)
+              .bankId,
           invoice: invoiceInfo,
           vat: vatTextController.text.isNotEmpty
               ? double.parse(vatTextController.text)
@@ -382,6 +387,17 @@ class InvoiceViewModel extends InvoiceStatus {
       totalEditAmount = invoiceInfo!.totalAmount;
       totalEditVat = invoiceInfo!.vatAmount;
       totalEditAmountVat = invoiceInfo!.totalAfterVat;
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
+  Future<void> getInvoiceExcel(String id) async {
+    try {
+      setState(ViewStatus.Loading);
+      invoiceExcelDTO = await _dao.getInvoiceExcel(id);
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

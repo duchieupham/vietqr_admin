@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
+import 'package:vietqr_admin/models/DAO/InvoiceDAO.dart';
+import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
 import 'item_title_widget.dart';
 
 class PopupExcelInvoice extends StatefulWidget {
-  const PopupExcelInvoice({super.key});
+  final String invoiceId;
+  const PopupExcelInvoice({super.key, required this.invoiceId});
 
   @override
   State<PopupExcelInvoice> createState() => _PopupExcelInvoiceState();
@@ -20,6 +24,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _model.getInvoiceExcel(widget.invoiceId);
   }
 
   @override
@@ -85,7 +90,8 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                             child: Column(
                               children: [
                                 _itemTitleWidget(),
-                                _buildItem(),
+                                if (model.invoiceExcelDTO != null)
+                                  _buildItem(model.invoiceExcelDTO!),
                               ],
                             ),
                           ),
@@ -109,27 +115,25 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                             width: 1000,
                             child: Column(
                               children: [
-                                Container(
-                                  child: _itemTitleInfoTransactionWidget(),
-                                ),
-                                SizedBox(
-                                  height: 250,
-                                  width: 1000,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        _buildItemInfoTransaction(),
-                                        _buildItemInfoTransaction(),
-                                        _buildItemInfoTransaction(),
-                                        _buildItemInfoTransaction(),
-                                        _buildItemInfoTransaction(),
-                                        _buildItemInfoTransaction(),
-                                        _buildItemInfoTransaction(),
-                                        _buildItemInfoTransaction(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                _itemTitleInfoTransactionWidget(),
+                                if (model.invoiceExcelDTO != null &&
+                                    model.invoiceExcelDTO!.transactions
+                                        .isNotEmpty)
+                                  ...model.invoiceExcelDTO!.transactions
+                                      .asMap()
+                                      .map(
+                                        (index, x) {
+                                          return MapEntry(
+                                            index,
+                                            _buildItemInfoTransaction(
+                                              index + 1,
+                                              x,
+                                            ),
+                                          );
+                                        },
+                                      )
+                                      .values
+                                      .toList()
                               ],
                             ),
                           ),
@@ -206,7 +210,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
     );
   }
 
-  Widget _buildItem() {
+  Widget _buildItem(InvoiceExcelDTO dto) {
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -215,11 +219,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                '0541103612005\nMBBank',
+                '${dto.customerDetails.bankAccount}\n${dto.customerDetails.bankShortName}',
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
           ),
@@ -227,11 +231,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 220,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                'Cong Ty Co Phan Dau Tu... ajsdnkas saskdn askndas sndasdnkasd asdasd asd asd heha ahsd axnz',
+                dto.customerDetails.userBankName,
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -241,11 +245,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                'VietQR Pro',
+                dto.customerDetails.mmsActive ? "VietQR Pro" : "VietQR Plus",
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -255,11 +259,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                'VQR5_PT',
+                dto.customerDetails.title,
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -269,11 +273,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                '0',
+                StringUtils.formatNumberWithOutVND(dto.customerDetails.fixFee),
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -283,11 +287,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                '0,8',
+                '${dto.customerDetails.percentFee}',
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -297,11 +301,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 120,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                '8',
+                '${dto.customerDetails.vat}',
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -311,11 +315,13 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 190,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                'Chỉ GD đối soát',
+                dto.customerDetails.recordType == 0
+                    ? 'Chỉ GD đối soát'
+                    : 'Tất cả GD',
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -382,7 +388,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
     );
   }
 
-  Widget _buildItemInfoTransaction() {
+  Widget _buildItemInfoTransaction(int index, Transaction dto) {
     return Container(
       decoration: const BoxDecoration(
           border: Border(
@@ -394,11 +400,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 50,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                '1',
+                index.toString(),
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
           ),
@@ -406,11 +412,11 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Text(
-                '03/2024',
+                dto.time,
                 // textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -420,22 +426,22 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '12,540 GD',
+                    '${dto.totalCount}',
                     // textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '2,046,300,000',
+                    StringUtils.formatNumberWithOutVND(dto.totalAmount),
                     // textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -448,22 +454,22 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '12,000 GD',
+                    '${dto.creditCount} VND',
                     // textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '2,000,000,000',
+                    StringUtils.formatNumberWithOutVND(dto.creditAmount),
                     // textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -476,22 +482,22 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '540 GD',
+                    '${dto.debitCount} VND',
                     // textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '46,300,000',
+                    StringUtils.formatNumberWithOutVND(dto.debitAmount),
                     // textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -504,22 +510,22 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: const SelectionArea(
+            child: SelectionArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '12,000 GD',
+                    '${dto.controlCount} VND',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '2,000,000,000',
+                    StringUtils.formatNumberWithOutVND(dto.controlAmount),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

@@ -6,6 +6,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/invoice_detail_screen.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/invoice_manage_screen.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
@@ -103,10 +104,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     );
   }
 
-  void onShowPopupExcel() async {
+  void onShowPopupExcel(String invoiceId) async {
     return await showDialog(
       context: context,
-      builder: (context) => const PopupExcelInvoice(),
+      builder: (context) => PopupExcelInvoice(
+        invoiceId: invoiceId,
+      ),
     );
   }
 
@@ -675,12 +678,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                                   child:
                                                                       InkWell(
                                                                     onTap: () {
-                                                                      // onShowPopupExcel();
-                                                                      DialogWidget
-                                                                          .instance
-                                                                          .openMsgDialog(
-                                                                              title: 'Bảo trì',
-                                                                              msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
+                                                                      onShowPopupExcel(
+                                                                        e.invoiceId,
+                                                                      );
+                                                                      // DialogWidget
+                                                                      //     .instance
+                                                                      //     .openMsgDialog(
+                                                                      //         title: 'Bảo trì',
+                                                                      //         msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
                                                                     },
                                                                     child:
                                                                         BoxLayout(
