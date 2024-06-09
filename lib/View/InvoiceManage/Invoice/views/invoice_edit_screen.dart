@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_edit_invoice_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
@@ -44,7 +45,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.getInvoiceInfo(widget.invoiceId);
-    _model.getInvoiceDetail(widget.invoiceId);
+    // _model.getInvoiceDetail(widget.invoiceId);
     _model.clear();
   }
 
@@ -60,6 +61,17 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
       context: context,
       builder: (context) =>
           PopupEditInvoiceWidget(bankId: bankId!, invoiceItem: item),
+    );
+  }
+
+  void onShowCreatePopup() async {
+    await showDialog(
+      context: context,
+      builder: (context) => const PopupCreateServiceWidget(
+        isPageUpdate: true,
+        isEdit: false,
+        dto: null,
+      ),
     );
   }
 
@@ -117,13 +129,13 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                           children: [
                             const Text(
                               'Tổng tiền hàng',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 13),
                             ),
                             const SizedBox(height: 10),
                             Text(
                               StringUtils.formatNumber(model.totalEditAmount),
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
@@ -137,13 +149,13 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                           children: [
                             const Text(
                               'VAT',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 13),
                             ),
                             const SizedBox(height: 10),
                             Text(
                               StringUtils.formatNumber(model.totalEditVat),
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
@@ -157,14 +169,14 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                           children: [
                             const Text(
                               'Tổng tiền thanh toán (bao gồm VAT)',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 13),
                             ),
                             const SizedBox(height: 10),
                             Text(
                               StringUtils.formatNumber(
                                   model.totalEditAmountVat),
                               style: const TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: AppColor.BLUE_TEXT,
                               ),
@@ -201,9 +213,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
           );
         }
 
-        if (model.status == ViewStatus.Error &&
-            model.invoiceInfo == null &&
-            model.invoiceDetailDTO == null) {
+        if (model.status == ViewStatus.Error && model.invoiceInfo == null) {
           return const SizedBox.shrink();
         }
 
@@ -247,7 +257,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                       const Text(
                         'Chỉnh sửa hoá đơn',
                         style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                            fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -255,7 +265,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                 const SizedBox(height: 30),
                 const Text(
                   'Thông tin khách hàng thanh toán',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 30),
                 SizedBox(
@@ -274,7 +284,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Tên hoá đơn*',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -310,7 +320,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                             : 'Nhập tên hoá đơn tại đây',
                                     hintStyle: const TextStyle(
                                         color: AppColor.GREY_TEXT,
-                                        fontSize: 15),
+                                        fontSize: 13),
                                     suffixIcon: const IconButton(
                                         onPressed: null,
                                         icon: Icon(
@@ -320,7 +330,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                         )),
                                   ),
                                   style: const TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                   ),
                                   textAlign: TextAlign.left,
                                   maxLines: 1,
@@ -342,7 +352,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Mô tả hoá đơn',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -372,7 +382,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                         ? invoiceInfo.description
                                         : 'Nhập thông tin mô tả hoá đơn ở đây',
                                     hintStyle: const TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                         color: AppColor.GREY_TEXT),
                                     suffixIcon: const IconButton(
                                         onPressed: null,
@@ -401,7 +411,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                   margin: const EdgeInsets.only(top: 30),
                   child: const Text(
                     'Thông tin khách hàng thanh toán',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(
@@ -424,7 +434,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Đối tượng*',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -457,7 +467,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                             horizontal: 10),
                                         child: Text(
                                           'Đại lý',
-                                          style: TextStyle(fontSize: 15),
+                                          style: TextStyle(fontSize: 13),
                                           textAlign: TextAlign.left,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -475,7 +485,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                         child: Text(
                                           invoiceInfo
                                               .userInformation.merchantName,
-                                          style: const TextStyle(fontSize: 15),
+                                          style: const TextStyle(fontSize: 13),
                                           textAlign: TextAlign.left,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -500,7 +510,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Tài khoản ngân hàng*',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -526,7 +536,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                         horizontal: 10),
                                     child: Text(
                                       '${invoiceInfo.userInformation.bankShortName} - ${invoiceInfo.userInformation.bankAccount}',
-                                      style: const TextStyle(fontSize: 15),
+                                      style: const TextStyle(fontSize: 13),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -559,7 +569,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Chủ tài khoản',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -589,7 +599,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                           ? invoiceInfo
                                               .userInformation.userBankName
                                           : '-',
-                                      style: const TextStyle(fontSize: 15),
+                                      style: const TextStyle(fontSize: 13),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -612,7 +622,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Tài khoản VietQR',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -638,7 +648,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                         horizontal: 10),
                                     child: Text(
                                       invoiceInfo.userInformation.phoneNo,
-                                      style: const TextStyle(fontSize: 15),
+                                      style: const TextStyle(fontSize: 13),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -661,7 +671,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Email',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -690,7 +700,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                               .userInformation.email.isNotEmpty
                                           ? invoiceInfo.userInformation.email
                                           : '-',
-                                      style: const TextStyle(fontSize: 15),
+                                      style: const TextStyle(fontSize: 13),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -723,7 +733,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Luồng kết nối',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -750,7 +760,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                     child: Text(
                                       invoiceInfo
                                           .userInformation.connectionType,
-                                      style: const TextStyle(fontSize: 15),
+                                      style: const TextStyle(fontSize: 13),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -773,7 +783,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'Gói dịch vụ',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -799,7 +809,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                         horizontal: 10),
                                     child: Text(
                                       invoiceInfo.userInformation.feePackage,
-                                      style: const TextStyle(fontSize: 15),
+                                      style: const TextStyle(fontSize: 13),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -822,7 +832,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                               height: 20,
                               child: Text(
                                 'VAT (%)',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -869,10 +879,10 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                             : 'Nhập VAT',
                                         hintStyle: const TextStyle(
                                             color: AppColor.GREY_TEXT,
-                                            fontSize: 15),
+                                            fontSize: 13),
                                       ),
                                       style: const TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                       ),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
@@ -899,7 +909,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                   height: 20,
                   child: Text(
                     'Danh mục hàng hoá / dịch vụ',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -920,6 +930,8 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                     ),
                   ),
                 ),
+                _buttonAddIvoiceItem(
+                    bankId: invoiceInfo.userInformation.bankId),
                 const SizedBox(height: 30),
                 const MySeparator(color: AppColor.GREY_DADADA),
                 const SizedBox(height: 30),
@@ -928,31 +940,28 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                   height: 20,
                   child: Text(
                     'Tài khoản nhận tiền',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 30),
-                if (model.invoiceDetailDTO != null &&
-                    model.invoiceDetailDTO!.paymentRequestDTOS.isNotEmpty)
+                if (model.listPaymentRequest.isNotEmpty)
                   SizedBox(
                     height: 70,
                     child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          final listPaymentBank =
-                              model.invoiceDetailDTO!.paymentRequestDTOS;
+                          final listPaymentBank = model.listPaymentRequest;
 
                           return SelectBankRecieveItem(
                             dto: listPaymentBank[index],
                             onChange: (value) {
-                              model.selectPayment(index);
+                              model.selectPaymentRequest(index);
                             },
                           );
                         },
                         separatorBuilder: (context, index) =>
                             const SizedBox(width: 20),
-                        itemCount:
-                            model.invoiceDetailDTO!.paymentRequestDTOS.length),
+                        itemCount: model.listPaymentRequest.length),
                   ),
                 const SizedBox(height: 100),
               ],
@@ -960,6 +969,24 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buttonAddIvoiceItem({required String bankId}) {
+    return MButtonWidget(
+      onTap: () async {
+        await _model.getBankDetail(id: bankId).then(
+              (value) => onShowCreatePopup(),
+            );
+      },
+      title: 'Thêm mới danh mục hàng hoá / dịch vụ',
+      border: Border.all(color: AppColor.BLUE_TEXT),
+      isEnable: true,
+      colorEnableBgr: AppColor.WHITE,
+      colorEnableText: AppColor.BLUE_TEXT,
+      width: 350,
+      margin: const EdgeInsets.only(top: 10, bottom: 20),
+      height: 50,
     );
   }
 
@@ -1054,7 +1081,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 (index + 1).toString(),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
               ),
             ),
           ),
@@ -1066,7 +1093,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 item.invoiceItemName.isNotEmpty ? item.invoiceItemName : '-',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1080,7 +1107,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 item.unit.isNotEmpty ? item.unit : '-',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1094,7 +1121,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 item.quantity.toString(),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1108,7 +1135,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.amount),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1122,7 +1149,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.totalAmount),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1136,7 +1163,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 item.vat.toString(),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1150,7 +1177,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.vatAmount),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1164,7 +1191,7 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.totalAmountAfterVat),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -1239,23 +1266,23 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
         children: [
           Text(
             "Quản lý hoá đơn",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
           Text(
             "/",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
           Text(
             "Danh sách hoá đơn",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
           Text(
             "/",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
           Text(
             "Chỉnh sửa hoá đơn",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
         ],
       ),

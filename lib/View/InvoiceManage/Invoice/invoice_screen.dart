@@ -198,7 +198,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           const Text(
                             "Tìm kiếm thông tin hoá đơn ",
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 10),
                           _filterWidget(),
@@ -210,7 +210,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           const Text(
                             "Danh sách hoá đơn",
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 20),
                           statisticInvoice(),
@@ -986,181 +986,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     );
   }
 
-  Widget _statisticInvoice() {
-    return ScopedModelDescendant<InvoiceViewModel>(
-      builder: (context, child, model) {
-        return model.invoiceDTO != null
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        // color: AppColor.WHITE,
-                        border: Border.all(
-                            color: AppColor.GREY_DADADA, width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Center(
-                            child: Text(
-                              model.filterByDate == 0
-                                  ? "Ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
-                                  // : 'Tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
-                                  : 'Tháng',
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                        Container(
-                          width: 120,
-                          height: 40,
-                          color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                DateFormat('MM/yyyy').format(selectDate!),
-                                style: const TextStyle(
-                                    fontSize: 15, color: AppColor.BLACK),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: AppColor.WHITE,
-                        border: Border.all(
-                            color: AppColor.GREY_DADADA, width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                          child: const Center(
-                            child: Text(
-                              'Chưa TT',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                        Container(
-                          height: 40,
-                          color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${model.invoiceDTO!.extraData.pendingCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.pendingAmount)}',
-                                // StringUtils.formatNumberWithOutVND(
-                                //     model.invoiceDTO!.extraData.pendingFee),
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.ORANGE_DARK),
-                              ),
-                              const Text(
-                                ' VND',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColor.ORANGE_DARK,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: AppColor.WHITE,
-                        border: Border.all(
-                            color: AppColor.GREY_DADADA, width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                          child: const Center(
-                            child: Text(
-                              'Đã TT',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                        Container(
-                          height: 40,
-                          color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${model.invoiceDTO!.extraData.completeCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.completeAmount)}',
-
-                                // StringUtils.formatNumberWithOutVND(
-                                //     model.invoiceDTO!.extraData.completeFee),
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.GREEN),
-                              ),
-                              const Text(
-                                ' VND',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColor.GREEN,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            : const SizedBox.shrink();
-      },
-    );
-  }
-
   Widget _headerWidget() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
@@ -1174,16 +999,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             children: [
               const Text(
                 "Quản lý hoá đơn",
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 13),
               ),
               const Text(
                 "   /   ",
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 13),
               ),
               model.pageType == PageInvoice.LIST
                   ? const Text(
                       "Danh sách hoá đơn",
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 13),
                     )
                   : InkWell(
                       onTap: () {
@@ -1196,27 +1021,27 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         'Danh sách hoá đơn',
                         style: TextStyle(
                             color: AppColor.BLUE_TEXT,
-                            fontSize: 15,
+                            fontSize: 13,
                             decoration: TextDecoration.underline),
                       ),
                     ),
               if (model.pageType == PageInvoice.DETAIL) ...[
                 const Text(
                   "   /   ",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
                 const Text(
                   "Chi tiết hoá đơn",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
               ] else if (model.pageType == PageInvoice.EDIT) ...[
                 const Text(
                   "   /   ",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
                 const Text(
                   "Chỉnh sửa hoá đơn",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
               ]
             ],
@@ -1244,7 +1069,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       const Text(
                         "Tìm kiếm theo",
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.normal),
+                            fontSize: 13, fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(height: 10),
                       Container(
@@ -1345,7 +1170,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   color: AppColor.GREY_TEXT,
-                                                  fontSize: 15),
+                                                  fontSize: 13),
                                             ),
                                             const Icon(
                                               Icons.keyboard_arrow_down,
@@ -1381,7 +1206,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           border: InputBorder.none,
                                           hintText: 'Nhập mã hoá đơn',
                                           hintStyle: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 13,
                                               color: AppColor.GREY_TEXT),
                                         ),
                                       ),
@@ -1416,7 +1241,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           border: InputBorder.none,
                                           hintText: 'Nhập số TK ngân hàng',
                                           hintStyle: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 13,
                                               color: AppColor.GREY_TEXT),
                                         ),
                                       ),
@@ -1451,7 +1276,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           border: InputBorder.none,
                                           hintText: 'Nhập TK VietQR',
                                           hintStyle: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 13,
                                               color: AppColor.GREY_TEXT),
                                         ),
                                       ),
@@ -1522,7 +1347,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       const Text(
                         "Thời gian",
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.normal),
+                            fontSize: 13, fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(height: 10),
                       Container(
@@ -1563,7 +1388,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         (selectDate == null
                                             ? '${model.getMonth().month}/${model.getMonth().year}'
                                             : '${selectDate?.month}/${selectDate?.year}'),
-                                        style: const TextStyle(fontSize: 15),
+                                        style: const TextStyle(fontSize: 13),
                                       ),
                                       const Icon(Icons.calendar_month_outlined)
                                     ],
@@ -1582,7 +1407,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     children: [
                       const Text(
                         "Thời gian",
-                        style: TextStyle(fontSize: 15, color: AppColor.WHITE),
+                        style: TextStyle(fontSize: 13, color: AppColor.WHITE),
                       ),
                       const SizedBox(height: 10),
                       InkWell(
@@ -1609,7 +1434,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               Text(
                                 "Tìm kiếm",
                                 style: TextStyle(
-                                    color: AppColor.WHITE, fontSize: 15),
+                                    color: AppColor.WHITE, fontSize: 13),
                               )
                             ],
                           ),
@@ -1670,7 +1495,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       padding: const EdgeInsets.all(4),
                       child: Text(
                         "Trang ${paging.page}/${paging.totalPage}",
-                        style: const TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 13),
                       ),
                     ),
                     const SizedBox(width: 30),

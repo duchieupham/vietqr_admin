@@ -133,6 +133,16 @@ class PaymentRequestDTO {
       isChecked: json['isChecked'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'bankId': bankId,
+      'bankAccount': bankAccount,
+      'bankShortName': bankShortName,
+      'userBankName': userBankName,
+      'isChecked': isChecked,
+    };
+  }
 }
 
 class InvoiceDetailDTO {

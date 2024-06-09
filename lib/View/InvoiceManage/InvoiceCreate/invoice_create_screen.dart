@@ -66,6 +66,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
     await showDialog(
       context: context,
       builder: (context) => PopupCreateServiceWidget(
+        isPageUpdate: false,
         isEdit: isEdit,
         dto: isEdit == true ? dto : null,
       ),
@@ -141,7 +142,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         children: [
                           const Text(
                             "Tổng tiền hàng",
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 13),
                           ),
                           const SizedBox(
                             height: 5,
@@ -149,7 +150,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                           Text(
                             StringUtils.formatNumber(model.totalAmount),
                             style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
@@ -163,7 +164,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         children: [
                           const Text(
                             "VAT",
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 13),
                           ),
                           const SizedBox(
                             height: 5,
@@ -171,7 +172,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                           Text(
                             StringUtils.formatNumber(model.totalVat),
                             style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           )
                         ],
                       ),
@@ -185,7 +186,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         children: [
                           const Text(
                             "Tổng tiền thanh toán (bao gồm VAT)",
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 13),
                           ),
                           const SizedBox(
                             height: 5,
@@ -193,7 +194,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                           Text(
                             StringUtils.formatNumber(model.totalAmountVat),
                             style: const TextStyle(
-                                fontSize: 15,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: AppColor.BLUE_TEXT),
                           )
@@ -304,7 +305,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: const Text(
                   'Tạo mới hoá đơn',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -313,7 +314,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 margin: const EdgeInsets.only(bottom: 10),
                 child: const Text(
                   'Thông tin khởi tạo hoá đơn',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 20),
@@ -332,7 +333,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             height: 20,
                             child: Text(
                               'Tên hoá đơn*',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 13),
                             ),
                           ),
                           const SizedBox(
@@ -367,7 +368,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                     ? 'Vui lòng nhập tên hóa đơn'
                                     : 'Nhập tên hoá đơn tại đây',
                                 hintStyle: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     color: isErrorInvoiceName == true
                                         ? AppColor.RED_TEXT
                                         : AppColor.GREY_TEXT),
@@ -389,7 +390,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             height: 20,
                             child: Text(
                               'Mô tả hoá đơn',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 13),
                             ),
                           ),
                           const SizedBox(
@@ -417,7 +418,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                     ? 'Vui lòng nhập mô tả hóa đơn'
                                     : 'Nhập thông tin mô tả hoá đơn ở đây',
                                 hintStyle: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     color: isErrorDescription == true
                                         ? AppColor.RED_TEXT
                                         : AppColor.GREY_TEXT),
@@ -440,7 +441,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 margin: const EdgeInsets.only(top: 10),
                 child: const Text(
                   'Thông tin khách hàng thanh toán',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -459,7 +460,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                             height: 20,
                             child: Text(
                               'Đối tượng*',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 13),
                             ),
                           ),
                           const SizedBox(
@@ -556,7 +557,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                                     : (model.selectBank != null
                                                         ? AppColor.BLACK
                                                         : AppColor.GREY_TEXT),
-                                                fontSize: 15),
+                                                fontSize: 13),
                                           ),
                                           const Icon(
                                             Icons.keyboard_arrow_down,
@@ -589,7 +590,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               height: 20,
                               child: Text(
                                 'Tài khoản ngân hàng*',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -659,7 +660,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               height: 20,
                               child: Text(
                                 'Chủ tài khoản',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -683,7 +684,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   child: Text(
                                     model.bankDetail!.userBankName,
                                     style: const TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
@@ -708,7 +709,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               height: 20,
                               child: Text(
                                 'Tài khoản VietQR',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -732,7 +733,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   child: Text(
                                     model.bankDetail!.phoneNo,
                                     style: const TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
@@ -757,7 +758,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               height: 20,
                               child: Text(
                                 'Email',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -783,7 +784,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                         ? model.bankDetail!.email
                                         : '-',
                                     style: const TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
@@ -818,7 +819,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               height: 20,
                               child: Text(
                                 'Luồng kết nối',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -842,7 +843,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   child: Text(
                                     model.bankDetail!.connectionType,
                                     style: const TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
@@ -867,7 +868,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               height: 20,
                               child: Text(
                                 'Gói dịch vụ',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -891,7 +892,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                   child: Text(
                                     model.bankDetail!.feePackage,
                                     style: const TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
@@ -916,7 +917,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               height: 20,
                               child: Text(
                                 'VAT (%)',
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 13),
                               ),
                             ),
                             const SizedBox(
@@ -959,10 +960,10 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                                             model.bankDetail?.vat.toString(),
                                         hintStyle: const TextStyle(
                                             color: AppColor.GREY_TEXT,
-                                            fontSize: 15),
+                                            fontSize: 13),
                                       ),
                                       style: const TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                       ),
                                       textAlign: TextAlign.left,
                                       maxLines: 1,
@@ -990,7 +991,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 margin: const EdgeInsets.only(top: 10),
                 child: const Text(
                   'Danh mục hàng hoá / dịch vụ',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -1023,7 +1024,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 height: 20,
                 child: Text(
                   'Tài khoản nhận tiền',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 30),
@@ -1063,15 +1064,15 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
         children: [
           Text(
             "Quản lý hoá đơn",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
           Text(
             "/",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
           Text(
             "Tạo mới hoá đơn",
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
         ],
       ),
@@ -1169,7 +1170,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 index.toString(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1183,7 +1184,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1195,7 +1196,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 item.unit,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1207,7 +1208,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 item.quantity.toString(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1219,7 +1220,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.amount),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1231,7 +1232,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.totalAmount),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1243,7 +1244,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 item.vat.toString(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1255,7 +1256,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.vatAmount.round()),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),
@@ -1267,7 +1268,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(item.amountAfterVat),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 10),
               ),
             ),
           ),

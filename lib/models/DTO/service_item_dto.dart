@@ -1,4 +1,3 @@
-
 class ServiceItemDTO {
   String itemId;
   String content;
@@ -10,7 +9,7 @@ class ServiceItemDTO {
   double vat;
   int vatAmount;
   int amountAfterVat;
-  String? timeProcess;
+  String timeProcess;
   int type;
 
   ServiceItemDTO({

@@ -19,7 +19,9 @@ import 'item_title_widget.dart';
 class PopupCreateServiceWidget extends StatefulWidget {
   final bool isEdit;
   final ServiceItemDTO? dto;
-  const PopupCreateServiceWidget({super.key, required this.isEdit, this.dto});
+  final bool isPageUpdate;
+  const PopupCreateServiceWidget(
+      {super.key, required this.isEdit, this.dto, required this.isPageUpdate});
 
   @override
   State<PopupCreateServiceWidget> createState() =>
@@ -347,7 +349,8 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                       model.editService(item);
                                       Navigator.of(context).pop();
                                     } else {
-                                      model.confirmService(item);
+                                      model.confirmService(item,
+                                          isUpdatePage: widget.isPageUpdate);
                                     }
                                   },
                                 );

@@ -1,3 +1,4 @@
+import 'package:vietqr_admin/models/DTO/invoice_detail_dto.dart';
 
 class UserInformation {
   final String merchantId;
@@ -63,6 +64,7 @@ class InvoiceInfoItem {
   String invoiceItemId;
   String invoiceItemName;
   String unit;
+  String timeProcess;
   int quantity;
   int amount;
   int totalAmount;
@@ -81,6 +83,7 @@ class InvoiceInfoItem {
     required this.vat,
     required this.vatAmount,
     required this.totalAmountAfterVat,
+    required this.timeProcess,
     this.type,
   });
 
@@ -95,21 +98,23 @@ class InvoiceInfoItem {
       vat: json['vat'].toDouble(),
       vatAmount: json['vatAmount'],
       totalAmountAfterVat: json['totalAmountAfterVat'],
+      timeProcess: json['timeProcess'],
       type: json['type'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'itemId': invoiceItemId,
-      'content': invoiceItemName,
+      'invoiceItemId': invoiceItemId,
+      'invoiceItemName': invoiceItemName,
       'unit': unit,
       'quantity': quantity,
       'amount': amount,
       'totalAmount': totalAmount,
       'vat': vat,
       'vatAmount': vatAmount,
-      'amountAfterVat': totalAmountAfterVat,
+      'totalAmountAfterVat': totalAmountAfterVat,
+      'timeProcess': timeProcess,
       'type': type,
     };
   }
@@ -124,6 +129,7 @@ class InvoiceInfoDTO {
   final int totalAfterVat;
   final UserInformation userInformation;
   final List<InvoiceInfoItem> invoiceItems;
+  List<PaymentRequestDTO> paymentRequestDTOS;
 
   InvoiceInfoDTO({
     required this.invoiceId,
@@ -134,12 +140,16 @@ class InvoiceInfoDTO {
     required this.totalAfterVat,
     required this.userInformation,
     required this.invoiceItems,
+    required this.paymentRequestDTOS,
   });
 
   factory InvoiceInfoDTO.fromJson(Map<String, dynamic> json) {
     var items = json['invoiceItems'] as List;
     List<InvoiceInfoItem> invoiceItemsList =
         items.map((i) => InvoiceInfoItem.fromJson(i)).toList();
+    var paymentLst = json['paymentRequestDTOS'] as List;
+    List<PaymentRequestDTO> listPayment =
+        paymentLst.map((e) => PaymentRequestDTO.fromJson(e)).toList();
 
     return InvoiceInfoDTO(
       invoiceId: json['invoiceId'],
@@ -150,6 +160,7 @@ class InvoiceInfoDTO {
       totalAfterVat: json['totalAfterVat'].toDouble(),
       userInformation: UserInformation.fromJson(json['userInformation']),
       invoiceItems: invoiceItemsList,
+      paymentRequestDTOS: listPayment,
     );
   }
 
@@ -163,6 +174,7 @@ class InvoiceInfoDTO {
       'totalAfterVat': totalAfterVat,
       'userInformation': userInformation.toJson(),
       'invoiceItems': invoiceItems.map((i) => i.toJson()).toList(),
+      'paymentRequestDTOS': paymentRequestDTOS.map((e) => e.toJson()).toList(),
     };
   }
 }

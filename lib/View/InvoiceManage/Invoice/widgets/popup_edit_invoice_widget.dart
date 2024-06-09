@@ -52,6 +52,7 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
     InvoiceInfoItem? item;
     if (widget.invoiceItem.type == 9) {
       item = InvoiceInfoItem(
+          timeProcess: widget.invoiceItem.timeProcess,
           invoiceItemId: widget.invoiceItem.invoiceItemId,
           invoiceItemName: _contentController.text.isNotEmpty
               ? _contentController.text
@@ -72,6 +73,7 @@ class _PopupEditInvoiceWidgetState extends State<PopupEditInvoiceWidget> {
           type: widget.invoiceItem.type);
     } else {
       item = InvoiceInfoItem(
+          timeProcess: widget.invoiceItem.timeProcess,
           invoiceItemId: widget.invoiceItem.invoiceItemId,
           invoiceItemName: widget.invoiceItem.invoiceItemName,
           unit: widget.invoiceItem.unit,

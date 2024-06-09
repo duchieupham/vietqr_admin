@@ -31,9 +31,9 @@ class InvoiceDAO extends BaseDAO {
       param['vat'] = vat;
       param['items'] = invoice.invoiceItems.map((e) => e.toJson()).toList();
       param['bankIdRecharge'] = bankIdRecharge;
-
+      print("REQ: $param");
       String url =
-          '${EnvConfig.instance.getBaseUrl()}invoice/update/${invoice.invoiceId}';
+          '${EnvConfig.instance.getBaseUrl()}invoice/update-invoice/${invoice.invoiceId}';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
