@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
+import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 
 import '../../commons/constants/utils/base_api.dart';
@@ -18,7 +19,9 @@ import '../DTO/service_item_dto.dart';
 
 class InvoiceDAO extends BaseDAO {
   Future<bool?> editInvoice(
-      {required InvoiceInfoDTO? invoice, required double vat}) async {
+      {required InvoiceInfoDTO? invoice,
+      required double vat,
+      String? bankIdRecharge}) async {
     try {
       Map<String, dynamic> param = {};
       param['bankId'] = invoice!.userInformation.bankId;
@@ -27,9 +30,10 @@ class InvoiceDAO extends BaseDAO {
       param['description'] = invoice.description;
       param['vat'] = vat;
       param['items'] = invoice.invoiceItems.map((e) => e.toJson()).toList();
-
+      param['bankIdRecharge'] = bankIdRecharge;
+      print("REQ: $param");
       String url =
-          '${EnvConfig.instance.getBaseUrl()}invoice/update/${invoice.invoiceId}';
+          '${EnvConfig.instance.getBaseUrl()}invoice/update-invoice/${invoice.invoiceId}';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
@@ -51,6 +55,25 @@ class InvoiceDAO extends BaseDAO {
         body: param,
         url: url,
         type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool?> exportExcel(String invoiceItemId) async {
+    try {
+      Map<String, dynamic> param = {};
+      param['invoiceItemId'] = invoiceItemId;
+      // String url = '${EnvConfig.instance.getBaseUrl()}invoice/remove';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}invoice/export-excel?invoiceItemId=$invoiceItemId';
+      final response = await BaseAPIClient.postAPI(
+        body: param,
+        url: url,
+        type: AuthenticationType.NONE,
       );
       return response.statusCode == 200;
     } catch (e) {
@@ -108,6 +131,25 @@ class InvoiceDAO extends BaseDAO {
       LOG.error("Failed to fetch invoice data: ${e.toString()}");
     }
     return false;
+  }
+
+  Future<InvoiceExcelDTO?> getInvoiceExcel(String invoiceId) async {
+    try {
+      // String url = '${EnvConfig.getBaseUrl()}invoice/detail/$invoiceId';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}invoice/transaction-list?invoiceId=$invoiceId';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return InvoiceExcelDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error("Failed to fetch Invoice detail: ${e.toString()}");
+    }
+    return null;
   }
 
   Future<InvoiceDetailDTO?> getInvoiceDetail(String invoiceId) async {

@@ -1,4 +1,6 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -6,7 +8,9 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/invoice_detail_screen.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/invoice_manage_screen.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
+import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 
@@ -27,6 +31,14 @@ import 'views/invoice_edit_screen.dart';
 
 // ignore: constant_identifier_names
 
+enum Actions {
+  copy,
+  qr,
+  edit,
+  exportExcel,
+  delete,
+}
+
 class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({super.key});
 
@@ -41,10 +53,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   late ScrollController controller1;
   late ScrollController controller2;
+
   final controller3 = ScrollController();
   final controller4 = ScrollController();
+  final controllerHorizontal = ScrollController();
+
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
+  bool isScrollingHorizontal = false;
+
   String? selectInvoiceId;
 
   int? type = 9;
@@ -103,10 +120,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     );
   }
 
-  void onShowPopupExcel() async {
+  void onShowPopupExcel(String invoiceId) async {
     return await showDialog(
       context: context,
-      builder: (context) => const PopupExcelInvoice(),
+      builder: (context) => PopupExcelInvoice(
+        invoiceId: invoiceId,
+      ),
     );
   }
 
@@ -195,7 +214,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           const Text(
                             "Tìm kiếm thông tin hoá đơn ",
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 10),
                           _filterWidget(),
@@ -207,7 +226,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           const Text(
                             "Danh sách hoá đơn",
                             style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
+                                fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 20),
                           statisticInvoice(),
@@ -318,14 +337,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           width: MediaQuery.of(context).size.width - 220,
                           child: Stack(
                             children: [
-                              SingleChildScrollView(
-                                controller: controller1,
-                                child: ScrollConfiguration(
-                                  behavior: MyCustomScrollBehavior(),
+                              Scrollbar(
+                                thumbVisibility: true,
+                                controller: controllerHorizontal,
+                                child: SingleChildScrollView(
+                                  controller: controllerHorizontal,
+                                  scrollDirection: Axis.horizontal,
                                   child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
+                                    controller: controller1,
                                     child: SizedBox(
-                                      width: 2100,
+                                      width: 2000,
                                       child: Column(
                                         children: [
                                           const TitleItemInvoiceWidget(),
@@ -339,14 +360,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               ),
                               SizedBox(
                                 // width: 1890,
-                                width: 2100,
+                                width: 2000,
                                 child: Row(
                                   children: [
                                     const Expanded(child: SizedBox()),
-                                    SingleChildScrollView(
+                                    Scrollbar(
                                       controller: controller2,
+                                      thumbVisibility: true,
                                       child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
+                                        controller: controller2,
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: AppColor.WHITE,
@@ -393,7 +415,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         )),
                                                     Container(
                                                         height: 50,
-                                                        width: 210,
+                                                        width: 110,
                                                         alignment:
                                                             Alignment.center,
                                                         decoration: BoxDecoration(
@@ -419,372 +441,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                               ),
                                               ...invoiceDTO.items.map(
                                                 (e) {
-                                                  return Container(
-                                                    alignment: Alignment.center,
-                                                    child: Row(
-                                                      children: [
-                                                        Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          decoration: BoxDecoration(
-                                                              border: Border(
-                                                                  left: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)),
-                                                                  bottom: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)),
-                                                                  right: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)))),
-                                                          height: 50,
-                                                          width: 130,
-                                                          child: SelectionArea(
-                                                              child: Text(
-                                                            e.status == 0
-                                                                ? 'Chờ thanh toán'
-                                                                : e.status == 1
-                                                                    ? 'Đã thanh toán'
-                                                                    : 'Chưa TT hết',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: e.status ==
-                                                                      0
-                                                                  ? AppColor
-                                                                      .ORANGE_DARK
-                                                                  : e.status ==
-                                                                          1
-                                                                      ? AppColor
-                                                                          .GREEN
-                                                                      : AppColor
-                                                                          .GREEN_STATUS,
-                                                            ),
-                                                          )),
-                                                        ),
-                                                        Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      8),
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          decoration: BoxDecoration(
-                                                              border: Border(
-                                                                  left: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)),
-                                                                  bottom: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)),
-                                                                  right: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)))),
-                                                          height: 50,
-                                                          width: 210,
-                                                          child: SelectionArea(
-                                                            child: Row(
-                                                              children: [
-                                                                Visibility(
-                                                                  visible: e.status ==
-                                                                          0 ||
-                                                                      e.status ==
-                                                                          3,
-                                                                  child:
-                                                                      Tooltip(
-                                                                    message:
-                                                                        'Mã QR',
-                                                                    child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        onShowPopup(
-                                                                            e);
-                                                                      },
-                                                                      child:
-                                                                          BoxLayout(
-                                                                        width:
-                                                                            30,
-                                                                        height:
-                                                                            30,
-                                                                        borderRadius:
-                                                                            100,
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0),
-                                                                        bgColor: AppColor
-                                                                            .BLUE_TEXT
-                                                                            .withOpacity(0.3),
-                                                                        child:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .qr_code,
-                                                                          size:
-                                                                              12,
-                                                                          color:
-                                                                              AppColor.BLUE_TEXT,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Visibility(
-                                                                  visible: e.status ==
-                                                                          0 ||
-                                                                      e.status ==
-                                                                          3,
-                                                                  child:
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              10),
-                                                                ),
-                                                                Tooltip(
-                                                                  message:
-                                                                      'Thông tin hoá đơn',
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap: () {
-                                                                      setState(
-                                                                          () {
-                                                                        selectInvoiceId =
-                                                                            e.invoiceId;
-                                                                        // pageType =
-                                                                        //     PageInvoice.DETAIL;
-                                                                      });
-                                                                      _model.onChangePage(
-                                                                          PageInvoice
-                                                                              .DETAIL);
-                                                                    },
-                                                                    child:
-                                                                        BoxLayout(
-                                                                      width: 30,
-                                                                      height:
-                                                                          30,
-                                                                      borderRadius:
-                                                                          100,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      padding:
-                                                                          const EdgeInsets
-                                                                              .all(
-                                                                              0),
-                                                                      bgColor: AppColor
-                                                                          .BLUE_TEXT
-                                                                          .withOpacity(
-                                                                              0.3),
-                                                                      child:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .info,
-                                                                        size:
-                                                                            12,
-                                                                        color: AppColor
-                                                                            .BLUE_TEXT,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Visibility(
-                                                                  visible: e.status ==
-                                                                          0 ||
-                                                                      e.status ==
-                                                                          3,
-                                                                  child:
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              10),
-                                                                ),
-                                                                Visibility(
-                                                                  visible: e.status ==
-                                                                          0 ||
-                                                                      e.status ==
-                                                                          3,
-                                                                  child:
-                                                                      Tooltip(
-                                                                    message:
-                                                                        'Chỉnh sửa',
-                                                                    child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          selectInvoiceId =
-                                                                              e.invoiceId;
-                                                                          // pageType =
-                                                                          //     PageInvoice.EDIT;
-                                                                        });
-                                                                        _model.onChangePage(
-                                                                            PageInvoice.EDIT);
-                                                                      },
-                                                                      child:
-                                                                          BoxLayout(
-                                                                        width:
-                                                                            30,
-                                                                        height:
-                                                                            30,
-                                                                        borderRadius:
-                                                                            100,
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            0),
-                                                                        bgColor: AppColor
-                                                                            .BLUE_TEXT
-                                                                            .withOpacity(0.3),
-                                                                        child:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .edit,
-                                                                          size:
-                                                                              12,
-                                                                          color:
-                                                                              AppColor.BLUE_TEXT,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 10),
-                                                                Tooltip(
-                                                                  message:
-                                                                      'Xuất Excel',
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap: () {
-                                                                      // onShowPopupExcel();
-                                                                      DialogWidget
-                                                                          .instance
-                                                                          .openMsgDialog(
-                                                                              title: 'Bảo trì',
-                                                                              msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                                                                    },
-                                                                    child:
-                                                                        BoxLayout(
-                                                                      width: 30,
-                                                                      height:
-                                                                          30,
-                                                                      borderRadius:
-                                                                          100,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      padding:
-                                                                          const EdgeInsets
-                                                                              .all(
-                                                                              0),
-                                                                      bgColor: AppColor
-                                                                          .BLUE_TEXT
-                                                                          .withOpacity(
-                                                                              0.3),
-                                                                      child:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .list,
-                                                                        size:
-                                                                            12,
-                                                                        color: AppColor
-                                                                            .BLUE_TEXT,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                    width: 10),
-                                                                Tooltip(
-                                                                  message:
-                                                                      'Xoá',
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap: () {
-                                                                      DialogWidget
-                                                                          .instance
-                                                                          .openMsgDialogQuestion(
-                                                                        title:
-                                                                            "Hóa đơn",
-                                                                        msg:
-                                                                            'Xác nhận xóa hóa đơn!!',
-                                                                        onConfirm:
-                                                                            () async {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                          bool?
-                                                                              result =
-                                                                              await model.deleteInvoice(e.invoiceId);
-                                                                          if (result!) {
-                                                                            model.filterListInvoice(
-                                                                                time: selectDate!,
-                                                                                page: 1,
-                                                                                filter: textInput()!);
-                                                                          }
-                                                                        },
-                                                                      );
-                                                                      // DialogWidget
-                                                                      //     .instance
-                                                                      //     .openMsgDialog(
-                                                                      //         title: 'Bảo trì',
-                                                                      //         msg: 'Chúng tôi đang bảo trì tính năng này trong khoảng 2-3 ngày để mang lại trải nghiệm tốt nhất cho người dùng. Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi.');
-                                                                    },
-                                                                    child:
-                                                                        BoxLayout(
-                                                                      width: 30,
-                                                                      height:
-                                                                          30,
-                                                                      borderRadius:
-                                                                          100,
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      padding:
-                                                                          const EdgeInsets
-                                                                              .all(
-                                                                              0),
-                                                                      bgColor: AppColor
-                                                                          .RED_TEXT
-                                                                          .withOpacity(
-                                                                              0.3),
-                                                                      child:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .delete_forever,
-                                                                        size:
-                                                                            12,
-                                                                        color: AppColor
-                                                                            .RED_TEXT,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
+                                                  return _rightItem(e);
                                                 },
                                               )
                                             ],
@@ -806,6 +463,176 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             : const SizedBox.shrink();
       },
     );
+  }
+
+  Widget _rightItem(InvoiceItem e) {
+    return Container(
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                border: Border(
+                    left:
+                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                    bottom:
+                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                    right: BorderSide(
+                        color: AppColor.GREY_TEXT.withOpacity(0.3)))),
+            height: 50,
+            width: 130,
+            child: SelectionArea(
+                child: Text(
+              e.status == 0
+                  ? 'Chờ thanh toán'
+                  : e.status == 1
+                      ? 'Đã thanh toán'
+                      : 'Chưa TT hết',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: e.status == 0
+                    ? AppColor.ORANGE_DARK
+                    : e.status == 1
+                        ? AppColor.GREEN
+                        : AppColor.GREEN_STATUS,
+              ),
+            )),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                bottom: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                right: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+              ),
+            ),
+            height: 50,
+            width: 110,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Tooltip(
+                  message: 'Thông tin hoá đơn',
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectInvoiceId = e.invoiceId;
+                      });
+                      _model.onChangePage(PageInvoice.DETAIL);
+                    },
+                    child: BoxLayout(
+                      width: 30,
+                      height: 30,
+                      borderRadius: 100,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(0),
+                      bgColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+                      child: const Icon(
+                        Icons.info,
+                        size: 12,
+                        color: AppColor.BLUE_TEXT,
+                      ),
+                    ),
+                  ),
+                ),
+                PopupMenuButton<Actions>(
+                  onSelected: (Actions result) {
+                    switch (result) {
+                      case Actions.copy:
+                        onCopy(dto: e);
+                        break;
+                      case Actions.qr:
+                        onShowPopup(e);
+                        break;
+                      case Actions.edit:
+                        setState(() {
+                          selectInvoiceId = e.invoiceId;
+                        });
+                        _model.onChangePage(PageInvoice.EDIT);
+                        break;
+                      case Actions.exportExcel:
+                        onShowPopupExcel(e.invoiceId);
+                        break;
+                      case Actions.delete:
+                        DialogWidget.instance.openMsgDialogQuestion(
+                          title: "Hóa đơn",
+                          msg: 'Xác nhận xóa hóa đơn!!',
+                          onConfirm: () async {
+                            Navigator.of(context).pop();
+                            bool? result =
+                                await _model.deleteInvoice(e.invoiceId);
+                            if (result!) {
+                              _model.filterListInvoice(
+                                  time: selectDate!,
+                                  page: 1,
+                                  filter: textInput()!);
+                            }
+                          },
+                        );
+                        break;
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      _buildMenuItems(e.status),
+                  icon: Container(
+                    width: 30,
+                    height: 30,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                    ),
+                    child: const Icon(
+                      Icons.more_vert,
+                      color: AppColor.BLUE_TEXT,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<PopupMenuEntry<Actions>> _buildMenuItems(int status) {
+    List<PopupMenuEntry<Actions>> items = [
+      const PopupMenuItem<Actions>(
+        value: Actions.copy,
+        child: Text('Copy'),
+      ),
+      const PopupMenuItem<Actions>(
+        value: Actions.exportExcel,
+        child: Text('Xuất Excel'),
+      ),
+    ];
+
+    if (status != 1) {
+      // Chỉ thêm "Edit" và "Delete" khi status không phải là 1
+      items.addAll([
+        const PopupMenuItem<Actions>(
+          value: Actions.qr,
+          child: Text('QR thanh toán'),
+        ),
+        const PopupMenuItem<Actions>(
+          value: Actions.edit,
+          child: Text('Chỉnh sửa hoá đơn'),
+        ),
+        const PopupMenuItem<Actions>(
+          value: Actions.delete,
+          child: Text('Xoá hoá đơn'),
+        ),
+      ]);
+    }
+
+    return items;
   }
 
   Widget statisticInvoice() {
@@ -981,186 +808,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     );
   }
 
-  Widget _statisticInvoice() {
-    return ScopedModelDescendant<InvoiceViewModel>(
-      builder: (context, child, model) {
-        return model.invoiceDTO != null
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        // color: AppColor.WHITE,
-                        border: Border.all(
-                            color: AppColor.GREY_DADADA, width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Center(
-                            child: Text(
-                              model.filterByDate == 0
-                                  ? "Ngày ${DateFormat('dd-MM-yyyy').format(selectDate!)}"
-                                  // : 'Tháng ${DateFormat('MM-yyyy').format(selectDate!)}',
-                                  : 'Tháng',
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                        Container(
-                          width: 120,
-                          height: 40,
-                          color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                DateFormat('MM/yyyy').format(selectDate!),
-                                style: const TextStyle(
-                                    fontSize: 15, color: AppColor.BLACK),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: AppColor.WHITE,
-                        border: Border.all(
-                            color: AppColor.GREY_DADADA, width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                          child: const Center(
-                            child: Text(
-                              'Chưa TT',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                        Container(
-                          height: 40,
-                          color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${model.invoiceDTO!.extraData.pendingCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.pendingAmount)}',
-                                // StringUtils.formatNumberWithOutVND(
-                                //     model.invoiceDTO!.extraData.pendingFee),
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.ORANGE_DARK),
-                              ),
-                              const Text(
-                                ' VND',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColor.ORANGE_DARK,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: AppColor.WHITE,
-                        border: Border.all(
-                            color: AppColor.GREY_DADADA, width: 0.5)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 40,
-                          color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                          child: const Center(
-                            child: Text(
-                              'Đã TT',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 40,
-                          color: AppColor.GREY_DADADA,
-                        ),
-                        Container(
-                          height: 40,
-                          color: AppColor.WHITE,
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${model.invoiceDTO!.extraData.completeCount} HĐ - ${StringUtils.formatNumberWithOutVND(model.invoiceDTO!.extraData.completeAmount)}',
-
-                                // StringUtils.formatNumberWithOutVND(
-                                //     model.invoiceDTO!.extraData.completeFee),
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.GREEN),
-                              ),
-                              const Text(
-                                ' VND',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColor.GREEN,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            : const SizedBox.shrink();
-      },
-    );
-  }
-
   Widget _headerWidget() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return Container(
-          padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
+          padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
           // width: MediaQuery.of(context).size.width *
           //     (model.pageType == PageInvoice.LIST ? 0.22 : 0.33),
           width: MediaQuery.of(context).size.width,
@@ -1169,16 +821,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             children: [
               const Text(
                 "Quản lý hoá đơn",
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 13),
               ),
               const Text(
                 "   /   ",
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 13),
               ),
               model.pageType == PageInvoice.LIST
                   ? const Text(
                       "Danh sách hoá đơn",
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 13),
                     )
                   : InkWell(
                       onTap: () {
@@ -1191,27 +843,27 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         'Danh sách hoá đơn',
                         style: TextStyle(
                             color: AppColor.BLUE_TEXT,
-                            fontSize: 15,
+                            fontSize: 13,
                             decoration: TextDecoration.underline),
                       ),
                     ),
               if (model.pageType == PageInvoice.DETAIL) ...[
                 const Text(
                   "   /   ",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
                 const Text(
                   "Chi tiết hoá đơn",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
               ] else if (model.pageType == PageInvoice.EDIT) ...[
                 const Text(
                   "   /   ",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
                 const Text(
                   "Chỉnh sửa hoá đơn",
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 13),
                 ),
               ]
             ],
@@ -1239,7 +891,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       const Text(
                         "Tìm kiếm theo",
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.normal),
+                            fontSize: 13, fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(height: 10),
                       Container(
@@ -1340,7 +992,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   color: AppColor.GREY_TEXT,
-                                                  fontSize: 15),
+                                                  fontSize: 13),
                                             ),
                                             const Icon(
                                               Icons.keyboard_arrow_down,
@@ -1376,7 +1028,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           border: InputBorder.none,
                                           hintText: 'Nhập mã hoá đơn',
                                           hintStyle: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 13,
                                               color: AppColor.GREY_TEXT),
                                         ),
                                       ),
@@ -1411,7 +1063,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           border: InputBorder.none,
                                           hintText: 'Nhập số TK ngân hàng',
                                           hintStyle: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 13,
                                               color: AppColor.GREY_TEXT),
                                         ),
                                       ),
@@ -1446,7 +1098,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           border: InputBorder.none,
                                           hintText: 'Nhập TK VietQR',
                                           hintStyle: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 13,
                                               color: AppColor.GREY_TEXT),
                                         ),
                                       ),
@@ -1517,7 +1169,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       const Text(
                         "Thời gian",
                         style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.normal),
+                            fontSize: 13, fontWeight: FontWeight.normal),
                       ),
                       const SizedBox(height: 10),
                       Container(
@@ -1558,7 +1210,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         (selectDate == null
                                             ? '${model.getMonth().month}/${model.getMonth().year}'
                                             : '${selectDate?.month}/${selectDate?.year}'),
-                                        style: const TextStyle(fontSize: 15),
+                                        style: const TextStyle(fontSize: 13),
                                       ),
                                       const Icon(Icons.calendar_month_outlined)
                                     ],
@@ -1577,7 +1229,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     children: [
                       const Text(
                         "Thời gian",
-                        style: TextStyle(fontSize: 15, color: AppColor.WHITE),
+                        style: TextStyle(fontSize: 13, color: AppColor.WHITE),
                       ),
                       const SizedBox(height: 10),
                       InkWell(
@@ -1604,7 +1256,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               Text(
                                 "Tìm kiếm",
                                 style: TextStyle(
-                                    color: AppColor.WHITE, fontSize: 15),
+                                    color: AppColor.WHITE, fontSize: 13),
                               )
                             ],
                           ),
@@ -1665,7 +1317,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       padding: const EdgeInsets.all(4),
                       child: Text(
                         "Trang ${paging.page}/${paging.totalPage}",
-                        style: const TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 13),
                       ),
                     ),
                     const SizedBox(width: 30),
@@ -1733,6 +1385,22 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               )
             : const SizedBox.shrink();
       },
+    );
+  }
+
+  void onCopy({required InvoiceItem dto}) async {
+    await FlutterClipboard.copy(ShareUtils.instance.getTextSharing(dto)).then(
+      (value) => Fluttertoast.showToast(
+        msg: 'Đã sao chép',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Theme.of(context).cardColor,
+        textColor: Colors.black,
+        fontSize: 15,
+        webBgColor: 'rgba(255, 255, 255)',
+        webPosition: 'center',
+      ),
     );
   }
 }

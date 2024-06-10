@@ -89,7 +89,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                         const Text(
                           'Chi tiết hoá đơn',
                           style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 30),
                         if (_model.invoiceDetailDTO!.status == 0)
@@ -106,7 +106,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               'Chỉnh sửa hoá đơn',
                               style: TextStyle(
                                   color: AppColor.BLUE_TEXT,
-                                  fontSize: 15,
+                                  fontSize: 13,
                                   decoration: TextDecoration.underline),
                             ),
                           ),
@@ -128,14 +128,14 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                             child: Text(
                               model.invoiceDetailDTO!.invoiceName,
                               style: const TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold),
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(height: 10),
                           model.invoiceDetailDTO!.invoiceDescription.isNotEmpty
                               ? Text(
                                   model.invoiceDetailDTO!.invoiceDescription,
-                                  style: const TextStyle(fontSize: 15),
+                                  style: const TextStyle(fontSize: 13),
                                 )
                               : const SizedBox.shrink(),
                           if (model.invoiceDetailDTO!.customerDetailDTOS
@@ -151,7 +151,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               child: Text(
                                 'Thông tin khách hàng thanh toán',
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 13, fontWeight: FontWeight.bold),
                               ),
                             ),
                             const SizedBox(height: 30),
@@ -198,7 +198,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               child: Text(
                                 'Thông tin gói dịch vụ',
                                 style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                    fontSize: 13, fontWeight: FontWeight.bold),
                               ),
                             ),
                             const SizedBox(height: 30),
@@ -241,7 +241,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                             child: Text(
                               'Danh mục hàng hoá / dịch vụ',
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                                  fontSize: 13, fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(height: 30),
@@ -302,7 +302,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                             child: Text(
                               'Tài khoản nhận tiền',
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                                  fontSize: 13, fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(height: 30),
@@ -429,7 +429,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 index.toString(),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
               ),
             ),
           ),
@@ -441,7 +441,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.vso.isNotEmpty ? dto.vso : '-',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -455,7 +455,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.merchantName.isNotEmpty ? dto.merchantName : '-',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -469,7 +469,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.platform.isNotEmpty ? dto.platform : '-',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -483,7 +483,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 '${dto.bankAccount}\n${dto.bankShortName}',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -497,7 +497,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.userBankName,
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -511,7 +511,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.connectionType,
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -525,7 +525,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.phoneNo,
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -539,7 +539,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.email.isNotEmpty ? dto.email : '-',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -620,7 +620,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 index.toString(),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
               ),
             ),
           ),
@@ -632,7 +632,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.feePackage,
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -646,7 +646,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(dto.annualFee),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -660,7 +660,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(dto.fixFee),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -674,7 +674,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 StringUtils.formatNumberWithOutVND(dto.percentFee),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -688,7 +688,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.vat.toString(),
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -702,7 +702,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: Text(
                 dto.recordType == 0 ? 'Chỉ GD đối soát' : 'Tất cả GD',
                 // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 13),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

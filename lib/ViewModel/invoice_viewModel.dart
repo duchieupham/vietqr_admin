@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
@@ -60,6 +61,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
   List<PaymentRequestDTO> listPaymentRequest = [];
+  InvoiceExcelDTO? invoiceExcelDTO;
 
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
@@ -252,17 +254,44 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
-  void confirmService(ServiceItemDTO? item) {
-    bool hasId = listService!.any((e) => e.itemId == item?.itemId);
-    if (hasId == false) {
-      listService?.insert(listService!.length, item!);
-      totalAmount += item!.totalAmount;
-      totalVat += item.vatAmount;
-      totalAmountVat += item.amountAfterVat;
-      serviceItemDTO = null;
-      isInsert = true;
+  void confirmService(ServiceItemDTO? item, {required bool isUpdatePage}) {
+    if (!isUpdatePage) {
+      bool hasId = listService!.any((e) => e.itemId == item?.itemId);
+      if (hasId == false) {
+        listService?.insert(listService!.length, item!);
+        totalAmount += item!.totalAmount;
+        totalVat += item.vatAmount;
+        totalAmountVat += item.amountAfterVat;
+        serviceItemDTO = null;
+        isInsert = true;
+      } else {
+        isInsert = false;
+      }
     } else {
-      isInsert = false;
+      InvoiceInfoItem invoiceInfoItem = InvoiceInfoItem(
+          invoiceItemId: item!.itemId,
+          invoiceItemName: item.content,
+          unit: item.unit,
+          quantity: item.quantity,
+          amount: item.amount,
+          totalAmount: totalAmount,
+          vat: item.vat,
+          vatAmount: item.vatAmount,
+          totalAmountAfterVat: item.amountAfterVat,
+          timeProcess: item.timeProcess,
+          type: item.type);
+      bool hasId = listInvoiceItem!
+          .any((e) => e.invoiceItemId == invoiceInfoItem.invoiceItemId);
+      if (hasId == false) {
+        listInvoiceItem?.insert(listInvoiceItem!.length, invoiceInfoItem);
+        totalEditAmount += invoiceInfoItem.totalAmount;
+        totalEditVat += invoiceInfoItem.vatAmount;
+        totalEditAmountVat += invoiceInfoItem.totalAmountAfterVat;
+        serviceItemDTO = null;
+        isInsert = true;
+      } else {
+        isInsert = false;
+      }
     }
 
     notifyListeners();
@@ -357,6 +386,9 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setState(ViewStatus.Empty);
       bool? result = await _dao.editInvoice(
+          bankIdRecharge: listPaymentRequest
+              .firstWhere((element) => element.isChecked == true)
+              .bankId,
           invoice: invoiceInfo,
           vat: vatTextController.text.isNotEmpty
               ? double.parse(vatTextController.text)
@@ -376,12 +408,24 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setState(ViewStatus.Loading);
       invoiceInfo = await _dao.getInvoiceInfo(id);
+      listPaymentRequest = invoiceInfo!.paymentRequestDTOS;
       if (invoiceInfo!.invoiceItems.isNotEmpty) {
         listInvoiceItem = invoiceInfo?.invoiceItems;
       }
       totalEditAmount = invoiceInfo!.totalAmount;
       totalEditVat = invoiceInfo!.vatAmount;
       totalEditAmountVat = invoiceInfo!.totalAfterVat;
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
+  Future<void> getInvoiceExcel(String id) async {
+    try {
+      setState(ViewStatus.Loading);
+      invoiceExcelDTO = await _dao.getInvoiceExcel(id);
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());
@@ -425,6 +469,19 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setState(ViewStatus.Loading);
       bool? result = await _dao.delelteInvoice(id);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
+
+  Future<bool?> exportExcel(String id) async {
+    try {
+      setState(ViewStatus.Loading);
+      bool? result = await _dao.exportExcel(id);
       setState(ViewStatus.Completed);
       return result;
     } catch (e) {
