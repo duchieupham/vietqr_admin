@@ -112,7 +112,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
       if (serviceType != 9) {
         item = ServiceItemDTO(
             itemId: dto.itemId,
-            content: dto.content,
+            content: _contentController.text,
             // time: dto.time,
             unit: dto.unit,
             quantity: dto.quantity,
@@ -279,7 +279,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                           children: [
                                             _itemTitleWidget(true),
                                             _buildItem(
-                                                item: widget.dto,
+                                                item: widget.dto!,
                                                 type: widget.dto?.type)
                                           ],
                                         ),
@@ -302,7 +302,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                                       model.serviceType
                                                   ? _buildItem(
                                                       item:
-                                                          model.serviceItemDTO,
+                                                          model.serviceItemDTO!,
                                                       type: model.serviceType)
                                                   : const SizedBox.shrink(),
                                             ],
@@ -769,7 +769,10 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
     );
   }
 
-  Widget _buildItem({required ServiceItemDTO? item, int? type}) {
+  Widget _buildItem({required ServiceItemDTO item, int? type}) {
+    if (!widget.isEdit) {
+      _contentController.text = item.content;
+    }
     return Container(
       decoration: const BoxDecoration(
         color: AppColor.WHITE,
@@ -782,29 +785,19 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             height: 50,
             width: 250,
             padding: const EdgeInsets.only(right: 8),
-            color: type == 9 ? AppColor.WHITE : AppColor.GREY_DADADA,
-            child: type == 9
-                ? TextField(
-                    controller: _contentController,
-                    decoration: InputDecoration(
-                      // contentPadding: EdgeInsets.only(top: 15),
-                      border: InputBorder.none,
-                      hintText: widget.dto != null
-                          ? widget.dto?.content
-                          : 'Nhập nội dung',
-                      hintStyle: const TextStyle(
-                          fontSize: 12, color: AppColor.GREY_TEXT),
-                    ),
-                  )
-                : SelectionArea(
-                    child: Text(
-                      item!.content,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ),
+            color: AppColor.WHITE,
+            child: TextField(
+              controller: _contentController,
+              maxLines: 2,
+              decoration: InputDecoration(
+                // contentPadding: EdgeInsets.only(top: 15),
+                border: InputBorder.none,
+                hintText:
+                    widget.dto != null ? widget.dto?.content : 'Nhập nội dung',
+                hintStyle:
+                    const TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+              ),
+            ),
           ),
           Container(
             alignment: Alignment.centerLeft,

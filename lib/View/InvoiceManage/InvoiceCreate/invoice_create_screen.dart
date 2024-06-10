@@ -1,5 +1,7 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
@@ -119,7 +121,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
       builder: (context, child, model) {
         return Container(
           height: 120,
-          margin: const EdgeInsets.symmetric(horizontal: 10),
+          // margin: const EdgeInsets.symmetric(horizontal: 10),
           decoration: const BoxDecoration(
               color: AppColor.WHITE,
               border: Border(
@@ -455,13 +457,41 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            width: 100,
-                            height: 20,
-                            child: Text(
-                              'Đối tượng*',
-                              style: TextStyle(fontSize: 13),
-                            ),
+                          Row(
+                            children: [
+                              const Text(
+                                'Đối tượng*',
+                                style: TextStyle(fontSize: 13),
+                              ),
+                              const SizedBox(width: 8),
+                              InkWell(
+                                onTap: model.selectMerchantItem != null
+                                    ? () async {
+                                        await FlutterClipboard.copy(model
+                                                .selectMerchantItem!
+                                                .merchantName)
+                                            .then(
+                                          (value) => Fluttertoast.showToast(
+                                            msg: 'Đã sao chép',
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: AppColor.WHITE,
+                                            textColor: AppColor.BLACK,
+                                            fontSize: 15,
+                                            webBgColor: 'rgba(255, 255, 255)',
+                                            webPosition: 'center',
+                                          ),
+                                        );
+                                      }
+                                    : null,
+                                child: const Icon(
+                                  Icons.copy,
+                                  size: 15,
+                                  color: AppColor.BLUE_TEXT,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             height: 10,
@@ -585,13 +615,40 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              width: 100,
-                              height: 20,
-                              child: Text(
-                                'Tài khoản ngân hàng*',
-                                style: TextStyle(fontSize: 13),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Tài khoản ngân hàng*',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: model.selectBank != null
+                                      ? () async {
+                                          await FlutterClipboard.copy(
+                                                  '${model.selectBank?.bankShortName} - ${model.selectBank?.bankAccount}')
+                                              .then(
+                                            (value) => Fluttertoast.showToast(
+                                              msg: 'Đã sao chép',
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: AppColor.WHITE,
+                                              textColor: AppColor.BLACK,
+                                              fontSize: 15,
+                                              webBgColor: 'rgba(255, 255, 255)',
+                                              webPosition: 'center',
+                                            ),
+                                          );
+                                        }
+                                      : null,
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 15,
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,

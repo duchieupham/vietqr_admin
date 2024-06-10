@@ -43,6 +43,19 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
     _controller.clear();
   }
 
+  void onConfirm() {
+    if (hasSelect == true && selectItem != null) {
+      _model.selectMerchant(selectItem!);
+    }
+    if (hasSelect == true && selectBank != null) {
+      _model.bankSelect(selectBank!);
+    }
+    if (hasSelect == true) {
+      _model.clearItem();
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -51,7 +64,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
           color: AppColor.WHITE,
-          width: 700,
+          width: 750,
           height: 700,
           child: ScopedModel<InvoiceViewModel>(
               model: _model,
@@ -213,6 +226,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                                                           .merchantId ==
                                                       selectItem?.merchantId;
                                               return _buildItem(
+                                                  index: index + 1,
                                                   merchantItem:
                                                       listMerchant![index],
                                                   isSelect: isSelect);
@@ -221,6 +235,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                                                   listBank?[index].bankId ==
                                                       selectBank?.bankId;
                                               return _buildItem(
+                                                  index: index + 1,
                                                   bankItem: listBank![index],
                                                   isSelect: isSelect);
                                             }
@@ -239,18 +254,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                             padding: const EdgeInsets.only(right: 20),
                             alignment: Alignment.centerRight,
                             child: InkWell(
-                              onTap: () {
-                                if (hasSelect == true && selectItem != null) {
-                                  model.selectMerchant(selectItem!);
-                                }
-                                if (hasSelect == true && selectBank != null) {
-                                  model.bankSelect(selectBank!);
-                                }
-                                if (hasSelect == true) {
-                                  model.clearItem();
-                                  Navigator.of(context).pop();
-                                }
-                              },
+                              onTap: onConfirm,
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.18,
                                 height: 50,
@@ -324,10 +328,17 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
             InkWell(
               onTap: () async {
                 if (paging.page != 1) {
-                  await model.getMerchant(
-                      isGetList: widget.isGetList!,
-                      _controller.text.isNotEmpty ? _controller.text : '',
-                      page: paging.page! - 1);
+                  if (widget.type == 0) {
+                    await model.getMerchant(
+                        isGetList: widget.isGetList!,
+                        _controller.text.isNotEmpty ? _controller.text : '',
+                        page: paging.page! - 1);
+                  } else {
+                    await model.getBanks(
+                        _controller.text.isNotEmpty ? _controller.text : '',
+                        page: paging.page! - 1);
+                  }
+
                   // await model.filterListSystemTransaction(
                   //   time: selectDate!,
                   //   page: paging.page! - 1,
@@ -357,10 +368,17 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
             InkWell(
               onTap: () async {
                 if (isPaging) {
-                  await model.getMerchant(
-                      isGetList: widget.isGetList!,
-                      _controller.text.isNotEmpty ? _controller.text : '',
-                      page: paging.page! + 1);
+                  if (widget.type == 0) {
+                    await model.getMerchant(
+                        isGetList: widget.isGetList!,
+                        _controller.text.isNotEmpty ? _controller.text : '',
+                        page: paging.page! + 1);
+                  } else {
+                    await model.getBanks(
+                        _controller.text.isNotEmpty ? _controller.text : '',
+                        page: paging.page! + 1);
+                  }
+
                   // await model.filterListSystemTransaction(
                   //   time: selectDate!,
                   //   page: paging.page! + 1,
@@ -390,8 +408,30 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
   }
 
   Widget _buildItem(
-      {bool? isSelect, MerchantItem? merchantItem, BankItem? bankItem}) {
+      {bool? isSelect,
+      MerchantItem? merchantItem,
+      BankItem? bankItem,
+      required int index}) {
     return InkWell(
+      onDoubleTap: () {
+        if (widget.type == 0) {
+          selectItem = merchantItem;
+        } else {
+          selectBank = bankItem;
+        }
+        hasSelect = true;
+        setState(() {});
+        if (hasSelect == true && selectItem != null) {
+          _model.selectMerchant(selectItem!);
+        }
+        if (hasSelect == true && selectBank != null) {
+          _model.bankSelect(selectBank!);
+        }
+        if (hasSelect == true) {
+          _model.clearItem();
+          Navigator.of(context).pop();
+        }
+      },
       onTap: () {
         if (widget.type == 0) {
           setState(() {
@@ -419,51 +459,53 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
+                    width: 50,
+                    child: Text(
+                      index.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: 50,
                     width: 120,
-                    child: SelectionArea(
-                      child: Text(
-                        merchantItem!.vsoCode.isNotEmpty
-                            ? merchantItem.vsoCode
-                            : '-',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      merchantItem!.vsoCode.isNotEmpty
+                          ? merchantItem.vsoCode
+                          : '-',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
                     width: 200,
-                    child: SelectionArea(
-                      child: Text(
-                        merchantItem.merchantName,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      merchantItem.merchantName,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
                     width: 200,
-                    child: SelectionArea(
-                      child: Text(
-                        merchantItem.platform,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      merchantItem.platform,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
                     width: 100,
-                    child: SelectionArea(
-                      child: Text(
-                        merchantItem.numberOfBank.toString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      merchantItem.numberOfBank.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ]
@@ -471,67 +513,67 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
+                    width: 50,
+                    child: Text(
+                      index.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: 50,
                     width: 120,
-                    child: SelectionArea(
-                      child: Text(
-                        bankItem!.bankAccount.isNotEmpty
-                            ? bankItem.bankAccount
-                            : '-',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      bankItem!.bankAccount.isNotEmpty
+                          ? bankItem.bankAccount
+                          : '-',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
                     width: 200,
-                    child: SelectionArea(
-                      child: Text(
-                        bankItem.userBankName.isNotEmpty
-                            ? bankItem.userBankName
-                            : '-',
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      bankItem.userBankName.isNotEmpty
+                          ? bankItem.userBankName
+                          : '-',
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
                     width: 100,
-                    child: SelectionArea(
-                      child: Text(
-                        bankItem.bankShortName.isNotEmpty
-                            ? bankItem.bankShortName
-                            : '-',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      bankItem.bankShortName.isNotEmpty
+                          ? bankItem.bankShortName
+                          : '-',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
                     width: 130,
-                    child: SelectionArea(
-                      child: Text(
-                        bankItem.connectionType,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      bankItem.connectionType,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
                     height: 50,
                     width: 100,
-                    child: SelectionArea(
-                      child: Text(
-                        bankItem.feePackage,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                    child: Text(
+                      bankItem.feePackage,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ],
@@ -551,6 +593,12 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
       child: Row(
         children: widget.type != 0
             ? const [
+                BuildItemlTitle(
+                    title: 'STT',
+                    textAlign: TextAlign.center,
+                    width: 50,
+                    height: 50,
+                    alignment: Alignment.centerLeft),
                 BuildItemlTitle(
                     title: 'Số tài khoản',
                     textAlign: TextAlign.center,
@@ -583,6 +631,12 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                     textAlign: TextAlign.center),
               ]
             : const [
+                BuildItemlTitle(
+                    title: 'STT',
+                    textAlign: TextAlign.center,
+                    width: 50,
+                    height: 50,
+                    alignment: Alignment.centerLeft),
                 BuildItemlTitle(
                     title: 'VSO',
                     textAlign: TextAlign.center,

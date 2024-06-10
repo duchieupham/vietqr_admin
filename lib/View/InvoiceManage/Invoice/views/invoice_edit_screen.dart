@@ -215,6 +215,19 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
 
         if (model.status == ViewStatus.Error && model.invoiceInfo == null) {
           return const SizedBox.shrink();
+        } else {
+          _invoiceTextController.value = TextEditingValue(
+            text: model.invoiceInfo!.invoiceName,
+            selection: TextSelection.collapsed(
+                offset: model.invoiceInfo!.invoiceName.length),
+          );
+          _descriptionTextController.value = TextEditingValue(
+            text: model.invoiceInfo!.description,
+            selection: TextSelection.collapsed(
+                offset: model.invoiceInfo!.description.length),
+          );
+          // _invoiceTextController.text = model.invoiceInfo!.invoiceName;
+          // _descriptionTextController.text = model.invoiceInfo!.description;
         }
 
         List<Widget> buildItemList(List<InvoiceInfoItem>? list,
@@ -311,6 +324,12 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                   controller: _invoiceTextController,
                                   onChanged: (value) {
                                     model.onEditInvoiceName(value);
+                                    // _invoiceTextController.value =
+                                    //     TextEditingValue(
+                                    //   text: value,
+                                    //   selection: TextSelection.collapsed(
+                                    //       offset: value.length),
+                                    // );
                                   },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -375,6 +394,12 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                                   controller: _descriptionTextController,
                                   onChanged: (value) {
                                     model.onEditDescription(value);
+                                    // _descriptionTextController.value =
+                                    //     TextEditingValue(
+                                    //   text: value,
+                                    //   selection: TextSelection.collapsed(
+                                    //       offset: value.length),
+                                    // );
                                   },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,

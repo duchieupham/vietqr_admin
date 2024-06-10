@@ -42,10 +42,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   late ScrollController controller1;
   late ScrollController controller2;
+
   final controller3 = ScrollController();
   final controller4 = ScrollController();
+  final controllerHorizontal = ScrollController();
+
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
+  bool isScrollingHorizontal = false;
+
   String? selectInvoiceId;
 
   int? type = 9;
@@ -321,12 +326,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           width: MediaQuery.of(context).size.width - 220,
                           child: Stack(
                             children: [
-                              SingleChildScrollView(
-                                controller: controller1,
-                                child: ScrollConfiguration(
-                                  behavior: MyCustomScrollBehavior(),
+                              Scrollbar(
+                                thumbVisibility: true,
+                                controller: controllerHorizontal,
+                                child: SingleChildScrollView(
+                                  controller: controllerHorizontal,
+                                  scrollDirection: Axis.horizontal,
                                   child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
+                                    controller: controller1,
                                     child: SizedBox(
                                       width: 2100,
                                       child: Column(
@@ -346,10 +353,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 child: Row(
                                   children: [
                                     const Expanded(child: SizedBox()),
-                                    SingleChildScrollView(
+                                    Scrollbar(
                                       controller: controller2,
+                                      thumbVisibility: true,
                                       child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
+                                        controller: controller2,
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: AppColor.WHITE,
