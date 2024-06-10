@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DAO/InvoiceDAO.dart';
 import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
+import 'dart:html' as html;
 
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
@@ -78,14 +80,10 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 30),
-                          const SizedBox(
-                            width: double.infinity,
-                            height: 18,
-                            child: Text(
-                              'Thông tin khách hàng thanh toán',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
+                          const Text(
+                            'Thông tin khách hàng thanh toán',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           const SizedBox(height: 30),
                           SizedBox(
@@ -110,14 +108,10 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                             color: AppColor.GREY_DADADA,
                           ),
                           const SizedBox(height: 30),
-                          const SizedBox(
-                            width: double.infinity,
-                            height: 18,
-                            child: Text(
-                              'Thông tin giao dịch',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
+                          const Text(
+                            'Thông tin giao dịch',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
                           ),
                           const SizedBox(height: 30),
                           SizedBox(
@@ -557,8 +551,19 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
             width: 200,
             child: SelectionArea(
               child: InkWell(
-                onTap: () {
-                  // _model.exportExcel(dto.invoiceItemId);
+                onTap: () async {
+                  String url =
+                      '${EnvConfig.instance.getBaseUrl()}invoice/export-excel?invoiceItemId=${dto.invoiceItemId}';
+                  html.window.open(url, 'new tab');
+                  // await _model.exportExcel(dto.invoiceItemId).then(
+                  //   (value) {
+                  //     if (value == true) {
+                  //       String url =
+                  //           '${EnvConfig.instance.getBaseUrl()}invoice/export-excel?invoiceItemId=${dto.invoiceItemId}';
+                  //       html.window.open(url, 'new tab');
+                  //     }
+                  //   },
+                  // );
                 },
                 child: const Row(
                   children: [
@@ -568,6 +573,7 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                         fontSize: 15,
                         color: Colors.green,
                         decoration: TextDecoration.underline,
+                        decorationColor: Colors.green,
                       ),
                     ),
                     SizedBox(

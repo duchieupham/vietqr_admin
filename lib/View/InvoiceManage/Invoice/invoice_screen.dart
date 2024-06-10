@@ -990,7 +990,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return Container(
-          padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
+          padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
           // width: MediaQuery.of(context).size.width *
           //     (model.pageType == PageInvoice.LIST ? 0.22 : 0.33),
           width: MediaQuery.of(context).size.width,

@@ -84,7 +84,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
             children: [
               Expanded(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  // margin: const EdgeInsets.symmetric(horizontal: 10),
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
                       color: AppColor.WHITE,
@@ -1057,17 +1057,18 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
 
   Widget _headerWidget() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(30, 25, 30, 10),
-      width: MediaQuery.of(context).size.width * 0.22,
+      padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+
+      // width: MediaQuery.of(context).size.width,
       child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             "Quản lý hoá đơn",
             style: TextStyle(fontSize: 13),
           ),
           Text(
-            "/",
+            "   /   ",
             style: TextStyle(fontSize: 13),
           ),
           Text(

@@ -69,11 +69,11 @@ class InvoiceDAO extends BaseDAO {
       param['invoiceItemId'] = invoiceItemId;
       // String url = '${EnvConfig.instance.getBaseUrl()}invoice/remove';
       String url =
-          'https://dev.vietqr.org/vqr/api/invoice/export-excel/$invoiceItemId';
+          '${EnvConfig.instance.getBaseUrl()}invoice/export-excel?invoiceItemId=$invoiceItemId';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
-        type: AuthenticationType.SYSTEM,
+        type: AuthenticationType.NONE,
       );
       return response.statusCode == 200;
     } catch (e) {
@@ -137,7 +137,7 @@ class InvoiceDAO extends BaseDAO {
     try {
       // String url = '${EnvConfig.getBaseUrl()}invoice/detail/$invoiceId';
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/invoice/transaction-list?invoiceId=$invoiceId';
+          '${EnvConfig.instance.getBaseUrl()}invoice/transaction-list?invoiceId=$invoiceId';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

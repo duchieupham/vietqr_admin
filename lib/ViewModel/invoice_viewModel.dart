@@ -254,17 +254,44 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
-  void confirmService(ServiceItemDTO? item) {
-    bool hasId = listService!.any((e) => e.itemId == item?.itemId);
-    if (hasId == false) {
-      listService?.insert(listService!.length, item!);
-      totalAmount += item!.totalAmount;
-      totalVat += item.vatAmount;
-      totalAmountVat += item.amountAfterVat;
-      serviceItemDTO = null;
-      isInsert = true;
+  void confirmService(ServiceItemDTO? item, {required bool isUpdatePage}) {
+    if (!isUpdatePage) {
+      bool hasId = listService!.any((e) => e.itemId == item?.itemId);
+      if (hasId == false) {
+        listService?.insert(listService!.length, item!);
+        totalAmount += item!.totalAmount;
+        totalVat += item.vatAmount;
+        totalAmountVat += item.amountAfterVat;
+        serviceItemDTO = null;
+        isInsert = true;
+      } else {
+        isInsert = false;
+      }
     } else {
-      isInsert = false;
+      InvoiceInfoItem invoiceInfoItem = InvoiceInfoItem(
+          invoiceItemId: item!.itemId,
+          invoiceItemName: item.content,
+          unit: item.unit,
+          quantity: item.quantity,
+          amount: item.amount,
+          totalAmount: totalAmount,
+          vat: item.vat,
+          vatAmount: item.vatAmount,
+          totalAmountAfterVat: item.amountAfterVat,
+          timeProcess: item.timeProcess,
+          type: item.type);
+      bool hasId = listInvoiceItem!
+          .any((e) => e.invoiceItemId == invoiceInfoItem.invoiceItemId);
+      if (hasId == false) {
+        listInvoiceItem?.insert(listInvoiceItem!.length, invoiceInfoItem);
+        totalEditAmount += invoiceInfoItem.totalAmount;
+        totalEditVat += invoiceInfoItem.vatAmount;
+        totalEditAmountVat += invoiceInfoItem.totalAmountAfterVat;
+        serviceItemDTO = null;
+        isInsert = true;
+      } else {
+        isInsert = false;
+      }
     }
 
     notifyListeners();
@@ -359,7 +386,7 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setState(ViewStatus.Empty);
       bool? result = await _dao.editInvoice(
-          bankIdRecharge: invoiceDetailDTO!.paymentRequestDTOS
+          bankIdRecharge: listPaymentRequest
               .firstWhere((element) => element.isChecked == true)
               .bankId,
           invoice: invoiceInfo,
@@ -381,6 +408,7 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       setState(ViewStatus.Loading);
       invoiceInfo = await _dao.getInvoiceInfo(id);
+      listPaymentRequest = invoiceInfo!.paymentRequestDTOS;
       if (invoiceInfo!.invoiceItems.isNotEmpty) {
         listInvoiceItem = invoiceInfo?.invoiceItems;
       }
