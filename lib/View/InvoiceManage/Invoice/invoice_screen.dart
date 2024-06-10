@@ -441,237 +441,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                               ),
                                               ...invoiceDTO.items.map(
                                                 (e) {
-                                                  return Container(
-                                                    alignment: Alignment.center,
-                                                    child: Row(
-                                                      children: [
-                                                        Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10),
-                                                          alignment:
-                                                              Alignment.center,
-                                                          decoration: BoxDecoration(
-                                                              border: Border(
-                                                                  left: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)),
-                                                                  bottom: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)),
-                                                                  right: BorderSide(
-                                                                      color: AppColor
-                                                                          .GREY_TEXT
-                                                                          .withOpacity(
-                                                                              0.3)))),
-                                                          height: 50,
-                                                          width: 130,
-                                                          child: SelectionArea(
-                                                              child: Text(
-                                                            e.status == 0
-                                                                ? 'Chờ thanh toán'
-                                                                : e.status == 1
-                                                                    ? 'Đã thanh toán'
-                                                                    : 'Chưa TT hết',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: e.status ==
-                                                                      0
-                                                                  ? AppColor
-                                                                      .ORANGE_DARK
-                                                                  : e.status ==
-                                                                          1
-                                                                      ? AppColor
-                                                                          .GREEN
-                                                                      : AppColor
-                                                                          .GREEN_STATUS,
-                                                            ),
-                                                          )),
-                                                        ),
-                                                        Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      8),
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border(
-                                                              left: BorderSide(
-                                                                  color: AppColor
-                                                                      .GREY_TEXT
-                                                                      .withOpacity(
-                                                                          0.3)),
-                                                              bottom: BorderSide(
-                                                                  color: AppColor
-                                                                      .GREY_TEXT
-                                                                      .withOpacity(
-                                                                          0.3)),
-                                                              right: BorderSide(
-                                                                  color: AppColor
-                                                                      .GREY_TEXT
-                                                                      .withOpacity(
-                                                                          0.3)),
-                                                            ),
-                                                          ),
-                                                          height: 50,
-                                                          width: 110,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Tooltip(
-                                                                message:
-                                                                    'Thông tin hoá đơn',
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    setState(
-                                                                        () {
-                                                                      selectInvoiceId =
-                                                                          e.invoiceId;
-                                                                    });
-                                                                    _model.onChangePage(
-                                                                        PageInvoice
-                                                                            .DETAIL);
-                                                                  },
-                                                                  child:
-                                                                      BoxLayout(
-                                                                    width: 30,
-                                                                    height: 30,
-                                                                    borderRadius:
-                                                                        100,
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            0),
-                                                                    bgColor: AppColor
-                                                                        .BLUE_TEXT
-                                                                        .withOpacity(
-                                                                            0.3),
-                                                                    child:
-                                                                        const Icon(
-                                                                      Icons
-                                                                          .info,
-                                                                      size: 12,
-                                                                      color: AppColor
-                                                                          .BLUE_TEXT,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              PopupMenuButton<
-                                                                  Actions>(
-                                                                onSelected:
-                                                                    (Actions
-                                                                        result) {
-                                                                  switch (
-                                                                      result) {
-                                                                    case Actions
-                                                                          .copy:
-                                                                      onCopy(
-                                                                          dto:
-                                                                              e);
-                                                                      break;
-                                                                    case Actions
-                                                                          .qr:
-                                                                      onShowPopup(
-                                                                          e);
-                                                                      break;
-                                                                    case Actions
-                                                                          .edit:
-                                                                      setState(
-                                                                          () {
-                                                                        selectInvoiceId =
-                                                                            e.invoiceId;
-                                                                      });
-                                                                      _model.onChangePage(
-                                                                          PageInvoice
-                                                                              .EDIT);
-                                                                      break;
-                                                                    case Actions
-                                                                          .exportExcel:
-                                                                      onShowPopupExcel(
-                                                                          e.invoiceId);
-                                                                      break;
-                                                                    case Actions
-                                                                          .delete:
-                                                                      DialogWidget
-                                                                          .instance
-                                                                          .openMsgDialogQuestion(
-                                                                        title:
-                                                                            "Hóa đơn",
-                                                                        msg:
-                                                                            'Xác nhận xóa hóa đơn!!',
-                                                                        onConfirm:
-                                                                            () async {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                          bool?
-                                                                              result =
-                                                                              await model.deleteInvoice(e.invoiceId);
-                                                                          if (result!) {
-                                                                            model.filterListInvoice(
-                                                                                time: selectDate!,
-                                                                                page: 1,
-                                                                                filter: textInput()!);
-                                                                          }
-                                                                        },
-                                                                      );
-                                                                      break;
-                                                                  }
-                                                                },
-                                                                itemBuilder: (BuildContext
-                                                                        context) =>
-                                                                    _buildMenuItems(
-                                                                        e.status),
-                                                                icon: Container(
-                                                                  width: 30,
-                                                                  height: 30,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          0),
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            100),
-                                                                    color: AppColor
-                                                                        .BLUE_TEXT
-                                                                        .withOpacity(
-                                                                            0.3),
-                                                                  ),
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons
-                                                                        .more_vert,
-                                                                    color: AppColor
-                                                                        .BLUE_TEXT,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
+                                                  return _rightItem(e);
                                                 },
                                               )
                                             ],
@@ -692,6 +462,143 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               )
             : const SizedBox.shrink();
       },
+    );
+  }
+
+  Widget _rightItem(InvoiceItem e) {
+    return Container(
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(right: 10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                border: Border(
+                    left:
+                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                    bottom:
+                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                    right: BorderSide(
+                        color: AppColor.GREY_TEXT.withOpacity(0.3)))),
+            height: 50,
+            width: 130,
+            child: SelectionArea(
+                child: Text(
+              e.status == 0
+                  ? 'Chờ thanh toán'
+                  : e.status == 1
+                      ? 'Đã thanh toán'
+                      : 'Chưa TT hết',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: e.status == 0
+                    ? AppColor.ORANGE_DARK
+                    : e.status == 1
+                        ? AppColor.GREEN
+                        : AppColor.GREEN_STATUS,
+              ),
+            )),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                bottom: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                right: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+              ),
+            ),
+            height: 50,
+            width: 110,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Tooltip(
+                  message: 'Thông tin hoá đơn',
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectInvoiceId = e.invoiceId;
+                      });
+                      _model.onChangePage(PageInvoice.DETAIL);
+                    },
+                    child: BoxLayout(
+                      width: 30,
+                      height: 30,
+                      borderRadius: 100,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(0),
+                      bgColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+                      child: const Icon(
+                        Icons.info,
+                        size: 12,
+                        color: AppColor.BLUE_TEXT,
+                      ),
+                    ),
+                  ),
+                ),
+                PopupMenuButton<Actions>(
+                  onSelected: (Actions result) {
+                    switch (result) {
+                      case Actions.copy:
+                        onCopy(dto: e);
+                        break;
+                      case Actions.qr:
+                        onShowPopup(e);
+                        break;
+                      case Actions.edit:
+                        setState(() {
+                          selectInvoiceId = e.invoiceId;
+                        });
+                        _model.onChangePage(PageInvoice.EDIT);
+                        break;
+                      case Actions.exportExcel:
+                        onShowPopupExcel(e.invoiceId);
+                        break;
+                      case Actions.delete:
+                        DialogWidget.instance.openMsgDialogQuestion(
+                          title: "Hóa đơn",
+                          msg: 'Xác nhận xóa hóa đơn!!',
+                          onConfirm: () async {
+                            Navigator.of(context).pop();
+                            bool? result =
+                                await _model.deleteInvoice(e.invoiceId);
+                            if (result!) {
+                              _model.filterListInvoice(
+                                  time: selectDate!,
+                                  page: 1,
+                                  filter: textInput()!);
+                            }
+                          },
+                        );
+                        break;
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      _buildMenuItems(e.status),
+                  icon: Container(
+                    width: 30,
+                    height: 30,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                    ),
+                    child: const Icon(
+                      Icons.more_vert,
+                      color: AppColor.BLUE_TEXT,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
