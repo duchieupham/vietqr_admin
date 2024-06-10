@@ -389,6 +389,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                     color: AppColor.BLUE_TEXT
                                                         .withOpacity(0.3)),
                                                 child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
                                                   children: [
                                                     Container(
                                                         height: 50,
@@ -415,15 +417,28 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         )),
                                                     Container(
                                                         height: 50,
-                                                        width: 110,
+                                                        width: 100,
                                                         alignment:
                                                             Alignment.center,
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3))),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                border: Border(
+                                                          top: BorderSide(
+                                                              color: AppColor
+                                                                  .GREY_TEXT
+                                                                  .withOpacity(
+                                                                      0.3)),
+                                                          bottom: BorderSide(
+                                                              color: AppColor
+                                                                  .GREY_TEXT
+                                                                  .withOpacity(
+                                                                      0.3)),
+                                                          right: BorderSide(
+                                                              color: AppColor
+                                                                  .GREY_TEXT
+                                                                  .withOpacity(
+                                                                      0.3)),
+                                                        )),
                                                         child: const Text(
                                                           'Thao tác',
                                                           textAlign:
@@ -506,16 +521,17 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                // left: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
                 bottom: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
                 right: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
               ),
             ),
             height: 50,
-            width: 110,
+            width: 100,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                const SizedBox(width: 4),
                 Tooltip(
                   message: 'Thông tin hoá đơn',
                   child: InkWell(
@@ -540,7 +556,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     ),
                   ),
                 ),
+                const Spacer(),
                 PopupMenuButton<Actions>(
+                  padding: const EdgeInsets.all(0),
                   onSelected: (Actions result) {
                     switch (result) {
                       case Actions.copy:
@@ -589,6 +607,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       color: AppColor.BLUE_TEXT.withOpacity(0.3),
                     ),
                     child: const Icon(
+                      size: 18,
                       Icons.more_vert,
                       color: AppColor.BLUE_TEXT,
                     ),
