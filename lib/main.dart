@@ -314,15 +314,23 @@ class _VietQRAdmin extends State<VietQRAdmin> {
             child: MaterialApp.router(
               onGenerateTitle: (context) => 'VietQR VN - Admin',
               routerConfig: _router,
-              themeMode: ThemeMode.light,
-              darkTheme: DefaultThemeData(context: context).darkTheme,
-              theme: DefaultThemeData(context: context).lightTheme,
+              // themeMode: ThemeMode.light,
+              // darkTheme: DefaultThemeData(context: context).darkTheme,
+              // theme: DefaultThemeData(context: context).lightTheme,
+              //
+              // localizationsDelegates: const [
+              //   GlobalMaterialLocalizations.delegate,
+              //   GlobalWidgetsLocalizations.delegate,
+              //   GlobalCupertinoLocalizations.delegate,
+              //   // MonthYearPickerLocalizations.delegate,
+              // ],
               debugShowCheckedModeBanner: false,
-              localizationsDelegates: const [
+              themeMode: ThemeMode.light,
+              theme: DefaultThemeData(context: context).lightTheme,
+              localizationsDelegates: const <LocalizationsDelegate<Object>>[
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
-                // MonthYearPickerLocalizations.delegate,
               ],
               supportedLocales: const [
                 //  Locale('en'), // English
