@@ -335,6 +335,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                         page: paging.page! - 1);
                   } else {
                     await model.getBanks(
+                        merchantId: widget.merchantId,
                         _controller.text.isNotEmpty ? _controller.text : '',
                         page: paging.page! - 1);
                   }
@@ -375,6 +376,7 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
                         page: paging.page! + 1);
                   } else {
                     await model.getBanks(
+                        merchantId: widget.merchantId,
                         _controller.text.isNotEmpty ? _controller.text : '',
                         page: paging.page! + 1);
                   }
