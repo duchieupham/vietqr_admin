@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/SystemManage/UserSystem/views/user_detail_screen.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/item_user_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
@@ -43,6 +44,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   late ScrollController controller2;
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
+  String selectedUserId = '';
 
   int? type = 0;
   PageUser page = PageUser.LIST;
@@ -136,6 +138,10 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             _buildList(),
           ] else if (page == PageUser.ADD_USER)
             AddUserScreen()
+          else if (page == PageUser.USER_INFO)
+            UserDetailScreen(
+              userId: selectedUserId,
+            )
         ],
       ),
     );
@@ -344,10 +350,10 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   message: 'Thông tin',
                   child: InkWell(
                     onTap: () {
-                      // setState(() {
-                      //   selectInvoiceId = e.invoiceId;
-                      // });
-                      // _model.onChangePage(PageInvoice.DETAIL);
+                      setState(() {
+                        page = PageUser.USER_INFO;
+                        selectedUserId = e.id;
+                      });
                     },
                     child: BoxLayout(
                       width: 30,
