@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toastification/toastification.dart';
+import 'package:vietqr_admin/View/SystemManage/system_manage_screen.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/setup.dart';
 import 'package:vietqr_admin/feature/login/views/login.dart';
@@ -106,6 +107,32 @@ final GoRouter _router = GoRouter(
             context: context,
             state: state,
             child: const MerchantManageScreen(type: MerchantType.API_SERVICE));
+      },
+    ),
+    GoRoute(
+      path: '/system-user',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/system-user' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const SystemManageScreen(type: SystemManage.USER),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const SystemManageScreen(type: SystemManage.USER));
+      },
+    ),
+    GoRoute(
+      path: '/system-bank',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/system-bank' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const SystemManageScreen(type: SystemManage.BANK),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+            context: context,
+            state: state,
+            child: const SystemManageScreen(type: SystemManage.BANK));
       },
     ),
     GoRoute(

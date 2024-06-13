@@ -70,7 +70,8 @@ class _DialogPickDateState extends State<DialogPickDate> {
                     children: [
                       Text('$_monthSelect - $_year',
                           textAlign: TextAlign.start,
-                          style: const TextStyle(fontSize: 16, color: Colors.white)),
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.white)),
                       DropdownButton<int>(
                         value: _year,
                         elevation: 16,
@@ -105,7 +106,6 @@ class _DialogPickDateState extends State<DialogPickDate> {
               height: 100,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GridView.builder(
-                padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
