@@ -69,6 +69,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
           color: AppColor.TRANSPARENT,
           child: Center(
             child: DialogPickDate(
+              year: 2,
               dateTime: dateTime,
             ),
           ),

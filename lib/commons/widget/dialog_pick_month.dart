@@ -5,8 +5,9 @@ import 'm_button_widget.dart';
 
 class DialogPickDate extends StatefulWidget {
   final DateTime dateTime;
+  final int year;
 
-  const DialogPickDate({super.key, required this.dateTime});
+  const DialogPickDate({super.key, required this.dateTime, required this.year});
 
   @override
   State<DialogPickDate> createState() => _DialogPickDateState();
@@ -28,7 +29,7 @@ class _DialogPickDateState extends State<DialogPickDate> {
     super.initState();
     _monthSelect = widget.dateTime.month;
     _year = widget.dateTime.year;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < widget.year; i++) {
       int yearNow = _now.year;
       listYear.add(yearNow - i);
     }

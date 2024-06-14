@@ -477,6 +477,7 @@ class _SaleReportState extends State<SynthesisReport> {
                         color: AppColor.TRANSPARENT,
                         child: Center(
                           child: DialogPickDate(
+                            year: 2,
                             dateTime: provider.timeCurrent,
                           ),
                         ),
