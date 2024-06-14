@@ -141,6 +141,11 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
           else if (page == PageUser.USER_INFO)
             UserDetailScreen(
               userId: selectedUserId,
+              callback: () {
+                setState(() {
+                  page = PageUser.LIST;
+                });
+              },
             )
         ],
       ),

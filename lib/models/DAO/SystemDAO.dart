@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/models/DTO/user_detail_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
 class SystemDAO extends BaseDAO {
@@ -33,5 +35,25 @@ class SystemDAO extends BaseDAO {
       LOG.error(e.toString());
     }
     return [];
+  }
+
+  Future<UserDetailDTO?> getUserDetail(String userId) async {
+    try {
+      String url =
+          'https://dev.vietqr.org/vqr/mock/api/user-detail?userId=$userId';
+      // String url =
+      //     '${EnvConfig.instance.getBaseUrl()}invoice/detail/$userId';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return UserDetailDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error("Failed to fetch Invoice detail: ${e.toString()}");
+    }
+    return null;
   }
 }

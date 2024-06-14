@@ -3,12 +3,14 @@ import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/DAO/SystemDAO.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/models/DTO/user_detail_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
 class SystemViewModel extends BaseModel {
   late SystemDAO _dao;
   List<UserSystemDTO>? listUser = [];
   MetaDataDTO? metaDataDTO;
+  UserDetailDTO? userDetailDTO;
 
   SystemViewModel() {
     _dao = SystemDAO();
@@ -21,6 +23,17 @@ class SystemViewModel extends BaseModel {
       setState(ViewStatus.Loading);
       listUser = await _dao.getListUser(page: page, type: type, value: value);
       metaDataDTO = _dao.metaDataDTO;
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
+  Future<void> getUserDetail(String id) async {
+    try {
+      setState(ViewStatus.Loading);
+      userDetailDTO = await _dao.getUserDetail(id);
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());
