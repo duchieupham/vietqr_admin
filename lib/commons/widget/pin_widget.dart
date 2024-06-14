@@ -64,7 +64,9 @@ class _PinWidgetState extends State<PinWidget> {
                                 : AppColor.BLUE_TEXT,
                             border: Border.all(
                               width: 2,
-                              color: AppColor.BLUE_TEXT,
+                              color: model.pinLength < index + 1
+                                  ? AppColor.GREY_DADADA
+                                  : AppColor.BLUE_TEXT,
                             ),
                           ),
                         ),

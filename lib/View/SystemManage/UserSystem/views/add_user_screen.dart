@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/ViewModel/root_viewModel.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/encrypt_utils.dart';
@@ -65,6 +66,12 @@ class _AddUserScreenState extends State<AddUserScreen> {
       return 'Enter a valid email address';
     }
     return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Get.find<RootViewModel>().reset();
   }
 
   @override

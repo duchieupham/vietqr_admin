@@ -50,4 +50,23 @@ class SystemDAO extends BaseDAO {
     }
     return false;
   }
+
+  Future<bool?> changeLinkedUser(String? userId, int? status) async {
+    try {
+      Map<String, dynamic> param = {};
+      param['userId'] = userId;
+      param['status'] = status;
+
+      String url = 'https://dev.vietqr.org/vqr/api/admin';
+      final response = await BaseAPIClient.putAPI(
+        body: param,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
 }

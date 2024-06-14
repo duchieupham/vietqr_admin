@@ -41,4 +41,17 @@ class SystemViewModel extends BaseModel {
     }
     return false;
   }
+
+  Future<bool?> changeLinked(String id, int status) async {
+    try {
+      setState(ViewStatus.Loading);
+      final result = await _dao.changeLinkedUser(id, status);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
 }

@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/views/user_detail_screen.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/item_user_widget.dart';
+import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/popup_reset_pass_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -27,7 +28,7 @@ enum Actions {
   active,
 }
 
-enum PageUser { LIST, ADD_USER, USER_INFO }
+enum PageUser { LIST, ADD_USER, USER_INFO, UPDATE_USER }
 
 class UserSystemScreen extends StatefulWidget {
   const UserSystemScreen({super.key});
@@ -48,13 +49,14 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   bool isScrollingDown2 = false;
   String selectedUserId = '';
 
-  int? type = 0;
+  int type = 0;
   PageUser page = PageUser.LIST;
 
   @override
   void initState() {
     super.initState();
     _model = Get.find<SystemViewModel>();
+    initController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initData();
     });
@@ -62,7 +64,9 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
 
   void initData() {
     _model.getListUser(type: 1);
+  }
 
+  void initController() {
     controller1 = ScrollController();
     controller2 = ScrollController();
     controllerHorizontal = ScrollController();
@@ -89,27 +93,25 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
       backgroundColor: AppColor.BLUE_BGR,
       body: ScopedModel<SystemViewModel>(
           model: _model,
-          child: ScopedModelDescendant<SystemViewModel>(
-            builder: (context, child, model) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                    color: AppColor.WHITE,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _headerWidget(),
-                    const Divider(),
-                    Expanded(
-                      child: _bodyWidget(),
-                    ),
-                  ],
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+                color: AppColor.WHITE,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _headerWidget(),
+                const Divider(
+                  color: AppColor.GREY_DADADA,
                 ),
-              );
-            },
+                Expanded(
+                  child: _bodyWidget(),
+                ),
+              ],
+            ),
           )),
     );
   }
@@ -145,7 +147,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
               onCreateUser(dto);
             }, callback: () {
               page = PageUser.LIST;
-              _model.getListUser(type: type!, value: _textController.text);
+              _model.getListUser(type: type, value: _textController.text);
               setState(() {});
             })
           else if (page == PageUser.USER_INFO)
@@ -164,7 +166,9 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
           return const Expanded(child: Center(child: Text('Đang tải...')));
         }
 
-        if (model.status == ViewStatus.Error || model.listUser!.isEmpty) {
+        if (model.listUser!.isEmpty ||
+            model.metadata == null ||
+            model.status == ViewStatus.Error) {
           return const Expanded(child: Center(child: Text('Trống...')));
         }
         List<Widget> buildItemList(
@@ -194,7 +198,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
         MetaDataDTO metadata = model.metadata!;
         return Expanded(
           child: SizedBox(
-            width: MediaQuery.of(context).size.width - 220,
+            width: MediaQuery.of(context).size.width,
             child: Stack(
               children: [
                 Scrollbar(
@@ -210,7 +214,8 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                         child: Column(
                           children: [
                             const TitleItemWidget(),
-                            ...buildItemList(list, metadata)
+                            if (list != null && list.isNotEmpty)
+                              ...buildItemList(list, metadata)
                             // ...buildItemList(
                             //     invoiceDTO.items, metadata)
                           ],
@@ -285,9 +290,10 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                                     ],
                                   ),
                                 ),
-                                ...list!.map(
-                                  (e) => _rightItem(e),
-                                ),
+                                if (list != null && list.isNotEmpty)
+                                  ...list.map(
+                                    (e) => _rightItem(e),
+                                  ),
                               ],
                             ),
                           ),
@@ -324,11 +330,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             width: 130,
             child: SelectionArea(
                 child: Text(
-              e.status == 0
-                  ? 'Chờ thanh toán'
-                  : e.status == 1
-                      ? 'Đã thanh toán'
-                      : 'Chưa TT hết',
+              e.status == 0 ? 'Không hoạt động' : 'Hoạt động',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
@@ -388,8 +390,13 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                       case Actions.update_info:
                         break;
                       case Actions.reset_pass:
+                        showDialog(
+                          context: context,
+                          builder: (context) => PopupResetPassWidget(dto: e),
+                        );
                         break;
                       case Actions.active:
+                        changeLinked(e);
                         break;
                     }
                   },
@@ -494,9 +501,8 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                       ],
                       onChanged: (value) {
                         setState(() {
-                          type = value;
+                          type = value!;
                         });
-                        // model.changeTypeInvoice(value);
                       },
                     ),
                   ),
@@ -525,7 +531,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                                       RegExp(r'^[a-zA-ZÀ-ỹẠ-ỵ0-9 ]+$'))
                             ],
                             onSubmitted: (value) {
-                              _model.getListUser(type: type!, value: value);
+                              _model.getListUser(type: type, value: value);
                             },
                             onChanged: (value) {
                               _textController.value = TextEditingValue(
@@ -571,7 +577,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
         const SizedBox(width: 20),
         InkWell(
           onTap: () {
-            _model.getListUser(type: type!, value: _textController.text);
+            _model.getListUser(type: type, value: _textController.text);
           },
           child: Container(
             height: 40,
@@ -626,20 +632,71 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   Widget _headerWidget() {
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
-      child: const Row(
+      child: Row(
         children: [
-          Text(
+          const Text(
             "Quản lý hoá đơn",
             style: TextStyle(fontSize: 13),
           ),
-          Text(
+          const Text(
             "   /   ",
             style: TextStyle(fontSize: 13),
           ),
-          Text(
-            "Tạo mới hoá đơn",
-            style: TextStyle(fontSize: 13),
+          InkWell(
+            onTap: page != PageUser.LIST
+                ? () {
+                    page = PageUser.LIST;
+                    _model.getListUser(
+                        page: 1, type: type, value: _textController.text);
+
+                    setState(() {});
+                  }
+                : null,
+            child: Text(
+              "Quản lý người dùng",
+              style: TextStyle(
+                fontSize: 13,
+                color: page != PageUser.LIST
+                    ? AppColor.BLUE_TEXT
+                    : AppColor.BLACK_TEXT,
+                decoration: page != PageUser.LIST
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
+                decorationColor:
+                    page != PageUser.LIST ? AppColor.BLUE_TEXT : null,
+              ),
+            ),
           ),
+          if (page == PageUser.ADD_USER) ...[
+            const Text(
+              "   /   ",
+              style: TextStyle(fontSize: 13),
+            ),
+            const Text(
+              "Quản lý người dùng",
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+          if (page == PageUser.USER_INFO) ...[
+            const Text(
+              "   /   ",
+              style: TextStyle(fontSize: 13),
+            ),
+            const Text(
+              "Chi tiết người dùng",
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+          if (page == PageUser.UPDATE_USER) ...[
+            const Text(
+              "   /   ",
+              style: TextStyle(fontSize: 13),
+            ),
+            const Text(
+              "Cập nhật thông tin người dùng",
+              style: TextStyle(fontSize: 13),
+            ),
+          ]
         ],
       ),
     );
@@ -650,7 +707,8 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
       builder: (context, child, model) {
         bool isPaging = false;
         if (model.status == ViewStatus.Loading ||
-            model.status == ViewStatus.Error) {
+            model.status == ViewStatus.Error ||
+            model.metadata == null) {
           return const SizedBox.shrink();
         }
 
@@ -659,77 +717,149 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
           isPaging = true;
         }
 
-        return paging != null
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      "Trang ${paging.page}/${paging.totalPage}",
-                      style: const TextStyle(fontSize: 13),
-                    ),
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(4),
+              child: Text(
+                "Trang ${paging.page}/${paging.totalPage}",
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+            const SizedBox(width: 30),
+            InkWell(
+              onTap: () async {
+                if (paging.page != 1) {
+                  await _model.getListUser(
+                      page: paging.page! - 1,
+                      type: type,
+                      value: _textController.text);
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(
+                        color: paging.page != 1
+                            ? AppColor.BLACK
+                            : AppColor.GREY_DADADA)),
+                child: Center(
+                  child: Icon(
+                    Icons.chevron_left_rounded,
+                    color: paging.page != 1
+                        ? AppColor.BLACK
+                        : AppColor.GREY_DADADA,
+                    size: 20,
                   ),
-                  const SizedBox(width: 30),
-                  InkWell(
-                    onTap: () async {
-                      if (paging.page != 1) {
-                        await _model.getListUser(
-                            page: paging.page! - 1,
-                            type: type!,
-                            value: _textController.text);
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(
-                              color: paging.page != 1
-                                  ? AppColor.BLACK
-                                  : AppColor.GREY_DADADA)),
-                      child: Center(
-                        child: Icon(
-                          Icons.chevron_left_rounded,
-                          color: paging.page != 1
-                              ? AppColor.BLACK
-                              : AppColor.GREY_DADADA,
-                          size: 20,
-                        ),
-                      ),
-                    ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 15),
+            InkWell(
+              onTap: () async {
+                if (isPaging) {
+                  await _model.getListUser(
+                      page: paging.page! + 1,
+                      type: type,
+                      value: _textController.text);
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(
+                        color:
+                            isPaging ? AppColor.BLACK : AppColor.GREY_DADADA)),
+                child: Center(
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    color: isPaging ? AppColor.BLACK : AppColor.GREY_DADADA,
+                    size: 20,
                   ),
-                  const SizedBox(width: 15),
-                  InkWell(
-                    onTap: () async {
-                      if (isPaging) {
-                        await _model.getListUser(
-                            page: paging.page! + 1,
-                            type: type!,
-                            value: _textController.text);
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(
-                              color: isPaging
-                                  ? AppColor.BLACK
-                                  : AppColor.GREY_DADADA)),
-                      child: Center(
-                        child: Icon(
-                          Icons.chevron_right_rounded,
-                          color:
-                              isPaging ? AppColor.BLACK : AppColor.GREY_DADADA,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : const SizedBox.shrink();
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void changeLinked(UserSystemDTO e) {
+    _model.changeLinked(e.id, e.status == 0 ? 1 : 0).then(
+      (value) {
+        if (value == true) {
+          if (e.status == 0) {
+            toastification.show(
+              context: context,
+              type: ToastificationType.success,
+              style: ToastificationStyle.flat,
+              title: const Text(
+                'Liên kết thành công',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              showProgressBar: false,
+              alignment: Alignment.topRight,
+              autoCloseDuration: const Duration(seconds: 5),
+              boxShadow: highModeShadow,
+              dragToClose: true,
+              pauseOnHover: true,
+            );
+          } else {
+            toastification.show(
+              context: context,
+              type: ToastificationType.success,
+              style: ToastificationStyle.flat,
+              title: const Text(
+                'Hủy liên kết thành công',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              showProgressBar: false,
+              alignment: Alignment.topRight,
+              autoCloseDuration: const Duration(seconds: 5),
+              boxShadow: highModeShadow,
+              dragToClose: true,
+              pauseOnHover: true,
+            );
+          }
+        } else {
+          if (e.status == 0) {
+            toastification.show(
+              context: context,
+              type: ToastificationType.error,
+              style: ToastificationStyle.flat,
+              title: const Text(
+                'Liên kết thất bại',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              showProgressBar: false,
+              alignment: Alignment.topRight,
+              autoCloseDuration: const Duration(seconds: 5),
+              boxShadow: highModeShadow,
+              dragToClose: true,
+              pauseOnHover: true,
+            );
+          } else {
+            toastification.show(
+              context: context,
+              type: ToastificationType.error,
+              style: ToastificationStyle.flat,
+              title: const Text(
+                'Hủy liên kết thất bại',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              showProgressBar: false,
+              alignment: Alignment.topRight,
+              autoCloseDuration: const Duration(seconds: 5),
+              boxShadow: highModeShadow,
+              dragToClose: true,
+              pauseOnHover: true,
+            );
+          }
+        }
       },
     );
   }
@@ -754,7 +884,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             pauseOnHover: true,
           );
           page = PageUser.LIST;
-          _model.getListUser(type: type!, value: _textController.text);
+          _model.getListUser(type: type, value: _textController.text);
           setState(() {});
         } else {
           toastification.show(
