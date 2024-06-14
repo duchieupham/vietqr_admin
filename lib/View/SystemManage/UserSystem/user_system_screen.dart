@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
+import 'package:vietqr_admin/View/SystemManage/UserSystem/views/user_detail_screen.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/item_user_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
@@ -45,6 +46,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   late ScrollController controller2;
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
+  String selectedUserId = '';
 
   int? type = 0;
   PageUser page = PageUser.LIST;
@@ -139,15 +141,16 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             const SizedBox(height: 10),
             _pagingWidget(),
           ] else if (page == PageUser.ADD_USER)
-            AddUserScreen(
-              onCreate: (dto) {
-                onCreateUser(dto);
-              },
-              callback: () {
-                page = PageUser.LIST;
-                _model.getListUser(type: type!, value: _textController.text);
-                setState(() {});
-              },
+            AddUserScreen(onCreate: (dto) {
+              onCreateUser(dto);
+            }, callback: () {
+              page = PageUser.LIST;
+              _model.getListUser(type: type!, value: _textController.text);
+              setState(() {});
+            })
+          else if (page == PageUser.USER_INFO)
+            UserDetailScreen(
+              userId: selectedUserId,
             )
         ],
       ),
@@ -357,10 +360,10 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   message: 'Thông tin',
                   child: InkWell(
                     onTap: () {
-                      // setState(() {
-                      //   selectInvoiceId = e.invoiceId;
-                      // });
-                      // _model.onChangePage(PageInvoice.DETAIL);
+                      setState(() {
+                        page = PageUser.USER_INFO;
+                        selectedUserId = e.id;
+                      });
                     },
                     child: BoxLayout(
                       width: 30,
