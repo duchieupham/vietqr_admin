@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/instance_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/item_user_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
@@ -12,6 +13,7 @@ import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
+import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
@@ -134,8 +136,19 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             ),
             const SizedBox(height: 30),
             _buildList(),
+            const SizedBox(height: 10),
+            _pagingWidget(),
           ] else if (page == PageUser.ADD_USER)
-            AddUserScreen()
+            AddUserScreen(
+              onCreate: (dto) {
+                onCreateUser(dto);
+              },
+              callback: () {
+                page = PageUser.LIST;
+                _model.getListUser(type: type!, value: _textController.text);
+                setState(() {});
+              },
+            )
         ],
       ),
     );
@@ -175,7 +188,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
         }
 
         List<UserSystemDTO>? list = model.listUser;
-        MetaDataDTO metadata = model.metaDataDTO!;
+        MetaDataDTO metadata = model.metadata!;
         return Expanded(
           child: SizedBox(
             width: MediaQuery.of(context).size.width - 220,
@@ -584,7 +597,8 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
         const SizedBox(width: 10),
         InkWell(
           onTap: () {
-            // model.getListQrBox(type: type, value: _textController.text);
+            page = PageUser.ADD_USER;
+            setState(() {});
           },
           child: Container(
             height: 40,
@@ -625,6 +639,138 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _pagingWidget() {
+    return ScopedModelDescendant<SystemViewModel>(
+      builder: (context, child, model) {
+        bool isPaging = false;
+        if (model.status == ViewStatus.Loading ||
+            model.status == ViewStatus.Error) {
+          return const SizedBox.shrink();
+        }
+
+        MetaDataDTO paging = model.metadata!;
+        if (paging.page! != paging.totalPage!) {
+          isPaging = true;
+        }
+
+        return paging != null
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                      "Trang ${paging.page}/${paging.totalPage}",
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  const SizedBox(width: 30),
+                  InkWell(
+                    onTap: () async {
+                      if (paging.page != 1) {
+                        await _model.getListUser(
+                            page: paging.page! - 1,
+                            type: type!,
+                            value: _textController.text);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                              color: paging.page != 1
+                                  ? AppColor.BLACK
+                                  : AppColor.GREY_DADADA)),
+                      child: Center(
+                        child: Icon(
+                          Icons.chevron_left_rounded,
+                          color: paging.page != 1
+                              ? AppColor.BLACK
+                              : AppColor.GREY_DADADA,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  InkWell(
+                    onTap: () async {
+                      if (isPaging) {
+                        await _model.getListUser(
+                            page: paging.page! + 1,
+                            type: type!,
+                            value: _textController.text);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          border: Border.all(
+                              color: isPaging
+                                  ? AppColor.BLACK
+                                  : AppColor.GREY_DADADA)),
+                      child: Center(
+                        child: Icon(
+                          Icons.chevron_right_rounded,
+                          color:
+                              isPaging ? AppColor.BLACK : AppColor.GREY_DADADA,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox.shrink();
+      },
+    );
+  }
+
+  void onCreateUser(CreateUserDTO dto) async {
+    await _model.createUser(dto).then(
+      (value) {
+        if (value == true) {
+          toastification.show(
+            context: context,
+            type: ToastificationType.success,
+            style: ToastificationStyle.flat,
+            title: const Text(
+              'Tạo người thành công',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            showProgressBar: false,
+            alignment: Alignment.topRight,
+            autoCloseDuration: const Duration(seconds: 5),
+            boxShadow: highModeShadow,
+            dragToClose: true,
+            pauseOnHover: true,
+          );
+          page = PageUser.LIST;
+          _model.getListUser(type: type!, value: _textController.text);
+          setState(() {});
+        } else {
+          toastification.show(
+            context: context,
+            type: ToastificationType.error,
+            style: ToastificationStyle.flat,
+            title: const Text(
+              'Tạo thất bại',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            showProgressBar: false,
+            alignment: Alignment.topRight,
+            autoCloseDuration: const Duration(seconds: 5),
+            boxShadow: highModeShadow,
+            dragToClose: true,
+            pauseOnHover: true,
+          );
+        }
+      },
     );
   }
 }

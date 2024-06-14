@@ -634,6 +634,7 @@ class _ActiveFeeScreenState extends State<ActiveFeeScreen> {
                       color: AppColor.TRANSPARENT,
                       child: Center(
                         child: DialogPickDate(
+                          year: 2,
                           dateTime: provider.currentDate,
                         ),
                       ),
