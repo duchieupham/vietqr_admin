@@ -19,7 +19,7 @@ class SystemDAO extends BaseDAO {
     List<UserSystemDTO> result = [];
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/admin-list-users?page=$page&size=${size ?? 20}&type=$type&value=$value';
+          'https://dev.vietqr.org/vqr/api/account/admin-list-account-user?page=$page&size=${size ?? 20}&type=$type&value=$value';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -41,7 +41,7 @@ class SystemDAO extends BaseDAO {
   Future<UserDetailDTO?> getUserDetail(String userId) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/mock/api/user-detail?userId=$userId';
+          'https://dev.vietqr.org/vqr/api/account/users-details?userId=$userId';
       // String url =
       //     '${EnvConfig.instance.getBaseUrl()}invoice/detail/$userId';
       final response = await BaseAPIClient.getAPI(
@@ -60,7 +60,7 @@ class SystemDAO extends BaseDAO {
 
   Future<bool?> createUser(CreateUserDTO dto) async {
     try {
-      String url = 'https://dev.vietqr.org/vqr/mock/admin/create';
+      String url = 'https://dev.vietqr.org/vqr/api/admin/create';
       final response = await BaseAPIClient.postAPI(
         body: dto.toJson(),
         url: url,
@@ -81,6 +81,25 @@ class SystemDAO extends BaseDAO {
 
       String url = 'https://dev.vietqr.org/vqr/api/admin';
       final response = await BaseAPIClient.putAPI(
+        body: param,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool?> changeUserPassword(String phone, String pass) async {
+    try {
+      Map<String, dynamic> param = {};
+      param['newPassword'] = pass;
+
+      String url =
+          'https://dev.vietqr.org/vqr/api/password-reset?phoneNo=$phone';
+      final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
         type: AuthenticationType.SYSTEM,

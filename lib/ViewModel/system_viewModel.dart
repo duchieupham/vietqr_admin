@@ -12,6 +12,7 @@ class SystemViewModel extends BaseModel {
   List<UserSystemDTO>? listUser = [];
   MetaDataDTO? metaDataDTO;
   UserDetailDTO? userDetailDTO;
+  UserInfo? userInfo;
   MetaDataDTO? metadata;
 
   SystemViewModel() {
@@ -32,10 +33,26 @@ class SystemViewModel extends BaseModel {
     }
   }
 
+  Future<bool?> changePass(String phone, String pass) async {
+    try {
+      setState(ViewStatus.Loading);
+      final result = await _dao.changeUserPassword(phone, pass);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
+
   Future<void> getUserDetail(String id) async {
     try {
       setState(ViewStatus.Loading);
       userDetailDTO = await _dao.getUserDetail(id);
+      if (userDetailDTO != null) {
+        userInfo = userDetailDTO!.userInfo;
+      }
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

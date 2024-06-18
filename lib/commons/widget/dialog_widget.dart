@@ -758,6 +758,7 @@ class DialogWidget {
                           text: 'Đóng',
                           textColor: AppColor.BLUE_TEXT,
                           bgColor: AppColor.WHITE,
+                          borderColor: AppColor.BLUE_TEXT,
                           borderRadius: 5,
                           function: (onCancel != null)
                               ? onCancel

@@ -96,15 +96,17 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                                 child: Column(
                                   children: [
                                     _itemTitleUserInfo(),
-                                    ...model.userDetailDTO!.userInfo!
-                                        .asMap()
-                                        .map(
-                                          (index, e) => MapEntry(
-                                            index,
-                                            _buildItemUserInfo(e, index + 1),
-                                          ),
-                                        )
-                                        .values
+                                    _buildItemUserInfo(
+                                        model.userDetailDTO!.userInfo)
+                                    // ...model.userDetailDTO!.userInfo
+                                    //     .asMap()
+                                    //     .map(
+                                    //       (index, e) => MapEntry(
+                                    //         index,
+                                    //        ,
+                                    //       ),
+                                    //     )
+                                    //     .values
                                   ],
                                 ),
                               ),
@@ -181,7 +183,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                                 child: Column(
                                   children: [
                                     _itemTitleBankInfo(),
-                                    ...model.userDetailDTO!.bankShareInfo!
+                                    ...model.userDetailDTO!.bankShareInfo
                                         .asMap()
                                         .map(
                                           (index, e) => MapEntry(
@@ -224,7 +226,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                                 child: Column(
                                   children: [
                                     _itemTitleLinkedInfo(),
-                                    ...model.userDetailDTO!.socialMedia!
+                                    ...model.userDetailDTO!.socalMedia
                                         .asMap()
                                         .map(
                                           (index, e) => MapEntry(
@@ -320,7 +322,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     );
   }
 
-  Widget _buildItemUserInfo(UserInfo dto, int index) {
+  Widget _buildItemUserInfo(UserInfo dto) {
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -331,7 +333,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.bankAccount,
+                dto.phoneNo,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -345,7 +347,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 200,
             child: SelectionArea(
               child: Text(
-                dto.bankAccountName,
+                dto.fullName,
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -506,14 +508,12 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     );
   }
 
-  Widget _buildItemBankShareInfo(BankShareInfo dto, int index) {
+  Widget _buildItemBankShareInfo(BankInfo dto, int index) {
     // Convert UNIX timestamp to DateTime (assuming the timestamp is in seconds)
-    DateTime date =
-        DateTime.fromMillisecondsSinceEpoch(dto.validFeeFrom * 1000);
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(dto.fromDate * 1000);
     // Format DateTime to a string in dd/mm/yyyy format
     String formattedDateFrom = DateFormat('dd/MM/yyyy').format(date);
-    DateTime dateTo =
-        DateTime.fromMillisecondsSinceEpoch(dto.validFeeTo * 1000);
+    DateTime dateTo = DateTime.fromMillisecondsSinceEpoch(dto.toDate * 1000);
     // Format DateTime to a string in dd/mm/yyyy format
     String formattedDateTo = DateFormat('dd/MM/yyyy').format(date);
     return Container(
@@ -566,7 +566,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                dto.isAuthenticated == 0 ? 'Chưa liên kết' : 'Đã liên kết',
+                !dto.status ? 'Chưa liên kết' : 'Đã liên kết',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -580,7 +580,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.mmsActive == 0 ? 'VietQR Plus' : 'VietQR Pro',
+                !dto.mmsActive ? 'VietQR Plus' : 'VietQR Pro',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -665,12 +665,10 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
 
   Widget _buildItemBankInfo(BankInfo dto, int index) {
     // Convert UNIX timestamp to DateTime (assuming the timestamp is in seconds)
-    DateTime date =
-        DateTime.fromMillisecondsSinceEpoch(dto.validFeeFrom * 1000);
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(dto.fromDate * 1000);
     // Format DateTime to a string in dd/mm/yyyy format
     String formattedDateFrom = DateFormat('dd/MM/yyyy').format(date);
-    DateTime dateTo =
-        DateTime.fromMillisecondsSinceEpoch(dto.validFeeTo * 1000);
+    DateTime dateTo = DateTime.fromMillisecondsSinceEpoch(dto.toDate * 1000);
     // Format DateTime to a string in dd/mm/yyyy format
     String formattedDateTo = DateFormat('dd/MM/yyyy').format(date);
     return Container(
@@ -723,7 +721,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                dto.isAuthenticated == 0 ? 'Chưa liên kết' : 'Đã liên kết',
+                dto.status ? 'Chưa liên kết' : 'Đã liên kết',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -737,7 +735,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.mmsActive == 0 ? 'VietQR Plus' : 'VietQR Pro',
+                dto.mmsActive ? 'VietQR Plus' : 'VietQR Pro',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,

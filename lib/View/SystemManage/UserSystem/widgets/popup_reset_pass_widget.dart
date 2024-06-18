@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vietqr_admin/ViewModel/root_viewModel.dart';
+import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/utils/encrypt_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/pin_widget.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
@@ -18,6 +20,9 @@ class _PopupResetPassWidgetState extends State<PopupResetPassWidget> {
   final FocusNode focusNode = FocusNode();
 
   bool isEnterPass = false;
+  bool isError = false;
+
+  String pass = '';
 
   @override
   void initState() {
@@ -56,7 +61,9 @@ class _PopupResetPassWidgetState extends State<PopupResetPassWidget> {
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
                           color: isEnterPass
-                              ? AppColor.BLUE_TEXT
+                              ? isError
+                                  ? AppColor.RED_TEXT
+                                  : AppColor.BLUE_TEXT
                               : AppColor.GREY_DADADA),
                     ),
                     alignment: Alignment.center,
@@ -71,15 +78,40 @@ class _PopupResetPassWidgetState extends State<PopupResetPassWidget> {
                           if (i.isEmpty) {
                             isEnterPass = false;
                           } else {
-                            isEnterPass = true;
+                            if (i.length >= 6) {
+                              isEnterPass = true;
+                            }
                           }
+                          pass = i;
                           setState(() {});
                         },
                       ),
                     ),
                   ),
                   MButtonWidget(
-                      onTap: () {},
+                      isEnable: isEnterPass,
+                      onTap: isEnterPass
+                          ? () async {
+                              await Get.find<SystemViewModel>()
+                                  .changePass(
+                                widget.dto.phoneNo,
+                                EncryptUtils.instance.encrypted(
+                                  widget.dto.phoneNo,
+                                  pass,
+                                ),
+                              )
+                                  .then(
+                                (value) {
+                                  if (value == true) {
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    isError = true;
+                                    setState(() {});
+                                  }
+                                },
+                              );
+                            }
+                          : null,
                       width: double.infinity,
                       height: 50,
                       colorDisableBgr: AppColor.GREY_DADADA,

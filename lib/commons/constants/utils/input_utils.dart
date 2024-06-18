@@ -16,3 +16,17 @@ class VietnameseNameInputFormatter extends TextInputFormatter {
     return oldValue;
   }
 }
+
+class EmailInputFormatter extends TextInputFormatter {
+  final RegExp _emailRegExp = RegExp(r'[a-zA-Z0-9@._-]*$');
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow characters that match the email regex
+    if (_emailRegExp.hasMatch(newValue.text)) {
+      return newValue;
+    }
+    return oldValue;
+  }
+}

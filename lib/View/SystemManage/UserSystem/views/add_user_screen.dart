@@ -7,6 +7,7 @@ import 'package:vietqr_admin/ViewModel/root_viewModel.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/encrypt_utils.dart';
+import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/pin_widget.dart';
@@ -549,20 +550,6 @@ class Gender {
   bool? isSelect;
 
   Gender(this.gender, this.type, this.isSelect);
-}
-
-class EmailInputFormatter extends TextInputFormatter {
-  final RegExp _emailRegExp = RegExp(r'[a-zA-Z0-9@._-]*$');
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    // Allow characters that match the email regex
-    if (_emailRegExp.hasMatch(newValue.text)) {
-      return newValue;
-    }
-    return oldValue;
-  }
 }
 
 class DateInputFormatter extends TextInputFormatter {

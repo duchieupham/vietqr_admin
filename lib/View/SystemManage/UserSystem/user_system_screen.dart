@@ -14,12 +14,14 @@ import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
 import 'views/add_user_screen.dart';
+import 'views/update_user_screen.dart';
 import 'widgets/title_item_widget.dart';
 
 enum Actions {
@@ -49,7 +51,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   bool isScrollingDown2 = false;
   String selectedUserId = '';
 
-  int type = 0;
+  int type = 1;
   PageUser page = PageUser.LIST;
 
   @override
@@ -154,11 +156,22 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             UserDetailScreen(
               userId: selectedUserId,
               callback: () {
+                page = PageUser.LIST;
+
+                _model.getListUser(type: type, value: _textController.text);
+                setState(() {});
+              },
+            )
+          else if (page == PageUser.UPDATE_USER)
+            UpdateUserScreen(
+              userId: selectedUserId,
+              callback: () {
                 setState(() {
                   page = PageUser.LIST;
                 });
               },
-            )
+              onUpdate: () {},
+            ),
         ],
       ),
     );
@@ -281,9 +294,16 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                                           width: 100,
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: AppColor.GREY_TEXT
-                                                      .withOpacity(0.3))),
+                                              border: Border(
+                                                  top: BorderSide(
+                                                      color: AppColor.GREY_TEXT
+                                                          .withOpacity(0.3)),
+                                                  bottom: BorderSide(
+                                                      color: AppColor.GREY_TEXT
+                                                          .withOpacity(0.3)),
+                                                  right: BorderSide(
+                                                      color: AppColor.GREY_TEXT
+                                                          .withOpacity(0.3)))),
                                           child: const Text(
                                             'Thao tác',
                                             textAlign: TextAlign.center,
@@ -335,15 +355,11 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             width: 130,
             child: SelectionArea(
                 child: Text(
-              e.status == 0 ? 'Không hoạt động' : 'Hoạt động',
+              !e.status ? 'Không hoạt động' : 'Hoạt động',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: e.status == 0
-                    ? AppColor.ORANGE_DARK
-                    : e.status == 1
-                        ? AppColor.GREEN
-                        : AppColor.GREEN_STATUS,
+                color: !e.status ? AppColor.ORANGE_DARK : AppColor.GREEN_STATUS,
               ),
             )),
           ),
@@ -369,7 +385,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                     onTap: () {
                       setState(() {
                         page = PageUser.USER_INFO;
-                        selectedUserId = e.id;
+                        selectedUserId = e.userIdDetail;
                       });
                     },
                     child: BoxLayout(
@@ -393,6 +409,10 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   onSelected: (Actions result) {
                     switch (result) {
                       case Actions.update_info:
+                        setState(() {
+                          page = PageUser.UPDATE_USER;
+                          selectedUserId = e.userIdDetail;
+                        });
                         break;
                       case Actions.reset_pass:
                         showDialog(
@@ -431,7 +451,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
     );
   }
 
-  List<PopupMenuEntry<Actions>> _buildMenuItems(int status) {
+  List<PopupMenuEntry<Actions>> _buildMenuItems(bool status) {
     List<PopupMenuEntry<Actions>> items = [
       const PopupMenuItem<Actions>(
         value: Actions.update_info,
@@ -444,9 +464,9 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
       PopupMenuItem<Actions>(
         value: Actions.active,
         child: Text(
-          status == 0 ? 'Huỷ kích hoạt' : 'Kích hoạt',
-          style: TextStyle(
-              color: status == 0 ? AppColor.RED_TEXT : AppColor.BLUE_TEXT),
+          status ? 'Huỷ kích hoạt' : 'Kích hoạt',
+          style:
+              TextStyle(color: status ? AppColor.RED_TEXT : AppColor.BLUE_TEXT),
         ),
       ),
     ];
@@ -494,14 +514,14 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                       ),
                       items: const [
                         DropdownMenuItem<int>(
-                            value: 0,
-                            child: Text(
-                              "Số điện thoại",
-                            )),
-                        DropdownMenuItem<int>(
                             value: 1,
                             child: Text(
                               "Họ và tên",
+                            )),
+                        DropdownMenuItem<int>(
+                            value: 2,
+                            child: Text(
+                              "Số điện thoại",
                             )),
                       ],
                       onChanged: (value) {
@@ -526,11 +546,11 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                           width: 260,
                           child: TextField(
                             textInputAction: TextInputAction.done,
-                            keyboardType: type == 0
+                            keyboardType: type == 2
                                 ? TextInputType.number
                                 : TextInputType.name,
                             inputFormatters: [
-                              type == 0
+                              type == 2
                                   ? FilteringTextInputFormatter.digitsOnly
                                   : FilteringTextInputFormatter.allow(
                                       RegExp(r'^[a-zA-ZÀ-ỹẠ-ỵ0-9 ]+$'))
@@ -551,7 +571,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                               contentPadding: const EdgeInsets.only(top: 6),
                               border: InputBorder.none,
                               hintText:
-                                  'Tìm kiếm theo ${type == 0 ? 'số điện thoại' : 'họ tên'}',
+                                  'Tìm kiếm theo ${type == 2 ? 'số điện thoại' : 'họ tên'}',
                               hintStyle: const TextStyle(
                                   fontSize: 13, color: AppColor.GREY_TEXT),
                               prefixIcon: const Icon(
@@ -794,77 +814,83 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   }
 
   void changeLinked(UserSystemDTO e) {
-    _model.changeLinked(e.id, e.status == 0 ? 1 : 0).then(
-      (value) {
-        if (value == true) {
-          if (e.status == 0) {
-            toastification.show(
-              context: context,
-              type: ToastificationType.success,
-              style: ToastificationStyle.flat,
-              title: const Text(
-                'Liên kết thành công',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              showProgressBar: false,
-              alignment: Alignment.topRight,
-              autoCloseDuration: const Duration(seconds: 5),
-              boxShadow: highModeShadow,
-              dragToClose: true,
-              pauseOnHover: true,
-            );
-          } else {
-            toastification.show(
-              context: context,
-              type: ToastificationType.success,
-              style: ToastificationStyle.flat,
-              title: const Text(
-                'Hủy liên kết thành công',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              showProgressBar: false,
-              alignment: Alignment.topRight,
-              autoCloseDuration: const Duration(seconds: 5),
-              boxShadow: highModeShadow,
-              dragToClose: true,
-              pauseOnHover: true,
-            );
-          }
-        } else {
-          if (e.status == 0) {
-            toastification.show(
-              context: context,
-              type: ToastificationType.error,
-              style: ToastificationStyle.flat,
-              title: const Text(
-                'Liên kết thất bại',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              showProgressBar: false,
-              alignment: Alignment.topRight,
-              autoCloseDuration: const Duration(seconds: 5),
-              boxShadow: highModeShadow,
-              dragToClose: true,
-              pauseOnHover: true,
-            );
-          } else {
-            toastification.show(
-              context: context,
-              type: ToastificationType.error,
-              style: ToastificationStyle.flat,
-              title: const Text(
-                'Hủy liên kết thất bại',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              showProgressBar: false,
-              alignment: Alignment.topRight,
-              autoCloseDuration: const Duration(seconds: 5),
-              boxShadow: highModeShadow,
-              dragToClose: true,
-              pauseOnHover: true,
-            );
-          }
-        }
+    DialogWidget.instance.openMsgDialogQuestion(
+      title: 'Xác nhận ${!e.status ? 'liên kết' : 'hủy liên kết'}',
+      msg: '',
+      onConfirm: () {
+        _model.changeLinked(e.id, !e.status ? 1 : 0).then(
+          (value) {
+            if (value == true) {
+              if (e.status) {
+                toastification.show(
+                  context: context,
+                  type: ToastificationType.success,
+                  style: ToastificationStyle.flat,
+                  title: const Text(
+                    'Liên kết thành công',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  showProgressBar: false,
+                  alignment: Alignment.topRight,
+                  autoCloseDuration: const Duration(seconds: 5),
+                  boxShadow: highModeShadow,
+                  dragToClose: true,
+                  pauseOnHover: true,
+                );
+              } else {
+                toastification.show(
+                  context: context,
+                  type: ToastificationType.success,
+                  style: ToastificationStyle.flat,
+                  title: const Text(
+                    'Hủy liên kết thành công',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  showProgressBar: false,
+                  alignment: Alignment.topRight,
+                  autoCloseDuration: const Duration(seconds: 5),
+                  boxShadow: highModeShadow,
+                  dragToClose: true,
+                  pauseOnHover: true,
+                );
+              }
+            } else {
+              if (!e.status) {
+                toastification.show(
+                  context: context,
+                  type: ToastificationType.error,
+                  style: ToastificationStyle.flat,
+                  title: const Text(
+                    'Liên kết thất bại',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  showProgressBar: false,
+                  alignment: Alignment.topRight,
+                  autoCloseDuration: const Duration(seconds: 5),
+                  boxShadow: highModeShadow,
+                  dragToClose: true,
+                  pauseOnHover: true,
+                );
+              } else {
+                toastification.show(
+                  context: context,
+                  type: ToastificationType.error,
+                  style: ToastificationStyle.flat,
+                  title: const Text(
+                    'Hủy liên kết thất bại',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  showProgressBar: false,
+                  alignment: Alignment.topRight,
+                  autoCloseDuration: const Duration(seconds: 5),
+                  boxShadow: highModeShadow,
+                  dragToClose: true,
+                  pauseOnHover: true,
+                );
+              }
+            }
+          },
+        );
       },
     );
   }

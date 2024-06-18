@@ -65,7 +65,9 @@ class ItemUserWidget extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerRight,
+              alignment: dto.email.isNotEmpty
+                  ? Alignment.centerRight
+                  : Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -73,14 +75,16 @@ class ItemUserWidget extends StatelessWidget {
               height: 50,
               width: 150,
               child: Text(
-                dto.email,
+                dto.email.isNotEmpty ? dto.email : '-',
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 12),
               ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerRight,
+              alignment: dto.nationalId.isNotEmpty
+                  ? Alignment.centerRight
+                  : Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -88,14 +92,16 @@ class ItemUserWidget extends StatelessWidget {
               height: 50,
               width: 150,
               child: Text(
-                '-',
+                dto.nationalId.isNotEmpty ? dto.nationalId : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerRight,
+              alignment: dto.nationalDate.isNotEmpty
+                  ? Alignment.centerRight
+                  : Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -103,14 +109,16 @@ class ItemUserWidget extends StatelessWidget {
               height: 50,
               width: 150,
               child: Text(
-                '-',
+                dto.nationalDate.isNotEmpty ? dto.nationalDate : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerRight,
+              alignment: dto.oldNationalId.isNotEmpty
+                  ? Alignment.centerRight
+                  : Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -118,7 +126,7 @@ class ItemUserWidget extends StatelessWidget {
               height: 50,
               width: 150,
               child: Text(
-                '-',
+                dto.oldNationalId.isNotEmpty ? dto.oldNationalId : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -170,7 +178,9 @@ class ItemUserWidget extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerLeft,
+              alignment: dto.address.isNotEmpty
+                  ? Alignment.centerLeft
+                  : Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -178,7 +188,7 @@ class ItemUserWidget extends StatelessWidget {
               height: 50,
               width: 200,
               child: Text(
-                dto.address,
+                dto.address.isNotEmpty ? dto.address : '-',
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),

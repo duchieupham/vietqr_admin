@@ -494,7 +494,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<SelectInvoiceItem> mapToSelectInvoiceItems(
       List<InvoiceItemDetailDTO> invoiceItems) {
     return invoiceItems
-        .map((item) => SelectInvoiceItem(isSelect: false, invoiceItem: item))
+        .map((item) => SelectInvoiceItem(isSelect: true, invoiceItem: item))
         .toList();
   }
 

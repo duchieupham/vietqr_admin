@@ -131,14 +131,13 @@ class BaseAPIClient {
   }
 
   static Map<String, String>? _getHeader(
-      {AuthenticationType? type,
-      Map<String, String>? header}) {
+      {AuthenticationType? type, Map<String, String>? header}) {
     Map<String, String>? result = {};
     type ??= AuthenticationType.NONE;
     final String token = AccountHelper.instance.getToken();
     debugPrint('----------------token-----------------$token');
     final String tokenFree = AccountHelper.instance.getTokenFree();
-    debugPrint('----------------tokenFree-----------------$tokenFree');
+    // debugPrint('----------------tokenFree-----------------$tokenFree');
     switch (type) {
       case AuthenticationType.SYSTEM:
         result['Authorization'] =
