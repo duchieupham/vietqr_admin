@@ -19,7 +19,7 @@ class SystemDAO extends BaseDAO {
     List<UserSystemDTO> result = [];
     try {
       String url =
-          'https://dev.vietqr.org/vqr/api/account/admin-list-account-user?page=$page&size=${size ?? 20}&type=$type&value=$value';
+          '${EnvConfig.instance.getBaseUrl()}account/admin-list-account-user?page=$page&size=${size ?? 20}&type=$type&value=$value';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -38,10 +38,26 @@ class SystemDAO extends BaseDAO {
     return [];
   }
 
+  Future<bool?> updateUser(UserInfo dto) async {
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}admin/account-update/${dto.id}';
+      final response = await BaseAPIClient.putAPI(
+        body: dto.toJson(),
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
   Future<UserDetailDTO?> getUserDetail(String userId) async {
     try {
       String url =
-          'https://dev.vietqr.org/vqr/api/account/users-details?userId=$userId';
+          '${EnvConfig.instance.getBaseUrl()}account/users-details?userId=$userId';
       // String url =
       //     '${EnvConfig.instance.getBaseUrl()}invoice/detail/$userId';
       final response = await BaseAPIClient.getAPI(
@@ -60,7 +76,7 @@ class SystemDAO extends BaseDAO {
 
   Future<bool?> createUser(CreateUserDTO dto) async {
     try {
-      String url = 'https://dev.vietqr.org/vqr/api/admin/create';
+      String url = '${EnvConfig.instance.getBaseUrl()}admin/account-create';
       final response = await BaseAPIClient.postAPI(
         body: dto.toJson(),
         url: url,
@@ -76,10 +92,10 @@ class SystemDAO extends BaseDAO {
   Future<bool?> changeLinkedUser(String? userId, int? status) async {
     try {
       Map<String, dynamic> param = {};
-      param['userId'] = userId;
-      param['status'] = status;
+      param[''] = status;
 
-      String url = 'https://dev.vietqr.org/vqr/api/admin';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}admin/account-status/$userId?status=$status';
       final response = await BaseAPIClient.putAPI(
         body: param,
         url: url,
@@ -98,7 +114,7 @@ class SystemDAO extends BaseDAO {
       param['newPassword'] = pass;
 
       String url =
-          'https://dev.vietqr.org/vqr/api/password-reset?phoneNo=$phone';
+          '${EnvConfig.instance.getBaseUrl()}password-reset?phoneNo=$phone';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
@@ -386,6 +387,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                       setState(() {
                         page = PageUser.USER_INFO;
                         selectedUserId = e.userIdDetail;
+                        debugPrint(selectedUserId);
                       });
                     },
                     child: BoxLayout(
@@ -412,6 +414,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                         setState(() {
                           page = PageUser.UPDATE_USER;
                           selectedUserId = e.userIdDetail;
+                          print(selectedUserId);
                         });
                         break;
                       case Actions.reset_pass:
@@ -422,6 +425,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                         break;
                       case Actions.active:
                         changeLinked(e);
+
                         break;
                     }
                   },
@@ -818,26 +822,10 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
       title: 'Xác nhận ${!e.status ? 'liên kết' : 'hủy liên kết'}',
       msg: '',
       onConfirm: () {
-        _model.changeLinked(e.id, !e.status ? 1 : 0).then(
+        _model.changeLinked(e.userIdDetail, !e.status ? 1 : 0).then(
           (value) {
             if (value == true) {
               if (e.status) {
-                toastification.show(
-                  context: context,
-                  type: ToastificationType.success,
-                  style: ToastificationStyle.flat,
-                  title: const Text(
-                    'Liên kết thành công',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  showProgressBar: false,
-                  alignment: Alignment.topRight,
-                  autoCloseDuration: const Duration(seconds: 5),
-                  boxShadow: highModeShadow,
-                  dragToClose: true,
-                  pauseOnHover: true,
-                );
-              } else {
                 toastification.show(
                   context: context,
                   type: ToastificationType.success,
@@ -853,15 +841,13 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   dragToClose: true,
                   pauseOnHover: true,
                 );
-              }
-            } else {
-              if (!e.status) {
+              } else {
                 toastification.show(
                   context: context,
-                  type: ToastificationType.error,
+                  type: ToastificationType.success,
                   style: ToastificationStyle.flat,
                   title: const Text(
-                    'Liên kết thất bại',
+                    'Liên kết thành công',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   showProgressBar: false,
@@ -871,7 +857,12 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   dragToClose: true,
                   pauseOnHover: true,
                 );
-              } else {
+              }
+              _model.getListUser(type: type, value: _textController.text);
+
+              Navigator.of(context).pop();
+            } else {
+              if (!e.status) {
                 toastification.show(
                   context: context,
                   type: ToastificationType.error,
@@ -887,7 +878,24 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   dragToClose: true,
                   pauseOnHover: true,
                 );
+              } else {
+                toastification.show(
+                  context: context,
+                  type: ToastificationType.error,
+                  style: ToastificationStyle.flat,
+                  title: const Text(
+                    'Liên kết thất bại',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  showProgressBar: false,
+                  alignment: Alignment.topRight,
+                  autoCloseDuration: const Duration(seconds: 5),
+                  boxShadow: highModeShadow,
+                  dragToClose: true,
+                  pauseOnHover: true,
+                );
               }
+              Navigator.of(context).pop();
             }
           },
         );

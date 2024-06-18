@@ -43,16 +43,45 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment:
-                  dto.vso.isNotEmpty ? Alignment.centerLeft : Alignment.center,
+              alignment: Alignment.centerLeft,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
-              width: 120,
+              width: 200,
               child: Text(
-                dto.vso.isNotEmpty ? dto.vso : '-',
+                dto.fullName.isNotEmpty ? dto.fullName : '-',
+                textAlign: TextAlign.left,
+                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment: Alignment.centerLeft,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
+              height: 50,
+              width: 150,
+              child: Text(
+                dto.phoneNo,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment: Alignment.centerLeft,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
+              height: 50,
+              width: 150,
+              child: Text(
+                dto.billNumber,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -75,6 +104,22 @@ class ItemInvoiceWidget extends StatelessWidget {
                     color: dto.status == 1
                         ? AppColor.GREEN
                         : AppColor.ORANGE_DARK),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment:
+                  dto.vso.isNotEmpty ? Alignment.centerLeft : Alignment.center,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
+              height: 50,
+              width: 120,
+              child: Text(
+                dto.vso.isNotEmpty ? dto.vso : '-',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
             Container(
@@ -116,21 +161,6 @@ class ItemInvoiceWidget extends StatelessWidget {
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
-              width: 150,
-              child: Text(
-                dto.billNumber,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerLeft,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
               width: 250,
               child: Text(
                 dto.invoiceName,
@@ -148,40 +178,10 @@ class ItemInvoiceWidget extends StatelessWidget {
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
-              width: 200,
-              child: Text(
-                dto.fullName.isNotEmpty ? dto.fullName : '-',
-                textAlign: TextAlign.left,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerLeft,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
               width: 150,
               child: Text(
                 '${dto.bankAccount}\n${dto.bankShortName}',
                 textAlign: TextAlign.left,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerLeft,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
-              width: 150,
-              child: Text(
-                dto.phoneNo,
-                textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),

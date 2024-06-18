@@ -1,3 +1,4 @@
+import 'package:vietqr_admin/View/SystemManage/UserSystem/views/add_user_screen.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
@@ -14,10 +15,16 @@ class SystemViewModel extends BaseModel {
   UserDetailDTO? userDetailDTO;
   UserInfo? userInfo;
   MetaDataDTO? metadata;
+  Gender? selectGender;
 
   SystemViewModel() {
     _dao = SystemDAO();
     listUser = [];
+  }
+
+  void genderUpdate(Gender value) async {
+    selectGender = value;
+    notifyListeners();
   }
 
   Future<void> getListUser(
@@ -52,12 +59,30 @@ class SystemViewModel extends BaseModel {
       userDetailDTO = await _dao.getUserDetail(id);
       if (userDetailDTO != null) {
         userInfo = userDetailDTO!.userInfo;
+        selectGender = Gender(
+            userInfo!.gender == 0 ? 'Nam' : 'Nữ', userInfo!.gender, false);
+      } else {
+        userInfo = null;
       }
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());
       setState(ViewStatus.Error);
     }
+  }
+
+  Future<bool?> updateUser(UserInfo dto) async {
+    try {
+      setState(ViewStatus.Loading);
+      final result = await _dao.updateUser(dto);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+
+    return false;
   }
 
   Future<bool?> createUser(CreateUserDTO dto) async {

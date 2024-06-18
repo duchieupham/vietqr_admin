@@ -34,7 +34,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _midtNameController = TextEditingController();
+  final TextEditingController _midNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
   final TextEditingController _nationalController = TextEditingController();
@@ -263,7 +263,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                         border: Border.all(color: AppColor.GREY_DADADA),
                       ),
                       child: TextField(
-                        controller: _midtNameController,
+                        controller: _midNameController,
                         keyboardType: TextInputType.name,
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
@@ -513,7 +513,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   ),
                   email: _emailController.text,
                   firstName: _firstNameController.text,
-                  middleName: _midtNameController.text,
+                  middleName: _midNameController.text,
                   lastName: _lastNameController.text,
                   address: _addressController.text,
                   gender: selectGender.type.toString(),
@@ -534,7 +534,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
         _passController.text.isNotEmpty &&
         (_emailController.text.isNotEmpty ||
             _firstNameController.text.isNotEmpty ||
-            _midtNameController.text.isNotEmpty ||
+            _midNameController.text.isNotEmpty ||
             _lastNameController.text.isNotEmpty)) {
       isEnable = true;
     } else {

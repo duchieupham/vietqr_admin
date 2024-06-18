@@ -51,16 +51,12 @@ class UserInfo {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'address': address,
-      'fullName': fullName,
-      'status': status,
       'firstName': firstName,
       'middleName': middleName,
       'lastName': lastName,
       'email': email,
       'nationalId': nationalId,
-      'phoneNo': phoneNo,
       'oldNationalId': oldNationalId,
       'nationalDate': nationalDate,
       'gender': gender,
