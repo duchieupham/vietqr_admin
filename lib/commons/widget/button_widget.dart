@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 
 class ButtonWidget extends StatelessWidget {
   final double? width;
@@ -6,6 +7,8 @@ class ButtonWidget extends StatelessWidget {
   final String text;
   final Color textColor;
   final Color bgColor;
+  final Color? borderColor;
+
   final VoidCallback function;
   final double? height;
   final double? borderRadius;
@@ -18,6 +21,7 @@ class ButtonWidget extends StatelessWidget {
     required this.textColor,
     required this.bgColor,
     required this.function,
+    this.borderColor,
     this.height,
     this.borderRadius,
     this.padding = EdgeInsets.zero,
@@ -36,6 +40,7 @@ class ButtonWidget extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
               (borderRadius != null) ? borderRadius! : 15),
+          border: Border.all(color: borderColor ?? AppColor.WHITE),
           color: bgColor,
         ),
         child: Text(

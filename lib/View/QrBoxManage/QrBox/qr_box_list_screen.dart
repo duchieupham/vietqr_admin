@@ -761,27 +761,28 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                         type: type, value: value);
                                   },
                                   decoration: InputDecoration(
-                                      contentPadding: const EdgeInsets.only(
-                                          bottom: 8, top: 8),
-                                      border: InputBorder.none,
-                                      hintText: 'Tìm kiếm theo TK ngân hàng',
-                                      hintStyle: const TextStyle(
-                                          fontSize: 15,
-                                          color: AppColor.GREY_TEXT),
-                                      prefixIcon: const Icon(
-                                        Icons.search,
-                                        size: 15,
-                                        color: AppColor.GREY_TEXT,
-                                      ),
-                                      suffixIcon: IconButton(
-                                          onPressed: () {
-                                            _textController.clear();
-                                          },
-                                          icon: const Icon(
-                                            Icons.close,
-                                            size: 15,
-                                            color: AppColor.GREY_TEXT,
-                                          ))),
+                                    contentPadding: const EdgeInsets.only(
+                                        bottom: 8, top: 8),
+                                    border: InputBorder.none,
+                                    hintText: 'Tìm kiếm theo TK ngân hàng',
+                                    hintStyle: const TextStyle(
+                                        fontSize: 15,
+                                        color: AppColor.GREY_TEXT),
+                                    prefixIcon: const Icon(
+                                      Icons.search,
+                                      size: 15,
+                                      color: AppColor.GREY_TEXT,
+                                    ),
+                                    suffixIcon: IconButton(
+                                        onPressed: () {
+                                          _textController.clear();
+                                        },
+                                        icon: const Icon(
+                                          Icons.close,
+                                          size: 15,
+                                          color: AppColor.GREY_TEXT,
+                                        )),
+                                  ),
                                   maxLines: 1,
                                 ),
                               )

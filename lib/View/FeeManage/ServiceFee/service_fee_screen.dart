@@ -100,6 +100,7 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
           color: AppColor.TRANSPARENT,
           child: Center(
             child: DialogPickDate(
+              year: 2,
               dateTime: dateTime,
             ),
           ),

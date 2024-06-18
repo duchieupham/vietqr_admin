@@ -765,7 +765,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                               width: 250,
                               height: 20,
                               child: Text(
-                                'Tài khoản VietQR',
+                                'Tài khoản VietQR-ID',
                                 style: TextStyle(fontSize: 13),
                               ),
                             ),

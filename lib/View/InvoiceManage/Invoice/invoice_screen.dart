@@ -166,6 +166,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           color: AppColor.TRANSPARENT,
           child: Center(
             child: DialogPickDate(
+              year: 2,
               dateTime: dateTime,
             ),
           ),
@@ -346,7 +347,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                   child: SingleChildScrollView(
                                     controller: controller1,
                                     child: SizedBox(
-                                      width: 2000,
+                                      width: 1960,
                                       child: Column(
                                         children: [
                                           const TitleItemInvoiceWidget(),
@@ -360,7 +361,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               ),
                               SizedBox(
                                 // width: 1890,
-                                width: 2000,
+                                width: 1960,
                                 child: Row(
                                   children: [
                                     const Expanded(child: SizedBox()),
@@ -394,7 +395,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                   children: [
                                                     Container(
                                                         height: 50,
-                                                        width: 130,
+                                                        width: 100,
                                                         alignment:
                                                             Alignment.center,
                                                         decoration: BoxDecoration(
@@ -497,13 +498,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     right: BorderSide(
                         color: AppColor.GREY_TEXT.withOpacity(0.3)))),
             height: 50,
-            width: 130,
+            width: 100,
             child: SelectionArea(
                 child: Text(
               e.status == 0
-                  ? 'Chờ thanh toán'
+                  ? 'Chờ TT'
                   : e.status == 1
-                      ? 'Đã thanh toán'
+                      ? 'Đã TT'
                       : 'Chưa TT hết',
               textAlign: TextAlign.center,
               style: TextStyle(

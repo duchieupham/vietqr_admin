@@ -15,6 +15,7 @@ class MenuLeft extends StatelessWidget {
   final List<Widget> subMenuTransFee;
   final List<Widget> subMenuInvoice;
   final List<Widget> subMenuQrBox;
+  final List<Widget> subMenuSys;
 
   final List<Widget> subMenuSetting;
 
@@ -29,6 +30,7 @@ class MenuLeft extends StatelessWidget {
     this.subMenuInvoice = const [],
     this.subMenuQrBox = const [],
     this.subMenuSetting = const [],
+    this.subMenuSys = const [],
   });
 
   @override
@@ -61,6 +63,16 @@ class MenuLeft extends StatelessWidget {
                 bold: true,
                 onTap: () {
                   context.go('/vnpt-epay');
+                },
+              ),
+              ItemMenuHome(
+                title: 'Quản lý hệ thống',
+                enableDropDownList: true,
+                listItemDrop: subMenuSys,
+                isSelect: currentType == MenuType.SYS_MANAGE,
+                bold: true,
+                onTap: () {
+                  context.go('/system-user');
                 },
               ),
               ItemMenuHome(

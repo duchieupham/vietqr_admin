@@ -175,6 +175,7 @@ class _InformationPopupState extends State<InformationPopup> {
                                 color: AppColor.TRANSPARENT,
                                 child: Center(
                                   child: DialogPickDate(
+                                    year: 2,
                                     dateTime: provider.month,
                                   ),
                                 ),

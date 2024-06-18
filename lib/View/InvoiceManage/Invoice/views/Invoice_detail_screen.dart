@@ -1176,7 +1176,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                     colorDisableBgr: AppColor.GREY_DADADA,
                     width: 250,
                     height: 50,
-                    title: 'Yêu cầu thanh toán',
+                    title: 'tạo mã qr gửi yc thanh toán'.toUpperCase(),
                     radius: 5,
                     isEnable: isEnable,
                     onTap: isEnable
