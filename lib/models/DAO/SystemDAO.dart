@@ -6,6 +6,7 @@ import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
 import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/models/DTO/total_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_detail_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
@@ -52,6 +53,24 @@ class SystemDAO extends BaseDAO {
       LOG.error(e.toString());
     }
     return false;
+  }
+
+  Future<TotalUserDTO?> getTotalUsers() async {
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}account/count-registered-today';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return TotalUserDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return null;
   }
 
   Future<UserDetailDTO?> getUserDetail(String userId) async {

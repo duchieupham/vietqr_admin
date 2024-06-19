@@ -141,7 +141,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                                 child: Column(
                                   children: [
                                     _itemTitleBankInfo(),
-                                    ...model.userDetailDTO!.bankInfo!
+                                    ...model.userDetailDTO!.bankInfo
                                         .asMap()
                                         .map(
                                           (index, e) => MapEntry(
@@ -515,7 +515,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     String formattedDateFrom = DateFormat('dd/MM/yyyy').format(date);
     DateTime dateTo = DateTime.fromMillisecondsSinceEpoch(dto.toDate * 1000);
     // Format DateTime to a string in dd/mm/yyyy format
-    String formattedDateTo = DateFormat('dd/MM/yyyy').format(date);
+    String formattedDateTo = DateFormat('dd/MM/yyyy').format(dateTo);
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -589,12 +589,14 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             ),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: dto.phoneAuthenticated.isNotEmpty
+                ? Alignment.centerLeft
+                : Alignment.center,
             height: 50,
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.phoneAuthenticated,
+                dto.phoneAuthenticated.isNotEmpty ? dto.nationalId : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -603,12 +605,31 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             ),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: dto.nationalId.isNotEmpty
+                ? Alignment.centerLeft
+                : Alignment.center,
             height: 50,
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.nationalId,
+                dto.nationalId.isNotEmpty ? dto.nationalId : '-',
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: dto.activeService != 0
+                ? Alignment.centerLeft
+                : Alignment.center,
+            height: 50,
+            width: 120,
+            child: SelectionArea(
+              child: Text(
+                // '${dto.activeService} tháng',
+                dto.activeService != 0 ? '${dto.activeService} tháng' : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -622,7 +643,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                '${dto.activeService} tháng',
+                dto.fromDate != 0 ? formattedDateFrom : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -636,21 +657,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                formattedDateFrom,
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 120,
-            child: SelectionArea(
-              child: Text(
-                formattedDateTo,
+                dto.toDate != 0 ? formattedDateTo : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -670,7 +677,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     String formattedDateFrom = DateFormat('dd/MM/yyyy').format(date);
     DateTime dateTo = DateTime.fromMillisecondsSinceEpoch(dto.toDate * 1000);
     // Format DateTime to a string in dd/mm/yyyy format
-    String formattedDateTo = DateFormat('dd/MM/yyyy').format(date);
+    String formattedDateTo = DateFormat('dd/MM/yyyy').format(dateTo);
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -744,12 +751,14 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             ),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: dto.phoneAuthenticated.isNotEmpty
+                ? Alignment.centerLeft
+                : Alignment.center,
             height: 50,
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.phoneAuthenticated,
+                dto.phoneAuthenticated.isNotEmpty ? dto.nationalId : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -758,12 +767,31 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             ),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: dto.nationalId.isNotEmpty
+                ? Alignment.centerLeft
+                : Alignment.center,
             height: 50,
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.nationalId,
+                dto.nationalId.isNotEmpty ? dto.nationalId : '-',
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: dto.activeService != 0
+                ? Alignment.centerLeft
+                : Alignment.center,
+            height: 50,
+            width: 120,
+            child: SelectionArea(
+              child: Text(
+                // '${dto.activeService} tháng',
+                dto.activeService != 0 ? '${dto.activeService} tháng' : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -777,7 +805,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                '${dto.activeService} tháng',
+                dto.fromDate != 0 ? formattedDateFrom : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -791,21 +819,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                formattedDateFrom,
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 120,
-            child: SelectionArea(
-              child: Text(
-                formattedDateTo,
+                dto.toDate != 0 ? formattedDateTo : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,

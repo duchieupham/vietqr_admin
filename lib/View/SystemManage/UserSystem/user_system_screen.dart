@@ -59,6 +59,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   void initState() {
     super.initState();
     _model = Get.find<SystemViewModel>();
+    _model.getTotalUsers();
     initController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initData();
@@ -132,6 +133,19 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             ),
             const SizedBox(height: 20),
             _filterWidget(),
+            const SizedBox(height: 20),
+            const MySeparator(
+              color: AppColor.GREY_DADADA,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Tổng số người dùng trong hệ thống: ${_model.totalUserDTO?.totalUsers?.toString() ?? '0'}",
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "Tổng số người dùng đăng ký hôm nay: ${_model.totalUserDTO?.totalUserRegisterToday?.toString() ?? '0'}",
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 20),
             const MySeparator(
               color: AppColor.GREY_DADADA,
@@ -819,7 +833,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
 
   void changeLinked(UserSystemDTO e) {
     DialogWidget.instance.openMsgDialogQuestion(
-      title: 'Xác nhận ${!e.status ? 'liên kết' : 'hủy liên kết'}',
+      title: 'Xác nhận ${!e.status ? 'kích hoạt' : 'hủy kích hoạt'}',
       msg: '',
       onConfirm: () {
         _model.changeLinked(e.userIdDetail, !e.status ? 1 : 0).then(
@@ -831,7 +845,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   type: ToastificationType.success,
                   style: ToastificationStyle.flat,
                   title: const Text(
-                    'Hủy liên kết thành công',
+                    'Hủy kích hoạt thành công',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   showProgressBar: false,
@@ -847,7 +861,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   type: ToastificationType.success,
                   style: ToastificationStyle.flat,
                   title: const Text(
-                    'Liên kết thành công',
+                    'Kích hoạt thành công',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   showProgressBar: false,
@@ -868,7 +882,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   type: ToastificationType.error,
                   style: ToastificationStyle.flat,
                   title: const Text(
-                    'Hủy liên kết thất bại',
+                    'Hủy kích hoạt thất bại',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   showProgressBar: false,
@@ -884,7 +898,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   type: ToastificationType.error,
                   style: ToastificationStyle.flat,
                   title: const Text(
-                    'Liên kết thất bại',
+                    'Kích hoạt thất bại',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   showProgressBar: false,
@@ -912,7 +926,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             type: ToastificationType.success,
             style: ToastificationStyle.flat,
             title: const Text(
-              'Tạo người thành công',
+              'Tạo người dùng thành công',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             showProgressBar: false,
@@ -931,7 +945,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
             type: ToastificationType.error,
             style: ToastificationStyle.flat,
             title: const Text(
-              'Tạo thất bại',
+              'Tạo người dùng thất bại',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             showProgressBar: false,
