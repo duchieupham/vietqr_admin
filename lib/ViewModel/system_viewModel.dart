@@ -44,7 +44,7 @@ class SystemViewModel extends BaseModel {
 
   Future<void> getTotalUsers() async {
     try {
-      setState(ViewStatus.Loading);
+      setState(ViewStatus.Loading_Page);
       totalUserDTO = await _dao.getTotalUsers();
       setState(ViewStatus.Completed);
     } catch (e) {

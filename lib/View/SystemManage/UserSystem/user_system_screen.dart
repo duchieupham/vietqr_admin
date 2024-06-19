@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/views/user_detail_screen.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/item_user_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/popup_reset_pass_widget.dart';
@@ -14,6 +15,7 @@ import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
+import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
@@ -189,33 +191,137 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   Widget _buildTotalUser() {
     return ScopedModelDescendant<SystemViewModel>(
         builder: (context, child, model) {
-      if (model.status == ViewStatus.Loading) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Tổng số người dùng trong hệ thống: Đang tải .....",
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Tổng số người dùng đăng ký hôm nay: Đang tải .....",
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
-          ],
+      if (model.status == ViewStatus.Loading_Page) {
+        return SizedBox(
+          width: 300,
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
+                  ),
+                ),
+                child: const Row(
+                  children: [
+                    BuildItemlTitle(
+                        title: 'Người dùng',
+                        textAlign: TextAlign.center,
+                        width: 150,
+                        height: 50,
+                        alignment: Alignment.centerLeft),
+                    BuildItemlTitle(
+                        title: 'Đăng ký hôm nay',
+                        height: 50,
+                        width: 150,
+                        alignment: Alignment.centerLeft,
+                        textAlign: TextAlign.center),
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Row(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      width: 150,
+                      child: const SelectionArea(
+                        child: Text(
+                          'Đang tải...',
+                          // textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      width: 150,
+                      child: const SelectionArea(
+                        child: Text(
+                          'Đang tải...',
+                          // textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 13),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         );
       }
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Tổng số người dùng trong hệ thống: ${_model.totalUserDTO?.totalUsers?.toString() ?? '0'}",
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Tổng số người dùng đăng ký hôm nay: ${_model.totalUserDTO?.totalUserRegisterToday?.toString() ?? '0'}",
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-          ),
-        ],
+      return SizedBox(
+        width: 300,
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
+                ),
+              ),
+              child: const Row(
+                children: [
+                  BuildItemlTitle(
+                      title: 'Người dùng',
+                      textAlign: TextAlign.center,
+                      width: 150,
+                      height: 50,
+                      alignment: Alignment.centerLeft),
+                  BuildItemlTitle(
+                      title: 'Đăng ký hôm nay',
+                      height: 50,
+                      width: 150,
+                      alignment: Alignment.centerLeft,
+                      textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: 50,
+                    width: 150,
+                    child: SelectionArea(
+                      child: Text(
+                        StringUtils.formatNumberWithOutVND(
+                            _model.totalUserDTO?.totalUsers ?? '0'),
+                        // textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    height: 50,
+                    width: 150,
+                    child: SelectionArea(
+                      child: Text(
+                        StringUtils.formatNumberWithOutVND(
+                            _model.totalUserDTO?.totalUserRegisterToday ?? '0'),
+                        // textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 13),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       );
     });
   }
