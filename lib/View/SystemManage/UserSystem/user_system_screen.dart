@@ -59,7 +59,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
   void initState() {
     super.initState();
     _model = Get.find<SystemViewModel>();
-    _model.getTotalUsers();
+
     initController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initData();
@@ -68,6 +68,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
 
   void initData() {
     _model.getListUser(type: 1);
+    _model.getTotalUsers();
   }
 
   void initController() {
@@ -138,14 +139,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
               color: AppColor.GREY_DADADA,
             ),
             const SizedBox(height: 20),
-            Text(
-              "Tổng số người dùng trong hệ thống: ${_model.totalUserDTO?.totalUsers?.toString() ?? '0'}",
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "Tổng số người dùng đăng ký hôm nay: ${_model.totalUserDTO?.totalUserRegisterToday?.toString() ?? '0'}",
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
+            _buildTotalUser(),
             const SizedBox(height: 20),
             const MySeparator(
               color: AppColor.GREY_DADADA,
@@ -190,6 +184,40 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildTotalUser() {
+    return ScopedModelDescendant<SystemViewModel>(
+        builder: (context, child, model) {
+      if (model.status == ViewStatus.Loading) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Tổng số người dùng trong hệ thống: Đang tải .....",
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              "Tổng số người dùng đăng ký hôm nay: Đang tải .....",
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+          ],
+        );
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Tổng số người dùng trong hệ thống: ${_model.totalUserDTO?.totalUsers?.toString() ?? '0'}",
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Tổng số người dùng đăng ký hôm nay: ${_model.totalUserDTO?.totalUserRegisterToday?.toString() ?? '0'}",
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildList() {
