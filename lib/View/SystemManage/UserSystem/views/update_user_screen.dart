@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:toastification/toastification.dart';
+import 'package:vietqr_admin/View/SystemManage/UserSystem/user_system_screen.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
@@ -39,7 +41,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
   final TextEditingController _nationalDateController = TextEditingController();
   final TextEditingController _oldNationalController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-
+  PageUser page = PageUser.LIST;
   final FocusNode focusNode = FocusNode();
 
   late SystemViewModel _model;
@@ -140,6 +142,31 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
                       _addressController.text = model.userInfo!.address;
                     },
                   );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(
+                  //     content: Text('Cập nhật thông tin thành công !!!'),
+                  //     duration: Duration(seconds: 2),
+                  //   ),
+                  // );
+                  toastification.show(
+                    context: context,
+                    type: ToastificationType.success,
+                    style: ToastificationStyle.flat,
+                    title: const Text(
+                      'Cập nhật thông tin thành công!',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    showProgressBar: false,
+                    alignment: Alignment.topRight,
+                    autoCloseDuration: const Duration(seconds: 5),
+                    boxShadow: highModeShadow,
+                    dragToClose: true,
+                    pauseOnHover: true,
+                  );
+                  // page = PageUser.LIST;
+                  // _model.getListUser(type: 1, value: '');
+                  // setState(() {});
                 }
               },
             );
@@ -250,7 +277,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
                           border: Border.all(color: AppColor.GREY_DADADA),
                         ),
                         child: TextField(
-                          controller: _firstNameController,
+                          controller: _lastNameController,
                           keyboardType: TextInputType.name,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
@@ -312,7 +339,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
                           border: Border.all(color: AppColor.GREY_DADADA),
                         ),
                         child: TextField(
-                          controller: _lastNameController,
+                          controller: _firstNameController,
                           keyboardType: TextInputType.name,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(

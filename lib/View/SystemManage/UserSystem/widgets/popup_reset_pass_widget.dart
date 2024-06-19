@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/root_viewModel.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
@@ -104,8 +105,51 @@ class _PopupResetPassWidgetState extends State<PopupResetPassWidget> {
                                 (value) {
                                   if (value == true) {
                                     Navigator.of(context).pop();
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //   const SnackBar(
+                                    //     content: Text(
+                                    //         'Đổi mật khẩu người dùng thành công!!!'),
+                                    //     duration: Duration(seconds: 2),
+                                    //   ),
+                                    // );
+                                    toastification.show(
+                                      context: context,
+                                      type: ToastificationType.success,
+                                      style: ToastificationStyle.flat,
+                                      title: const Text(
+                                        'Đổi mật khẩu thành công!',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      showProgressBar: false,
+                                      alignment: Alignment.topRight,
+                                      autoCloseDuration:
+                                          const Duration(seconds: 5),
+                                      boxShadow: highModeShadow,
+                                      dragToClose: true,
+                                      pauseOnHover: true,
+                                    );
                                   } else {
                                     isError = true;
+                                    toastification.show(
+                                      context: context,
+                                      type: ToastificationType.success,
+                                      style: ToastificationStyle.flat,
+                                      title: const Text(
+                                        'Đổi mật khẩu thất bại!',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      showProgressBar: false,
+                                      alignment: Alignment.topRight,
+                                      autoCloseDuration:
+                                          const Duration(seconds: 5),
+                                      boxShadow: highModeShadow,
+                                      dragToClose: true,
+                                      pauseOnHover: true,
+                                    );
                                     setState(() {});
                                   }
                                 },

@@ -5,6 +5,7 @@ import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/DAO/SystemDAO.dart';
 import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/models/DTO/total_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_detail_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
@@ -16,6 +17,7 @@ class SystemViewModel extends BaseModel {
   UserInfo? userInfo;
   MetaDataDTO? metadata;
   Gender? selectGender;
+  TotalUserDTO? totalUserDTO;
 
   SystemViewModel() {
     _dao = SystemDAO();
@@ -33,6 +35,17 @@ class SystemViewModel extends BaseModel {
       setState(ViewStatus.Loading);
       listUser = await _dao.getListUser(page: page, type: type, value: value);
       metadata = _dao.metaDataDTO;
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
+  Future<void> getTotalUsers() async {
+    try {
+      setState(ViewStatus.Loading);
+      totalUserDTO = await _dao.getTotalUsers();
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

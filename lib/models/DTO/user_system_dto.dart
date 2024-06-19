@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class UserSystemDTO {
   final String id;
   final String address;
