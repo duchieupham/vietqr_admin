@@ -417,7 +417,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 100,
             child: SelectionArea(
               child: Text(
-                dto.status == 0 ? 'Nam ' : 'Nữ',
+                dto.gender == 0 ? 'Nam ' : 'Nữ',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -728,7 +728,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                dto.status ? 'Chưa liên kết' : 'Đã liên kết',
+                !dto.status ? 'Chưa liên kết' : 'Đã liên kết',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
@@ -742,7 +742,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.mmsActive ? 'VietQR Plus' : 'VietQR Pro',
+                !dto.mmsActive ? 'VietQR Plus' : 'VietQR Pro',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
