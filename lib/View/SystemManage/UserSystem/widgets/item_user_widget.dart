@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vietqr_admin/commons/constants/configurations/stringify.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
 import '../../../../commons/constants/configurations/theme.dart';
@@ -156,7 +157,7 @@ class ItemUserWidget extends StatelessWidget {
               height: 50,
               width: 150,
               child: Text(
-                '0',
+                StringUtils.formatAmount(dto.balance),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -171,7 +172,7 @@ class ItemUserWidget extends StatelessWidget {
               height: 50,
               width: 100,
               child: Text(
-                '110',
+                dto.score.toString(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),

@@ -5,6 +5,8 @@ class UserSystemDTO {
   final String email;
   final bool status;
   final int gender;
+  final int balance;
+  final int score;
   final String firstName;
   final String middleName;
   final String lastName;
@@ -24,6 +26,8 @@ class UserSystemDTO {
     required this.email,
     required this.status,
     required this.gender,
+    required this.balance,
+    required this.score,
     required this.firstName,
     required this.middleName,
     required this.lastName,
@@ -46,6 +50,8 @@ class UserSystemDTO {
       'email': email,
       'status': status,
       'gender': gender,
+      'balance': balance,
+      'score': score,
       'firstName': firstName,
       'middleName': middleName,
       'lastName': lastName,
@@ -69,6 +75,8 @@ class UserSystemDTO {
       email: json['email'],
       status: json['status'],
       gender: json['gender'],
+      balance: json['balance'],
+      score: json['score'],
       firstName: json['firstName'],
       middleName: json['middleName'],
       lastName: json['lastName'],
