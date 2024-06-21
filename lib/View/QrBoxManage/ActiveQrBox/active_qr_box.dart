@@ -61,7 +61,9 @@ class _ActiveQrBoxScreenState extends State<ActiveQrBoxScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _headerWidget(),
-              const Divider(),
+              const Divider(
+                color: AppColor.GREY_DADADA,
+              ),
               Expanded(child: _bodyWidget()),
             ],
           ),
