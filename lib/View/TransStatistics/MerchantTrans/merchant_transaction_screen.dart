@@ -170,44 +170,50 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _headerWidget(),
-              const Divider(),
-              Container(
-                padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Tìm kiếm thông tin ",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    _filterWidget(),
-                    const SizedBox(height: 20),
-                    const MySeparator(
-                      color: AppColor.GREY_DADADA,
-                    ),
-                    const SizedBox(height: 20),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        "Thống kê giao dịch đại lý",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
+              const Divider(
+                color: AppColor.GREY_DADADA,
+              ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Tìm kiếm thông tin ",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        _filterWidget(),
+                        const SizedBox(height: 20),
+                        const MySeparator(
+                          color: AppColor.GREY_DADADA,
+                        ),
+                        const SizedBox(height: 20),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 0),
+                          child: Text(
+                            "Thống kê giao dịch đại lý",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        _buildList(),
+                        // FixedColumnTable(),
+                        const SizedBox(height: 10),
+                        _pagingWidget(),
+                        const SizedBox(height: 10),
 
-                    // _statisticMerchant(),
-                  ],
+                        // _statisticMerchant(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               // _buildListMerchant(),
-              _buildList(),
-              // FixedColumnTable(),
-              const SizedBox(height: 10),
-              _pagingWidget(),
-              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -686,7 +692,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
         MetaDataDTO metadata = model.metadata!;
 
         return Container(
-          padding: const EdgeInsets.only(left: 40, right: 40),
+          padding: const EdgeInsets.only(left: 0, right: 40),
           child: TableWidget(
               width: 1400,
               hasData: hasData ? true : false,
@@ -777,7 +783,7 @@ class _MerchantTransactionScreenState extends State<MerchantTransactionScreen> {
 
         return paging != null
             ? Padding(
-                padding: const EdgeInsets.only(left: 30),
+                padding: const EdgeInsets.only(left: 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

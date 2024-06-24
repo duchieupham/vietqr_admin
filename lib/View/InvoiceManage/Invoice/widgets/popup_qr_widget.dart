@@ -205,7 +205,17 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                                       );
                                     }),
                                 const SizedBox(
-                                  height: 140,
+                                  height: 20,
+                                ),
+                                const Text(
+                                  'SỬ DỤNG APP NGÂN HÀNG HOẶC VÍ ĐIỆN TỬ QUÉT MÃ QR ĐỂ THANH TOÁN',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 80,
                                 ),
                                 InkWell(
                                   onTap: () {

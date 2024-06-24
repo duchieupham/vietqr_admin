@@ -1,5 +1,7 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
@@ -455,12 +457,38 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              height: 20,
-                              child: Text(
-                                'Đối tượng*',
-                                style: TextStyle(fontSize: 13),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Đối tượng*',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: () async {
+                                    await FlutterClipboard.copy(invoiceInfo
+                                            .userInformation.merchantName)
+                                        .then(
+                                      (value) => Fluttertoast.showToast(
+                                        msg: 'Đã sao chép',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: AppColor.WHITE,
+                                        textColor: AppColor.BLACK,
+                                        fontSize: 15,
+                                        webBgColor: 'rgba(255, 255, 255)',
+                                        webPosition: 'center',
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 15,
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,
@@ -531,12 +559,38 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              height: 20,
-                              child: Text(
-                                'Tài khoản ngân hàng*',
-                                style: TextStyle(fontSize: 13),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Tài khoản ngân hàng*',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: () async {
+                                    await FlutterClipboard.copy(
+                                            '${invoiceInfo.userInformation.bankShortName} - ${invoiceInfo.userInformation.bankAccount}')
+                                        .then(
+                                      (value) => Fluttertoast.showToast(
+                                        msg: 'Đã sao chép',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: AppColor.WHITE,
+                                        textColor: AppColor.BLACK,
+                                        fontSize: 15,
+                                        webBgColor: 'rgba(255, 255, 255)',
+                                        webPosition: 'center',
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 15,
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,
@@ -590,12 +644,38 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              height: 20,
-                              child: Text(
-                                'Chủ tài khoản',
-                                style: TextStyle(fontSize: 13),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Chủ tài khoản',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: () async {
+                                    await FlutterClipboard.copy(invoiceInfo
+                                            .userInformation.userBankName)
+                                        .then(
+                                      (value) => Fluttertoast.showToast(
+                                        msg: 'Đã sao chép',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: AppColor.WHITE,
+                                        textColor: AppColor.BLACK,
+                                        fontSize: 15,
+                                        webBgColor: 'rgba(255, 255, 255)',
+                                        webPosition: 'center',
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 15,
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,
@@ -643,12 +723,38 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              height: 20,
-                              child: Text(
-                                'Tài khoản VietQR-ID',
-                                style: TextStyle(fontSize: 13),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Tài khoản VietQR-ID',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: () async {
+                                    await FlutterClipboard.copy(
+                                            invoiceInfo.userInformation.phoneNo)
+                                        .then(
+                                      (value) => Fluttertoast.showToast(
+                                        msg: 'Đã sao chép',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: AppColor.WHITE,
+                                        textColor: AppColor.BLACK,
+                                        fontSize: 15,
+                                        webBgColor: 'rgba(255, 255, 255)',
+                                        webPosition: 'center',
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 15,
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,

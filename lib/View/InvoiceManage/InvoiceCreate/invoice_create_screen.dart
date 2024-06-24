@@ -712,13 +712,38 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              width: 100,
-                              height: 20,
-                              child: Text(
-                                'Chủ tài khoản',
-                                style: TextStyle(fontSize: 13),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Chủ tài khoản',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: () async {
+                                    await FlutterClipboard.copy(
+                                            model.bankDetail!.userBankName)
+                                        .then(
+                                      (value) => Fluttertoast.showToast(
+                                        msg: 'Đã sao chép',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: AppColor.WHITE,
+                                        textColor: AppColor.BLACK,
+                                        fontSize: 15,
+                                        webBgColor: 'rgba(255, 255, 255)',
+                                        webPosition: 'center',
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 15,
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,
@@ -761,13 +786,38 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              width: 250,
-                              height: 20,
-                              child: Text(
-                                'Tài khoản VietQR-ID',
-                                style: TextStyle(fontSize: 13),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Tài khoản VietQR-ID',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: () async {
+                                    await FlutterClipboard.copy(
+                                            model.bankDetail!.phoneNo)
+                                        .then(
+                                      (value) => Fluttertoast.showToast(
+                                        msg: 'Đã sao chép',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: AppColor.WHITE,
+                                        textColor: AppColor.BLACK,
+                                        fontSize: 15,
+                                        webBgColor: 'rgba(255, 255, 255)',
+                                        webPosition: 'center',
+                                      ),
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.copy,
+                                    size: 15,
+                                    color: AppColor.BLUE_TEXT,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,

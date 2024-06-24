@@ -177,39 +177,46 @@ class _SystemTransStatisticsScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _headerWidget(),
-                    const Divider(),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Tìm kiếm thông tin ",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          _filterWidget(),
-                          const SizedBox(height: 20),
-                          const MySeparator(
-                            color: AppColor.GREY_DADADA,
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Thống kê giao dịch hệ thống",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
+                    const Divider(
+                      color: AppColor.GREY_DADADA,
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Tìm kiếm thông tin ",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 10),
+                              _filterWidget(),
+                              const SizedBox(height: 20),
+                              const MySeparator(
+                                color: AppColor.GREY_DADADA,
+                              ),
+                              const SizedBox(height: 20),
+                              const Text(
+                                "Thống kê giao dịch hệ thống",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 10),
+                              _buildList(),
+                              const SizedBox(height: 10),
+                              _pagingWidget(),
+                              const SizedBox(height: 10),
 
-                          // _showTotalSystemTransaction(),
-                        ],
+                              // _showTotalSystemTransaction(),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     // _buildListSystemTransaction(),
-                    _buildList(),
-                    const SizedBox(height: 10),
-                    _pagingWidget(),
-                    const SizedBox(height: 10),
                   ],
                 ),
               );
@@ -571,7 +578,7 @@ class _SystemTransStatisticsScreenState
 
         MetaDataDTO metadata = model.metadata!;
         return Container(
-          padding: const EdgeInsets.only(left: 40, right: 40),
+          padding: const EdgeInsets.only(left: 0, right: 40),
           child: TableWidget(
               width: 1100,
               header: TitleItemSystemTransactionWidget(
@@ -664,7 +671,7 @@ class _SystemTransStatisticsScreenState
 
         return paging != null
             ? Padding(
-                padding: const EdgeInsets.only(left: 30),
+                padding: const EdgeInsets.only(left: 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

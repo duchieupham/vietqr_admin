@@ -42,7 +42,9 @@ class _EnvironmentSettingScreenState extends State<EnvironmentSettingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _headerWidget(),
-            const Divider(),
+            const Divider(
+              color: AppColor.GREY_DADADA,
+            ),
             _bodyWidget(),
           ],
         ),

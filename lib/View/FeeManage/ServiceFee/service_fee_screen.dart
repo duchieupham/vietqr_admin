@@ -129,7 +129,9 @@ class _ServiceFeeScreenState extends State<ServiceFeeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _headerWidget(),
-              const Divider(),
+              const Divider(
+                color: AppColor.GREY_DADADA,
+              ),
               Container(
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                 child: Column(
