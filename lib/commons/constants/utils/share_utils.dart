@@ -71,7 +71,7 @@ class ShareUtils {
       timePaid = '\nThời gian thanh toán: $formattedDateTimePaid';
     }
     if (dto.midName.isNotEmpty) {
-      merchant = '\nĐại lý: ${dto.midName}';
+      merchant = 'Đại lý: ${dto.midName}';
     }
     if (dto.billNumber.isNotEmpty) {
       billNumber = '\nMã hoá đơn: ${dto.billNumber}';
@@ -93,7 +93,7 @@ class ShareUtils {
     }
 
     result =
-        '$vso $amount $timePaid $merchant $billNumber $invoiceName $userName $bankAccount $vietQrBank $email $timeCreate\nBy VietQR VN';
+        '$invoiceName $amount $merchant $timePaid $vso $billNumber $userName $bankAccount $vietQrBank $email $timeCreate\nBy VIETQR.VN';
 
     return result;
   }

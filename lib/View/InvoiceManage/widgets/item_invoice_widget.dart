@@ -1,4 +1,6 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 
@@ -50,11 +52,30 @@ class ItemInvoiceWidget extends StatelessWidget {
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
               width: 200,
-              child: Text(
-                dto.fullName.isNotEmpty ? dto.fullName : '-',
-                textAlign: TextAlign.left,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
+              child: TextButton(
+                  onPressed: () async {
+                    await FlutterClipboard.copy(dto.fullName).then(
+                      (value) => Fluttertoast.showToast(
+                        msg: 'Đã sao chép',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppColor.WHITE,
+                        textColor: AppColor.BLACK,
+                        fontSize: 15,
+                        webBgColor: 'rgba(255, 255, 255)',
+                        webPosition: 'center',
+                      ),
+                    );
+                  },
+                  child: Text(
+                    dto.fullName.isNotEmpty ? dto.fullName : '-',
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColor.BLACK,
+                    ),
+                  )),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -65,11 +86,30 @@ class ItemInvoiceWidget extends StatelessWidget {
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
               width: 150,
-              child: Text(
-                dto.phoneNo,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
+              child: TextButton(
+                  onPressed: () async {
+                    await FlutterClipboard.copy(dto.phoneNo).then(
+                      (value) => Fluttertoast.showToast(
+                        msg: 'Đã sao chép',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppColor.WHITE,
+                        textColor: AppColor.BLACK,
+                        fontSize: 15,
+                        webBgColor: 'rgba(255, 255, 255)',
+                        webPosition: 'center',
+                      ),
+                    );
+                  },
+                  child: Text(
+                    dto.phoneNo,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColor.BLACK,
+                    ),
+                  )),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -80,11 +120,27 @@ class ItemInvoiceWidget extends StatelessWidget {
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
               width: 150,
-              child: Text(
-                dto.billNumber,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
+              child: TextButton(
+                  onPressed: () async {
+                    await FlutterClipboard.copy(dto.billNumber).then(
+                      (value) => Fluttertoast.showToast(
+                        msg: 'Đã sao chép',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppColor.WHITE,
+                        textColor: AppColor.BLACK,
+                        fontSize: 15,
+                        webBgColor: 'rgba(255, 255, 255)',
+                        webPosition: 'center',
+                      ),
+                    );
+                  },
+                  child: Text(
+                    dto.billNumber,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                  )),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -116,11 +172,27 @@ class ItemInvoiceWidget extends StatelessWidget {
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
               width: 120,
-              child: Text(
-                dto.vso.isNotEmpty ? dto.vso : '-',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
+              child: TextButton(
+                  onPressed: () async {
+                    await FlutterClipboard.copy(dto.vso).then(
+                      (value) => Fluttertoast.showToast(
+                        msg: 'Đã sao chép',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppColor.WHITE,
+                        textColor: AppColor.BLACK,
+                        fontSize: 15,
+                        webBgColor: 'rgba(255, 255, 255)',
+                        webPosition: 'center',
+                      ),
+                    );
+                  },
+                  child: Text(
+                    dto.vso.isNotEmpty ? dto.vso : '-',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                  )),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -139,8 +211,9 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment:
-                  dto.vso.isNotEmpty ? Alignment.centerLeft : Alignment.center,
+              alignment: dto.midName.isNotEmpty
+                  ? Alignment.centerLeft
+                  : Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -179,11 +252,29 @@ class ItemInvoiceWidget extends StatelessWidget {
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
               width: 150,
-              child: Text(
-                '${dto.bankAccount}\n${dto.bankShortName}',
-                textAlign: TextAlign.left,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
+              child: TextButton(
+                  onPressed: () async {
+                    await FlutterClipboard.copy(
+                            '${dto.bankAccount} - ${dto.bankShortName}')
+                        .then(
+                      (value) => Fluttertoast.showToast(
+                        msg: 'Đã sao chép',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppColor.WHITE,
+                        textColor: AppColor.BLACK,
+                        fontSize: 15,
+                        webBgColor: 'rgba(255, 255, 255)',
+                        webPosition: 'center',
+                      ),
+                    );
+                  },
+                  child: Text(
+                    '${dto.bankAccount}\n${dto.bankShortName}',
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                  )),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
