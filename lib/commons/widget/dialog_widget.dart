@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/commons/constants/configurations/app_image.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/image_utils.dart';
@@ -112,6 +113,26 @@ class DialogWidget {
             ),
           );
         });
+  }
+
+  void openToast(
+      {BuildContext? context, ToastificationType? type, String title = ''}) {
+    context ??= NavigationService.navigatorKey.currentContext;
+    toastification.show(
+      context: context,
+      type: type,
+      style: ToastificationStyle.flat,
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      showProgressBar: false,
+      alignment: Alignment.topRight,
+      autoCloseDuration: const Duration(seconds: 5),
+      boxShadow: highModeShadow,
+      dragToClose: true,
+      pauseOnHover: true,
+    );
   }
 
   void openLoadingDialog() async {

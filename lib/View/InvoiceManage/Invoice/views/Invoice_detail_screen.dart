@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_qr_widget.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -607,7 +608,40 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                       .then(
                     (value) {
                       if (value == true) {
+                        toastification.show(
+                          context: context,
+                          type: ToastificationType.success,
+                          style: ToastificationStyle.flat,
+                          title: const Text(
+                            'Cập nhật thành công',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          showProgressBar: false,
+                          alignment: Alignment.topRight,
+                          autoCloseDuration: const Duration(seconds: 5),
+                          boxShadow: highModeShadow,
+                          dragToClose: true,
+                          pauseOnHover: true,
+                        );
                         _model.getInvoiceDetail(widget.invoiceId);
+                      } else {
+                        toastification.show(
+                          context: context,
+                          type: ToastificationType.error,
+                          style: ToastificationStyle.flat,
+                          title: const Text(
+                            'Cập nhật thất bại',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          showProgressBar: false,
+                          alignment: Alignment.topRight,
+                          autoCloseDuration: const Duration(seconds: 5),
+                          boxShadow: highModeShadow,
+                          dragToClose: true,
+                          pauseOnHover: true,
+                        );
                       }
                     },
                   );
