@@ -246,18 +246,14 @@ class _PopupQrCodeInvoiceState extends State<PopupQrCodeInvoice> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  width: 660,
-                                  height: 60,
-                                  child: Text(
-                                    // widget.dto.invoiceName,
-                                    model.detailQrDTO!.invoiceName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                Text(
+                                  // widget.dto.invoiceName,
+                                  model.detailQrDTO!.invoiceName,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(
                                   height: 10,

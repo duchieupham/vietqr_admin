@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_qr_widget.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
+import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
@@ -30,6 +34,7 @@ class InvoiceDetailScreen extends StatefulWidget {
 
 class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
   late InvoiceViewModel _model;
+
   final controller1 = ScrollController();
   final controller2 = ScrollController();
   final controller3 = ScrollController();
@@ -107,7 +112,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                               style: TextStyle(
                                   color: AppColor.BLUE_TEXT,
                                   fontSize: 13,
-                                  decoration: TextDecoration.underline),
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: AppColor.BLUE_TEXT),
                             ),
                           ),
                       ],
@@ -156,7 +162,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                             ),
                             const SizedBox(height: 30),
                             SizedBox(
-                              width: 1300,
+                              width: 1400,
                               child: Scrollbar(
                                 controller: controller1,
                                 child: SingleChildScrollView(
@@ -411,12 +417,22 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               width: 150,
               alignment: Alignment.centerLeft,
               textAlign: TextAlign.center),
+          BuildItemlTitle(
+              title: 'Thao tác',
+              height: 50,
+              width: 100,
+              alignment: Alignment.centerLeft,
+              textAlign: TextAlign.center),
         ],
       ),
     );
   }
 
   Widget _buildItemPaymentInfo(CustomerDetailDTO dto, int index) {
+    final vsoController = TextEditingController();
+    final midNameController = TextEditingController();
+    final emailController = TextEditingController();
+
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -437,29 +453,56 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
-              child: Text(
-                dto.vso.isNotEmpty ? dto.vso : '-',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
+            padding: const EdgeInsets.only(right: 10),
+            child: MTextFieldCustom(
+                controller: vsoController,
+                value: dto.vso,
+                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                hintText: dto.vso.isNotEmpty ? dto.vso : 'Nhập VSO',
+                hintSize: 13,
+                hintColor: AppColor.BLUE_TEXT,
+                keyboardAction: TextInputAction.done,
+                onChange: (value) {},
+                inputType: TextInputType.name,
+                isObscureText: false),
+            // child: SelectionArea(
+            //   child: Text(
+            //     dto.vso.isNotEmpty ? dto.vso : '-',
+            //     // textAlign: TextAlign.center,
+            //     style: const TextStyle(fontSize: 13),
+            //     maxLines: 2,
+            //     overflow: TextOverflow.ellipsis,
+            //   ),
+            // ),
           ),
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
-              child: Text(
-                dto.merchantName.isNotEmpty ? dto.merchantName : '-',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
+            padding: const EdgeInsets.only(right: 10),
+
+            child: MTextFieldCustom(
+                controller: midNameController,
+                value: dto.merchantName,
+                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                hintText: dto.merchantName.isNotEmpty
+                    ? dto.merchantName
+                    : 'Nhập tên đại lý',
+                hintColor: AppColor.BLUE_TEXT,
+                hintSize: 13,
+                keyboardAction: TextInputAction.done,
+                onChange: (value) {},
+                inputType: TextInputType.name,
+                isObscureText: false),
+            // child: SelectionArea(
+            //   child: Text(
+            //     dto.merchantName.isNotEmpty ? dto.merchantName : '-',
+            //     // textAlign: TextAlign.center,
+            //     style: const TextStyle(fontSize: 13),
+            //     maxLines: 2,
+            //     overflow: TextOverflow.ellipsis,
+            //   ),
+            // ),
           ),
           Container(
             alignment: Alignment.centerLeft,
@@ -535,15 +578,45 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: SelectionArea(
-              child: Text(
-                dto.email.isNotEmpty ? dto.email : '-',
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
+            child: MTextFieldCustom(
+                controller: emailController,
+                value: dto.email,
+                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                hintText: dto.email.isNotEmpty ? dto.email : 'Nhập email',
+                hintSize: 13,
+                hintColor: AppColor.BLUE_TEXT,
+                keyboardAction: TextInputAction.done,
+                onChange: (value) {},
+                inputType: TextInputType.emailAddress,
+                inputFormatter: [EmailInputFormatter()],
+                isObscureText: false),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 100,
+            child: IconButton(
+                onPressed: () async {
+                  await _model
+                      .updateInfo(context,
+                          bankAccount: dto.bankAccount,
+                          bankShortName: dto.bankShortName,
+                          email: emailController.text,
+                          vso: vsoController.text,
+                          midName: midNameController.text)
+                      .then(
+                    (value) {
+                      if (value == true) {
+                        _model.getInvoiceDetail(widget.invoiceId);
+                      }
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.edit_square,
+                  color: AppColor.BLUE_TEXT,
+                  size: 15,
+                )),
           ),
         ],
       ),
@@ -1059,82 +1132,84 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               child: SingleChildScrollView(
                 controller: controller4,
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Tổng tiền hàng',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          StringUtils.formatNumber(dto.totalAmount),
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    const SizedBox(width: 90),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'VAT',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          StringUtils.formatNumber(dto.vatAmount),
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    const SizedBox(width: 90),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Chưa TT (bao gồm VAT)',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          StringUtils.formatNumber(dto.totalUnpaid),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.ORANGE_DARK,
+                child: SelectionArea(
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Tổng tiền hàng',
+                            style: TextStyle(fontSize: 13),
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(width: 40),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Đã TT (bao gồm VAT)',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          StringUtils.formatNumber(dto.totalPaid),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.GREEN,
+                          const SizedBox(height: 10),
+                          Text(
+                            StringUtils.formatNumber(dto.totalAmount),
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      const SizedBox(width: 90),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'VAT',
+                            style: TextStyle(fontSize: 13),
                           ),
-                        )
-                      ],
-                    ),
-                  ],
+                          const SizedBox(height: 10),
+                          Text(
+                            StringUtils.formatNumber(dto.vatAmount),
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      const SizedBox(width: 90),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Chưa TT (bao gồm VAT)',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            StringUtils.formatNumber(dto.totalUnpaid),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.ORANGE_DARK,
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(width: 40),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Đã TT (bao gồm VAT)',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            StringUtils.formatNumber(dto.totalPaid),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.GREEN,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -1149,24 +1224,26 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Trạng thái',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      status,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: color,
+                SelectionArea(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Trạng thái',
+                        style: TextStyle(fontSize: 13),
                       ),
-                    )
-                  ],
+                      const SizedBox(height: 10),
+                      Text(
+                        status,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: color,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 12),
                 if (dto.status == 0 || dto.status == 3)
@@ -1176,7 +1253,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                     colorDisableBgr: AppColor.GREY_DADADA,
                     width: 250,
                     height: 50,
-                    title: 'tạo mã qr gửi yc thanh toán'.toUpperCase(),
+                    title: 'Gửi yêu cầu thanh toán',
                     radius: 5,
                     isEnable: isEnable,
                     onTap: isEnable

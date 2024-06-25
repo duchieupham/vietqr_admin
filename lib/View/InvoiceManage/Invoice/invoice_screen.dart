@@ -74,6 +74,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    initData();
+  }
+
+  void initData() {
     _model.onChangePage(PageInvoice.LIST);
     selectDate = _model.getMonth();
     _model.filterListInvoice(time: selectDate!, page: 1, filter: '');
@@ -244,12 +248,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       child: InvoiceDetailScreen(
                           callback: () {
                             _model.onChangePage(PageInvoice.LIST);
-                            // setState(() {
-                            //   pageType = PageInvoice.LIST;
-                            // });
+
                             _model.filterListInvoice(
                                 time: selectDate!,
-                                page: 1,
+                                page: model.metadata != null
+                                    ? model.metadata!.page!
+                                    : 1,
                                 filter: textInput()!);
                           },
                           onEdit: () {
@@ -271,14 +275,20 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             _model.onChangePage(PageInvoice.LIST);
                             _model.filterListInvoice(
                                 time: selectDate!,
-                                page: 1,
+                                page: model.metadata != null
+                                    ? model.metadata!.page!
+                                    : 1,
                                 filter: textInput()!);
                           }
                         },
                         callback: () {
                           _model.onChangePage(PageInvoice.LIST);
                           _model.filterListInvoice(
-                              time: selectDate!, page: 1, filter: textInput()!);
+                              time: selectDate!,
+                              page: model.metadata != null
+                                  ? model.metadata!.page!
+                                  : 1,
+                              filter: textInput()!);
                         },
                       ),
                     ),
@@ -864,7 +874,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         style: TextStyle(
                             color: AppColor.BLUE_TEXT,
                             fontSize: 13,
-                            decoration: TextDecoration.underline),
+                            decoration: TextDecoration.underline,
+                            decorationColor: AppColor.BLUE_TEXT),
                       ),
                     ),
               if (model.pageType == PageInvoice.DETAIL) ...[

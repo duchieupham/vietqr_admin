@@ -3,9 +3,11 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
@@ -71,6 +73,7 @@ class InvoiceViewModel extends InvoiceStatus {
   int? value = 9;
   int? valueStatus = 0;
   int? filterByDate = 1;
+  int pagingPage = 1;
 
   int totalAmount = 0;
   int totalVat = 0;
@@ -380,6 +383,30 @@ class InvoiceViewModel extends InvoiceStatus {
     }
 
     return DateTime(newYear, newMonth);
+  }
+
+  Future<bool?> updateInfo(BuildContext context,
+      {String bankId = '',
+      String? bankAccount,
+      String? bankShortName,
+      String? email,
+      String? vso,
+      String? midName}) async {
+    try {
+      setState(ViewStatus.Empty);
+      final result = await _dao.updateInfo(
+          bankAccount: bankAccount,
+          bankShortName: bankShortName,
+          bankId: bankId,
+          vso: vso,
+          midName: midName,
+          email: email);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
   }
 
   Future<bool?> editInvoice() async {

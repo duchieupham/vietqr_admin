@@ -46,6 +46,35 @@ class InvoiceDAO extends BaseDAO {
     return false;
   }
 
+  Future<bool?> updateInfo(
+      {String bankId = '',
+      String? bankAccount,
+      String? bankShortName,
+      String? email,
+      String? vso,
+      String? midName}) async {
+    try {
+      Map<String, dynamic> param = {};
+      param['bankId'] = bankId;
+      param['bankAccount'] = bankAccount;
+      param['bankShortName'] = bankShortName;
+      param['email'] = email;
+      param['vso'] = vso;
+      param['midName'] = midName;
+
+      String url = '${EnvConfig.instance.getBaseUrl()}account/admin-update';
+      final response = await BaseAPIClient.postAPI(
+        body: param,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
   Future<bool?> delelteInvoice(String invoiceId) async {
     try {
       Map<String, dynamic> param = {};

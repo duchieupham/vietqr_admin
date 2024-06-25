@@ -222,7 +222,7 @@ class ItemInvoiceWidget extends StatelessWidget {
               width: 150,
               child: Text(
                 dto.midName.isNotEmpty ? dto.midName : '-',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),

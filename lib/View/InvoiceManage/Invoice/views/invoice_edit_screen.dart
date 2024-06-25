@@ -120,73 +120,75 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 30),
-                        width: 250,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Tổng tiền hàng',
-                              style: TextStyle(fontSize: 13),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              StringUtils.formatNumber(model.totalEditAmount),
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 30),
-                        width: 250,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'VAT',
-                              style: TextStyle(fontSize: 13),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              StringUtils.formatNumber(model.totalEditVat),
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 30),
-                        width: 350,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'Tổng tiền thanh toán (bao gồm VAT)',
-                              style: TextStyle(fontSize: 13),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              StringUtils.formatNumber(
-                                  model.totalEditAmountVat),
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.BLUE_TEXT,
+                  SelectionArea(
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 30),
+                          width: 250,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Tổng tiền hàng',
+                                style: TextStyle(fontSize: 13),
                               ),
-                            )
-                          ],
+                              const SizedBox(height: 10),
+                              Text(
+                                StringUtils.formatNumber(model.totalEditAmount),
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Container(
+                          margin: const EdgeInsets.only(left: 30),
+                          width: 250,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'VAT',
+                                style: TextStyle(fontSize: 13),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                StringUtils.formatNumber(model.totalEditVat),
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 30),
+                          width: 350,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Tổng tiền thanh toán (bao gồm VAT)',
+                                style: TextStyle(fontSize: 13),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                StringUtils.formatNumber(
+                                    model.totalEditAmountVat),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.BLUE_TEXT,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(width: 70),
                   MButtonWidget(
