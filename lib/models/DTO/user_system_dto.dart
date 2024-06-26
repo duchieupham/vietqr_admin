@@ -18,6 +18,7 @@ class UserSystemDTO {
   final String nationalId;
   final String oldNationalId;
   final String userIdDetail;
+  final int getTimeRegister;
 
   UserSystemDTO({
     required this.id,
@@ -39,6 +40,7 @@ class UserSystemDTO {
     required this.nationalId,
     required this.oldNationalId,
     required this.userIdDetail,
+    required this.getTimeRegister,
   });
 
   // Convert a UserSystemDTO object to a Map
@@ -63,6 +65,7 @@ class UserSystemDTO {
       'nationalId': nationalId,
       'oldNationalId': oldNationalId,
       'userIdDetail': userIdDetail,
+      'getTimeRegister': getTimeRegister,
     };
   }
 
@@ -88,6 +91,7 @@ class UserSystemDTO {
       nationalId: json['nationalId'],
       oldNationalId: json['oldNationalId'],
       userIdDetail: json['userIdDetail'],
+      getTimeRegister: json['getTimeRegister'],
     );
   }
 }

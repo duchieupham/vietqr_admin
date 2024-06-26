@@ -13,6 +13,10 @@ class ItemUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDateTimeRegister = dto.getTimeRegister.toString().isNotEmpty
+        ? DateFormat('yyyy-MM-dd HH:mm:ss').format(
+            DateTime.fromMillisecondsSinceEpoch(dto.getTimeRegister * 1000))
+        : '-';
     return Container(
       // color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,
@@ -31,6 +35,23 @@ class ItemUserWidget extends StatelessWidget {
               child: Text(
                 '${index + 1}',
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment: Alignment.centerRight,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
+              height: 50,
+              width: 120,
+              child: Text(
+                dto.getTimeRegister.toString() != '0'
+                    ? formattedDateTimeRegister
+                    : '-',
+                textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 12),
               ),
             ),

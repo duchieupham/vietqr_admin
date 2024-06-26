@@ -377,7 +377,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                     child: SingleChildScrollView(
                       controller: controller1,
                       child: SizedBox(
-                        width: 1760,
+                        width: 1880,
                         child: Column(
                           children: [
                             const TitleItemWidget(),
@@ -392,7 +392,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: 1760,
+                  width: 1880,
                   child: Row(
                     children: [
                       const Expanded(child: SizedBox()),
