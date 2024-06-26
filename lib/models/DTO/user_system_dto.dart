@@ -91,7 +91,7 @@ class UserSystemDTO {
       nationalId: json['nationalId'],
       oldNationalId: json['oldNationalId'],
       userIdDetail: json['userIdDetail'],
-      getTimeRegister: json['getTimeRegister'],
+      getTimeRegister: json['getTimeRegister'] ?? 0,
     );
   }
 }

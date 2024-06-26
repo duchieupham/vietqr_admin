@@ -40,7 +40,9 @@ class ItemUserWidget extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.centerRight,
+              alignment: dto.getTimeRegister != 0
+                  ? Alignment.centerRight
+                  : Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
