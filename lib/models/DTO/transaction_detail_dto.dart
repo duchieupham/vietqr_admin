@@ -25,6 +25,7 @@ class TransactionDetailDTO {
   final String bankShortName;
   final String bankName;
   final String imgId;
+  final String terminalCode;
   final int flow;
   const TransactionDetailDTO(
       {this.id = '',
@@ -49,6 +50,7 @@ class TransactionDetailDTO {
       this.bankName = '',
       this.sign = '',
       this.sync = false,
+      this.terminalCode = '',
       this.traceId = ''});
 
   factory TransactionDetailDTO.fromJson(Map<String, dynamic> json) {
@@ -76,6 +78,7 @@ class TransactionDetailDTO {
       sign: json['sign'] ?? '',
       sync: json['sync'] ?? false,
       traceId: json['traceId'] ?? '',
+      terminalCode: json['terminalCode'] ?? '',
     );
   }
 

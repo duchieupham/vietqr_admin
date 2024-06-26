@@ -89,6 +89,8 @@ class TransactionDetailScreen extends StatelessWidget {
               _buildItemTemplate('Chữ kí', transactionDetailDTO.sign),
               _buildItemTemplate(
                   'Loại giao dịch', transactionDetailDTO.getTypeTrace()),
+              _buildItemTemplate(
+                  'Mã điểm bán', transactionDetailDTO.terminalCode),
             ],
           ),
         ),
