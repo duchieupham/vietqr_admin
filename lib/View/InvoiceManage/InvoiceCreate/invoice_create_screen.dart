@@ -1,4 +1,5 @@
 import 'package:clipboard/clipboard.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,6 +40,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   final _horizontal = ScrollController();
 
   late InvoiceViewModel _model;
+  String? _fileName;
+  String? _filePath;
 
   @override
   void initState() {
@@ -1091,6 +1094,54 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
               const MySeparator(
                 color: AppColor.GREY_DADADA,
               ),
+              const SizedBox(height: 20),
+              const Text(
+                'Chọn tệp đính kèm',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: _pickFile,
+                child: Container(
+                  width: 200,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: AppColor.WHITE,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey)),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              _fileName ?? 'Đính kèm tệp',
+                              style: const TextStyle(
+                                color: AppColor.BLUE_TEXT,
+                                fontSize: 13,
+                              ),
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          const Icon(
+                            Icons.attach_file,
+                            color: AppColor.BLUE_TEXT,
+                            size: 15,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const MySeparator(
+                color: AppColor.GREY_DADADA,
+              ),
               const SizedBox(height: 10),
               Container(
                 height: 30,
@@ -1259,6 +1310,25 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+      if (result != null) {
+        print('file name: ${result.files.single.name}');
+        // print('file path: ${result.files.single.path}');
+        setState(() {
+          _fileName = result.files.single.name;
+          // _filePath = result.files.single.path;
+        });
+      } else {
+        // User canceled the picker
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Widget _buildItem(ServiceItemDTO item, int index) {

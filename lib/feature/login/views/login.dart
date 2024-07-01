@@ -33,7 +33,7 @@ class _Login extends State<Login> {
     super.initState();
     if (kDebugMode) {
       userNameController.text = 'vietqradmin';
-      passController.text = 'systemadmin123';
+      passController.text = 'vietqrbnsadmin';
     }
   }
 
