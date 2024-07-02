@@ -260,7 +260,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                                       _pickFile();
                                     } else {
                                       String url =
-                                          '${EnvConfig.instance.getBaseUrl()}images-invoice/${widget.invoiceId}';
+                                          '${EnvConfig.instance.getBaseUrl()}images-invoice/download-files?invoiceId=${widget.invoiceId}';
                                       html.window.open(url, 'new tab');
                                     }
                                   },
