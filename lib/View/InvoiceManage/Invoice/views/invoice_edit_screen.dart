@@ -1,4 +1,5 @@
 import 'package:clipboard/clipboard.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,13 +42,20 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
   late InvoiceViewModel _model;
   final controller1 = ScrollController();
   final controller2 = ScrollController();
+  String? _fileName;
+  bool hasFile = false;
 
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.getInvoiceInfo(widget.invoiceId);
-    // _model.getInvoiceDetail(widget.invoiceId);
+    _model.getFile(widget.invoiceId).then(
+      (value) {
+        hasFile = value;
+        updateState();
+      },
+    );
     _model.clear();
   }
 
@@ -75,6 +83,36 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
         dto: null,
       ),
     );
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'pdf', 'png', 'jpeg'],
+      );
+
+      if (result != null) {
+        PlatformFile file = result.files.first;
+        setState(() {
+          _fileName = file.name;
+        });
+        _model.attachFile(widget.invoiceId, file.name, file.bytes!).then(
+          (value) {
+            if (value == true) {
+              _model.getFile(widget.invoiceId).then(
+                (value) {
+                  hasFile = value;
+                  updateState();
+                },
+              );
+            }
+          },
+        );
+      } else {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -1036,7 +1074,64 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
                 const MySeparator(
                   color: AppColor.GREY_DADADA,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const Text(
+                      'Chọn tệp đính kèm',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        _pickFile();
+                      },
+                      child: Container(
+                        width: 200,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: AppColor.WHITE,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.grey)),
+                        child: const Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    'Đính kèm tệp',
+                                    style: TextStyle(
+                                      color: AppColor.BLUE_TEXT,
+                                      fontSize: 13,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Icon(
+                                  Icons.attach_file,
+                                  color: AppColor.BLUE_TEXT,
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(_fileName ?? '')
+                  ],
+                ),
+                const SizedBox(height: 20),
+                const MySeparator(
+                  color: AppColor.GREY_DADADA,
+                ),
+                const SizedBox(height: 20),
                 const SizedBox(
                   width: double.infinity,
                   height: 20,
@@ -1420,5 +1515,9 @@ class _InvoiceEditScreenState extends State<InvoiceEditScreen> {
         ],
       ),
     );
+  }
+
+  void updateState() {
+    setState(() {});
   }
 }

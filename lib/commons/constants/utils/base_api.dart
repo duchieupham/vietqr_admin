@@ -109,11 +109,15 @@ class BaseAPIClient {
     required String url,
     required Map<String, dynamic> fields,
     required List<http.MultipartFile> files,
+    required bool isAuthen,
   }) async {
     final Uri uri = Uri.parse(url);
     final request = http.MultipartRequest('POST', uri);
     final String token = AccountHelper.instance.getToken();
-    request.headers['Authorization'] = 'Bearer $token';
+    if (isAuthen) {
+      request.headers['Authorization'] = 'Bearer $token';
+    }
+
     if (fields.isNotEmpty) {
       for (String key in fields.keys) {
         request.fields[key] = fields[key];

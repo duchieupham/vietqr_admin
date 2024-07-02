@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
 import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
+import 'package:http/http.dart' as http;
 
 import '../../commons/constants/utils/base_api.dart';
 import '../../commons/constants/utils/log.dart';
@@ -18,6 +22,56 @@ import '../DTO/metadata_dto.dart';
 import '../DTO/service_item_dto.dart';
 
 class InvoiceDAO extends BaseDAO {
+  Future<bool> getFile(String invoiceId) async {
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}images-invoice/get-file?invoiceId=$invoiceId';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<ResponseMessageDTO> attachFile(
+      String invoiceId, String fileName, Uint8List byte) async {
+    ResponseMessageDTO result =
+        const ResponseMessageDTO(status: '', message: '');
+    try {
+      final Map<String, dynamic> data = {
+        'invoiceId': invoiceId,
+      };
+      String url = '${EnvConfig.instance.getBaseUrl()}images-invoice/upload';
+      final List<http.MultipartFile> files = [];
+
+      if (fileName.isNotEmpty) {
+        final imageFile =
+            http.MultipartFile.fromBytes('file', byte, filename: fileName);
+        files.add(imageFile);
+        final response = await BaseAPIClient.postMultipartAPI(
+          isAuthen: false,
+          url: url,
+          fields: data,
+          files: files,
+        );
+        if (response.statusCode == 200 || response.statusCode == 400) {
+          var data = jsonDecode(response.body);
+          result = ResponseMessageDTO.fromJson(data);
+        } else {
+          result = const ResponseMessageDTO(status: 'FAILED', message: 'E05');
+        }
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+      result = const ResponseMessageDTO(status: 'FAILED', message: 'E05');
+    }
+    return result;
+  }
+
   Future<bool?> editInvoice(
       {required InvoiceInfoDTO? invoice,
       required double vat,
@@ -129,7 +183,7 @@ class InvoiceDAO extends BaseDAO {
     return null;
   }
 
-  Future<bool?> createInvoice(
+  Future<ResponseMessageDTO?> createInvoice(
       {required String bankId,
       required double? vat,
       required String? merchantId,
@@ -137,6 +191,8 @@ class InvoiceDAO extends BaseDAO {
       required String description,
       required String bankIdRecharge,
       required List<ServiceItemDTO> list}) async {
+    ResponseMessageDTO result =
+        const ResponseMessageDTO(status: '', message: '');
     try {
       Map<String, dynamic> params = {};
       params['bankId'] = bankId;
@@ -155,11 +211,18 @@ class InvoiceDAO extends BaseDAO {
         url: url,
         type: AuthenticationType.SYSTEM,
       );
-      return response.statusCode == 200;
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        result = ResponseMessageDTO.fromJson(data);
+      } else {
+        result = const ResponseMessageDTO(status: 'FAILED', message: 'E05');
+      }
     } catch (e) {
       LOG.error("Failed to fetch invoice data: ${e.toString()}");
+      result = const ResponseMessageDTO(status: 'FAILED', message: 'E05');
     }
-    return false;
+    return result;
   }
 
   Future<InvoiceExcelDTO?> getInvoiceExcel(String invoiceId) async {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_ite
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
+import 'package:vietqr_admin/commons/constants/utils/file_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
@@ -21,7 +24,7 @@ import '../../../commons/constants/configurations/theme.dart';
 import '../../../models/DTO/service_item_dto.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
-  final Function(String, String) onCreate;
+  final Function(String, String, String, Uint8List?) onCreate;
   const CreateInvoiceScreen({super.key, required this.onCreate});
 
   @override
@@ -40,8 +43,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   final _horizontal = ScrollController();
 
   late InvoiceViewModel _model;
-  String? _fileName;
-  String? _filePath;
+  String? _fileName = '';
+  Uint8List? byte;
 
   @override
   void initState() {
@@ -230,20 +233,11 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   if (isErrorDescription == false &&
                       isErrorInvoiceName == false &&
                       model.listService!.isNotEmpty) {
-                    widget.onCreate(_invoiceTextController.text,
-                        _descriptionTextController.text);
-                    // await model
-                    //     .createInvoice(
-                    //         invoiceName: _invoiceTextController.text,
-                    //         description: _descriptionTextController.text)
-                    //     .then(
-                    //   (value) {
-                    //     if (value == true) {
-                    //       // onTapMenu(Invoice.LIST);
-                    //       context.go('/invoice-list');
-                    //     }
-                    //   },
-                    // );
+                    widget.onCreate(
+                        _invoiceTextController.text,
+                        _descriptionTextController.text,
+                        _fileName ?? '',
+                        byte!);
                   }
                 },
               ),
@@ -1095,48 +1089,56 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 color: AppColor.GREY_DADADA,
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Chọn tệp đính kèm',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: _pickFile,
-                child: Container(
-                  width: 200,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: AppColor.WHITE,
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.grey)),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              _fileName ?? 'Đính kèm tệp',
-                              style: const TextStyle(
-                                color: AppColor.BLUE_TEXT,
-                                fontSize: 13,
+              Row(
+                children: [
+                  const Text(
+                    'Chọn tệp đính kèm',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      _pickFile();
+                    },
+                    child: Container(
+                      width: 200,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          color: AppColor.WHITE,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey)),
+                      child: const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  'Đính kèm tệp',
+                                  style: TextStyle(
+                                    color: AppColor.BLUE_TEXT,
+                                    fontSize: 13,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.attach_file,
+                                color: AppColor.BLUE_TEXT,
+                                size: 15,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          const Icon(
-                            Icons.attach_file,
-                            color: AppColor.BLUE_TEXT,
-                            size: 15,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Text(_fileName ?? '')
+                ],
               ),
               const SizedBox(height: 20),
               const MySeparator(
@@ -1317,15 +1319,12 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
 
       if (result != null) {
-        print('file name: ${result.files.single.name}');
-        // print('file path: ${result.files.single.path}');
-        setState(() {
-          _fileName = result.files.single.name;
-          // _filePath = result.files.single.path;
-        });
-      } else {
-        // User canceled the picker
-      }
+        PlatformFile file = result.files.first;
+        _fileName = file.name;
+        byte = file.bytes;
+        // print('file name: ${result.files.single.bytes}');
+        setState(() {});
+      } else {}
     } catch (e) {
       print(e.toString());
     }

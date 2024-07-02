@@ -1,6 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -385,6 +387,31 @@ class InvoiceViewModel extends InvoiceStatus {
     return DateTime(newYear, newMonth);
   }
 
+  Future<bool> getFile(String invoiceId) async {
+    try {
+      final result = await _dao.getFile(invoiceId);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool?> attachFile(
+      String invoiceId, String fileName, Uint8List byte) async {
+    try {
+      final result = await _dao.attachFile(invoiceId, fileName, byte);
+      if (result.status == 'SUCCESS') {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return false;
+  }
+
   Future<bool?> updateInfo(BuildContext context,
       {String bankId = '',
       String? bankAccount,
@@ -461,10 +488,13 @@ class InvoiceViewModel extends InvoiceStatus {
   }
 
   Future<bool?> createInvoice(
-      {required String invoiceName, required String description}) async {
+      {required String invoiceName,
+      required String description,
+      Uint8List? bytes,
+      String fileName = ''}) async {
     try {
       setState(ViewStatus.Loading);
-      bool? result = await _dao.createInvoice(
+      final result = await _dao.createInvoice(
           bankIdRecharge: listPaymentRequest
               .firstWhere((element) => element.isChecked == true)
               .bankId,
@@ -476,15 +506,18 @@ class InvoiceViewModel extends InvoiceStatus {
           invoiceName: invoiceName,
           description: description,
           list: listService!);
-      if (result!) {
+      if (result!.status == 'SUCCESS') {
         setState(
           ViewStatus.Completed,
         );
+        if (fileName.isNotEmpty) {
+          attachFile(result.message, fileName, bytes!);
+        }
+        return true;
       } else {
         setState(ViewStatus.Error);
+        return false;
       }
-      print('Create Invoice: ------$result');
-      return result;
     } catch (e) {
       LOG.error(e.toString());
       setState(ViewStatus.Error);

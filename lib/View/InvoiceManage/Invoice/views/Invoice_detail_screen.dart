@@ -1,15 +1,18 @@
+import 'dart:typed_data';
+import 'dart:html' as html;
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_qr_widget.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
-import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
@@ -41,11 +44,50 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
   final controller3 = ScrollController();
   final controller4 = ScrollController();
 
+  String? _fileName;
+  bool hasFile = false;
+
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
     _model.getInvoiceDetail(widget.invoiceId);
+    _model.getFile(widget.invoiceId).then(
+      (value) {
+        hasFile = value;
+        updateState();
+      },
+    );
+  }
+
+  Future<void> _pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'pdf', 'png', 'jpeg'],
+      );
+
+      if (result != null) {
+        PlatformFile file = result.files.first;
+        setState(() {
+          _fileName = file.name;
+        });
+        _model.attachFile(widget.invoiceId, file.name, file.bytes!).then(
+          (value) {
+            if (value == true) {
+              _model.getFile(widget.invoiceId).then(
+                (value) {
+                  hasFile = value;
+                  updateState();
+                },
+              );
+            }
+          },
+        );
+      } else {}
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -134,8 +176,12 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                             margin: const EdgeInsets.only(top: 30),
                             child: Text(
                               model.invoiceDetailDTO!.invoiceName,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -199,14 +245,68 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
                           if (model.invoiceDetailDTO!.feePackageDetailDTOS
                               .isNotEmpty) ...[
                             const SizedBox(height: 30),
-                            const SizedBox(
-                              width: double.infinity,
-                              height: 20,
-                              child: Text(
-                                'Thông tin gói dịch vụ',
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Thông tin gói dịch vụ',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (!hasFile) {
+                                      _pickFile();
+                                    } else {
+                                      String url =
+                                          '${EnvConfig.instance.getBaseUrl()}images-invoice/${widget.invoiceId}';
+                                      html.window.open(url, 'new tab');
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 200,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        color: AppColor.WHITE,
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(color: Colors.grey)),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                hasFile
+                                                    ? "Tải tệp"
+                                                    : 'Đính kèm tệp',
+                                                style: const TextStyle(
+                                                  color: AppColor.BLUE_TEXT,
+                                                  fontSize: 13,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            const Icon(
+                                              Icons.attach_file,
+                                              color: AppColor.BLUE_TEXT,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(_fileName ?? '')
+                              ],
                             ),
                             const SizedBox(height: 30),
                             SizedBox(
@@ -1318,5 +1418,9 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
         ],
       ),
     );
+  }
+
+  void updateState() {
+    setState(() {});
   }
 }

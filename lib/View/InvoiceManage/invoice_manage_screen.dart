@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
+import 'package:vietqr_admin/commons/constants/utils/file_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'dart:html' as html;
 
@@ -74,9 +77,15 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
       return const InvoiceScreen();
     } else {
       return CreateInvoiceScreen(
-        onCreate: (invoice, desciption) async {
+        onCreate: (invoice, desciption, fileName, bytes) async {
+          // File? file = File(filePath);
+          // File? compressedFile = FileUtils.instance.compressImage(file);
           await _model
-              .createInvoice(invoiceName: invoice, description: desciption)
+              .createInvoice(
+                  invoiceName: invoice,
+                  description: desciption,
+                  fileName: fileName,
+                  bytes: bytes)
               .then(
             (value) {
               if (value == true) {
