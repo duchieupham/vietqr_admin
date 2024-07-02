@@ -63,6 +63,7 @@ dependencies:
   flutter_localization: ^0.2.0
   toastification: ^2.0.0
   font_awesome_flutter: ^10.7.0
+  file_picker: ^8.0.6
   
   # flutter_web_plugins: any
   # flutter_localizations: any
