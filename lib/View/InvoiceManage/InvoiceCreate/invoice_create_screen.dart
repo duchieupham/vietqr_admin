@@ -233,11 +233,8 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   if (isErrorDescription == false &&
                       isErrorInvoiceName == false &&
                       model.listService!.isNotEmpty) {
-                    widget.onCreate(
-                        _invoiceTextController.text,
-                        _descriptionTextController.text,
-                        _fileName ?? '',
-                        byte!);
+                    widget.onCreate(_invoiceTextController.text,
+                        _descriptionTextController.text, _fileName ?? '', byte);
                   }
                 },
               ),
