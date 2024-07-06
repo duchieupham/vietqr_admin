@@ -8,6 +8,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_qr_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_edit_vso.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
@@ -88,6 +89,24 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void onShowPopupEdit(String email, String merchant, String vso,
+      String bankAccount, String bankShortName) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => PopupEditVsoWidget(
+        email: email,
+        merchant: merchant,
+        vso: vso,
+        bankAccount: bankAccount,
+        bankShortName: bankShortName,
+      ),
+    ).then(
+      (value) {
+        _model.getInvoiceDetail(widget.invoiceId);
+      },
+    );
   }
 
   @override
@@ -554,56 +573,29 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            padding: const EdgeInsets.only(right: 10),
-            child: MTextFieldCustom(
-                controller: vsoController,
-                value: dto.vso,
-                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                hintText: dto.vso.isNotEmpty ? dto.vso : 'Nhập VSO',
-                hintSize: 13,
-                hintColor: AppColor.BLUE_TEXT,
-                keyboardAction: TextInputAction.done,
-                onChange: (value) {},
-                inputType: TextInputType.name,
-                isObscureText: false),
-            // child: SelectionArea(
-            //   child: Text(
-            //     dto.vso.isNotEmpty ? dto.vso : '-',
-            //     // textAlign: TextAlign.center,
-            //     style: const TextStyle(fontSize: 13),
-            //     maxLines: 2,
-            //     overflow: TextOverflow.ellipsis,
-            //   ),
-            // ),
+            child: SelectionArea(
+              child: Text(
+                dto.vso.isEmpty ? '-' : dto.vso,
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            padding: const EdgeInsets.only(right: 10),
-
-            child: MTextFieldCustom(
-                controller: midNameController,
-                value: dto.merchantName,
-                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                hintText: dto.merchantName.isNotEmpty
-                    ? dto.merchantName
-                    : 'Nhập tên đại lý',
-                hintColor: AppColor.BLUE_TEXT,
-                hintSize: 13,
-                keyboardAction: TextInputAction.done,
-                onChange: (value) {},
-                inputType: TextInputType.name,
-                isObscureText: false),
-            // child: SelectionArea(
-            //   child: Text(
-            //     dto.merchantName.isNotEmpty ? dto.merchantName : '-',
-            //     // textAlign: TextAlign.center,
-            //     style: const TextStyle(fontSize: 13),
-            //     maxLines: 2,
-            //     overflow: TextOverflow.ellipsis,
-            //   ),
-            // ),
+            child: SelectionArea(
+              child: Text(
+                dto.merchantName.isEmpty ? '-' : dto.merchantName,
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
           Container(
             alignment: Alignment.centerLeft,
@@ -679,18 +671,15 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 150,
-            child: MTextFieldCustom(
-                controller: emailController,
-                value: dto.email,
-                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                hintText: dto.email.isNotEmpty ? dto.email : 'Nhập email',
-                hintSize: 13,
-                hintColor: AppColor.BLUE_TEXT,
-                keyboardAction: TextInputAction.done,
-                onChange: (value) {},
-                inputType: TextInputType.emailAddress,
-                inputFormatter: [EmailInputFormatter()],
-                isObscureText: false),
+            child: SelectionArea(
+              child: Text(
+                dto.email.isEmpty ? '-' : dto.email,
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
           Container(
             alignment: Alignment.centerLeft,
@@ -698,53 +687,8 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
             width: 100,
             child: IconButton(
                 onPressed: () async {
-                  await _model
-                      .updateInfo(context,
-                          bankAccount: dto.bankAccount,
-                          bankShortName: dto.bankShortName,
-                          email: emailController.text,
-                          vso: vsoController.text,
-                          midName: midNameController.text)
-                      .then(
-                    (value) {
-                      if (value == true) {
-                        toastification.show(
-                          context: context,
-                          type: ToastificationType.success,
-                          style: ToastificationStyle.flat,
-                          title: const Text(
-                            'Cập nhật thành công',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          showProgressBar: false,
-                          alignment: Alignment.topRight,
-                          autoCloseDuration: const Duration(seconds: 5),
-                          boxShadow: highModeShadow,
-                          dragToClose: true,
-                          pauseOnHover: true,
-                        );
-                        _model.getInvoiceDetail(widget.invoiceId);
-                      } else {
-                        toastification.show(
-                          context: context,
-                          type: ToastificationType.error,
-                          style: ToastificationStyle.flat,
-                          title: const Text(
-                            'Cập nhật thất bại',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          showProgressBar: false,
-                          alignment: Alignment.topRight,
-                          autoCloseDuration: const Duration(seconds: 5),
-                          boxShadow: highModeShadow,
-                          dragToClose: true,
-                          pauseOnHover: true,
-                        );
-                      }
-                    },
-                  );
+                  onShowPopupEdit(dto.email, dto.merchantName, dto.vso,
+                      dto.bankAccount, dto.bankShortName);
                 },
                 icon: const Icon(
                   Icons.edit_square,
