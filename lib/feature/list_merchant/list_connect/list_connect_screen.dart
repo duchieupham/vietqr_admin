@@ -26,8 +26,9 @@ class ListConnectScreen extends StatelessWidget {
     return ChangeNotifierProvider<ListConnectProvider>(
       create: (context) => ListConnectProvider(),
       child: BlocProvider<ListConnectBloc>(
-          create: (_) =>
-              ListConnectBloc()..add(const ListConnectGetListEvent(type: 9)),
+          create: (_) => ListConnectBloc()
+            ..add(const ListConnectGetListEvent(
+                type: 9, value: '', page: 1, size: 20)),
           child: const _ListConnectScreen()),
     );
   }
@@ -41,19 +42,31 @@ class _ListConnectScreen extends StatefulWidget {
 }
 
 class _ListConnectScreenState extends State<_ListConnectScreen> {
+  @override
+  void dispose() {
+    super.dispose();
+    _merchantController.clear();
+  }
+
+  final TextEditingController _merchantController = TextEditingController();
   List<ConnectDTO> result = [];
-
   StreamSubscription? _subscription;
-
   late ListConnectBloc _bloc;
   final PageController pageViewController = PageController();
+  int typeScreen = 0;
+  int? currentPage = 1;
+  int? totalPages = 7;
 
   @override
   void initState() {
     super.initState();
     _bloc = BlocProvider.of(context);
     _subscription = eventBus.on<GetListConnect>().listen((data) {
-      _bloc.add(const ListConnectGetListEvent(type: 9));
+      _bloc.add(ListConnectGetListEvent(
+          type: typeScreen,
+          value: _merchantController.text,
+          page: 1,
+          size: 20));
       context
           .read<ListConnectProvider>()
           .changeFilter(const FilterTransaction(id: 9, title: 'Tất cả'));
@@ -145,59 +158,6 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                     Expanded(
                       child: Row(
                         children: [
-                          // Container(
-                          //   margin: const EdgeInsets.symmetric(
-                          //       vertical: 8, horizontal: 12),
-                          //   padding: const EdgeInsets.symmetric(horizontal: 12),
-                          //   alignment: Alignment.center,
-                          //   decoration: BoxDecoration(
-                          //     color: AppColor.GREY_BG,
-                          //     borderRadius: BorderRadius.circular(5),
-                          //   ),
-                          //   child: Row(
-                          //     children: [
-                          //       const Text(
-                          //         'Lọc theo',
-                          //         style: TextStyle(
-                          //             fontSize: 11, color: AppColor.GREY_TEXT),
-                          //       ),
-                          //       const SizedBox(
-                          //         width: 20,
-                          //       ),
-                          //       DropdownButton<FilterTransaction>(
-                          //         value: provider.valueFilter,
-                          //         icon: const RotatedBox(
-                          //           quarterTurns: 5,
-                          //           child: Icon(
-                          //             Icons.arrow_forward_ios,
-                          //             size: 12,
-                          //           ),
-                          //         ),
-                          //         underline: const SizedBox.shrink(),
-                          //         onChanged: (FilterTransaction? value) {
-                          //           provider.changeFilter(value!);
-                          //           _bloc.add(ListConnectGetListEvent(
-                          //               type: value.id));
-                          //         },
-                          //         items: provider.listFilter
-                          //             .map<DropdownMenuItem<FilterTransaction>>(
-                          //                 (FilterTransaction value) {
-                          //           return DropdownMenuItem<FilterTransaction>(
-                          //             value: value,
-                          //             child: Padding(
-                          //               padding:
-                          //                   const EdgeInsets.only(right: 4),
-                          //               child: Text(
-                          //                 value.title,
-                          //                 style: const TextStyle(fontSize: 12),
-                          //               ),
-                          //             ),
-                          //           );
-                          //         }).toList(),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
                           Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -206,33 +166,54 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                                   title: 'Tất cả',
                                   isSelect: provider.valueFilter.id == 9,
                                   onTap: () {
+                                    _merchantController.clear();
+                                    setState(() {
+                                      typeScreen = 9;
+                                    });
                                     provider.changeFilter(
                                         const FilterTransaction(
                                             id: 9, title: 'Tất cả'));
-                                    _bloc.add(
-                                        const ListConnectGetListEvent(type: 9));
+                                    _bloc.add(ListConnectGetListEvent(
+                                        type: typeScreen,
+                                        value: _merchantController.text,
+                                        page: 1,
+                                        size: 20));
                                   },
                                 ),
                                 ItemMenuTop(
                                   title: 'API Service',
                                   isSelect: provider.valueFilter.id == 0,
                                   onTap: () {
+                                    _merchantController.clear();
+                                    setState(() {
+                                      typeScreen = 0;
+                                    });
                                     provider.changeFilter(
                                         const FilterTransaction(
                                             id: 0, title: 'API Service'));
-                                    _bloc.add(
-                                        const ListConnectGetListEvent(type: 0));
+                                    _bloc.add(ListConnectGetListEvent(
+                                        type: typeScreen,
+                                        value: _merchantController.text,
+                                        page: 1,
+                                        size: 20));
                                   },
                                 ),
                                 ItemMenuTop(
                                   title: 'Ecommerce',
                                   isSelect: provider.valueFilter.id == 1,
                                   onTap: () {
+                                    _merchantController.clear();
+                                    setState(() {
+                                      typeScreen = 1;
+                                    });
                                     provider.changeFilter(
                                         const FilterTransaction(
                                             id: 1, title: 'Ecommerce'));
-                                    _bloc.add(
-                                        const ListConnectGetListEvent(type: 1));
+                                    _bloc.add(ListConnectGetListEvent(
+                                        type: typeScreen,
+                                        value: _merchantController.text,
+                                        page: 1,
+                                        size: 20));
                                   },
                                 ),
                                 const SizedBox(
@@ -248,6 +229,85 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               ),
             );
           }),
+          const SizedBox(height: 10),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Text(
+                  'Tìm kiếm theo tên đại lý',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(width: 20),
+                  Container(
+                    height: 40,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: Colors.grey,
+                      ),
+                      color: AppColor.WHITE,
+                    ),
+                    child: TextField(
+                      controller: _merchantController,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(8, 0, 8, 16),
+                        border: InputBorder.none,
+                        hintText: 'Nhập tên đại lý',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          color: AppColor.GREY_TEXT,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  InkWell(
+                    onTap: () {
+                      _bloc.add(ListConnectGetListEvent(
+                          type: typeScreen,
+                          value: _merchantController.text,
+                          page: 1,
+                          size: 20));
+                    },
+                    child: Container(
+                      height: 40,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      decoration: BoxDecoration(
+                        color: AppColor.BLUE_TEXT,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search,
+                            size: 15,
+                            color: AppColor.WHITE,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "Tìm kiếm",
+                            style:
+                                TextStyle(color: AppColor.WHITE, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
           Expanded(
             child: PageView(
               controller: pageViewController,
@@ -258,8 +318,119 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               ],
             ),
           ),
+          const SizedBox(height: 30),
+          _pagingWidget(),
+          const SizedBox(height: 30),
         ],
       ),
+    );
+  }
+
+  Widget _pagingWidget() {
+    return BlocBuilder<ListConnectBloc, ListConnectState>(
+      builder: (context, state) {
+        bool isPaging = false;
+        if (state is ListConnectFailedState) {
+          return const SizedBox.shrink();
+        }
+        if (state is ListConnectLoadingState) {
+          return const SizedBox.shrink();
+        }
+        if (state is ListConnectSuccessfulState) {
+          if (state.dto.metadata.page != state.dto.metadata.totalPage) {
+            isPaging = true;
+          }
+          return state.dto.metadata != null
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        child: Text(
+                          "Trang ${state.dto.metadata.page}/${state.dto.metadata.totalPage}",
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      InkWell(
+                        onTap: () {
+                          if (state.dto.metadata.page != 1) {
+                            // await model.filterListInvoice(
+                            //   time: selectDate!,
+                            //   page: paging.page! - 1,
+                            //   filter: textInput()!,
+                            // );
+                            _bloc.add(ListConnectGetListEvent(
+                                type: typeScreen,
+                                value: _merchantController.text,
+                                page: state.dto.metadata.page - 1,
+                                size: 20));
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                  color: state.dto.metadata.page != 1
+                                      ? AppColor.BLACK
+                                      : AppColor.GREY_DADADA)),
+                          child: Center(
+                            child: Icon(
+                              Icons.chevron_left_rounded,
+                              color: state.dto.metadata.page != 1
+                                  ? AppColor.BLACK
+                                  : AppColor.GREY_DADADA,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      InkWell(
+                        onTap: () {
+                          if (isPaging) {
+                            // await model.filterListInvoice(
+                            //   time: selectDate!,
+                            //   page: paging.page! + 1,
+                            //   filter: textInput()!,
+                            // );
+                            _bloc.add(ListConnectGetListEvent(
+                                type: typeScreen,
+                                value: _merchantController.text,
+                                page: state.dto.metadata.page + 1,
+                                size: 20));
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                  color: isPaging
+                                      ? AppColor.BLACK
+                                      : AppColor.GREY_DADADA)),
+                          child: Center(
+                            child: Icon(
+                              Icons.chevron_right_rounded,
+                              color: isPaging
+                                  ? AppColor.BLACK
+                                  : AppColor.GREY_DADADA,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink();
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 
@@ -268,47 +439,49 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
       child: Column(
         children: [
           BlocConsumer<ListConnectBloc, ListConnectState>(
-              listener: (context, state) {
-            if (state is ListConnectSuccessfulState) {
-              result = state.dto;
-            }
-          }, builder: (context, state) {
-            if (state is ListConnectLoadingState) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Center(child: Text('Đang tải...')),
-              );
-            }
-            if (result.isEmpty) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 300),
-                child: Center(child: Text('Danh sách trống')),
-              );
-            }
-            return LayoutBuilder(builder: (context, constraints) {
-              return ScrollConfiguration(
-                behavior: MyCustomScrollBehavior(),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    width: constraints.maxWidth > 1040
-                        ? constraints.maxWidth
-                        : 1040,
-                    child: Column(
-                      children: [
-                        _buildTitleItem(),
-                        ...result.map((e) {
-                          int index = result.indexOf(e) + 1;
+            listener: (context, state) {
+              if (state is ListConnectSuccessfulState) {
+                result = state.dto.data;
+              }
+            },
+            builder: (context, state) {
+              if (state is ListConnectLoadingState) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Center(child: Text('Đang tải...')),
+                );
+              }
+              if (result.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 300),
+                  child: Center(child: Text('Danh sách trống')),
+                );
+              }
+              return LayoutBuilder(builder: (context, constraints) {
+                return ScrollConfiguration(
+                  behavior: MyCustomScrollBehavior(),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      width: constraints.maxWidth > 1040
+                          ? constraints.maxWidth
+                          : 1040,
+                      child: Column(
+                        children: [
+                          _buildTitleItem(),
+                          ...result.map((e) {
+                            int index = result.indexOf(e) + 1;
 
-                          return _buildItem(e, index);
-                        }),
-                      ],
+                            return _buildItem(e, index);
+                          }),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            });
-          }),
+                );
+              });
+            },
+          ),
           const SizedBox(height: 20),
         ],
       ),
@@ -467,6 +640,9 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                         uploadSuccess: () {
                           BlocProvider.of<ListConnectBloc>(context).add(
                               ListConnectGetListEvent(
+                                  page: 1,
+                                  size: 20,
+                                  value: _merchantController.text,
                                   type: context
                                       .read<ListConnectProvider>()
                                       .valueFilter
@@ -491,6 +667,9 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                     param['status'] = dto.active == 1 ? 0 : 1;
                     BlocProvider.of<ListConnectBloc>(context).add(
                         ListConnectUpdateStatusEvent(
+                            page: 1,
+                            size: 20,
+                            value: _merchantController.text,
                             param: param,
                             type: context
                                 .read<ListConnectProvider>()

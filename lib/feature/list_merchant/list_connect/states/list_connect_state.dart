@@ -14,7 +14,9 @@ class ListConnectInitialState extends ListConnectState {}
 class ListConnectLoadingState extends ListConnectState {}
 
 class ListConnectSuccessfulState extends ListConnectState {
-  final List<ConnectDTO> dto;
+  // final List<ConnectDTO> dto;
+  final ConnectResponse dto;
+
   const ListConnectSuccessfulState({required this.dto});
 
   @override
