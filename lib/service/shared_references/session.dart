@@ -33,7 +33,7 @@ class Session {
     _transactionId = value;
   }
 
-  ConnectDTO _connectDTO = const ConnectDTO(metadata: MetaData());
+  ConnectDTO _connectDTO = const ConnectDTO();
   ConnectDTO get connectDTO => _connectDTO;
   void updateConnectDTO(ConnectDTO value) {
     _connectDTO = value;

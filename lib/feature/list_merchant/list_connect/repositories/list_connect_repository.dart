@@ -35,9 +35,37 @@ class ListConnectRepository {
   //   return result;
   // }
 
-  Future<List<ConnectDTO>> getListConnect(
+  // Future<List<ConnectDTO>> getListConnect(
+  //     int type, int size, int page, String value) async {
+  //   List<ConnectDTO> result = [];
+  //   try {
+  //     String url =
+  //         '${EnvConfig.instance.getBaseUrl()}admin/customer-sync/sorted?type=$type&page=$page&size=$size&value=$value';
+
+  //     final response = await BaseAPIClient.getAPI(
+  //       url: url,
+  //       type: AuthenticationType.SYSTEM,
+  //     );
+  //     if (response.statusCode == 200) {
+  //       var data = jsonDecode(response.body);
+  //       if (data != null) {
+  //         var metadata = MetaData.fromJson(data['metadata']);
+  //         result = (data['data'] as List)
+  //             .map<ConnectDTO>((json) => ConnectDTO.fromJson(json))
+  //             .toList();
+  //         // If needed, you can use metadata here
+  //         // e.g., print(metadata.totalElement);
+  //         return result;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     LOG.error(e.toString());
+  //   }
+  //   return result;
+  // }
+
+  Future<ConnectResponse?> getListConnect(
       int type, int size, int page, String value) async {
-    List<ConnectDTO> result = [];
     try {
       String url =
           '${EnvConfig.instance.getBaseUrl()}admin/customer-sync/sorted?type=$type&page=$page&size=$size&value=$value';
@@ -49,17 +77,26 @@ class ListConnectRepository {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data != null) {
-          var metadata = MetaData.fromJson(data['metadata']);
-          result = (data['data'] as List)
-              .map<ConnectDTO>((json) => ConnectDTO.fromJson(json, metadata))
+          // Log the entire response for debugging
+          LOG.info('Response Data: $data');
+
+          MetaData metadata = MetaData.fromJson(data['metadata']);
+          LOG.info(
+              'Metadata: page=${metadata.page}, size=${metadata.size}, totalPage=${metadata.totalPage}, totalElement=${metadata.totalElement}');
+
+          List<ConnectDTO> connectData = (data['data'] as List)
+              .map<ConnectDTO>((json) => ConnectDTO.fromJson(json))
               .toList();
-          return result;
+
+          return ConnectResponse(metadata: metadata, data: connectData);
         }
+      } else {
+        LOG.error('Failed to fetch data. Status Code: ${response.statusCode}');
       }
     } catch (e) {
-      LOG.error(e.toString());
+      LOG.error('Exception: ${e.toString()}');
     }
-    return result;
+    return null;
   }
 
   Future updateStatus(Map<String, dynamic> param) async {

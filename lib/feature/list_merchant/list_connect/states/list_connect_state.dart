@@ -14,13 +14,13 @@ class ListConnectInitialState extends ListConnectState {}
 class ListConnectLoadingState extends ListConnectState {}
 
 class ListConnectSuccessfulState extends ListConnectState {
-  final List<ConnectDTO> dto;
-  final MetaData? metaData;
+  // final List<ConnectDTO> dto;
+  final ConnectResponse dto;
 
-  const ListConnectSuccessfulState({required this.dto, this.metaData});
+  const ListConnectSuccessfulState({required this.dto});
 
   @override
-  List<Object?> get props => [dto, metaData];
+  List<Object?> get props => [dto];
 }
 
 class ListConnectFailedState extends ListConnectState {}

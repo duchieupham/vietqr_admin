@@ -319,120 +319,120 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
             ),
           ),
           const SizedBox(height: 30),
-          // _pagingWidget(),
+          _pagingWidget(),
           const SizedBox(height: 30),
         ],
       ),
     );
   }
 
-  // Widget _pagingWidget() {
-  //   return BlocBuilder<ListConnectBloc, ListConnectState>(
-  //     builder: (context, state) {
-  //       bool isPaging = false;
-  //       if (state is ListConnectFailedState) {
-  //         return const SizedBox.shrink();
-  //       }
-  //       if (state is ListConnectLoadingState) {
-  //         return const SizedBox.shrink();
-  //       }
-  //       if (state is ListConnectSuccessfulState) {
-  //         if (state.metaData!.page != state.metaData!.totalPage) {
-  //           isPaging = true;
-  //         }
-  //         return state.metaData != null
-  //             ? Padding(
-  //                 padding: const EdgeInsets.only(left: 30),
-  //                 child: Row(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     Container(
-  //                       padding: const EdgeInsets.all(4),
-  //                       child: Text(
-  //                         "Trang ${state.metaData!.page}/${state.metaData!.totalPage}",
-  //                         style: const TextStyle(fontSize: 13),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(width: 30),
-  //                     InkWell(
-  //                       onTap: () {
-  //                         if (state.metaData!.page != 1) {
-  //                           // await model.filterListInvoice(
-  //                           //   time: selectDate!,
-  //                           //   page: paging.page! - 1,
-  //                           //   filter: textInput()!,
-  //                           // );
-  //                           _bloc.add(ListConnectGetListEvent(
-  //                               type: typeScreen,
-  //                               value: _merchantController.text,
-  //                               page: state.metaData!.page - 1,
-  //                               size: 20));
-  //                         }
-  //                       },
-  //                       child: Container(
-  //                         padding: const EdgeInsets.all(4),
-  //                         decoration: BoxDecoration(
-  //                             borderRadius: BorderRadius.circular(100),
-  //                             border: Border.all(
-  //                                 color: state.metaData!.page != 1
-  //                                     ? AppColor.BLACK
-  //                                     : AppColor.GREY_DADADA)),
-  //                         child: Center(
-  //                           child: Icon(
-  //                             Icons.chevron_left_rounded,
-  //                             color: state.metaData!.page != 1
-  //                                 ? AppColor.BLACK
-  //                                 : AppColor.GREY_DADADA,
-  //                             size: 20,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     const SizedBox(width: 15),
-  //                     InkWell(
-  //                       onTap: () {
-  //                         if (isPaging) {
-  //                           // await model.filterListInvoice(
-  //                           //   time: selectDate!,
-  //                           //   page: paging.page! + 1,
-  //                           //   filter: textInput()!,
-  //                           // );
-  //                           _bloc.add(ListConnectGetListEvent(
-  //                               type: typeScreen,
-  //                               value: _merchantController.text,
-  //                               page: state.metaData!.page + 1,
-  //                               size: 20));
-  //                         }
-  //                       },
-  //                       child: Container(
-  //                         padding: const EdgeInsets.all(4),
-  //                         decoration: BoxDecoration(
-  //                             borderRadius: BorderRadius.circular(100),
-  //                             border: Border.all(
-  //                                 color: isPaging
-  //                                     ? AppColor.BLACK
-  //                                     : AppColor.GREY_DADADA)),
-  //                         child: Center(
-  //                           child: Icon(
-  //                             Icons.chevron_right_rounded,
-  //                             color: isPaging
-  //                                 ? AppColor.BLACK
-  //                                 : AppColor.GREY_DADADA,
-  //                             size: 20,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               )
-  //             : const SizedBox.shrink();
-  //       } else {
-  //         return const SizedBox.shrink();
-  //       }
-  //     },
-  //   );
-  // }
+  Widget _pagingWidget() {
+    return BlocBuilder<ListConnectBloc, ListConnectState>(
+      builder: (context, state) {
+        bool isPaging = false;
+        if (state is ListConnectFailedState) {
+          return const SizedBox.shrink();
+        }
+        if (state is ListConnectLoadingState) {
+          return const SizedBox.shrink();
+        }
+        if (state is ListConnectSuccessfulState) {
+          if (state.dto.metadata.page != state.dto.metadata.totalPage) {
+            isPaging = true;
+          }
+          return state.dto.metadata != null
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        child: Text(
+                          "Trang ${state.dto.metadata.page}/${state.dto.metadata.totalPage}",
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      InkWell(
+                        onTap: () {
+                          if (state.dto.metadata.page != 1) {
+                            // await model.filterListInvoice(
+                            //   time: selectDate!,
+                            //   page: paging.page! - 1,
+                            //   filter: textInput()!,
+                            // );
+                            _bloc.add(ListConnectGetListEvent(
+                                type: typeScreen,
+                                value: _merchantController.text,
+                                page: state.dto.metadata.page - 1,
+                                size: 20));
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                  color: state.dto.metadata.page != 1
+                                      ? AppColor.BLACK
+                                      : AppColor.GREY_DADADA)),
+                          child: Center(
+                            child: Icon(
+                              Icons.chevron_left_rounded,
+                              color: state.dto.metadata.page != 1
+                                  ? AppColor.BLACK
+                                  : AppColor.GREY_DADADA,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      InkWell(
+                        onTap: () {
+                          if (isPaging) {
+                            // await model.filterListInvoice(
+                            //   time: selectDate!,
+                            //   page: paging.page! + 1,
+                            //   filter: textInput()!,
+                            // );
+                            _bloc.add(ListConnectGetListEvent(
+                                type: typeScreen,
+                                value: _merchantController.text,
+                                page: state.dto.metadata.page + 1,
+                                size: 20));
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                  color: isPaging
+                                      ? AppColor.BLACK
+                                      : AppColor.GREY_DADADA)),
+                          child: Center(
+                            child: Icon(
+                              Icons.chevron_right_rounded,
+                              color: isPaging
+                                  ? AppColor.BLACK
+                                  : AppColor.GREY_DADADA,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink();
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
 
   Widget _buildListConnect() {
     return SingleChildScrollView(
@@ -441,7 +441,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
           BlocConsumer<ListConnectBloc, ListConnectState>(
             listener: (context, state) {
               if (state is ListConnectSuccessfulState) {
-                result = state.dto;
+                result = state.dto.data;
               }
             },
             builder: (context, state) {

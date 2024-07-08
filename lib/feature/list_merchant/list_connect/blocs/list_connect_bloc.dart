@@ -15,13 +15,16 @@ class ListConnectBloc extends Bloc<ListConnectEvent, ListConnectState> {
 const ListConnectRepository listConnectRepository = ListConnectRepository();
 
 void _getList(ListConnectEvent event, Emitter emit) async {
-  List<ConnectDTO> result = [];
+  ConnectResponse? result = ConnectResponse(
+    metadata: const MetaData(),
+    data: [const ConnectDTO()],
+  );
   try {
     if (event is ListConnectGetListEvent) {
       emit(ListConnectLoadingState());
       result = await listConnectRepository.getListConnect(
           event.type, event.size, event.page, event.value);
-      emit(ListConnectSuccessfulState(dto: result));
+      emit(ListConnectSuccessfulState(dto: result!));
     }
   } catch (e) {
     print('Error at get list connect- ListConnectBloc: $e');
@@ -30,13 +33,16 @@ void _getList(ListConnectEvent event, Emitter emit) async {
 }
 
 void _updateStatus(ListConnectEvent event, Emitter emit) async {
-  List<ConnectDTO> result = [];
+  ConnectResponse? result = ConnectResponse(
+    metadata: const MetaData(),
+    data: [const ConnectDTO()],
+  );
   try {
     if (event is ListConnectUpdateStatusEvent) {
       await listConnectRepository.updateStatus(event.param);
       result = await listConnectRepository.getListConnect(
           event.type, event.size, event.page, event.value);
-      emit(ListConnectSuccessfulState(dto: result));
+      emit(ListConnectSuccessfulState(dto: result!));
     }
   } catch (e) {
     print('Error at get list connect- ListConnectBloc: $e');
