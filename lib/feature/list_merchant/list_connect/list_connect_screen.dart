@@ -230,65 +230,80 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
             );
           }),
           const SizedBox(height: 10),
-          Row(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(width: 20),
-              Container(
-                height: 40,
-                width: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
-                  color: AppColor.WHITE,
-                ),
-                child: TextField(
-                  controller: _merchantController,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(8, 0, 8, 16),
-                    border: InputBorder.none,
-                    hintText: 'Nhập tên đại lý',
-                    hintStyle: TextStyle(
-                      fontSize: 13,
-                      color: AppColor.GREY_TEXT,
-                    ),
-                  ),
+              const Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Text(
+                  'Tìm kiếm theo tên đại lý',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(width: 20),
-              InkWell(
-                onTap: () {
-                  _bloc.add(ListConnectGetListEvent(
-                      type: typeScreen,
-                      value: _merchantController.text,
-                      page: 1,
-                      size: 20));
-                },
-                child: Container(
-                  height: 40,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  decoration: BoxDecoration(
-                    color: AppColor.BLUE_TEXT,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.search,
-                        size: 15,
-                        color: AppColor.WHITE,
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const SizedBox(width: 20),
+                  Container(
+                    height: 40,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: Colors.grey,
                       ),
-                      SizedBox(width: 8),
-                      Text(
-                        "Tìm kiếm",
-                        style: TextStyle(color: AppColor.WHITE, fontSize: 13),
+                      color: AppColor.WHITE,
+                    ),
+                    child: TextField(
+                      controller: _merchantController,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(8, 0, 8, 16),
+                        border: InputBorder.none,
+                        hintText: 'Nhập tên đại lý',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          color: AppColor.GREY_TEXT,
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 20),
+                  InkWell(
+                    onTap: () {
+                      _bloc.add(ListConnectGetListEvent(
+                          type: typeScreen,
+                          value: _merchantController.text,
+                          page: 1,
+                          size: 20));
+                    },
+                    child: Container(
+                      height: 40,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      decoration: BoxDecoration(
+                        color: AppColor.BLUE_TEXT,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search,
+                            size: 15,
+                            color: AppColor.WHITE,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "Tìm kiếm",
+                            style:
+                                TextStyle(color: AppColor.WHITE, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
