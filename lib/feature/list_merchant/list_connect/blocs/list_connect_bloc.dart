@@ -23,7 +23,7 @@ void _getList(ListConnectEvent event, Emitter emit) async {
     if (event is ListConnectGetListEvent) {
       emit(ListConnectLoadingState());
       result = await listConnectRepository.getListConnect(
-          event.type, event.size, event.page, event.value);
+          event.type, event.size, event.page, event.value, event.typeSearch);
       emit(ListConnectSuccessfulState(dto: result!));
     }
   } catch (e) {
@@ -41,7 +41,7 @@ void _updateStatus(ListConnectEvent event, Emitter emit) async {
     if (event is ListConnectUpdateStatusEvent) {
       await listConnectRepository.updateStatus(event.param);
       result = await listConnectRepository.getListConnect(
-          event.type, event.size, event.page, event.value);
+          event.type, event.size, event.page, event.value, event.typeSearch);
       emit(ListConnectSuccessfulState(dto: result!));
     }
   } catch (e) {

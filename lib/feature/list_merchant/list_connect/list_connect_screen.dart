@@ -28,7 +28,7 @@ class ListConnectScreen extends StatelessWidget {
       child: BlocProvider<ListConnectBloc>(
           create: (_) => ListConnectBloc()
             ..add(const ListConnectGetListEvent(
-                type: 9, value: '', page: 1, size: 20)),
+                type: 9, value: '', page: 1, size: 20, typeSearch: 9)),
           child: const _ListConnectScreen()),
     );
   }
@@ -46,9 +46,11 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
   void dispose() {
     super.dispose();
     _merchantController.clear();
+    _bankController.clear();
   }
 
   final TextEditingController _merchantController = TextEditingController();
+  final TextEditingController _bankController = TextEditingController();
   List<ConnectDTO> result = [];
   StreamSubscription? _subscription;
   late ListConnectBloc _bloc;
@@ -56,6 +58,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
   int typeScreen = 0;
   int? currentPage = 1;
   int? totalPages = 7;
+  int? typeSearch = 9;
 
   @override
   void initState() {
@@ -64,9 +67,10 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
     _subscription = eventBus.on<GetListConnect>().listen((data) {
       _bloc.add(ListConnectGetListEvent(
           type: typeScreen,
-          value: _merchantController.text,
+          value: textInput()!,
           page: 1,
-          size: 20));
+          size: 20,
+          typeSearch: typeSearch!));
       context
           .read<ListConnectProvider>()
           .changeFilter(const FilterTransaction(id: 9, title: 'Tất cả'));
@@ -80,6 +84,8 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
       color: AppColor.WHITE,
       width: width,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Consumer<ListConnectProvider>(builder: (context, provider, child) {
             return Container(
@@ -167,6 +173,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                                   isSelect: provider.valueFilter.id == 9,
                                   onTap: () {
                                     _merchantController.clear();
+                                    _bankController.clear();
                                     setState(() {
                                       typeScreen = 9;
                                     });
@@ -175,9 +182,10 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                                             id: 9, title: 'Tất cả'));
                                     _bloc.add(ListConnectGetListEvent(
                                         type: typeScreen,
-                                        value: _merchantController.text,
+                                        value: textInput()!,
                                         page: 1,
-                                        size: 20));
+                                        size: 20,
+                                        typeSearch: typeSearch!));
                                   },
                                 ),
                                 ItemMenuTop(
@@ -185,6 +193,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                                   isSelect: provider.valueFilter.id == 0,
                                   onTap: () {
                                     _merchantController.clear();
+                                    _bankController.clear();
                                     setState(() {
                                       typeScreen = 0;
                                     });
@@ -193,9 +202,10 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                                             id: 0, title: 'API Service'));
                                     _bloc.add(ListConnectGetListEvent(
                                         type: typeScreen,
-                                        value: _merchantController.text,
+                                        value: textInput()!,
                                         page: 1,
-                                        size: 20));
+                                        size: 20,
+                                        typeSearch: typeSearch!));
                                   },
                                 ),
                                 ItemMenuTop(
@@ -203,6 +213,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                                   isSelect: provider.valueFilter.id == 1,
                                   onTap: () {
                                     _merchantController.clear();
+                                    _bankController.clear();
                                     setState(() {
                                       typeScreen = 1;
                                     });
@@ -211,9 +222,10 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                                             id: 1, title: 'Ecommerce'));
                                     _bloc.add(ListConnectGetListEvent(
                                         type: typeScreen,
-                                        value: _merchantController.text,
+                                        value: textInput()!,
                                         page: 1,
-                                        size: 20));
+                                        size: 20,
+                                        typeSearch: typeSearch!));
                                   },
                                 ),
                                 const SizedBox(
@@ -230,82 +242,277 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
             );
           }),
           const SizedBox(height: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Text(
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   'Tìm kiếm theo tên đại lý',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  const SizedBox(width: 20),
-                  Container(
-                    height: 40,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                      color: AppColor.WHITE,
-                    ),
-                    child: TextField(
-                      controller: _merchantController,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(8, 0, 8, 16),
-                        border: InputBorder.none,
-                        hintText: 'Nhập tên đại lý',
-                        hintStyle: TextStyle(
-                          fontSize: 13,
-                          color: AppColor.GREY_TEXT,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  InkWell(
-                    onTap: () {
-                      _bloc.add(ListConnectGetListEvent(
-                          type: typeScreen,
-                          value: _merchantController.text,
-                          page: 1,
-                          size: 20));
-                    },
-                    child: Container(
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Container(
                       height: 40,
-                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      width: typeSearch == 9 ? 250 : 500,
+                      padding: const EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                        color: AppColor.BLUE_TEXT,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppColor.GREY_DADADA)),
+                      child: Row(
                         children: [
-                          Icon(
-                            Icons.search,
-                            size: 15,
-                            color: AppColor.WHITE,
+                          SizedBox(
+                            height: 40,
+                            width: 220,
+                            child: DropdownButton<int>(
+                              isExpanded: true,
+                              value: typeSearch,
+                              underline: const SizedBox.shrink(),
+                              icon: const RotatedBox(
+                                quarterTurns: 5,
+                                child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 12,
+                                ),
+                              ),
+                              items: const [
+                                DropdownMenuItem<int>(
+                                    value: 9,
+                                    child: Text(
+                                      "Tất cả (mặc định)",
+                                    )),
+                                DropdownMenuItem<int>(
+                                    value: 0,
+                                    child: Text(
+                                      "Đại lý",
+                                    )),
+                                DropdownMenuItem<int>(
+                                    value: 1,
+                                    child: Text(
+                                      "Số TK ngân hàng",
+                                    )),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  typeSearch = value;
+                                });
+                                _merchantController.clear();
+                                _bankController.clear();
+                              },
+                            ),
                           ),
-                          SizedBox(width: 8),
-                          Text(
-                            "Tìm kiếm",
-                            style:
-                                TextStyle(color: AppColor.WHITE, fontSize: 13),
-                          ),
+                          if (typeSearch != null && typeSearch == 0)
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 8),
+                                  const SizedBox(
+                                    height: 40,
+                                    child: VerticalDivider(
+                                      thickness: 1,
+                                      color: AppColor.GREY_DADADA,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 234,
+                                    // padding: const EdgeInsets.symmetric(
+                                    //     horizontal: 10),
+                                    child: TextField(
+                                      controller: _merchantController,
+                                      decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(bottom: 8),
+
+                                        // contentPadding:
+                                        //     EdgeInsets.only(bottom: 0),
+                                        border: InputBorder.none,
+                                        hintText: 'Nhập tên đại lý',
+                                        hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            color: AppColor.GREY_TEXT),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (typeSearch != null && typeSearch == 1)
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 8),
+                                  const SizedBox(
+                                    height: 40,
+                                    child: VerticalDivider(
+                                      thickness: 1,
+                                      color: AppColor.GREY_DADADA,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 234,
+                                    // padding: const EdgeInsets.symmetric(
+                                    //     horizontal: 10),
+                                    child: TextField(
+                                      controller: _bankController,
+                                      decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(bottom: 8),
+
+                                        // contentPadding:
+                                        //     EdgeInsets.only(bottom: 0),
+                                        border: InputBorder.none,
+                                        hintText: 'Nhập số TK ngân hàng',
+                                        hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            color: AppColor.GREY_TEXT),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          // const SizedBox(width: 20),
+                          // InkWell(
+                          //   onTap: () {
+                          //     _bloc.add(ListConnectGetListEvent(
+                          //         type: typeScreen,
+                          //         value: _merchantController.text,
+                          //         page: 1,
+                          //         size: 20));
+                          //   },
+                          //   child: Container(
+                          //     height: 40,
+                          //     padding: const EdgeInsets.only(left: 20, right: 20),
+                          //     decoration: BoxDecoration(
+                          //       color: AppColor.BLUE_TEXT,
+                          //       borderRadius: BorderRadius.circular(10),
+                          //     ),
+                          //     child: const Row(
+                          //       mainAxisAlignment: MainAxisAlignment.center,
+                          //       children: [
+                          //         Icon(
+                          //           Icons.search,
+                          //           size: 15,
+                          //           color: AppColor.WHITE,
+                          //         ),
+                          //         SizedBox(width: 8),
+                          //         Text(
+                          //           "Tìm kiếm",
+                          //           style: TextStyle(
+                          //               color: AppColor.WHITE, fontSize: 13),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 20),
+                    InkWell(
+                      onTap: () {
+                        _bloc.add(ListConnectGetListEvent(
+                            type: typeScreen,
+                            value: textInput()!,
+                            page: 1,
+                            size: 20,
+                            typeSearch: typeSearch!));
+                      },
+                      child: Container(
+                        height: 40,
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        decoration: BoxDecoration(
+                          color: AppColor.BLUE_TEXT,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search,
+                              size: 15,
+                              color: AppColor.WHITE,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              "Tìm kiếm",
+                              style: TextStyle(
+                                  color: AppColor.WHITE, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // Row(
+                //   children: [
+                //     const SizedBox(width: 20),
+                //     Container(
+                //       height: 40,
+                //       width: 200,
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(5),
+                //         border: Border.all(
+                //           color: Colors.grey,
+                //         ),
+                //         color: AppColor.WHITE,
+                //       ),
+                //       child: TextField(
+                //         controller: _merchantController,
+                //         textAlignVertical: TextAlignVertical.center,
+                //         decoration: const InputDecoration(
+                //           contentPadding: EdgeInsets.fromLTRB(8, 0, 8, 16),
+                //           border: InputBorder.none,
+                //           hintText: 'Nhập tên đại lý',
+                //           hintStyle: TextStyle(
+                //             fontSize: 13,
+                //             color: AppColor.GREY_TEXT,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                // const SizedBox(width: 20),
+                // InkWell(
+                //   onTap: () {
+                //     _bloc.add(ListConnectGetListEvent(
+                //         type: typeScreen,
+                //         value: _merchantController.text,
+                //         page: 1,
+                //         size: 20));
+                //   },
+                //   child: Container(
+                //     height: 40,
+                //     padding: const EdgeInsets.only(left: 20, right: 20),
+                //     decoration: BoxDecoration(
+                //       color: AppColor.BLUE_TEXT,
+                //       borderRadius: BorderRadius.circular(10),
+                //     ),
+                //     child: const Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Icon(
+                //           Icons.search,
+                //           size: 15,
+                //           color: AppColor.WHITE,
+                //         ),
+                //         SizedBox(width: 8),
+                //         Text(
+                //           "Tìm kiếm",
+                //           style:
+                //               TextStyle(color: AppColor.WHITE, fontSize: 13),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                //   ],
+                // ),
+              ],
+            ),
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -324,6 +531,18 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
         ],
       ),
     );
+  }
+
+  String? textInput() {
+    switch (typeSearch) {
+      case 0:
+        return _merchantController.text;
+      case 1:
+        return _bankController.text;
+      default:
+        break;
+    }
+    return '';
   }
 
   Widget _pagingWidget() {
@@ -364,9 +583,10 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                             // );
                             _bloc.add(ListConnectGetListEvent(
                                 type: typeScreen,
-                                value: _merchantController.text,
+                                value: textInput()!,
                                 page: state.dto.metadata.page - 1,
-                                size: 20));
+                                size: 20,
+                                typeSearch: typeSearch!));
                           }
                         },
                         child: Container(
@@ -399,9 +619,10 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                             // );
                             _bloc.add(ListConnectGetListEvent(
                                 type: typeScreen,
-                                value: _merchantController.text,
+                                value: textInput()!,
                                 page: state.dto.metadata.page + 1,
-                                size: 20));
+                                size: 20,
+                                typeSearch: typeSearch!));
                           }
                         },
                         child: Container(
@@ -642,11 +863,12 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                               ListConnectGetListEvent(
                                   page: 1,
                                   size: 20,
-                                  value: _merchantController.text,
+                                  value: textInput()!,
                                   type: context
                                       .read<ListConnectProvider>()
                                       .valueFilter
-                                      .id));
+                                      .id,
+                                  typeSearch: typeSearch!));
                         },
                       ),
                     );
@@ -669,12 +891,13 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                         ListConnectUpdateStatusEvent(
                             page: 1,
                             size: 20,
-                            value: _merchantController.text,
+                            value: textInput()!,
                             param: param,
                             type: context
                                 .read<ListConnectProvider>()
                                 .valueFilter
-                                .id));
+                                .id,
+                            typeSearch: typeSearch!));
                   },
                   child: Text(
                     dto.active == 1 ? 'Tắt kết nối' : 'Bật kết nối',
