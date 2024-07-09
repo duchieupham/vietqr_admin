@@ -758,7 +758,9 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dto.phoneAuthenticated.isNotEmpty ? dto.nationalId : '-',
+                dto.phoneAuthenticated.isNotEmpty
+                    ? dto.phoneAuthenticated
+                    : '-',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
