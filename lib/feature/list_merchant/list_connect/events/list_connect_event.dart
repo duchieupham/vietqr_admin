@@ -12,14 +12,16 @@ class ListConnectGetListEvent extends ListConnectEvent {
   final int page;
   final int size;
   final String value;
+  final int typeSearch;
   const ListConnectGetListEvent(
       {required this.type,
       required this.page,
       required this.size,
-      required this.value});
+      required this.value,
+      required this.typeSearch});
 
   @override
-  List<Object?> get props => [type, page, value, size];
+  List<Object?> get props => [type, page, value, size, typeSearch];
 }
 
 class ListConnectUpdateStatusEvent extends ListConnectEvent {
@@ -28,13 +30,15 @@ class ListConnectUpdateStatusEvent extends ListConnectEvent {
   final int page;
   final int size;
   final String value;
+  final int typeSearch;
   const ListConnectUpdateStatusEvent(
       {required this.param,
       required this.type,
       required this.page,
       required this.size,
-      required this.value});
+      required this.value,
+      required this.typeSearch});
 
   @override
-  List<Object?> get props => [param, type, page, value, size];
+  List<Object?> get props => [param, type, page, value, size, typeSearch];
 }

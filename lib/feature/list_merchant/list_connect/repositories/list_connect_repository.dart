@@ -65,10 +65,12 @@ class ListConnectRepository {
   // }
 
   Future<ConnectResponse?> getListConnect(
-      int type, int size, int page, String value) async {
+      int type, int size, int page, String value, int typeSearch) async {
     try {
+      // String url =
+      //     '${EnvConfig.instance.getBaseUrl()}admin/customer-sync/sorted?type=$type&page=$page&size=$size&value=$value';
       String url =
-          '${EnvConfig.instance.getBaseUrl()}admin/customer-sync/sorted?type=$type&page=$page&size=$size&value=$value';
+          '${EnvConfig.instance.getBaseUrl()}admin/customer-sync/sorted?type=$type&page=$page&size=$size&value=$value&typeSearch=$typeSearch';
 
       final response = await BaseAPIClient.getAPI(
         url: url,
@@ -81,8 +83,8 @@ class ListConnectRepository {
           LOG.info('Response Data: $data');
 
           MetaData metadata = MetaData.fromJson(data['metadata']);
-          LOG.info(
-              'Metadata: page=${metadata.page}, size=${metadata.size}, totalPage=${metadata.totalPage}, totalElement=${metadata.totalElement}');
+          // LOG.info(
+          //     'Metadata: page=${metadata.page}, size=${metadata.size}, totalPage=${metadata.totalPage}, totalElement=${metadata.totalElement}');
 
           List<ConnectDTO> connectData = (data['data'] as List)
               .map<ConnectDTO>((json) => ConnectDTO.fromJson(json))
