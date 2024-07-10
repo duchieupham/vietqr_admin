@@ -79,7 +79,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.only(left: 5),
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               decoration: const BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
