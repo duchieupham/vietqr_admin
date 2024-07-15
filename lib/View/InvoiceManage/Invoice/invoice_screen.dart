@@ -358,7 +358,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                   child: SingleChildScrollView(
                                     controller: controller1,
                                     child: SizedBox(
-                                      width: 1960,
+                                      width: 2000,
                                       child: Column(
                                         children: [
                                           const TitleItemInvoiceWidget(),
@@ -372,7 +372,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                               ),
                               SizedBox(
                                 // width: 1890,
-                                width: 1960,
+                                width: 2000,
                                 child: Row(
                                   children: [
                                     const Expanded(child: SizedBox()),
@@ -429,7 +429,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         )),
                                                     Container(
                                                         height: 50,
-                                                        width: 100,
+                                                        width: 140,
                                                         alignment:
                                                             Alignment.center,
                                                         decoration:
@@ -539,7 +539,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               ),
             ),
             height: 50,
-            width: 100,
+            width: 140,
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -562,6 +562,26 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       bgColor: AppColor.BLUE_TEXT.withOpacity(0.3),
                       child: const Icon(
                         Icons.info,
+                        size: 12,
+                        color: AppColor.BLUE_TEXT,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Tooltip(
+                  message: 'Bảng đầy đủ',
+                  child: InkWell(
+                    onTap: () {},
+                    child: BoxLayout(
+                      width: 30,
+                      height: 30,
+                      borderRadius: 100,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(0),
+                      bgColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+                      child: const Icon(
+                        Icons.abc,
                         size: 12,
                         color: AppColor.BLUE_TEXT,
                       ),
