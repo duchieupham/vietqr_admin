@@ -13,6 +13,7 @@ import 'package:vietqr_admin/feature/list_merchant/list_connect/states/info_conn
 import 'package:vietqr_admin/feature/list_merchant/list_connect/widget/add_bank_popup.dart';
 import 'package:vietqr_admin/feature/merchant/blocs/merchant_bloc.dart';
 import 'package:vietqr_admin/feature/merchant/events/merchant_event.dart';
+import 'package:vietqr_admin/feature/merchant/page/change_flow_dialog.dart';
 import 'package:vietqr_admin/feature/merchant/provider/merchant_provider.dart';
 import 'package:vietqr_admin/feature/merchant/states/merchant_state.dart';
 import 'package:vietqr_admin/feature/merchant/widget/choose_service_pack.dart';
@@ -108,6 +109,25 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                           } else {
                             listBankSync = state.list;
                           }
+                        }
+                        if (state is ChangeFlow2FailedState ||
+                            state is ChangeFlow1FailedState) {
+                          toastification.show(
+                            context: context,
+                            type: ToastificationType.error,
+                            style: ToastificationStyle.flat,
+                            title: const Text(
+                              'Chuyển luồng thất bại!',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            showProgressBar: false,
+                            alignment: Alignment.topRight,
+                            autoCloseDuration: const Duration(seconds: 5),
+                            boxShadow: highModeShadow,
+                            dragToClose: true,
+                            pauseOnHover: true,
+                          );
                         }
                         if (state is ChangeFlow1SuccessfulState) {
                           toastification.show(
@@ -407,51 +427,117 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                   ),
                 ),
                 Expanded(
+                  // child: InkWell(
+                  //   onTap: () {
+                  //     Map<String, dynamic> param = {
+                  //       'bankTypeId': dto.bankTypeId,
+                  //       'bankAccount': dto.bankAccount,
+                  //       'bankCode': dto.bankCode,
+                  //       'bankAccountName': dto.customerBankName,
+                  //       'userId': dto.userId,
+                  //       'bankId': dto.bankId,
+                  //       'nationalId': dto.nationalId,
+                  //       'phoneAuthenticated': dto.phoneAuthenticated,
+                  //     };
+                  //     // merchantBloc.add(ChangeFlow1Event(param: param));
+                  //     DialogWidget.instance.openMsgDialogQuestion(
+                  //         title: 'Chuyển luồng',
+                  //         msg: 'Bạn có chắc chắn muốn chuyển luồng?',
+                  //         onConfirm: () {
+                  //           if (dto.flow == 1) {
+                  //             merchantBloc.add(ChangeFlow2Event(param: param));
+                  //           } else if (dto.flow == 2) {
+                  //             merchantBloc.add(ChangeFlow1Event(param: param));
+                  //           }
+                  //           Navigator.pop(context);
+                  //         });
+
+                  //     // if (dto.flow == 1) {
+                  //     //   merchantBloc.add(ChangeFlow2Event(param: param));
+                  //     // } else if (dto.flow == 2) {
+                  //     //   merchantBloc.add(ChangeFlow1Event(param: param));
+                  //     // }
+                  //   },
+                  //   child: Container(
+                  //     height: 50,
+                  //     alignment: Alignment.center,
+                  //     padding: const EdgeInsets.symmetric(horizontal: 4),
+                  //     decoration: const BoxDecoration(
+                  //         border: Border(
+                  //             right: BorderSide(color: AppColor.GREY_BUTTON))),
+                  //     child: const Text(
+                  //       'Chuyển luồng',
+                  //       textAlign: TextAlign.center,
+                  //       style: TextStyle(
+                  //           fontSize: 11,
+                  //           color: AppColor.BLUE_TEXT,
+                  //           decoration: TextDecoration.underline),
+                  //     ),
+                  //   ),
+                  // ),
                   child: InkWell(
                     onTap: () {
-                      Map<String, dynamic> param = {
-                        'bankTypeId': dto.bankTypeId,
-                        'bankAccount': dto.bankAccount,
-                        'bankCode': dto.bankCode,
-                        'bankAccountName': dto.customerBankName,
-                        'userId': dto.userId,
-                        'bankId': dto.bankId,
-                        'nationalId': dto.nationalId,
-                        'phoneAuthenticated': dto.phoneAuthenticated,
-                      };
-                      // merchantBloc.add(ChangeFlow1Event(param: param));
-                      DialogWidget.instance.openMsgDialogQuestion(
-                          title: 'Chuyển luồng',
-                          msg: 'Bạn có chắc chắn muốn chuyển luồng?',
-                          onConfirm: () {
-                            if (dto.flow == 1) {
-                              merchantBloc.add(ChangeFlow2Event(param: param));
-                            } else if (dto.flow == 2) {
-                              merchantBloc.add(ChangeFlow1Event(param: param));
-                            }
-                            Navigator.pop(context);
-                          });
+                      // Map<String, dynamic> param = {
+                      //   'bankTypeId': dto.bankTypeId,
+                      //   'bankAccount': dto.bankAccount,
+                      //   'bankCode': dto.bankCode,
+                      //   'bankAccountName': dto.customerBankName,
+                      //   'userId': dto.userId,
+                      //   'bankId': dto.bankId,
+                      //   'nationalId': dto.nationalId,
+                      //   'phoneAuthenticated': dto.phoneAuthenticated,
+                      // };
 
-                      // if (dto.flow == 1) {
-                      //   merchantBloc.add(ChangeFlow2Event(param: param));
-                      // } else if (dto.flow == 2) {
-                      //   merchantBloc.add(ChangeFlow1Event(param: param));
-                      // }
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ChangeFlowDialog(
+                            bankAccount: dto.bankAccount,
+                            bankCode: dto.bankCode,
+                            customerBankName: dto.customerBankName,
+                            address: dto.address,
+                            onConfirm: (String address) {
+                              Map<String, dynamic> param = {
+                                'bankTypeId': dto.bankTypeId,
+                                'bankAccount': dto.bankAccount,
+                                'bankCode': dto.bankCode,
+                                'bankAccountName': dto.customerBankName,
+                                'userId': dto.userId,
+                                'bankId': dto.bankId,
+                                'nationalId': dto.nationalId,
+                                'phoneAuthenticated': dto.phoneAuthenticated,
+                                'address': address,
+                              };
+                              // param['address'] = address;
+                              if (dto.flow == 1) {
+                                merchantBloc
+                                    .add(ChangeFlow2Event(param: param));
+                              } else if (dto.flow == 2) {
+                                merchantBloc
+                                    .add(ChangeFlow1Event(param: param));
+                              }
+                            },
+                          );
+                        },
+                      );
                     },
                     child: Container(
                       height: 50,
                       alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       decoration: const BoxDecoration(
-                          border: Border(
-                              right: BorderSide(color: AppColor.GREY_BUTTON))),
+                        border: Border(
+                          right: BorderSide(color: AppColor.GREY_BUTTON),
+                        ),
+                      ),
                       child: const Text(
                         'Chuyển luồng',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 11,
-                            color: AppColor.BLUE_TEXT,
-                            decoration: TextDecoration.underline),
+                          fontSize: 11,
+                          color: AppColor.BLUE_TEXT,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     ),
                   ),
