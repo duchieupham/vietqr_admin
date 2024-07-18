@@ -20,10 +20,50 @@ class MerchantBloc extends Bloc<MerchantEvent, MerchantState> {
     on<GetSynthesisReportEvent>(_getListSynthesisReport);
     on<GetListBankSyncEvent>(_getListBankSync);
     on<UpdateNoteMerchantEvent>(_updateNote);
+    on<ChangeFlow2Event>(_changeFlow2);
+    on<ChangeFlow1Event>(_changeFlow1);
   }
 }
 
 const MerchantRepository merchantRepository = MerchantRepository();
+
+void _changeFlow2(MerchantEvent event, Emitter emit) async {
+  ResponseMessageDTO dto = const ResponseMessageDTO();
+  try {
+    if (event is ChangeFlow2Event) {
+      emit(ChangeFlow2State());
+      dto = await merchantRepository.changeFlow2(event.param);
+
+      if (dto.status == "SUCCESS") {
+        emit(ChangeFlow2SuccessfulState());
+      } else {
+        emit(ChangeFlow2FailedState(dto: dto));
+      }
+    }
+  } catch (e) {
+    // print('Error at get _updateData: $e');
+    emit(ChangeFlow2FailedState(dto: dto));
+  }
+}
+
+void _changeFlow1(MerchantEvent event, Emitter emit) async {
+  ResponseMessageDTO dto = const ResponseMessageDTO();
+  try {
+    if (event is ChangeFlow1Event) {
+      emit(ChangeFlow1State());
+      dto = await merchantRepository.changeFlow1(event.param);
+
+      if (dto.status == "SUCCESS") {
+        emit(ChangeFlow1SuccessfulState());
+      } else {
+        emit(ChangeFlow1FailedState(dto: dto));
+      }
+    }
+  } catch (e) {
+    // print('Error at get _updateData: $e');
+    emit(ChangeFlow1FailedState(dto: dto));
+  }
+}
 
 void _updateNote(MerchantEvent event, Emitter emit) async {
   ResponseMessageDTO result;
