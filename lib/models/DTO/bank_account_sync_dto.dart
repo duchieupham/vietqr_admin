@@ -15,6 +15,7 @@ class BankAccountSync {
   final String accountCustomerId;
   final String customerBankName;
   final String serviceFeeName;
+  final String address;
 
   const BankAccountSync({
     this.flow = 0,
@@ -33,6 +34,7 @@ class BankAccountSync {
     this.customerBankName = '',
     this.phoneAuthenticated = '',
     this.serviceFeeName = '',
+    this.address = '',
   });
 
   factory BankAccountSync.fromJsonApi(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class BankAccountSync {
       customerBankName: json['customerBankName'] ?? '',
       phoneAuthenticated: json['phoneAuthenticated'] ?? '',
       serviceFeeName: json['serviceFeeName'] ?? '',
+      address: json['address'] ?? '',
     );
   }
 }
