@@ -56,6 +56,50 @@ class MerchantRepository {
     return result;
   }
 
+  Future changeFlow2(Map<String, dynamic> param) async {
+    ResponseMessageDTO result = const ResponseMessageDTO();
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}admin/account/update-flow-2';
+
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+        body: param,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        result = ResponseMessageDTO.fromJson(data);
+        return result;
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return result;
+  }
+
+  Future changeFlow1(Map<String, dynamic> param) async {
+    ResponseMessageDTO result = const ResponseMessageDTO();
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}admin/account/update-flow-1';
+
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+        body: param,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        result = ResponseMessageDTO.fromJson(data);
+        return result;
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return result;
+  }
+
   Future<List<TransactionMerchantDTO>> getListTransactionByUser(
       Map<String, dynamic> param) async {
     List<TransactionMerchantDTO> result = [];
