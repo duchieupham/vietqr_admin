@@ -90,3 +90,19 @@ class GetListBankSyncEvent extends MerchantEvent {
   @override
   List<Object?> get props => [customerSyncId, isLoadMore, offset];
 }
+
+class ChangeFlow2Event extends MerchantEvent {
+  final Map<String, dynamic> param;
+  const ChangeFlow2Event({required this.param});
+
+  @override
+  List<Object?> get props => [param];
+}
+
+class ChangeFlow1Event extends MerchantEvent {
+  final Map<String, dynamic> param;
+  const ChangeFlow1Event({required this.param});
+
+  @override
+  List<Object?> get props => [param];
+}
