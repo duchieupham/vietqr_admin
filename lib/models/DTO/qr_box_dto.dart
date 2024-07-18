@@ -13,6 +13,7 @@ class QrBoxDTO {
   String boxAddress;
   String certificate;
   int status;
+  int lastChecked;
 
   QrBoxDTO({
     required this.boxId,
@@ -29,6 +30,7 @@ class QrBoxDTO {
     required this.boxAddress,
     required this.certificate,
     required this.status,
+    required this.lastChecked,
   });
 
   factory QrBoxDTO.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class QrBoxDTO {
       boxAddress: json['boxAddress'] ?? '',
       certificate: json['certificate'],
       status: json['status'],
+      lastChecked: json['lastChecked'] ?? 0,
     );
   }
 

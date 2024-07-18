@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/QrBoxManage/QrBox/widgets/title_item_qr_box_widget.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
+import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/qr_box_dto.dart';
@@ -33,6 +34,8 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
 
   late ScrollController controller1;
   late ScrollController controller2;
+
+  final ScrollController scrollHorizontal = ScrollController();
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
 
@@ -164,23 +167,26 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
               children: [
                 SingleChildScrollView(
                   controller: controller1,
-                  child: ScrollConfiguration(
-                      behavior: MyCustomScrollBehavior(),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          width: 1950,
-                          child: Column(
-                            children: [
-                              const TitleItemQrBoxWidget(),
-                              ...buildItemList(list, metadata)
-                            ],
-                          ),
+                  child: Scrollbar(
+                    controller: scrollHorizontal,
+                    thumbVisibility: true,
+                    child: SingleChildScrollView(
+                      controller: scrollHorizontal,
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: 2060,
+                        child: Column(
+                          children: [
+                            const TitleItemQrBoxWidget(),
+                            ...buildItemList(list, metadata)
+                          ],
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
-                  width: 1950,
+                  width: 2060,
                   child: Row(
                     children: [
                       const Expanded(child: SizedBox()),
@@ -227,6 +233,27 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                           )),
                                       Container(
                                           height: 50,
+                                          width: 110,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border: Border(
+                                                top: BorderSide(
+                                                    color: AppColor.GREY_TEXT
+                                                        .withOpacity(0.3)),
+                                                bottom: BorderSide(
+                                                    color: AppColor.GREY_TEXT
+                                                        .withOpacity(0.3))),
+                                          ),
+                                          child: const Text(
+                                            'Hoạt động\ncuối cùng',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: AppColor.BLACK,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                      Container(
+                                          height: 50,
                                           width: 100,
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
@@ -246,6 +273,30 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                 ),
                                 ...list!.map(
                                   (e) {
+                                    String type = '';
+                                    Color color = Colors.white;
+                                    switch (e.status) {
+                                      case 0:
+                                        type = 'Offline';
+                                        color = const Color(0xFFF5233C);
+                                        break;
+                                      case 1:
+                                        type = 'Online';
+                                        color = const Color(0xFF00CA28);
+                                        break;
+                                      case 2:
+                                        type = 'Khởi tạo';
+                                        color = const Color(0xFF0072FF);
+                                        break;
+                                      case 3:
+                                        type = 'Chưa xác định';
+                                        color = const Color(0xFF666A72);
+                                        break;
+                                      default:
+                                        type = 'Chưa xác định';
+                                        color = const Color(0xFF666A72);
+                                        break;
+                                    }
                                     return Container(
                                       alignment: Alignment.center,
                                       child: Row(
@@ -269,19 +320,38 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
                                                                 0.3)))),
                                             height: 50,
                                             width: 130,
-                                            child: const SelectionArea(
+                                            child: SelectionArea(
                                               child: Text(
-                                                // e.status == 0
-                                                //     ? 'Không xác định'
-                                                //     : 'Đã thanh toán',
-                                                'Không xác định',
+                                                type,
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  // color: e.status == 0
-                                                  //     ? AppColor.ORANGE_DARK
-                                                  //     : AppColor.GREEN,
-                                                  color: AppColor.ORANGE_DARK,
+                                                  color: color,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                              bottom: BorderSide(
+                                                  color: AppColor.GREY_TEXT
+                                                      .withOpacity(0.3)),
+                                            )),
+                                            height: 50,
+                                            width: 110,
+                                            child: SelectionArea(
+                                              child: Text(
+                                                e.lastChecked == 0
+                                                    ? '-'
+                                                    : TimeUtils.instance
+                                                        .formatTimeNotification(
+                                                            e.lastChecked),
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: AppColor.GREY_TEXT,
                                                 ),
                                               ),
                                             ),
