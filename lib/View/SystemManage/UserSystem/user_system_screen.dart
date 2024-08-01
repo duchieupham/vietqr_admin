@@ -812,7 +812,7 @@ class _UserSystemScreenState extends State<UserSystemScreen> {
       child: Row(
         children: [
           const Text(
-            "Quản lý hoá đơn",
+            "Quản lý hệ thống",
             style: TextStyle(fontSize: 13),
           ),
           const Text(

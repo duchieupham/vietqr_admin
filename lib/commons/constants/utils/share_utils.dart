@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_downloader_web/image_downloader_web.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
+import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 
 import '../../utils/log.dart';
@@ -94,6 +95,60 @@ class ShareUtils {
 
     result =
         '$invoiceName $amount $merchant $timePaid $vso $billNumber $userName $bankAccount $vietQrBank $email $timeCreate\nBy VIETQR.VN';
+
+    return result;
+  }
+
+  String getBankSharing(BankSystemDTO dto) {
+    String formattedDateTimePaid = dto.validFeeTo.toString().isNotEmpty
+        ? DateFormat('yyyy-MM-dd HH:mm:ss')
+            .format(DateTime.fromMillisecondsSinceEpoch(dto.validFeeTo * 1000))
+        : '-';
+    String result = '';
+    String bankAccount = '';
+    String bankAccountName = '';
+    String bankShortName = '';
+    String phoneAuthenticated = '';
+    String mmsActive = '';
+    String status = '';
+    String validFeeTo = '';
+    String nationalId = '';
+    String phoneNo = '';
+    String email = '';
+    String vso = '';
+
+    if (dto.bankAccount.isNotEmpty) {
+      bankAccount = 'Số tài khoản: ${dto.bankAccount}';
+    }
+    if (dto.bankAccountName.isNotEmpty) {
+      bankAccountName = '\nChủ tài khoản: ${dto.bankAccountName}';
+    }
+    if (dto.bankShortName.isNotEmpty) {
+      bankShortName = '\nNgân hàng: ${dto.bankShortName}';
+    }
+    if (dto.phoneAuthenticated.isNotEmpty) {
+      phoneAuthenticated = '\nSĐT xác thực: ${dto.phoneAuthenticated}';
+    }
+    mmsActive = '\nLuồng: ${dto.mmsActive ? 'TF' : 'MF'}';
+    if (dto.nationalId.isNotEmpty) {
+      nationalId = '\nCCCD / MST: ${dto.nationalId}';
+    }
+    if (dto.validFeeTo != 0) {
+      validFeeTo = '\nThời hạn đến: $formattedDateTimePaid';
+    }
+    if (dto.vso.isNotEmpty) {
+      vso = '\nVSO: ${dto.vso}';
+    }
+    if (dto.phoneNo.isNotEmpty) {
+      phoneNo = '\nTK VietQR: ${dto.phoneNo}';
+    }
+    if (dto.email.isNotEmpty) {
+      email = '\nEmail: ${dto.email}';
+    }
+    status = '\nTrạng thái: ${dto.status ? 'Đã liên kết' : 'Chưa liên kết'}';
+
+    result =
+        '$bankAccount $bankAccountName $bankShortName $phoneAuthenticated $mmsActive $nationalId $validFeeTo $vso $phoneNo $email $status';
 
     return result;
   }
