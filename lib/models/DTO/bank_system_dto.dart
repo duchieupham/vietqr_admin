@@ -10,6 +10,10 @@ class BankSystemDTO {
   final String phoneNo;
   final String email;
   final String vso;
+  final String bankCode;
+  final int bankTypeStatus;
+  final bool validService;
+  final bool authenticated;
 
   BankSystemDTO({
     required this.bankAccount,
@@ -23,6 +27,10 @@ class BankSystemDTO {
     required this.phoneNo,
     required this.email,
     required this.vso,
+    required this.bankCode,
+    required this.bankTypeStatus,
+    required this.validService,
+    required this.authenticated,
   });
 
   // Convert a UserSystemDTO object to a Map
@@ -39,6 +47,10 @@ class BankSystemDTO {
       'phoneNo': phoneNo,
       'email': email,
       'vso': vso,
+      'bankCode': bankCode,
+      'bankTypeStatus': bankTypeStatus,
+      'validService': validService,
+      'authenticated': authenticated,
     };
   }
 
@@ -56,6 +68,10 @@ class BankSystemDTO {
       phoneNo: json['phoneNo'],
       email: json['email'],
       vso: json['vso'],
+      bankCode: json['bankCode'],
+      bankTypeStatus: json['bankTypeStatus'],
+      validService: json['validService'],
+      authenticated: json['authenticated'],
     );
   }
 }

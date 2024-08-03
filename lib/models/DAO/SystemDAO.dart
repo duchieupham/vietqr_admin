@@ -7,6 +7,7 @@ import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 import 'package:vietqr_admin/models/DTO/total_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_detail_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
@@ -173,5 +174,63 @@ class SystemDAO extends BaseDAO {
       LOG.error(e.toString());
     }
     return false;
+  }
+
+  // Future<ResponseMessageDTO> checkLog(Map<String, dynamic> param) async {
+  //   ResponseMessageDTO result = const ResponseMessageDTO();
+  //   try {
+  // String url =
+  //     '${EnvConfig.instance.getBaseUrl()}check-log/request_otp_bank';
+  //     String url = 'https://api.vietqr.org/vqr/api/check-log/request_otp_bank';
+
+  //     final response = await BaseAPIClient.postAPI(
+  //       url: url,
+  //       type: AuthenticationType.SYSTEM,
+  //       body: param,
+  //     );
+  //     if (response.statusCode == 200) {
+  //       var data = jsonDecode(response.body);
+  //       result = ResponseMessageDTO.fromJson(data);
+  //     } else {
+  //       result = ResponseMessageDTO(
+  //           status: 'FAILED', message: 'Error: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     LOG.error(e.toString());
+  //     result = ResponseMessageDTO(status: 'FAILED', message: e.toString());
+  //   }
+  //   return result;
+  // }
+  Future<ResponseMessageDTO> checkLog(Map<String, dynamic> param) async {
+    try {
+      // String url =
+      //     'https://api.vietqr.org/vqr/bank/api/check-log/request_otp_bank';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}check-log/request_otp_bank';
+
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+        body: param,
+      );
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return ResponseMessageDTO.fromJson(data);
+      } else {
+        // Nếu mã trạng thái không phải 200, giả định lỗi nằm trong nội dung phản hồi
+        var errorData = jsonDecode(response.body);
+        return ResponseMessageDTO(
+          status: 'FAILED',
+          message: errorData['message'] ?? 'Lỗi không xác định',
+        );
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+      return ResponseMessageDTO(
+        status: 'FAILED',
+        message: 'Đã có lỗi xảy ra: ${e.toString()}',
+      );
+    }
   }
 }

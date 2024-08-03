@@ -336,38 +336,8 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
             height: 50,
             width: 100,
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(width: 4),
-                Tooltip(
-                  message: 'Check LOG',
-                  child: InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return PopupCheckLogWidget(
-                            bankAccount: e.phoneNo,
-                          );
-                        },
-                      );
-                    },
-                    child: BoxLayout(
-                      width: 30,
-                      height: 30,
-                      borderRadius: 100,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(0),
-                      bgColor: AppColor.BLUE_TEXT.withOpacity(0.3),
-                      child: const Icon(
-                        Icons.info,
-                        size: 12,
-                        color: AppColor.BLUE_TEXT,
-                      ),
-                    ),
-                  ),
-                ),
-                const Spacer(),
                 PopupMenuButton<Actions>(
                   padding: const EdgeInsets.all(0),
                   onSelected: (Actions result) {
@@ -394,6 +364,37 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                     ),
                   ),
                 ),
+                const Spacer(),
+                if (e.bankCode == 'MB' || e.bankCode == 'BIDV')
+                  Tooltip(
+                    message: 'Check LOG',
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return PopupCheckLogWidget(
+                              dto: e,
+                              bankAccount: e.phoneNo,
+                            );
+                          },
+                        );
+                      },
+                      child: BoxLayout(
+                        width: 30,
+                        height: 30,
+                        borderRadius: 100,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(0),
+                        bgColor: AppColor.BLUE_TEXT.withOpacity(0.3),
+                        child: const Icon(
+                          Icons.lightbulb_outline,
+                          size: 12,
+                          color: AppColor.BLUE_TEXT,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
