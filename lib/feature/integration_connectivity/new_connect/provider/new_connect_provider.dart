@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:vietqr_admin/feature/list_merchant/list_connect/repositories/info_connect_repository.dart';
+import 'package:vietqr_admin/models/DTO/bank_name_search_dto.dart';
 
 import '../../../../models/DTO/bank_name_information_dto.dart';
 
@@ -99,27 +100,54 @@ class NewConnectProvider with ChangeNotifier {
     });
   }
 
-  void updateBankAccount(String value) async {
+  void updateBankAccount(String value,
+      {String cai = '', String code = ''}) async {
     _bankAccount = value;
     _errorBankAccount = false;
     if (_bankAccount.isNotEmpty) {
-      _errorBankAccount = false;
-    } else {
       _errorBankAccount = true;
+    } else {
+      _errorBankAccount = false;
     }
+    if (_bankAccount.isNotEmpty && _bankAccount.length > 5) {
+      String transferType = '';
+      String caiValue = '';
+      String bankCode = '';
+      // BankTypeDTO? bankTypeDTO = _addBankProvider.bankTypeDTO;
+      if (cai.isNotEmpty && code.isNotEmpty) {
+        caiValue = cai;
+        bankCode = code;
+        if (bankCode == 'MB') {
+          transferType = 'INHOUSE';
+        } else {
+          transferType = 'NAPAS';
+        }
 
-    if (_bankAccount.length > 8) {
-      BankNameInformationDTO bankNameInformationDTO =
-          await infoConnectRepository.searchBankName(_bankAccount);
-
-      if (bankNameInformationDTO.accountName.isNotEmpty) {
-        updateUserBankName(bankNameInformationDTO.accountName);
-        _errorBankAccount = false;
-      } else {
-        updateUserBankName('Không xác định');
-        _errorBankAccount = true;
+        BankNameSearchDTO bankNameSearchDTO = BankNameSearchDTO(
+          accountNumber: value,
+          accountType: 'ACCOUNT',
+          transferType: transferType,
+          bankCode: caiValue,
+        );
+        BankNameInformationDTO bankNameInformationDTO =
+            await infoConnectRepository
+                .searchBankNameNewConnectProvider(bankNameSearchDTO);
+        if (bankNameInformationDTO.accountName.isNotEmpty) {
+          updateUserBankName(bankNameInformationDTO.accountName);
+          _errorBankAccount = false;
+        } else {
+          updateUserBankName('Không xác định');
+          _errorBankAccount = true;
+        }
       }
+
+      // _bloc.add(SearchBankEvent(dto: bankNameSearchDTO));
     }
+    // if (_bankAccount.length > 8) {
+    //   BankNameInformationDTO bankNameInformationDTO =
+    //       await infoConnectRepository.searchBankName(_bankAccount);
+
+    // }
     notifyListeners();
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vietqr_admin/View/SystemManage/BankSystem/bank_system_screen.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/user_system_screen.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 import 'package:vietqr_admin/commons/widget/frame_view_widget.dart';
@@ -64,7 +65,7 @@ class _SystemManageScreenState extends State<SystemManageScreen> {
     if (type == SystemManage.USER) {
       return const UserSystemScreen();
     } else {
-      return const SizedBox();
+      return const BankSystemScreen();
     }
   }
 }

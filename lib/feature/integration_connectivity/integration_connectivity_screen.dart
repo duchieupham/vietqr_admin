@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
+import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
+import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/feature/dashboard/widget/item_menu_top.dart';
 import 'package:vietqr_admin/feature/integration_connectivity/provider/menu_top_provider.dart';
+import 'package:vietqr_admin/models/DTO/bank_type_dto.dart';
 
 import 'new_connect/new_connect_screen.dart';
 import 'run_callback/run_callback_screen.dart';
@@ -18,14 +23,51 @@ class IntegrationConnectivityScreen extends StatefulWidget {
 }
 
 class _ServiceScreenState extends State<IntegrationConnectivityScreen> {
-  List<Widget> pages = [];
+  List<BankTypeDTO> listBankType = [];
+  BankTypeDTO selectBank = const BankTypeDTO(
+      id: '0',
+      bankCode: '',
+      bankName: 'Chọn ngân hàng thụ hưởng',
+      bankShortName: '',
+      imageId: '',
+      caiValue: '',
+      status: 0);
   @override
   void initState() {
     super.initState();
-    pages = [
-      const NewConnectScreen(),
-      const RunCallBackScreen(),
-    ];
+    getBanks();
+  }
+
+  Future<void> getBanks() async {
+    try {
+      String url = 'https://api.vietqr.org/vqr/api/bank-type';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+
+        setState(() {
+          listBankType = [
+            const BankTypeDTO(
+                id: '0',
+                bankCode: '',
+                bankName: 'Chọn ngân hàng thụ hưởng',
+                bankShortName: '',
+                imageId: '',
+                caiValue: '',
+                status: 0),
+            ...data
+                .map<BankTypeDTO>((e) => BankTypeDTO.fromJson(e))
+                .where((i) => i.bankCode == 'MB' || i.bankCode == 'BIDV')
+                .toList()
+          ];
+        });
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
   }
 
   @override
@@ -87,7 +129,19 @@ class _ServiceScreenState extends State<IntegrationConnectivityScreen> {
             Expanded(
               child: Consumer<MenuConnectivityProvider>(
                 builder: (context, provider, child) {
-                  return pages[widget.isTestCallBack == false ? 0 : 1];
+                  // return pages[widget.isTestCallBack == false ? 0 : 1];
+                  if (!widget.isTestCallBack) {
+                    return NewConnectScreen(
+                      onSelectBank: (bank) {
+                        setState(() {
+                          selectBank = bank;
+                        });
+                      },
+                      listBank: listBankType,
+                      selectBank: selectBank,
+                    );
+                  }
+                  return const RunCallBackScreen();
                 },
               ),
             ),

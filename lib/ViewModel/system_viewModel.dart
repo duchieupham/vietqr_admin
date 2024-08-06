@@ -3,8 +3,10 @@ import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/DAO/SystemDAO.dart';
+import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
+import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 import 'package:vietqr_admin/models/DTO/total_user_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_detail_dto.dart';
 import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
@@ -12,6 +14,7 @@ import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 class SystemViewModel extends BaseModel {
   late SystemDAO _dao;
   List<UserSystemDTO>? listUser = [];
+  List<BankSystemDTO>? listBank = [];
   MetaDataDTO? metaDataDTO;
   UserDetailDTO? userDetailDTO;
   UserInfo? userInfo;
@@ -22,11 +25,25 @@ class SystemViewModel extends BaseModel {
   SystemViewModel() {
     _dao = SystemDAO();
     listUser = [];
+    listBank = [];
   }
 
   void genderUpdate(Gender value) async {
     selectGender = value;
     notifyListeners();
+  }
+
+  Future<void> getListBank(
+      {int page = 1, required int type, String value = ''}) async {
+    try {
+      setState(ViewStatus.Loading);
+      listBank = await _dao.getListBank(page: page, type: type, value: value);
+      metadata = _dao.metaDataDTO;
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
   }
 
   Future<void> getListUser(
@@ -122,5 +139,32 @@ class SystemViewModel extends BaseModel {
       setState(ViewStatus.Error);
     }
     return false;
+  }
+
+  //  Future<ResponseMessageDTO?> checkLog(Map<String, dynamic> param) async {
+  //   try {
+  //     setState(ViewStatus.Loading);
+  //     final result = await _dao.checkLog(param);
+  //     setState(ViewStatus.Completed);
+  //     return result;
+  //   } catch (e) {
+  //     LOG.error(e.toString());
+  //     setState(ViewStatus.Error);
+  //   }
+  //   return null;
+  // }
+
+  Future<ResponseMessageDTO?> checkLog(Map<String, dynamic> param) async {
+    try {
+      setState(ViewStatus.Loading);
+      final result = await _dao.checkLog(param);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+      return ResponseMessageDTO(
+          status: 'FAILED', message: 'Error occurred: ${e.toString()}');
+    }
   }
 }
