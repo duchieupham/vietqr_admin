@@ -12,6 +12,7 @@ import 'package:vietqr_admin/commons/widget/button_widget.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/textfield_widget.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
+import 'package:vietqr_admin/models/DTO/bank_type_dto.dart';
 
 import 'bloc/new_connect_bloc.dart';
 import 'event/new_connect_event.dart';
@@ -19,7 +20,14 @@ import 'provider/new_connect_provider.dart';
 import 'state/new_connect_state.dart';
 
 class NewConnectScreen extends StatelessWidget {
-  const NewConnectScreen({super.key});
+  final List<BankTypeDTO> listBank;
+  final BankTypeDTO selectBank;
+  final Function(BankTypeDTO) onSelectBank;
+  const NewConnectScreen(
+      {super.key,
+      required this.listBank,
+      required this.selectBank,
+      required this.onSelectBank});
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +349,45 @@ class NewConnectScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
+            Container(
+              width: 500,
+              height: 50,
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: AppColor.GREY_DADADA)),
+              child: DropdownButton<BankTypeDTO>(
+                value: selectBank,
+                underline: const SizedBox.shrink(),
+                icon: const RotatedBox(
+                  quarterTurns: 5,
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 12,
+                  ),
+                ),
+                isExpanded: true,
+                items: listBank.map((e) {
+                  if (e.id == '0') {
+                    return DropdownMenuItem<BankTypeDTO>(
+                      value: e,
+                      child: Text(e.bankName),
+                    );
+                  }
+                  return DropdownMenuItem<BankTypeDTO>(
+                      value: e,
+                      child: Text('${e.bankShortName} - ${e.bankName}'));
+                }).toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    onSelectBank(value);
+                  }
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -361,7 +408,9 @@ class NewConnectScreen extends StatelessWidget {
                           keyboardAction: TextInputAction.next,
                           onTapOutside: (value) {},
                           onChange: (value) {
-                            provider.updateBankAccount(value as String);
+                            provider.updateBankAccount(value as String,
+                                code: selectBank.bankCode,
+                                cai: selectBank.caiValue);
                           },
                         ),
                       ),

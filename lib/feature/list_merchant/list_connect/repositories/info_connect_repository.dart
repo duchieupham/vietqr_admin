@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/base_api.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
+import 'package:vietqr_admin/models/DTO/bank_name_search_dto.dart';
 
 import '../../../../models/DTO/api_service_dto.dart';
 import '../../../../models/DTO/bank_account_dto.dart';
@@ -104,6 +105,49 @@ class InfoConnectRepository {
   //   }
   //   return result;
   // }
+
+  Future<BankNameInformationDTO> searchBankNameNewConnectProvider(
+      BankNameSearchDTO dto) async {
+    String generateCheckSum(
+        String bankCode, String accountType, String accountNumber) {
+      String key = "VietQRAccesskey";
+      String toHash = bankCode + accountType + accountNumber + key;
+      // Tạo hash MD5
+      var bytes = utf8.encode(toHash);
+      var digest = md5.convert(bytes);
+      return digest.toString();
+    }
+
+    String checkSum =
+        generateCheckSum(dto.bankCode, dto.accountType, dto.accountNumber);
+
+    BankNameInformationDTO result = const BankNameInformationDTO(
+      accountName: '',
+      customerName: '',
+      customerShortName: '',
+    );
+    try {
+      String url = 'https://api.vietqr.org/vqr/bank/api/account/info';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        body: {
+          'bankCode': dto.bankCode,
+          'accountNumber': dto.accountNumber,
+          'accountType': dto.accountType,
+          'transferType': dto.transferType,
+          'checkSum': checkSum,
+        },
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        result = BankNameInformationDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return result;
+  }
 
   Future<BankNameInformationDTO> searchBankName(String accountNumber) async {
     String transferType = 'INHOUSE';
