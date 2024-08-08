@@ -476,19 +476,8 @@ class _ListTransactionState extends State<ListBankAccountSync> {
                   //   ),
                   // ),
                   child: InkWell(
-                    onTap: () {
-                      // Map<String, dynamic> param = {
-                      //   'bankTypeId': dto.bankTypeId,
-                      //   'bankAccount': dto.bankAccount,
-                      //   'bankCode': dto.bankCode,
-                      //   'bankAccountName': dto.customerBankName,
-                      //   'userId': dto.userId,
-                      //   'bankId': dto.bankId,
-                      //   'nationalId': dto.nationalId,
-                      //   'phoneAuthenticated': dto.phoneAuthenticated,
-                      // };
-
-                      showDialog(
+                    onTap: () async {
+                      await showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return ChangeFlowDialog(
