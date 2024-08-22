@@ -177,7 +177,7 @@ class InvoiceViewModel extends InvoiceStatus {
     vatTextController.clear();
   }
 
-  void selectDateTime(DateTime value) {
+  void selectDateTime(DateTime value) async {
     selectedDate = value;
     notifyListeners();
   }
@@ -705,6 +705,7 @@ class InvoiceViewModel extends InvoiceStatus {
     required int page,
     required int size,
     required int filterType,
+    int? subType,
     required String search,
   }) async {
     try {
@@ -717,7 +718,7 @@ class InvoiceViewModel extends InvoiceStatus {
           page: page,
           size: size,
           filterType: filterType,
-          subFilterType: subMenuType,
+          subFilterType: subType ?? subMenuType,
           time: formattedDate,
           value: search);
       if (result is InvoiceDTO) {

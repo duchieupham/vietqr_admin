@@ -32,9 +32,13 @@ enum Actions {
 class ListInvoiceWidget extends StatefulWidget {
   final Function(InvoiceItem) onShowPopup;
   final Function(InvoiceItem) onEdit;
+  final Function(String) onDetail;
 
   const ListInvoiceWidget(
-      {super.key, required this.onShowPopup, required this.onEdit});
+      {super.key,
+      required this.onShowPopup,
+      required this.onEdit,
+      required this.onDetail});
 
   @override
   State<ListInvoiceWidget> createState() => _ListInvoiceWidgetState();
@@ -330,10 +334,7 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                   message: 'Thông tin hoá đơn',
                   child: InkWell(
                     onTap: () {
-                      // setState(() {
-                      //   selectInvoiceId = e.invoiceId;
-                      // });
-                      // _model.onChangePage(PageInvoice.DETAIL);
+                      widget.onDetail(e.invoiceId);
                     },
                     child: BoxLayout(
                       width: 30,

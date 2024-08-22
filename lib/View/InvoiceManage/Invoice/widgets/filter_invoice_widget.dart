@@ -15,10 +15,12 @@ class FilterInvoiceWidget extends StatefulWidget {
   final TextEditingController controller;
   final int filterBy;
   final int pageSize;
+  final Function(int) onCall;
   const FilterInvoiceWidget(
       {super.key,
       required this.controller,
       required this.filterBy,
+      required this.onCall,
       required this.pageSize});
 
   @override
@@ -61,7 +63,11 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                         ),
                         items: model.listMenuDrop(widget.filterBy),
                         onChanged: (value) {
-                          model.changeTypeInvoice(value!);
+                          if (value != null) {
+                            // widget.controller.text = '';
+                            model.changeTypeInvoice(value);
+                            widget.onCall(value);
+                          }
                         },
                       ),
                     ),
@@ -115,6 +121,15 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                                 // width: 234,
                                 child: TextField(
                                   controller: widget.controller,
+                                  textInputAction: TextInputAction.done,
+                                  onSubmitted: (value) {
+                                    model.filterListInvoice(
+                                      size: widget.pageSize,
+                                      page: 1,
+                                      filterType: widget.filterBy,
+                                      search: value,
+                                    );
+                                  },
                                   decoration: const InputDecoration(
                                     contentPadding:
                                         EdgeInsets.only(bottom: 2, top: 6),
@@ -147,8 +162,19 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppColor.GREY_DADADA)),
                   child: InkWell(
-                    onTap: () {
-                      _onPickMonth(model, model.getMonth());
+                    onTap: () async {
+                      await _onPickMonth(model, model.getMonth()).then(
+                        (time) {
+                          if (time != null) {
+                            model.filterListInvoice(
+                              size: widget.pageSize,
+                              page: 1,
+                              filterType: widget.filterBy,
+                              search: widget.controller.text,
+                            );
+                          }
+                        },
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -231,7 +257,8 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
     );
   }
 
-  void _onPickMonth(InvoiceViewModel model, DateTime dateTime) async {
+  Future<dynamic> _onPickMonth(
+      InvoiceViewModel model, DateTime dateTime) async {
     DateTime? result = await showDialog(
       barrierDismissible: false,
       context: context,
@@ -249,6 +276,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
     );
     if (result != null) {
       model.selectDateTime(result);
+      return result;
       // setState(() {
       //   selectDate = result;
       // });

@@ -183,6 +183,17 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                   children: [
                                     _filter(),
                                     FilterInvoiceWidget(
+                                      onCall: (subType) {
+                                        textEditingController =
+                                            TextEditingController();
+                                        model.filterListInvoice(
+                                          size: pageSize,
+                                          page: 1,
+                                          subType: subType,
+                                          filterType: filterSelect.type,
+                                          search: '',
+                                        );
+                                      },
                                       pageSize: pageSize,
                                       filterBy: filterSelect.type,
                                       controller: textEditingController,
@@ -196,6 +207,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                             selectInvoiceId = dto.invoiceId;
                                           });
                                           _model.onChangePage(PageInvoice.EDIT);
+                                        },
+                                        onDetail: (invoiceId) {
+                                          setState(() {
+                                            selectInvoiceId = invoiceId;
+                                          });
+                                          _model
+                                              .onChangePage(PageInvoice.DETAIL);
                                         },
                                       )
                                     else
@@ -300,12 +318,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     onTap: () {
                       setState(() {
                         filterSelect = e;
+                        textEditingController = TextEditingController();
                       });
+
                       _model.filterListInvoice(
                         size: pageSize,
                         page: 1,
                         filterType: e.type,
-                        search: textEditingController.text,
+                        search: '',
                       );
                     },
                   );
@@ -341,62 +361,177 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           //     (model.pageType == PageInvoice.LIST ? 0.22 : 0.33),
           width: MediaQuery.of(context).size.width,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Quản lý hoá đơn",
-                style: TextStyle(fontSize: 13),
-              ),
-              const Text(
-                "   /   ",
-                style: TextStyle(fontSize: 13),
-              ),
-              model.pageType == PageInvoice.LIST
-                  ? const Text(
-                      "Danh sách hoá đơn",
-                      style: TextStyle(fontSize: 13),
-                    )
-                  : InkWell(
-                      onTap: () {
-                        _model.onChangePage(PageInvoice.LIST);
+              Row(
+                children: [
+                  const Text(
+                    "Quản lý hoá đơn",
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  const Text(
+                    "   /   ",
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  model.pageType == PageInvoice.LIST
+                      ? const Text(
+                          "Danh sách hoá đơn",
+                          style: TextStyle(fontSize: 13),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            _model.onChangePage(PageInvoice.LIST);
 
-                        _model.filterListInvoice(
-                          size: pageSize,
-                          page: _model.metadata != null
-                              ? _model.metadata!.page!
-                              : 1,
-                          filterType: filterSelect.type,
-                          search: textEditingController.text,
-                        );
-                      },
-                      child: const Text(
-                        'Danh sách hoá đơn',
-                        style: TextStyle(
-                            color: AppColor.BLUE_TEXT,
-                            fontSize: 13,
-                            decoration: TextDecoration.underline,
-                            decorationColor: AppColor.BLUE_TEXT),
-                      ),
+                            _model.filterListInvoice(
+                              size: pageSize,
+                              page: _model.metadata != null
+                                  ? _model.metadata!.page!
+                                  : 1,
+                              filterType: filterSelect.type,
+                              search: textEditingController.text,
+                            );
+                          },
+                          child: const Text(
+                            'Danh sách hoá đơn',
+                            style: TextStyle(
+                                color: AppColor.BLUE_TEXT,
+                                fontSize: 13,
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColor.BLUE_TEXT),
+                          ),
+                        ),
+                  if (model.pageType == PageInvoice.DETAIL) ...[
+                    const Text(
+                      "   /   ",
+                      style: TextStyle(fontSize: 13),
                     ),
-              if (model.pageType == PageInvoice.DETAIL) ...[
-                const Text(
-                  "   /   ",
-                  style: TextStyle(fontSize: 13),
-                ),
-                const Text(
-                  "Chi tiết hoá đơn",
-                  style: TextStyle(fontSize: 13),
-                ),
-              ] else if (model.pageType == PageInvoice.EDIT) ...[
-                const Text(
-                  "   /   ",
-                  style: TextStyle(fontSize: 13),
-                ),
-                const Text(
-                  "Chỉnh sửa hoá đơn",
-                  style: TextStyle(fontSize: 13),
-                ),
-              ]
+                    const Text(
+                      "Chi tiết hoá đơn",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ] else if (model.pageType == PageInvoice.EDIT) ...[
+                    const Text(
+                      "   /   ",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    const Text(
+                      "Chỉnh sửa hoá đơn",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ]
+                ],
+              ),
+              ScopedModelDescendant<InvoiceViewModel>(
+                builder: (context, child, model) {
+                  int pendingCount = 0;
+                  int completeCount = 0;
+                  int pendingAmount = 0;
+                  int completeAmount = 0;
+
+                  if (filterSelect.type == 0 && model.invoiceDTO != null) {
+                    pendingCount = model.invoiceDTO!.extraData.pendingCount;
+                    completeCount = model.invoiceDTO!.extraData.completeCount;
+                    pendingAmount = model.invoiceDTO!.extraData.pendingAmount;
+                    completeAmount = model.invoiceDTO!.extraData.completeAmount;
+                  } else if (filterSelect.type == 1 &&
+                      model.merchantData != null) {
+                    pendingCount = model.merchantData!.extraData.pendingCount;
+                    completeCount = model.merchantData!.extraData.completeCount;
+                    pendingAmount = model.merchantData!.extraData.pendingAmount;
+                    completeAmount =
+                        model.merchantData!.extraData.completeAmount;
+                  }
+                  return Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                width: 100,
+                                child: Text(
+                                  'HĐ chưa TT:',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              ),
+                              Text(
+                                pendingCount.toString(),
+                                style: const TextStyle(fontSize: 13),
+                              )
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                width: 100,
+                                child: Text(
+                                  'Số tiền chưa TT:',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              ),
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    pendingAmount),
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.ORANGE_DARK),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      const SizedBox(width: 35),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                width: 100,
+                                child: Text(
+                                  'HĐ đã TT:',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              ),
+                              Text(
+                                completeCount.toString(),
+                                style: const TextStyle(fontSize: 13),
+                              )
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                width: 100,
+                                child: Text(
+                                  'Số tiền đã TT:',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              ),
+                              Text(
+                                StringUtils.formatNumberWithOutVND(
+                                    completeAmount),
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.GREEN),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         );

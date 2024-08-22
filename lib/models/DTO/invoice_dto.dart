@@ -1,24 +1,21 @@
 class InvoiceDTO {
   List<InvoiceItem> items;
-  // InvoiceExtraData extraData;
+  InvoiceExtraData extraData;
 
-  InvoiceDTO({
-    required this.items,
-    //  required this.extraData
-  });
+  InvoiceDTO({required this.items, required this.extraData});
 
   factory InvoiceDTO.fromJson(Map<String, dynamic> json) {
     return InvoiceDTO(
       items: List<InvoiceItem>.from(
           json['items'].map((x) => InvoiceItem.fromJson(x))),
-      // extraData: InvoiceExtraData.fromJson(json['extraData']),
+      extraData: InvoiceExtraData.fromJson(json['extraData']),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'items': List<dynamic>.from(items.map((x) => x.toJson())),
-      // 'extraData': extraData.toJson(),
+      'extraData': extraData.toJson(),
     };
   }
 }
@@ -151,8 +148,9 @@ class InvoiceExtraData {
 
 class MerchantData {
   List<ItemMerchant> items;
+  InvoiceExtraData extraData;
 
-  MerchantData({required this.items});
+  MerchantData({required this.items, required this.extraData});
 
   // Convert from JSON (deserialize)
   factory MerchantData.fromJson(Map<String, dynamic> json) {
@@ -162,6 +160,7 @@ class MerchantData {
 
     return MerchantData(
       items: itemsList,
+      extraData: InvoiceExtraData.fromJson(json['extraData']),
     );
   }
 
@@ -169,6 +168,7 @@ class MerchantData {
   Map<String, dynamic> toJson() {
     return {
       'items': items.map((item) => item.toJson()).toList(),
+      'extraData': extraData.toJson(),
     };
   }
 }
