@@ -12,6 +12,7 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/invoice_detail_scr
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_button.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_invoice_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_merchant_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/invoice_manage_screen.dart';
@@ -59,6 +60,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   final controller3 = ScrollController();
   final controller4 = ScrollController();
   final controllerHorizontal = ScrollController();
+  TextEditingController textEditingController = TextEditingController();
 
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
@@ -78,7 +80,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     FilterInvoice(title: 'Đại lý', type: 1),
   ];
 
-  FilterInvoice filtetSelect = FilterInvoice(title: 'Hóa đơn', type: 0);
+  FilterInvoice filterSelect = FilterInvoice(title: 'Hóa đơn', type: 0);
 
   @override
   void initState() {
@@ -91,25 +93,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _model.init();
     _model.onChangePage(PageInvoice.LIST);
 
-    _model.filterListInvoice(page: 1, filter: '');
-
-    // controller1 = ScrollController();
-    // controller2 = ScrollController();
-    // controller1.addListener(() {
-    //   if (!isScrollingDown2) {
-    //     isScrollingDown1 = true;
-    //     controller2.jumpTo(controller1.offset);
-    //   }
-    //   isScrollingDown1 = false;
-    // });
-
-    // controller2.addListener(() {
-    //   if (!isScrollingDown1) {
-    //     isScrollingDown2 = true;
-    //     controller1.jumpTo(controller2.offset);
-    //   }
-    //   isScrollingDown2 = false;
-    // });
+    _model.filterListInvoice(
+      size: pageSize,
+      page: 1,
+      filterType: filterSelect.type,
+      search: textEditingController.text,
+    );
   }
 
   @override
@@ -170,18 +159,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // const Text(
-                            //   "Tìm kiếm thông tin hoá đơn ",
-                            //   style: TextStyle(
-                            //       fontSize: 13, fontWeight: FontWeight.bold),
-                            // ),
-                            // const SizedBox(height: 10),
-
-                            // const SizedBox(height: 20),
-                            // const MySeparator(
-                            //   color: AppColor.GREY_DADADA,
-                            // ),
-                            // const SizedBox(height: 20),
                             const Text(
                               "Danh sách hoá đơn",
                               style: TextStyle(
@@ -205,17 +182,24 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     _filter(),
-                                    FilterInvoiceWidget(),
-                                    // _filterWidget(),
-                                    ListInvoiceWidget(
-                                      onShowPopup: onShowPopup,
-                                      onEdit: (dto) {
-                                        setState(() {
-                                          selectInvoiceId = dto.invoiceId;
-                                        });
-                                        _model.onChangePage(PageInvoice.EDIT);
-                                      },
+                                    FilterInvoiceWidget(
+                                      pageSize: pageSize,
+                                      filterBy: filterSelect.type,
+                                      controller: textEditingController,
                                     ),
+                                    // _filterWidget(),
+                                    if (filterSelect.type == 0)
+                                      ListInvoiceWidget(
+                                        onShowPopup: onShowPopup,
+                                        onEdit: (dto) {
+                                          setState(() {
+                                            selectInvoiceId = dto.invoiceId;
+                                          });
+                                          _model.onChangePage(PageInvoice.EDIT);
+                                        },
+                                      )
+                                    else
+                                      ListMerchantWidget(),
                                     const MySeparator(
                                         color: AppColor.GREY_DADADA),
                                     _pagingWidget()
@@ -230,10 +214,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         ),
                       ),
                     ),
-                    // _buildListInvoice(),
-                    // const SizedBox(height: 10),
-                    // _pagingWidget(),
-                    // const SizedBox(height: 10),
                   ] else if (model.pageType == PageInvoice.DETAIL) ...[
                     Expanded(
                       child: InvoiceDetailScreen(
@@ -241,9 +221,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             _model.onChangePage(PageInvoice.LIST);
 
                             _model.filterListInvoice(
-                                page: model.metadata != null
-                                    ? model.metadata!.page!
-                                    : 1);
+                              size: pageSize,
+                              page: model.metadata != null
+                                  ? model.metadata!.page!
+                                  : 1,
+                              filterType: filterSelect.type,
+                              search: textEditingController.text,
+                            );
                           },
                           onEdit: () {
                             _model.onChangePage(PageInvoice.EDIT);
@@ -263,17 +247,25 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           if (result!) {
                             _model.onChangePage(PageInvoice.LIST);
                             _model.filterListInvoice(
-                                page: model.metadata != null
-                                    ? model.metadata!.page!
-                                    : 1);
+                              size: pageSize,
+                              page: model.metadata != null
+                                  ? model.metadata!.page!
+                                  : 1,
+                              filterType: filterSelect.type,
+                              search: textEditingController.text,
+                            );
                           }
                         },
                         callback: () {
                           _model.onChangePage(PageInvoice.LIST);
                           _model.filterListInvoice(
-                              page: model.metadata != null
-                                  ? model.metadata!.page!
-                                  : 1);
+                            size: pageSize,
+                            page: model.metadata != null
+                                ? model.metadata!.page!
+                                : 1,
+                            filterType: filterSelect.type,
+                            search: textEditingController.text,
+                          );
                         },
                       ),
                     ),
@@ -301,14 +293,20 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             children: [
               ...listFilter.map(
                 (e) {
-                  bool isSelect = filtetSelect.type == e.type;
+                  bool isSelect = filterSelect.type == e.type;
                   return FilterInvoiceButton(
                     text: e.title,
                     isSelect: isSelect,
                     onTap: () {
                       setState(() {
-                        filtetSelect = e;
+                        filterSelect = e;
                       });
+                      _model.filterListInvoice(
+                        size: pageSize,
+                        page: 1,
+                        filterType: e.type,
+                        search: textEditingController.text,
+                      );
                     },
                   );
                 },
@@ -331,544 +329,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildListInvoice() {
-    return ScopedModelDescendant<InvoiceViewModel>(
-      builder: (context, child, model) {
-        if (model.status == ViewStatus.Loading) {
-          return const Expanded(child: Center(child: Text('Đang tải...')));
-        }
-        if (model.status == ViewStatus.Error &&
-            model.request != InvoiceType.REQUEST_PAYMENT) {
-          return const SizedBox.shrink();
-        }
-        // List<InvoiceItem>? list = model.invoiceDTO?.items;
-        InvoiceDTO? invoiceDTO = model.invoiceDTO;
-
-        List<Widget> buildItemList(
-            List<InvoiceItem>? list, MetaDataDTO metadata) {
-          if (list == null || list.isEmpty) {
-            return [];
-          }
-
-          int itemsPerPage = 20;
-          return list
-              .asMap()
-              .map((index, e) {
-                int calculatedIndex =
-                    index + ((metadata.page! - 1) * itemsPerPage);
-                return MapEntry(
-                    index,
-                    ItemInvoiceWidget(
-                      dto: e,
-                      index: calculatedIndex,
-                    ));
-              })
-              .values
-              .toList();
-        }
-
-        MetaDataDTO metadata = model.metadata!;
-        return invoiceDTO != null
-            ? Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                  child: invoiceDTO.items.isNotEmpty
-                      ? SizedBox(
-                          width: MediaQuery.of(context).size.width - 220,
-                          child: Stack(
-                            children: [
-                              Scrollbar(
-                                thumbVisibility: true,
-                                controller: controllerHorizontal,
-                                child: SingleChildScrollView(
-                                  controller: controllerHorizontal,
-                                  scrollDirection: Axis.horizontal,
-                                  child: SingleChildScrollView(
-                                    controller: controller1,
-                                    child: SizedBox(
-                                      width: 1960,
-                                      child: Column(
-                                        children: [
-                                          const TitleItemInvoiceWidget(
-                                            width: 0,
-                                          ),
-                                          ...buildItemList(
-                                              invoiceDTO.items, metadata)
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                // width: 1890,
-                                width: 1960,
-                                child: Row(
-                                  children: [
-                                    const Expanded(child: SizedBox()),
-                                    Scrollbar(
-                                      controller: controller2,
-                                      thumbVisibility: true,
-                                      child: SingleChildScrollView(
-                                        controller: controller2,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: AppColor.WHITE,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: AppColor.GREY_BORDER
-                                                      .withOpacity(0.8),
-                                                  blurRadius: 5,
-                                                  spreadRadius: 1,
-                                                  offset: const Offset(0, 0)),
-                                            ],
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                    color: AppColor.BLUE_TEXT
-                                                        .withOpacity(0.3)),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                        height: 50,
-                                                        width: 100,
-                                                        alignment:
-                                                            Alignment.center,
-                                                        decoration: BoxDecoration(
-                                                            border: Border.all(
-                                                                color: AppColor
-                                                                    .GREY_TEXT
-                                                                    .withOpacity(
-                                                                        0.3))),
-                                                        child: const Text(
-                                                          'Trạng thái',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: AppColor
-                                                                  .BLACK,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        )),
-                                                    Container(
-                                                        height: 50,
-                                                        width: 100,
-                                                        alignment:
-                                                            Alignment.center,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                border: Border(
-                                                          top: BorderSide(
-                                                              color: AppColor
-                                                                  .GREY_TEXT
-                                                                  .withOpacity(
-                                                                      0.3)),
-                                                          bottom: BorderSide(
-                                                              color: AppColor
-                                                                  .GREY_TEXT
-                                                                  .withOpacity(
-                                                                      0.3)),
-                                                          right: BorderSide(
-                                                              color: AppColor
-                                                                  .GREY_TEXT
-                                                                  .withOpacity(
-                                                                      0.3)),
-                                                        )),
-                                                        child: const Text(
-                                                          'Thao tác',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              color: AppColor
-                                                                  .BLACK,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        )),
-                                                  ],
-                                                ),
-                                              ),
-                                              ...invoiceDTO.items.map(
-                                                (e) {
-                                                  return _rightItem(e);
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : const Center(
-                          child: Text("Không có hóa đơn"),
-                        ),
-                ),
-              )
-            : const SizedBox.shrink();
-      },
-    );
-  }
-
-  Widget _rightItem(InvoiceItem e) {
-    return Container(
-      alignment: Alignment.center,
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(right: 10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                border: Border(
-                    left:
-                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
-                    bottom:
-                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
-                    right: BorderSide(
-                        color: AppColor.GREY_TEXT.withOpacity(0.3)))),
-            height: 50,
-            width: 100,
-            child: SelectionArea(
-                child: Text(
-              e.status == 0
-                  ? 'Chờ TT'
-                  : e.status == 1
-                      ? 'Đã TT'
-                      : 'Chưa TT hết',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: e.status == 0
-                    ? AppColor.ORANGE_DARK
-                    : e.status == 1
-                        ? AppColor.GREEN
-                        : AppColor.GREEN_STATUS,
-              ),
-            )),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-              border: Border(
-                // left: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
-                bottom: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
-                right: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
-              ),
-            ),
-            height: 50,
-            width: 100,
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 4),
-                Tooltip(
-                  message: 'Thông tin hoá đơn',
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectInvoiceId = e.invoiceId;
-                      });
-                      _model.onChangePage(PageInvoice.DETAIL);
-                    },
-                    child: BoxLayout(
-                      width: 30,
-                      height: 30,
-                      borderRadius: 100,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(0),
-                      bgColor: AppColor.BLUE_TEXT.withOpacity(0.3),
-                      child: const Icon(
-                        Icons.info,
-                        size: 12,
-                        color: AppColor.BLUE_TEXT,
-                      ),
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                PopupMenuButton<Actions>(
-                  padding: const EdgeInsets.all(0),
-                  onSelected: (Actions result) {
-                    switch (result) {
-                      case Actions.copy:
-                        onCopy(dto: e);
-                        break;
-                      case Actions.qr:
-                        onShowPopup(e);
-                        break;
-                      case Actions.edit:
-                        setState(() {
-                          selectInvoiceId = e.invoiceId;
-                        });
-                        _model.onChangePage(PageInvoice.EDIT);
-                        break;
-                      case Actions.exportExcel:
-                        onShowPopupExcel(e.invoiceId);
-                        break;
-
-                      case Actions.delete:
-                        DialogWidget.instance.openMsgDialogQuestion(
-                          title: "Hóa đơn",
-                          msg: 'Xác nhận xóa hóa đơn!!',
-                          onConfirm: () async {
-                            Navigator.of(context).pop();
-                            bool? result =
-                                await _model.deleteInvoice(e.invoiceId);
-                            if (result!) {
-                              _model.filterListInvoice(
-                                page: 1,
-                              );
-                            }
-                          },
-                        );
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) =>
-                      _buildMenuItems(e.status),
-                  icon: Container(
-                    width: 30,
-                    height: 30,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                    ),
-                    child: const Icon(
-                      size: 18,
-                      Icons.more_vert,
-                      color: AppColor.BLUE_TEXT,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<PopupMenuEntry<Actions>> _buildMenuItems(int status) {
-    List<PopupMenuEntry<Actions>> items = [
-      const PopupMenuItem<Actions>(
-        value: Actions.copy,
-        child: Text('Copy'),
-      ),
-      const PopupMenuItem<Actions>(
-        value: Actions.exportExcel,
-        child: Text('Xuất Excel'),
-      ),
-    ];
-
-    if (status != 1) {
-      // Chỉ thêm "Edit" và "Delete" khi status không phải là 1
-      items.addAll([
-        const PopupMenuItem<Actions>(
-          value: Actions.qr,
-          child: Text('QR thanh toán'),
-        ),
-        const PopupMenuItem<Actions>(
-          value: Actions.edit,
-          child: Text('Chỉnh sửa hoá đơn'),
-        ),
-        const PopupMenuItem<Actions>(
-          value: Actions.delete,
-          child: Text('Xoá hoá đơn'),
-        ),
-      ]);
-    }
-
-    return items;
-  }
-
-  Widget statisticInvoice() {
-    return ScopedModelDescendant<InvoiceViewModel>(
-      builder: (context, child, model) {
-        return model.invoiceDTO != null
-            ? Scrollbar(
-                controller: controller3,
-                child: SingleChildScrollView(
-                  controller: controller3,
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                              border: Border(
-                            bottom: BorderSide(color: AppColor.GREY_DADADA),
-                          )),
-                          height: 40,
-                          width: 980,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                child: const Text(
-                                  'Tháng',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                child: const Text(
-                                  'HĐ chưa TT',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 250,
-                                child: const Text(
-                                  'Số tiền chưa TT (VND)',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                child: const Text(
-                                  'HĐ đã TT',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 250,
-                                child: const Text(
-                                  'Số tiền đã TT (VND)',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                child: const Text(
-                                  'HĐ lệch TT',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                // child: Text(
-                                //   DateFormat('MM/yyyy').format(selectDate!),
-                                //   style: const TextStyle(fontSize: 13),
-                                //   textAlign: TextAlign.left,
-                                // ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                child: Text(
-                                  '${model.invoiceDTO!.extraData.pendingCount}',
-                                  style: const TextStyle(fontSize: 13),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 250,
-                                child: Text(
-                                  StringUtils.formatNumberWithOutVND(model
-                                      .invoiceDTO!.extraData.pendingAmount),
-                                  style: const TextStyle(
-                                      fontSize: 13,
-                                      color: AppColor.ORANGE_DARK,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                child: Text(
-                                  '${model.invoiceDTO!.extraData.completeCount}',
-                                  style: const TextStyle(fontSize: 13),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 250,
-                                child: Text(
-                                  StringUtils.formatNumberWithOutVND(model
-                                      .invoiceDTO!.extraData.completeAmount),
-                                  style: const TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.GREEN),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: 120,
-                                child: Text(
-                                  '${model.invoiceDTO!.extraData.unFullyPaidCount}',
-                                  style: const TextStyle(fontSize: 13),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : const SizedBox.shrink();
-      },
     );
   }
 
@@ -900,7 +360,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       onTap: () {
                         _model.onChangePage(PageInvoice.LIST);
 
-                        _model.filterListInvoice(page: 1);
+                        _model.filterListInvoice(
+                          size: pageSize,
+                          page: _model.metadata != null
+                              ? _model.metadata!.page!
+                              : 1,
+                          filterType: filterSelect.type,
+                          search: textEditingController.text,
+                        );
                       },
                       child: const Text(
                         'Danh sách hoá đơn',
@@ -942,7 +409,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       builder: (context, child, model) {
         bool isPaging = false;
         if (model.status == ViewStatus.Loading ||
-            model.status == ViewStatus.Error) {
+            model.status == ViewStatus.Error ||
+            model.metadata == null) {
           return const SizedBox.shrink();
         }
 
@@ -952,6 +420,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         }
         double indexTotal =
             paging.page != 1 ? ((pageSize * paging.page!) / 2) + 1 : 1;
+        int totalOfCurrentPage = (pageSize * paging.page!) > paging.total!
+            ? paging.total!
+            : pageSize * paging.page!;
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
           child: Row(
@@ -988,10 +459,19 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         size: 10,
                       ),
                     ),
+
                     items: <int>[20, 50, 100]
                         .map<DropdownMenuItem<int>>((int value) {
                       return DropdownMenuItem<int>(
                         value: value,
+                        onTap: () {
+                          model.filterListInvoice(
+                            size: value,
+                            page: paging.page!,
+                            filterType: filterSelect.type,
+                            search: textEditingController.text,
+                          );
+                        },
                         child: Text(
                           value.toString(),
                           style: const TextStyle(
@@ -1012,6 +492,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         );
                       }).toList();
                     },
+
                     onChanged: (value) {
                       if (value != null) {
                         setState(() {
@@ -1022,7 +503,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   )),
               const SizedBox(width: 30),
               Text(
-                '$indexTotal-${pageSize * paging.page!} của ${paging.total}',
+                '$indexTotal-$totalOfCurrentPage của ${paging.total}',
                 style: const TextStyle(fontSize: 13),
               ),
               const SizedBox(width: 15),
@@ -1030,7 +511,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 onTap: () async {
                   if (paging.page != 1) {
                     await model.filterListInvoice(
+                      size: pageSize,
                       page: paging.page! - 1,
+                      filterType: filterSelect.type,
+                      search: textEditingController.text,
                     );
                   }
                 },
@@ -1047,7 +531,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 onTap: () async {
                   if (isPaging) {
                     await model.filterListInvoice(
+                      size: pageSize,
                       page: paging.page! + 1,
+                      filterType: filterSelect.type,
+                      search: textEditingController.text,
                     );
                   }
                 },

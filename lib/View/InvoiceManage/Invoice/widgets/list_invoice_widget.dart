@@ -1,7 +1,9 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
@@ -39,41 +41,30 @@ class ListInvoiceWidget extends StatefulWidget {
 }
 
 class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
-  final ScrollController _horizontal = ScrollController();
-  final ScrollController _vertical = ScrollController();
-  final ScrollController _vertical2 = ScrollController();
-  ValueNotifier<bool> scrollDown1Notifier = ValueNotifier<bool>(false);
-  ValueNotifier<bool> scrollDown2Notifier = ValueNotifier<bool>(false);
+  late LinkedScrollControllerGroup _linkedScrollControllerGroup;
+  late ScrollController _horizontal;
+  late ScrollController _vertical;
+  late ScrollController _vertical2;
   late InvoiceViewModel _model;
 
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
+    _linkedScrollControllerGroup = LinkedScrollControllerGroup();
 
-    _vertical.addListener(() {
-      if (!scrollDown2Notifier.value) {
-        scrollDown1Notifier.value = true;
-        _vertical2.jumpTo(_vertical.offset);
-      }
-      scrollDown1Notifier.value = false;
-    });
+    _vertical = _linkedScrollControllerGroup.addAndGet();
+    _vertical2 = _linkedScrollControllerGroup.addAndGet();
 
-    _vertical2.addListener(() {
-      if (!scrollDown1Notifier.value) {
-        scrollDown2Notifier.value = true;
-        _vertical.jumpTo(_vertical2.offset);
-      }
-      scrollDown2Notifier.value = false;
-    });
+    _horizontal = ScrollController();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _vertical.dispose();
     _vertical2.dispose();
     _horizontal.dispose();
+    super.dispose();
   }
 
   @override

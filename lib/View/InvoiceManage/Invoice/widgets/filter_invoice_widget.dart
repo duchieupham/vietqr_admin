@@ -12,7 +12,14 @@ import 'package:vietqr_admin/main.dart';
 import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 
 class FilterInvoiceWidget extends StatefulWidget {
-  const FilterInvoiceWidget({super.key});
+  final TextEditingController controller;
+  final int filterBy;
+  final int pageSize;
+  const FilterInvoiceWidget(
+      {super.key,
+      required this.controller,
+      required this.filterBy,
+      required this.pageSize});
 
   @override
   State<FilterInvoiceWidget> createState() => _FilterInvoiceWidgetState();
@@ -43,7 +50,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                       width: 120,
                       child: DropdownButton<int>(
                         isExpanded: true,
-                        value: model.value,
+                        value: model.subMenuType,
                         underline: const SizedBox.shrink(),
                         icon: const RotatedBox(
                           quarterTurns: 5,
@@ -52,7 +59,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                             size: 12,
                           ),
                         ),
-                        items: model.listMenuDrop,
+                        items: model.listMenuDrop(widget.filterBy),
                         onChanged: (value) {
                           model.changeTypeInvoice(value!);
                         },
@@ -69,7 +76,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                               color: AppColor.GREY_DADADA,
                             ),
                           ),
-                          if (model.value == 1)
+                          if (model.subMenuType == 3)
                             InkWell(
                               onTap: () async {
                                 await model.getMerchant('', isGetList: true);
@@ -107,7 +114,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                               child: SizedBox(
                                 // width: 234,
                                 child: TextField(
-                                  controller: model.textEditingController,
+                                  controller: widget.controller,
                                   decoration: const InputDecoration(
                                     contentPadding:
                                         EdgeInsets.only(bottom: 2, top: 6),
@@ -162,7 +169,14 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
               ],
               VietQRButton.gradient(
                   borderRadius: 100,
-                  onPressed: () {},
+                  onPressed: () {
+                    model.filterListInvoice(
+                      size: widget.pageSize,
+                      page: 1,
+                      filterType: widget.filterBy,
+                      search: widget.controller.text,
+                    );
+                  },
                   isDisabled: false,
                   height: 40,
                   width: 40,
@@ -246,38 +260,31 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
 
   List<PopupMenuEntry<DataFilter>> _buildMenuItems(
       List<DataFilter> value, DataFilter selected) {
-    List<PopupMenuEntry<DataFilter>> items = [
-      // const PopupMenuItem<DataFilter>(
-      //   value: DataFilter,
-      //   child: Text('Copy'),
-      // ),
-      // const PopupMenuItem<Actions>(
-      //   value: DataFilter.exportExcel,
-      //   child: Text('Xuất Excel'),
-      // ),
-      ...value.map(
-        (e) => PopupMenuItem<DataFilter>(
-          value: e,
-          child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: selected.id == e.id
-                      ? AppColor.BLUE_TEXT.withOpacity(0.1)
-                      : AppColor.TRANSPARENT),
-              child: Center(
-                child: Text(
-                  e.name,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: selected.id == e.id
-                          ? FontWeight.bold
-                          : FontWeight.normal),
-                ),
-              )),
-        ),
-      )
-    ];
+    List<PopupMenuEntry<DataFilter>> items = value
+        .map(
+          (e) => PopupMenuItem<DataFilter>(
+            value: e,
+            child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: selected.id == e.id
+                        ? AppColor.BLUE_TEXT.withOpacity(0.1)
+                        : AppColor.TRANSPARENT),
+                child: Center(
+                  child: Text(
+                    e.name,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: selected.id == e.id
+                            ? FontWeight.bold
+                            : FontWeight.normal),
+                  ),
+                )),
+          ),
+        )
+        .toList();
 
     return items;
   }

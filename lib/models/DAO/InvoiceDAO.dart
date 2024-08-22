@@ -325,16 +325,17 @@ class InvoiceDAO extends BaseDAO {
     return null;
   }
 
-  Future<InvoiceDTO?> filterInvoiceList({
+  Future<dynamic> filterInvoiceList({
     required String time,
     required int page,
-    int? size,
-    required int type,
-    required String filter,
+    required int size,
+    required int subFilterType,
+    required int filterType,
+    required String value,
   }) async {
     try {
       String url =
-          '${EnvConfig.instance.getBaseUrl()}invoice/admin-list?page=$page&size=${size ?? 20}&type=$type&value=${filter ?? ''}&time=$time';
+          '${EnvConfig.instance.getBaseUrl()}new-invoice-list?filterType=$filterType&subFilterType=$subFilterType&value=$value&page=$page&size=$size&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
@@ -342,7 +343,10 @@ class InvoiceDAO extends BaseDAO {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         metaDataDTO = MetaDataDTO.fromJson(data["metadata"]);
-        return InvoiceDTO.fromJson(data['data']);
+        if (filterType == 0) {
+          return InvoiceDTO.fromJson(data['data']);
+        }
+        return MerchantData.fromJson(data['data']);
       }
     } catch (e) {
       LOG.error("Failed to fetch invoice data: ${e.toString()}");

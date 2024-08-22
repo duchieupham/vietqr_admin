@@ -173,6 +173,7 @@ class ItemInvoiceWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 12,
+                      fontWeight: FontWeight.bold,
                       color: dto.status == 1
                           ? AppColor.GREEN
                           : AppColor.ORANGE_DARK),

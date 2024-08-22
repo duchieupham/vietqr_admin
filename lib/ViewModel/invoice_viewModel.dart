@@ -55,6 +55,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
   late InvoiceDAO _dao;
   InvoiceDTO? invoiceDTO;
+  MerchantData? merchantData;
   MerchantDTO? merchantDTO;
   BankInvoiceDTO? bankDTO;
   BankDetailDTO? bankDetail;
@@ -74,7 +75,6 @@ class InvoiceViewModel extends InvoiceStatus {
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
 
-  TextEditingController textEditingController = TextEditingController();
   late DateTime selectedDate = getMonth();
   DataFilter valueFilterTime = const DataFilter(id: 9, name: 'Tất cả');
 
@@ -85,7 +85,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
   int type = 0;
   int serviceType = 1;
-  int value = 0;
+  int subMenuType = 0;
   int? valueStatus = 0;
   int? filterByDate = 1;
   int pagingPage = 1;
@@ -98,32 +98,53 @@ class InvoiceViewModel extends InvoiceStatus {
   int totalEditVat = 0;
   int totalEditAmountVat = 0;
 
-  List<DropdownMenuItem<int>> listMenuDrop = const [
-    DropdownMenuItem<int>(
-        value: 0,
-        child: Text(
-          "Mã hóa đơn",
-          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-        )),
-    DropdownMenuItem<int>(
-        value: 1,
-        child: Text(
-          "Đại lý",
-          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-        )),
-    DropdownMenuItem<int>(
-        value: 2,
-        child: Text(
-          "TK ngân hàng",
-          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-        )),
-    DropdownMenuItem<int>(
-        value: 3,
-        child: Text(
-          "TK VietQR",
-          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-        )),
-  ];
+  List<DropdownMenuItem<int>> listMenuDrop(int filterBy) {
+    List<DropdownMenuItem<int>> items = [];
+    if (filterBy == 0) {
+      items.addAll([
+        const DropdownMenuItem<int>(
+            value: 0,
+            child: Text(
+              "Mã hóa đơn",
+              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+            )),
+        const DropdownMenuItem<int>(
+            value: 1,
+            child: Text(
+              "TK ngân hàng",
+              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+            )),
+        const DropdownMenuItem<int>(
+            value: 2,
+            child: Text(
+              "TK VietQR",
+              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+            )),
+        const DropdownMenuItem<int>(
+            value: 3,
+            child: Text(
+              "Đại lý",
+              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+            )),
+      ]);
+    } else {
+      items.addAll([
+        const DropdownMenuItem<int>(
+            value: 0,
+            child: Text(
+              "Tên đại lý",
+              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+            )),
+        const DropdownMenuItem<int>(
+            value: 1,
+            child: Text(
+              "Mã VSO",
+              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+            )),
+      ]);
+    }
+    return items;
+  }
 
   bool? isInsert;
 
@@ -179,6 +200,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void selectMerchant(MerchantItem item) {
     selectMerchantItem = item;
+
     selectBank = null;
     bankDetail = null;
 
@@ -211,7 +233,7 @@ class InvoiceViewModel extends InvoiceStatus {
   }
 
   void changeTypeInvoice(int selectType) {
-    value = selectType;
+    subMenuType = selectType;
     notifyListeners();
   }
 
@@ -679,19 +701,30 @@ class InvoiceViewModel extends InvoiceStatus {
     return null;
   }
 
-  Future<void> filterListInvoice(
-      {required int page, int? size, String? filter}) async {
+  Future<void> filterListInvoice({
+    required int page,
+    required int size,
+    required int filterType,
+    required String search,
+  }) async {
     try {
       String formattedDate = '';
       formattedDate = valueFilterTime.id == 9
           ? ''
           : DateFormat('yyyy-MM').format(selectedDate);
       setState(ViewStatus.Loading);
-      invoiceDTO = await _dao.filterInvoiceList(
-          type: 9,
-          time: formattedDate,
+      final result = await _dao.filterInvoiceList(
           page: page,
-          filter: filter ?? textEditingController.text);
+          size: size,
+          filterType: filterType,
+          subFilterType: subMenuType,
+          time: formattedDate,
+          value: search);
+      if (result is InvoiceDTO) {
+        invoiceDTO = result;
+      } else {
+        merchantData = result;
+      }
       metadata = _dao.metaDataDTO;
       setState(ViewStatus.Completed);
     } catch (e) {
