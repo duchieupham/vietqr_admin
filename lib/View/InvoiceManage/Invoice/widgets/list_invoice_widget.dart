@@ -1,5 +1,10 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/item_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/title_invoice_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
@@ -7,7 +12,9 @@ import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/measure_size.dart';
+import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
@@ -21,7 +28,11 @@ enum Actions {
 }
 
 class ListInvoiceWidget extends StatefulWidget {
-  const ListInvoiceWidget({super.key});
+  final Function(InvoiceItem) onShowPopup;
+  final Function(InvoiceItem) onEdit;
+
+  const ListInvoiceWidget(
+      {super.key, required this.onShowPopup, required this.onEdit});
 
   @override
   State<ListInvoiceWidget> createState() => _ListInvoiceWidgetState();
@@ -33,10 +44,13 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
   final ScrollController _vertical2 = ScrollController();
   ValueNotifier<bool> scrollDown1Notifier = ValueNotifier<bool>(false);
   ValueNotifier<bool> scrollDown2Notifier = ValueNotifier<bool>(false);
+  late InvoiceViewModel _model;
 
   @override
   void initState() {
     super.initState();
+    _model = Get.find<InvoiceViewModel>();
+
     _vertical.addListener(() {
       if (!scrollDown2Notifier.value) {
         scrollDown1Notifier.value = true;
@@ -152,88 +166,84 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: constraints.maxWidth,
-                    child: Row(
-                      children: [
-                        const Spacer(),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: AppColor.WHITE,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: AppColor.BLACK.withOpacity(0.1),
-                                  blurRadius: 5,
-                                  spreadRadius: 1,
-                                  offset: const Offset(-1, 0)),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                        height: 40,
-                                        width: 120,
-                                        alignment: Alignment.center,
-                                        child: const Text(
-                                          'Trạng thái',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: AppColor.BLACK,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                        height: 40,
-                                        width: 100,
-                                        alignment: Alignment.center,
-                                        child: const Text(
-                                          'Thao tác',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: AppColor.BLACK,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                  ],
-                                ),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColor.WHITE,
+                          boxShadow: [
+                            BoxShadow(
+                                color: AppColor.BLACK.withOpacity(0.1),
+                                blurRadius: 5,
+                                spreadRadius: 1,
+                                offset: const Offset(-1, 0)),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColor.BLUE_TEXT.withOpacity(0.3),
                               ),
-                              Expanded(
-                                  child: SingleChildScrollView(
-                                controller: _vertical2,
-                                physics: const ClampingScrollPhysics(),
-                                child: Column(
-                                  children: [
-                                    ...invoiceDTO.items.map(
-                                      (e) {
-                                        return Column(
-                                          children: [
-                                            _rightItem(e),
-                                            // if (index + 1 != list.length)
-                                            const SizedBox(
-                                                width: 220,
-                                                child: MySeparator(
-                                                    color:
-                                                        AppColor.GREY_DADADA)),
-                                          ],
-                                        );
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ))
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      height: 40,
+                                      width: 120,
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        'Trạng thái',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: AppColor.BLACK,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                  Container(
+                                      height: 40,
+                                      width: 100,
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        'Thao tác',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: AppColor.BLACK,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                                child: SingleChildScrollView(
+                              controller: _vertical2,
+                              physics: const ClampingScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  ...invoiceDTO.items.map(
+                                    (e) {
+                                      return Column(
+                                        children: [
+                                          _rightItem(e),
+                                          // if (index + 1 != list.length)
+                                          const SizedBox(
+                                              width: 220,
+                                              child: MySeparator(
+                                                  color: AppColor.GREY_DADADA)),
+                                        ],
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
+                            ))
+                          ],
+                        ),
+                      )
+                    ],
                   )
                 ],
               );
@@ -337,37 +347,34 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                   onSelected: (Actions result) {
                     switch (result) {
                       case Actions.copy:
-                        // onCopy(dto: e);
+                        onCopy(dto: e);
                         break;
                       case Actions.qr:
-                        // onShowPopup(e);
+                        widget.onShowPopup(e);
                         break;
                       case Actions.edit:
-                        // setState(() {
-                        //   selectInvoiceId = e.invoiceId;
-                        // });
-                        // _model.onChangePage(PageInvoice.EDIT);
+                        widget.onEdit(e);
                         break;
                       case Actions.exportExcel:
-                        // onShowPopupExcel(e.invoiceId);
+                        onShowPopupExcel(e.invoiceId);
                         break;
 
                       case Actions.delete:
-                        // DialogWidget.instance.openMsgDialogQuestion(
-                        //   title: "Hóa đơn",
-                        //   msg: 'Xác nhận xóa hóa đơn!!',
-                        //   onConfirm: () async {
-                        //     Navigator.of(context).pop();
-                        //     bool? result =
-                        //         await _model.deleteInvoice(e.invoiceId);
-                        //     if (result!) {
-                        //       _model.filterListInvoice(
-                        //           time: selectDate!,
-                        //           page: 1,
-                        //           filter: textInput()!);
-                        //     }
-                        //   },
-                        // );
+                        DialogWidget.instance.openMsgDialogQuestion(
+                          title: "Hóa đơn",
+                          msg: 'Xác nhận xóa hóa đơn!!',
+                          onConfirm: () async {
+                            Navigator.of(context).pop();
+                            bool? result =
+                                await _model.deleteInvoice(e.invoiceId);
+                            if (result!) {
+                              // _model.filterListInvoice(
+                              //     time: selectDate!,
+                              //     page: 1,
+                              //     filter: textInput()!);
+                            }
+                          },
+                        );
                         break;
                     }
                   },
@@ -428,5 +435,30 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
     }
 
     return items;
+  }
+
+  void onCopy({required InvoiceItem dto}) async {
+    await FlutterClipboard.copy(ShareUtils.instance.getTextSharing(dto)).then(
+      (value) => Fluttertoast.showToast(
+        msg: 'Đã sao chép',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Theme.of(context).cardColor,
+        textColor: Colors.black,
+        fontSize: 15,
+        webBgColor: 'rgba(255, 255, 255)',
+        webPosition: 'center',
+      ),
+    );
+  }
+
+  void onShowPopupExcel(String invoiceId) async {
+    showDialog(
+      context: context,
+      builder: (context) => PopupExcelInvoice(
+        invoiceId: invoiceId,
+      ),
+    );
   }
 }

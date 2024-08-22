@@ -69,6 +69,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   String? selectInvoiceId;
 
   int? type = 9;
+  int pageSize = 20;
+
   String? status = '';
 
   DateTime? selectDate;
@@ -264,12 +266,18 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                   children: [
                                     _filter(),
                                     _filterWidget(),
-                                    ListInvoiceWidget(),
+                                    ListInvoiceWidget(
+                                      onShowPopup: onShowPopup,
+                                      onEdit: (dto) {
+                                        setState(() {
+                                          selectInvoiceId = dto.invoiceId;
+                                        });
+                                        _model.onChangePage(PageInvoice.EDIT);
+                                      },
+                                    ),
                                     const MySeparator(
                                         color: AppColor.GREY_DADADA),
-                                    SizedBox(
-                                      height: 50,
-                                    )
+                                    _pagingWidget()
                                   ],
                                 ),
                               ),
@@ -1548,21 +1556,83 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         if (paging.page! != paging.totalPage!) {
           isPaging = true;
         }
-
+        double indexTotal =
+            paging.page != 1 ? ((pageSize * paging.page!) / 2) + 1 : 1;
         return paging != null
-            ? Padding(
-                padding: const EdgeInsets.only(left: 30),
+            ? Container(
+                padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      child: Text(
-                        "Trang ${paging.page}/${paging.totalPage}",
-                        style: const TextStyle(fontSize: 13),
-                      ),
+                    const Text(
+                      'Số hàng:',
+                      style: TextStyle(fontSize: 13),
                     ),
+                    const SizedBox(width: 15),
+                    Container(
+                        width: 50,
+                        height: 25,
+                        padding: const EdgeInsets.fromLTRB(5, 2, 7, 2),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                        child: DropdownButton<int>(
+                          isExpanded: true,
+                          isDense: true,
+                          value: pageSize,
+                          borderRadius: BorderRadius.circular(10),
+                          // dropdownColor: AppColor.WHITE,
+                          underline: const SizedBox.shrink(),
+                          iconSize: 12,
+                          elevation: 16,
+                          dropdownColor: Colors.white,
+
+                          icon: const RotatedBox(
+                            quarterTurns: 5,
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: AppColor.GREY_TEXT,
+                              size: 10,
+                            ),
+                          ),
+                          items: <int>[20, 50, 100]
+                              .map<DropdownMenuItem<int>>((int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(
+                                value.toString(),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          selectedItemBuilder: (BuildContext context) {
+                            return [20, 50, 100].map<Widget>((int item) {
+                              return Text(
+                                item.toString(),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                              );
+                            }).toList();
+                          },
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                pageSize = value;
+                              });
+                            }
+                          },
+                        )),
                     const SizedBox(width: 30),
+                    Text(
+                      '$indexTotal-${pageSize * paging.page!} của ${paging.total}',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                    const SizedBox(width: 15),
                     InkWell(
                       onTap: () async {
                         if (paging.page != 1) {
@@ -1573,26 +1643,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           );
                         }
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(
-                                color: paging.page != 1
-                                    ? AppColor.BLACK
-                                    : AppColor.GREY_DADADA)),
-                        child: Center(
-                          child: Icon(
-                            Icons.chevron_left_rounded,
-                            color: paging.page != 1
-                                ? AppColor.BLACK
-                                : AppColor.GREY_DADADA,
-                            size: 20,
-                          ),
-                        ),
+                      child: Icon(
+                        Icons.keyboard_arrow_left_rounded,
+                        size: 25,
+                        color: paging.page != 1
+                            ? AppColor.BLACK
+                            : AppColor.GREY_TEXT.withOpacity(0.5),
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    const SizedBox(width: 6),
                     InkWell(
                       onTap: () async {
                         if (isPaging) {
@@ -1603,28 +1662,93 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           );
                         }
                       },
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(
-                                color: isPaging
-                                    ? AppColor.BLACK
-                                    : AppColor.GREY_DADADA)),
-                        child: Center(
-                          child: Icon(
-                            Icons.chevron_right_rounded,
-                            color: isPaging
-                                ? AppColor.BLACK
-                                : AppColor.GREY_DADADA,
-                            size: 20,
-                          ),
-                        ),
+                      child: Icon(
+                        Icons.keyboard_arrow_right_rounded,
+                        size: 25,
+                        color: isPaging
+                            ? AppColor.BLACK
+                            : AppColor.GREY_TEXT.withOpacity(0.5),
                       ),
                     ),
+                    const SizedBox(width: 22),
                   ],
                 ),
               )
+            // Padding(
+            //     padding: const EdgeInsets.only(left: 30),
+            //     child: Row(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Container(
+            //           padding: const EdgeInsets.all(4),
+            //           child: Text(
+            //             "Trang ${paging.page}/${paging.totalPage}",
+            //             style: const TextStyle(fontSize: 13),
+            //           ),
+            //         ),
+            //         const SizedBox(width: 30),
+            //         InkWell(
+            //           onTap: () async {
+            //             if (paging.page != 1) {
+            //               await model.filterListInvoice(
+            //                 time: selectDate!,
+            //                 page: paging.page! - 1,
+            //                 filter: textInput()!,
+            //               );
+            //             }
+            //           },
+            //           child: Container(
+            //             padding: const EdgeInsets.all(4),
+            //             decoration: BoxDecoration(
+            //                 borderRadius: BorderRadius.circular(100),
+            //                 border: Border.all(
+            //                     color: paging.page != 1
+            //                         ? AppColor.BLACK
+            //                         : AppColor.GREY_DADADA)),
+            //             child: Center(
+            //               child: Icon(
+            //                 Icons.chevron_left_rounded,
+            //                 color: paging.page != 1
+            //                     ? AppColor.BLACK
+            //                     : AppColor.GREY_DADADA,
+            //                 size: 20,
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //         const SizedBox(width: 15),
+            //         InkWell(
+            //           onTap: () async {
+            //             if (isPaging) {
+            //               await model.filterListInvoice(
+            //                 time: selectDate!,
+            //                 page: paging.page! + 1,
+            //                 filter: textInput()!,
+            //               );
+            //             }
+            //           },
+            //           child: Container(
+            //             padding: const EdgeInsets.all(4),
+            //             decoration: BoxDecoration(
+            //                 borderRadius: BorderRadius.circular(100),
+            //                 border: Border.all(
+            //                     color: isPaging
+            //                         ? AppColor.BLACK
+            //                         : AppColor.GREY_DADADA)),
+            //             child: Center(
+            //               child: Icon(
+            //                 Icons.chevron_right_rounded,
+            //                 color: isPaging
+            //                     ? AppColor.BLACK
+            //                     : AppColor.GREY_DADADA,
+            //                 size: 20,
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   )
             : const SizedBox.shrink();
       },
     );
