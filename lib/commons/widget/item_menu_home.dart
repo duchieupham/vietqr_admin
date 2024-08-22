@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../../commons/constants/configurations/theme.dart';
 
@@ -39,13 +40,16 @@ class ItemMenuHome extends StatefulWidget {
   State<ItemMenuHome> createState() => _ItemMenuHomeState();
 }
 
-class _ItemMenuHomeState extends State<ItemMenuHome> {
-  double heightItem = 45;
+class _ItemMenuHomeState extends State<ItemMenuHome>
+    with TickerProviderStateMixin {
+  // double heightItem = 0;
+  ValueNotifier<double> heightItem = ValueNotifier<double>(45.0);
   bool openListDropDown = true;
   bool amIHovering = false;
   bool openMenuCard = true;
   Offset exitFrom = const Offset(0, 0);
-  double _currentHeight = 0.0;
+  bool isOpen = false;
+  late AnimationController _controller;
 
   onOpenDropDownList() {
     if (openListDropDown) {
@@ -61,7 +65,7 @@ class _ItemMenuHomeState extends State<ItemMenuHome> {
 
   double getHeightDropDownList() {
     if (openListDropDown) {
-      return widget.listItemDrop.length * heightItem;
+      return widget.listItemDrop.length * heightItem.value;
     }
     return 0;
   }
@@ -75,157 +79,124 @@ class _ItemMenuHomeState extends State<ItemMenuHome> {
     return Colors.transparent;
   }
 
-  void _startAnimation() {
-    Timer.periodic(const Duration(microseconds: 20), (timer) {
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
-        _currentHeight += 15;
-        if (_currentHeight >= getHeightDropDownList()) {
-          _currentHeight = getHeightDropDownList();
-          timer.cancel();
+        if (widget.listItemDrop.isNotEmpty) {
+          isOpen = true;
         }
       });
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _startAnimation();
-  }
+  // void toggleDropDown() {
+  //   setState(() {
+  //     isOpen = !isOpen;
+  //     isOpen ? _controller.forward() : _controller.reverse();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (PointerEvent details) => setState(() => amIHovering = true),
-      onExit: (PointerEvent details) => setState(() {
-        amIHovering = false;
-        exitFrom = details.localPosition;
-      }),
-      child: InkWell(
-        onTap: () {
-          widget.onTap();
-          if (widget.enableMenuCard) {
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            widget.onTap();
             setState(() {
-              openMenuCard = !openMenuCard;
+              isOpen = !isOpen;
             });
-          }
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: heightItem,
-              width: double.infinity,
-              // alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              color: AppColor.BLUE_BGR,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      // const Spacer(),
-                      if (widget.isLogout)
-                        Text(
-                          widget.title,
-                          style: TextStyle(
-                            fontSize: widget.titleSize,
-                            color: AppColor.RED_TEXT,
-                            fontWeight: widget.bold ? FontWeight.bold : null,
-                          ),
-                        )
-                      else
-                        Text(
-                          widget.title,
-                          style: TextStyle(
-                            fontSize: widget.titleSize,
-                            fontWeight: widget.bold ? FontWeight.bold : null,
-                            // color: widget.isSelect
-                            //     ? AppColor.BLUE_TEXT
-                            //     : AppColor.BLACK,
-                            color: AppColor.BLACK,
-                          ),
-                        ),
-                    ],
-                  ),
-
-                  // const Spacer(),
-                  if (widget.enableMenuCard)
-                    Expanded(
-                      child: Container(
-                        height: 20,
-                        width: 20,
-                        alignment: Alignment.centerRight,
-                        decoration: BoxDecoration(
-                            color: AppColor.BLUE_BGR,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Transform.rotate(
-                          angle: !openMenuCard ? -math.pi / 2 : math.pi / 2,
-                          child: const Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    )
-                  else if (widget.enableDropDownList)
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: 20,
-                        width: 20,
-                        decoration: BoxDecoration(
-                            color: AppColor.BLUE_BGR,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Transform.rotate(
-                          angle: !openListDropDown ? math.pi : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    )
-                ],
-              ),
+            isOpen ? _controller.forward() : _controller.reverse();
+            // if (widget.enableDropDownList) toggleDropDown();
+          },
+          child: Container(
+            height: 45,
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: widget.isSelect
+                  ? AppColor.BLUE_TEXT.withOpacity(0.1)
+                  : AppColor.TRANSPARENT,
+              borderRadius: BorderRadius.circular(5),
             ),
-            if (widget.enableDropDownList) _dropDownList(),
-          ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    if (widget.isLogout)
+                      Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontSize: widget.titleSize,
+                          color: Colors.red,
+                          fontWeight: widget.bold ? FontWeight.bold : null,
+                        ),
+                      )
+                    else
+                      ShaderMask(
+                        shaderCallback: (bounds) => widget.isSelect
+                            ? VietQRTheme.gradientColor.brightBlueLinear
+                                .createShader(bounds)
+                            : VietQRTheme.gradientColor.disableTextLinear
+                                .createShader(bounds),
+                        child: Text(
+                          widget.title,
+                          style: TextStyle(
+                            fontSize: widget.titleSize,
+                            color: AppColor.WHITE,
+                            fontWeight: widget.bold ? FontWeight.bold : null,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                if (widget.enableDropDownList)
+                  AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (child, anim) => RotationTransition(
+                            turns: child.key == const ValueKey('icon1')
+                                ? Tween<double>(begin: 1, end: 0.5)
+                                    .animate(anim)
+                                : Tween<double>(begin: 0.5, end: 1)
+                                    .animate(anim),
+                            child: FadeTransition(opacity: anim, child: child),
+                          ),
+                      child: isOpen
+                          ? const Icon(Icons.keyboard_arrow_down_rounded,
+                              key: ValueKey('icon1'))
+                          : const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              key: ValueKey('icon2'),
+                            )),
+                // Transform.rotate(
+                //   angle: isOpen ? math.pi : 0,
+                //   child: const Icon(Icons.keyboard_arrow_down),
+                // ),
+              ],
+            ),
+          ),
         ),
-      ),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height: isOpen ? widget.listItemDrop.length * heightItem.value : 0,
+          curve: Curves.easeInOut,
+          padding: const EdgeInsets.only(left: 40, right: 40, top: 4),
+          child: ListView(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: widget.listItemDrop,
+          ),
+        ),
+      ],
     );
   }
-
-  Widget _dropDownList() {
-    return AnimatedContainer(
-      duration: const Duration(microseconds: 20),
-      padding: const EdgeInsets.only(left: 40, right: 40),
-      // margin: const EdgeInsets.only(left: 20),
-      curve: Curves.easeInOut,
-      height: _currentHeight,
-      width: double.infinity,
-      child: ListView(
-        children: widget.listItemDrop,
-      ),
-    );
-  }
-
-  // Widget _dropDownList() {
-  //   return SlideFadeTransition(
-  //     offset: -0.2,
-  //     delayStart: const Duration(microseconds: 10),
-  //     animationDuration: const Duration(milliseconds: 400),
-  //     direction: Direction.vertical,
-  //     child: Container(
-  //       padding: const EdgeInsets.only(left: 40, right: 40),
-  //       // margin: const EdgeInsets.only(left: 20),
-  //       height: getHeightDropDownList(),
-  //       width: double.infinity,
-  //       child: ListView(
-  //         children: widget.listItemDrop,
-  //       ),
-  //     ),
-  //   );
-  // }
 }

@@ -44,7 +44,7 @@ class _ItemDropDownMenuState extends State<ItemDropDownMenu> {
         padding: const EdgeInsets.only(left: 15, right: 10),
         decoration: BoxDecoration(
           color: widget.isSelect
-              ? AppColor.BLUE_CARD.withOpacity(0.3)
+              ? AppColor.GREY_TEXT.withOpacity(0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(5),
         ),

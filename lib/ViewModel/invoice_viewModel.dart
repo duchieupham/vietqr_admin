@@ -5,9 +5,11 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
+import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
@@ -72,7 +74,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
   int type = 0;
   int serviceType = 1;
-  int? value = 9;
+  int value = 0;
   int? valueStatus = 0;
   int? filterByDate = 1;
   int pagingPage = 1;
@@ -84,6 +86,33 @@ class InvoiceViewModel extends InvoiceStatus {
   int totalEditAmount = 0;
   int totalEditVat = 0;
   int totalEditAmountVat = 0;
+
+  List<DropdownMenuItem<int>> listMenuDrop = const [
+    DropdownMenuItem<int>(
+        value: 0,
+        child: Text(
+          "Mã hóa đơn",
+          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+        )),
+    DropdownMenuItem<int>(
+        value: 1,
+        child: Text(
+          "Đại lý",
+          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+        )),
+    DropdownMenuItem<int>(
+        value: 2,
+        child: Text(
+          "TK ngân hàng",
+          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+        )),
+    DropdownMenuItem<int>(
+        value: 3,
+        child: Text(
+          "TK VietQR",
+          style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+        )),
+  ];
 
   bool? isInsert;
 
@@ -154,7 +183,7 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
-  void changeTypeInvoice(int? selectType) {
+  void changeTypeInvoice(int selectType) {
     value = selectType;
     notifyListeners();
   }
@@ -634,7 +663,7 @@ class InvoiceViewModel extends InvoiceStatus {
       formattedDate = DateFormat('yyyy-MM').format(time);
       setState(ViewStatus.Loading);
       invoiceDTO = await _dao.filterInvoiceList(
-          type: value!, time: formattedDate, page: page, filter: filter);
+          type: 9, time: formattedDate, page: page, filter: filter);
       metadata = _dao.metaDataDTO;
       setState(ViewStatus.Completed);
     } catch (e) {

@@ -22,6 +22,8 @@ class AppColor {
   static const Color GREY_HIGHLIGHT = Color(0xFF222222);
   static const Color GREY_979797 = Color(0xff979797);
   static const Color BLUE_BGR = Color(0xFFF0F4FA);
+  static const Color BLUE_E1EFFF = Color(0xFFE1EFFF);
+  static const Color BLUE_E5F9FF = Color(0xFFE5F9FF);
 
   static const Color RED_TEXT = Color(0xFFFF0A0A);
   static const Color BLUE_TEXT = Color(0xFF0A7AFF);
@@ -33,6 +35,7 @@ class AppColor {
   static const Color GREEN = Color(0xFF00CA28);
   static const Color DARK_GREEN = Color(0xFF0D5F34);
   static const Color GREEN_2D9D92 = Color(0xFF2D9D92);
+  static const Color GREY_F0F4FA = Color(0xFFF0F4FA);
 
   static const Color BLUE_LIGHT = Color(0xFF96D8FF);
   static const Color DARK_PURPLE = Color(0xFF7951F8);
@@ -81,6 +84,179 @@ class AppColor {
         borderRadius: BorderRadius.circular(12),
         color: Theme.of(context).cardColor);
   }
+}
+
+class GradientColor {
+  LinearGradient disableLinear = const LinearGradient(
+    colors: [
+      AppColor.BLUE_BGR,
+      AppColor.BLUE_BGR,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient disableTextLinear = const LinearGradient(
+    colors: [
+      AppColor.BLACK,
+      AppColor.BLACK,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient disableButtonLinear = const LinearGradient(
+    colors: [
+      AppColor.GREY_TEXT,
+      AppColor.GREY_TEXT,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient rainbowLinear = const LinearGradient(colors: [
+    Color(0xFFD8ECF8),
+    Color(0xFFFFEAD9),
+    Color(0xFFF5C9D1),
+  ], begin: Alignment.bottomLeft, end: Alignment.topRight);
+  LinearGradient brightBlueLinear = const LinearGradient(
+    colors: [
+      Color(0xFF00B8F5),
+      Color(0xFF0A7AFF),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient chardonnayLinear = const LinearGradient(
+    colors: [
+      Color(0xFFFFC889),
+      Color(0xFFFFDCA2),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient pastelBlueLinear = const LinearGradient(
+    colors: [
+      Color(0xFFA6C5FF),
+      Color(0xFFC5CDFF),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient thistleLinear = const LinearGradient(
+    colors: [
+      Color(0xFFCDB3D4),
+      Color(0xFFF7C1D4),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient lightYellow = const LinearGradient(
+    colors: [
+      Color(0xFFFCE9D9),
+      Color(0xFFFCF9DF),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient oysterPinkLinear = const LinearGradient(
+    colors: [
+      Color(0xFFF5CEC7),
+      Color(0xFFFFD7BF),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient skyBlueLinear = const LinearGradient(
+    colors: [
+      Color(0xFFBFF6FF),
+      Color(0xFFFFDBE7),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient lightLilacLinear = const LinearGradient(
+    colors: [
+      Color(0xFFF1C9FF),
+      Color(0xFFFFB5AC),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient seashellLinear = const LinearGradient(
+    colors: [
+      Color(0xFFF0F0F0),
+      Color(0xFFCDCDCD),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  LinearGradient columbiaBlueLinear = const LinearGradient(
+    colors: [
+      Color(0xFF91E2FF),
+      Color(0xFF91FFFF),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient cyanLinear = const LinearGradient(
+    colors: [
+      Color(0xFFB4FFEE),
+      Color(0xFFEDFF96),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  LinearGradient lilyLinear = const LinearGradient(
+    colors: [
+      AppColor.BLUE_E1EFFF,
+      AppColor.BLUE_E5F9FF,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient aiTextColor = const LinearGradient(
+    colors: [
+      Color(0xFF458BF8),
+      Color(0xFFFF8021),
+      Color(0xFFFF3751),
+      Color(0xFFC958DB),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+  LinearGradient lightMintLinear = const LinearGradient(
+    colors: [
+      Color(0xFFBAFFBF),
+      Color(0xFFCFF4D2),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  LinearGradient suggestLinear = const LinearGradient(colors: [
+    Color(0xFFD8ECF8),
+    Color(0xFFFFEAD9),
+    Color(0xFFF5C9D1),
+  ], begin: Alignment.bottomLeft, end: Alignment.topRight);
+
+  LinearGradient vietQrPro = const LinearGradient(colors: [
+    Color(0xFFE5CCA7),
+    Color(0xFF736052),
+  ], begin: Alignment.bottomLeft, end: Alignment.topRight);
+
+  LinearGradient viet_qr = const LinearGradient(
+    colors: [
+      AppColor.WHITE,
+      AppColor.GREY_F0F4FA,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+}
+
+class VietQRTheme {
+  static AppColor appColor = AppColor();
+  static GradientColor gradientColor = GradientColor();
 }
 
 //theme data

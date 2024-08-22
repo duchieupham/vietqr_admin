@@ -18,6 +18,8 @@ import 'events/list_connect_event.dart';
 import 'states/list_connect_state.dart';
 import 'widget/update_merchant_info_popup.dart';
 
+enum MerchantAction { detail, edit, delete }
+
 class ListConnectScreen extends StatelessWidget {
   const ListConnectScreen({super.key});
 
@@ -822,7 +824,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
             ),
           ),
           Container(
-            width: 200,
+            width: 150,
             height: 50,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             alignment: Alignment.center,
@@ -832,55 +834,101 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             child: Row(
               children: [
-                const Text('', style: TextStyle(fontSize: 12)),
-                InkWell(
-                  onTap: () {
-                    Session.instance.updateConnectDTO(dto);
+                PopupMenuButton<MerchantAction>(
+                  padding: const EdgeInsets.all(0),
+                  onSelected: (MerchantAction result) {
+                    switch (result) {
+                      case MerchantAction.detail:
+                        Session.instance.updateConnectDTO(dto);
 
-                    Provider.of<ListConnectProvider>(context, listen: false)
-                        .changePage(1);
+                        Provider.of<ListConnectProvider>(context, listen: false)
+                            .changePage(1);
 
-                    pageViewController.nextPage(
-                        duration: const Duration(milliseconds: 400),
-                        curve: Curves.easeIn);
+                        pageViewController.nextPage(
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeIn);
+                        break;
+                      case MerchantAction.edit:
+                        DialogWidget.instance.openPopupCenter(
+                          child: UpdateMerchantPopup(
+                            dto: dto,
+                            uploadSuccess: () {
+                              BlocProvider.of<ListConnectBloc>(context).add(
+                                  ListConnectGetListEvent(
+                                      page: 1,
+                                      size: 20,
+                                      value: textInput()!,
+                                      type: context
+                                          .read<ListConnectProvider>()
+                                          .valueFilter
+                                          .id,
+                                      typeSearch: typeSearch!));
+                            },
+                          ),
+                        );
+                        break;
+                      case MerchantAction.delete:
+                        break;
+                    }
                   },
-                  child: const Text(
-                    'Chi tiết',
+                  itemBuilder: (BuildContext context) => _buildMenuItems(),
+                  icon: const Text(
+                    'Xem thêm',
                     style: TextStyle(
                         fontSize: 11,
                         color: AppColor.BLUE_TEXT,
                         decoration: TextDecoration.underline),
                   ),
                 ),
-                const SizedBox(width: 16),
-                InkWell(
-                  onTap: () {
-                    DialogWidget.instance.openPopupCenter(
-                      child: UpdateMerchantPopup(
-                        dto: dto,
-                        uploadSuccess: () {
-                          BlocProvider.of<ListConnectBloc>(context).add(
-                              ListConnectGetListEvent(
-                                  page: 1,
-                                  size: 20,
-                                  value: textInput()!,
-                                  type: context
-                                      .read<ListConnectProvider>()
-                                      .valueFilter
-                                      .id,
-                                  typeSearch: typeSearch!));
-                        },
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Chỉnh sửa',
-                    style: TextStyle(
-                        fontSize: 11,
-                        color: AppColor.BLUE_TEXT,
-                        decoration: TextDecoration.underline),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () {
+                //     Session.instance.updateConnectDTO(dto);
+
+                //     Provider.of<ListConnectProvider>(context, listen: false)
+                //         .changePage(1);
+
+                //     pageViewController.nextPage(
+                //         duration: const Duration(milliseconds: 400),
+                //         curve: Curves.easeIn);
+                //   },
+                //   child: const Text(
+                //     'Chi tiết',
+                //     style: TextStyle(
+                //         fontSize: 11,
+                //         color: AppColor.BLUE_TEXT,
+                //         decoration: TextDecoration.underline),
+                //   ),
+                // ),
+
+                // const SizedBox(width: 16),
+                // InkWell(
+                //   onTap: () {
+                //     DialogWidget.instance.openPopupCenter(
+                //       child: UpdateMerchantPopup(
+                //         dto: dto,
+                //         uploadSuccess: () {
+                //           BlocProvider.of<ListConnectBloc>(context).add(
+                //               ListConnectGetListEvent(
+                //                   page: 1,
+                //                   size: 20,
+                //                   value: textInput()!,
+                //                   type: context
+                //                       .read<ListConnectProvider>()
+                //                       .valueFilter
+                //                       .id,
+                //                   typeSearch: typeSearch!));
+                //         },
+                //       ),
+                //     );
+                //   },
+                //   child: const Text(
+                //     'Chỉnh sửa',
+                //     style: TextStyle(
+                //         fontSize: 11,
+                //         color: AppColor.BLUE_TEXT,
+                //         decoration: TextDecoration.underline),
+                //   ),
+                // ),
                 const SizedBox(width: 16),
                 InkWell(
                   onTap: () {
@@ -915,6 +963,28 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
         ],
       ),
     );
+  }
+
+  List<PopupMenuEntry<MerchantAction>> _buildMenuItems() {
+    List<PopupMenuEntry<MerchantAction>> items = [
+      const PopupMenuItem<MerchantAction>(
+        value: MerchantAction.detail,
+        child: Text('Chi tiết'),
+      ),
+      const PopupMenuItem<MerchantAction>(
+        value: MerchantAction.edit,
+        child: Text('Chỉnh sửa'),
+      ),
+      const PopupMenuItem<MerchantAction>(
+        value: MerchantAction.delete,
+        child: Text(
+          'Xóa đại lý',
+          style: TextStyle(color: AppColor.RED_TEXT),
+        ),
+      ),
+    ];
+
+    return items;
   }
 
   Widget _buildTitleItem() {
@@ -966,7 +1036,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               alignment: Alignment.center),
           _buildItemTitle('Action',
               height: 50,
-              width: 200,
+              width: 150,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               alignment: Alignment.center),
         ],

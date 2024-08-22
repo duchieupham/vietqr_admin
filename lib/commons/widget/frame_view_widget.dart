@@ -40,6 +40,8 @@ class _FrameViewWidgetState extends State<FrameViewWidget> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+    bool isClose =
+        !PlatformUtils.instance.isCloseMenu(MediaQuery.of(context).size.width);
     return BlocProvider<TokenBloc>(
       create: (context) => _bloc,
       child: BlocListener<TokenBloc, TokenState>(
@@ -60,10 +62,11 @@ class _FrameViewWidgetState extends State<FrameViewWidget> {
             context.go('/login');
           }
         },
-        child: Material(
-          child: Container(
+        child: Scaffold(
+          drawer: widget.menu,
+          body: Container(
             width: width,
-            height: height - 60,
+            height: height,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -81,7 +84,7 @@ class _FrameViewWidgetState extends State<FrameViewWidget> {
                       Expanded(
                         child: Row(
                           children: [
-                            widget.menu,
+                            if (!isClose) widget.menu,
                             Expanded(child: widget.child),
                           ],
                         ),

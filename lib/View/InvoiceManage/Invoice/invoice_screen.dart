@@ -1,20 +1,23 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/invoice_detail_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_button.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/invoice_manage_screen.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
+import 'package:vietqr_admin/commons/widget/button.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
-
 import '../../../commons/constants/configurations/theme.dart';
 import '../../../commons/constants/enum/view_status.dart';
 import '../../../commons/constants/utils/custom_scroll.dart';
@@ -71,6 +74,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   DateTime? selectDate;
   late InvoiceViewModel _model;
 
+  List<FilterInvoice> listFilter = [
+    FilterInvoice(title: 'Hóa đơn', type: 0),
+    FilterInvoice(title: 'Đại lý', type: 1),
+  ];
+
+  FilterInvoice filtetSelect = FilterInvoice(title: 'Hóa đơn', type: 0);
+
   @override
   void initState() {
     super.initState();
@@ -83,23 +93,23 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     selectDate = _model.getMonth();
     _model.filterListInvoice(time: selectDate!, page: 1, filter: '');
 
-    controller1 = ScrollController();
-    controller2 = ScrollController();
-    controller1.addListener(() {
-      if (!isScrollingDown2) {
-        isScrollingDown1 = true;
-        controller2.jumpTo(controller1.offset);
-      }
-      isScrollingDown1 = false;
-    });
+    // controller1 = ScrollController();
+    // controller2 = ScrollController();
+    // controller1.addListener(() {
+    //   if (!isScrollingDown2) {
+    //     isScrollingDown1 = true;
+    //     controller2.jumpTo(controller1.offset);
+    //   }
+    //   isScrollingDown1 = false;
+    // });
 
-    controller2.addListener(() {
-      if (!isScrollingDown1) {
-        isScrollingDown2 = true;
-        controller1.jumpTo(controller2.offset);
-      }
-      isScrollingDown2 = false;
-    });
+    // controller2.addListener(() {
+    //   if (!isScrollingDown1) {
+    //     isScrollingDown2 = true;
+    //     controller1.jumpTo(controller2.offset);
+    //   }
+    //   isScrollingDown2 = false;
+    // });
   }
 
   @override
@@ -212,38 +222,69 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     color: AppColor.GREY_DADADA,
                   ),
                   if (model.pageType == PageInvoice.LIST) ...[
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Tìm kiếm thông tin hoá đơn ",
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          _filterWidget(),
-                          const SizedBox(height: 20),
-                          const MySeparator(
-                            color: AppColor.GREY_DADADA,
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Danh sách hoá đơn",
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 20),
-                          statisticInvoice(),
-                          const SizedBox(height: 20),
-                        ],
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(30, 10, 30, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // const Text(
+                            //   "Tìm kiếm thông tin hoá đơn ",
+                            //   style: TextStyle(
+                            //       fontSize: 13, fontWeight: FontWeight.bold),
+                            // ),
+                            // const SizedBox(height: 10),
+
+                            // const SizedBox(height: 20),
+                            // const MySeparator(
+                            //   color: AppColor.GREY_DADADA,
+                            // ),
+                            // const SizedBox(height: 20),
+                            const Text(
+                              "Danh sách hoá đơn",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 16),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: AppColor.WHITE,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColor.BLACK.withOpacity(0.1),
+                                        spreadRadius: 1,
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 1),
+                                      )
+                                    ]),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _filter(),
+                                    _filterWidget(),
+                                    ListInvoiceWidget(),
+                                    const MySeparator(
+                                        color: AppColor.GREY_DADADA),
+                                    SizedBox(
+                                      height: 50,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // const SizedBox(height: 20),
+                            // statisticInvoice(),
+                            // const SizedBox(height: 20),
+                          ],
+                        ),
                       ),
                     ),
-                    _buildListInvoice(),
-                    const SizedBox(height: 10),
-                    _pagingWidget(),
-                    const SizedBox(height: 10),
+                    // _buildListInvoice(),
+                    // const SizedBox(height: 10),
+                    // _pagingWidget(),
+                    // const SizedBox(height: 10),
                   ] else if (model.pageType == PageInvoice.DETAIL) ...[
                     Expanded(
                       child: InvoiceDetailScreen(
@@ -299,6 +340,53 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _filter() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColor.GREY_DADADA))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ...listFilter.map(
+                (e) {
+                  bool isSelect = filtetSelect.type == e.type;
+                  return FilterInvoiceButton(
+                    text: e.title,
+                    isSelect: isSelect,
+                    onTap: () {
+                      setState(() {
+                        filtetSelect = e;
+                      });
+                    },
+                  );
+                },
+              )
+            ],
+          ),
+          MButtonWidget(
+            onTap: () {
+              context.go('/create-invoice');
+            },
+            title: 'Tạo mới hoá đơn',
+            isEnable: true,
+            margin: EdgeInsets.zero,
+            width: 150,
+            colorEnableBgr: AppColor.WHITE,
+            colorEnableText: AppColor.BLUE_TEXT,
+            border: Border.all(color: AppColor.BLUE_TEXT),
+            radius: 10,
+            height: 40,
+          ),
+        ],
       ),
     );
   }
@@ -361,7 +449,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                       width: 1960,
                                       child: Column(
                                         children: [
-                                          const TitleItemInvoiceWidget(),
+                                          const TitleItemInvoiceWidget(
+                                            width: 0,
+                                          ),
                                           ...buildItemList(
                                               invoiceDTO.items, metadata)
                                         ],
@@ -909,419 +999,538 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   Widget _filterWidget() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
-        return Scrollbar(
-          controller: controller4,
-          child: SingleChildScrollView(
-            controller: controller4,
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tìm kiếm theo",
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.normal),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        height: 40,
-                        width: model.value == 9 ? 250 : 500,
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColor.GREY_DADADA)),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 220,
-                              child: DropdownButton<int>(
-                                isExpanded: true,
-                                value: model.value,
-                                underline: const SizedBox.shrink(),
-                                icon: const RotatedBox(
-                                  quarterTurns: 5,
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 12,
-                                  ),
-                                ),
-                                items: const [
-                                  DropdownMenuItem<int>(
-                                      value: 9,
-                                      child: Text(
-                                        "Tất cả (mặc định)",
-                                      )),
-                                  DropdownMenuItem<int>(
-                                      value: 0,
-                                      child: Text(
-                                        "Đại lý",
-                                      )),
-                                  DropdownMenuItem<int>(
-                                      value: 1,
-                                      child: Text(
-                                        "Mã hoá đơn",
-                                      )),
-                                  DropdownMenuItem<int>(
-                                      value: 2,
-                                      child: Text(
-                                        "Số TK ngân hàng",
-                                      )),
-                                  DropdownMenuItem<int>(
-                                      value: 3,
-                                      child: Text(
-                                        "Tài khoản VietQR",
-                                      )),
-                                  DropdownMenuItem<int>(
-                                      value: 4,
-                                      child: Text(
-                                        "Trạng thái",
-                                      )),
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    type = value;
-                                  });
-                                  model.changeTypeInvoice(value);
-                                },
-                              ),
-                            ),
-                            if (model.value != null && model.value == 0)
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 8),
-                                    const SizedBox(
-                                      height: 40,
-                                      child: VerticalDivider(
-                                        thickness: 1,
-                                        color: AppColor.GREY_DADADA,
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () async {
-                                        await model.getMerchant('',
-                                            isGetList: true);
-                                        onSelectMerchant();
-                                      },
-                                      child: SizedBox(
-                                        width: 234,
-                                        // padding: const EdgeInsets.symmetric(
-                                        //     horizontal: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              model.selectMerchantItem != null
-                                                  ? model.selectMerchantItem!
-                                                      .merchantName
-                                                  : 'Chọn đại lý',
-                                              style: const TextStyle(
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  color: AppColor.GREY_TEXT,
-                                                  fontSize: 13),
-                                            ),
-                                            const Icon(
-                                              Icons.keyboard_arrow_down,
-                                              size: 20,
-                                              color: AppColor.GREY_TEXT,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (model.value != null && model.value == 1)
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 8),
-                                    const SizedBox(
-                                      height: 40,
-                                      child: VerticalDivider(
-                                        thickness: 1,
-                                        color: AppColor.GREY_DADADA,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 234,
-                                      child: TextField(
-                                        controller: _invoiceController,
-                                        decoration: const InputDecoration(
-                                          contentPadding:
-                                              EdgeInsets.only(bottom: 8),
-                                          border: InputBorder.none,
-                                          hintText: 'Nhập mã hoá đơn',
-                                          hintStyle: TextStyle(
-                                              fontSize: 13,
-                                              color: AppColor.GREY_TEXT),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (model.value != null && model.value == 2)
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 8),
-                                    const SizedBox(
-                                      height: 40,
-                                      child: VerticalDivider(
-                                        thickness: 1,
-                                        color: AppColor.GREY_DADADA,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 234,
-                                      // padding: const EdgeInsets.symmetric(
-                                      //     horizontal: 10),
-                                      child: TextField(
-                                        controller: _bankController,
-                                        decoration: const InputDecoration(
-                                          contentPadding:
-                                              EdgeInsets.only(bottom: 8),
-
-                                          // contentPadding:
-                                          //     EdgeInsets.only(bottom: 0),
-                                          border: InputBorder.none,
-                                          hintText: 'Nhập số TK ngân hàng',
-                                          hintStyle: TextStyle(
-                                              fontSize: 13,
-                                              color: AppColor.GREY_TEXT),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (model.value != null && model.value == 3)
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 8),
-                                    const SizedBox(
-                                      height: 40,
-                                      child: VerticalDivider(
-                                        thickness: 1,
-                                        color: AppColor.GREY_DADADA,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 234,
-                                      // padding: const EdgeInsets.symmetric(
-                                      //     horizontal: 10),
-                                      child: TextField(
-                                        controller: _accController,
-                                        decoration: const InputDecoration(
-                                          contentPadding:
-                                              EdgeInsets.only(bottom: 8),
-
-                                          // contentPadding:
-                                          //     EdgeInsets.only(bottom: 0),
-                                          border: InputBorder.none,
-                                          hintText: 'Nhập TK VietQR',
-                                          hintStyle: TextStyle(
-                                              fontSize: 13,
-                                              color: AppColor.GREY_TEXT),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (model.value != null && model.value == 4)
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 8),
-                                    const SizedBox(
-                                      height: 40,
-                                      child: VerticalDivider(
-                                        thickness: 1,
-                                        color: AppColor.GREY_DADADA,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 234,
-                                      height: 40,
-                                      // padding: const EdgeInsets.symmetric(
-                                      //     horizontal: 10),
-                                      child: DropdownButton<int>(
-                                        isExpanded: true,
-                                        value: model.valueStatus,
-                                        underline: const SizedBox.shrink(),
-                                        icon: const RotatedBox(
-                                          quarterTurns: 5,
-                                          child: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 12,
-                                          ),
-                                        ),
-                                        items: const [
-                                          DropdownMenuItem<int>(
-                                              value: 0,
-                                              child: Text(
-                                                "Chờ thanh toán",
-                                              )),
-                                          DropdownMenuItem<int>(
-                                              value: 1,
-                                              child: Text(
-                                                "Đã thanh toán",
-                                              )),
-                                        ],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            status = value.toString();
-                                          });
-                                          model.changeStatus(value);
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          ],
+        return Container(
+          margin: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 40,
+                width: 420,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColor.GREY_DADADA)),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 40,
+                      width: 120,
+                      child: DropdownButton<int>(
+                        isExpanded: true,
+                        value: model.value,
+                        underline: const SizedBox.shrink(),
+                        icon: const RotatedBox(
+                          quarterTurns: 5,
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Thời gian",
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.normal),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        width: 300,
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColor.GREY_DADADA)),
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 60,
-                              child: Center(
-                                child: Text('Tháng'),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            const SizedBox(
-                              height: 40,
-                              child: VerticalDivider(
-                                thickness: 1,
-                                color: AppColor.GREY_DADADA,
-                              ),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  _onPickMonth(model.getMonth());
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        (selectDate == null
-                                            ? '${model.getMonth().month}/${model.getMonth().year}'
-                                            : '${selectDate?.month}/${selectDate?.year}'),
-                                        style: const TextStyle(fontSize: 13),
-                                      ),
-                                      const Icon(Icons.calendar_month_outlined)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 30),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Thời gian",
-                        style: TextStyle(fontSize: 13, color: AppColor.WHITE),
-                      ),
-                      const SizedBox(height: 10),
-                      InkWell(
-                        onTap: () async {
-                          await model.filterListInvoice(
-                              time: selectDate!, page: 1, filter: textInput()!);
+                        items: model.listMenuDrop,
+                        onChanged: (value) {
+                          setState(() {
+                            type = value;
+                          });
+                          model.changeTypeInvoice(value!);
                         },
-                        child: Container(
-                          height: 40,
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          decoration: BoxDecoration(
-                            color: AppColor.BLUE_TEXT,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.search,
-                                size: 15,
-                                color: AppColor.WHITE,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                "Tìm kiếm",
-                                style: TextStyle(
-                                    color: AppColor.WHITE, fontSize: 13),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 30),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: InkWell(
-                      onTap: () {
-                        context.go('/create-invoice');
-                      },
-                      child: MButtonWidget(
-                        title: 'Tạo mới hoá đơn',
-                        isEnable: true,
-                        margin: EdgeInsets.zero,
-                        width: 150,
-                        colorEnableBgr: AppColor.WHITE,
-                        colorEnableText: AppColor.BLUE_TEXT,
-                        border: Border.all(color: AppColor.BLUE_TEXT),
-                        radius: 10,
-                        height: 40,
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 8),
+                          const SizedBox(
+                            height: 40,
+                            child: VerticalDivider(
+                              thickness: 1,
+                              color: AppColor.GREY_DADADA,
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              // width: 234,
+                              child: TextField(
+                                controller: _invoiceController,
+                                decoration: const InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(bottom: 2, top: 6),
+                                  prefixIcon: Icon(
+                                    Icons.search,
+                                    size: 16,
+                                    color: AppColor.GREY_TEXT,
+                                  ),
+                                  border: InputBorder.none,
+                                  hintText: 'Nhập mã hoá đơn',
+                                  hintStyle: TextStyle(
+                                      fontSize: 15, color: AppColor.GREY_TEXT),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              const SizedBox(width: 18),
+              Container(
+                width: 140,
+                height: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColor.GREY_DADADA)),
+                child: InkWell(
+                  onTap: () {
+                    _onPickMonth(model.getMonth());
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          selectDate == null
+                              ? '${model.getMonth().month}/${model.getMonth().year}'
+                              : '${selectDate?.month}/${selectDate?.year}',
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                        const Icon(Icons.calendar_month_outlined)
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 18),
+              VietQRButton.gradient(
+                  borderRadius: 100,
+                  onPressed: () {},
+                  isDisabled: false,
+                  height: 40,
+                  width: 40,
+                  padding: EdgeInsets.zero,
+                  child: const Center(
+                      child: Icon(
+                    Icons.search,
+                    size: 18,
+                    color: AppColor.WHITE,
+                  )))
+            ],
           ),
         );
+        // return Scrollbar(
+        //   controller: controller4,
+        //   child: SingleChildScrollView(
+        //     controller: controller4,
+        //     scrollDirection: Axis.horizontal,
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(bottom: 10),
+        //       child: Row(
+        //         children: [
+        //           Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               const Text(
+        //                 "Tìm kiếm theo",
+        //                 style: TextStyle(
+        //                     fontSize: 13, fontWeight: FontWeight.normal),
+        //               ),
+        //               const SizedBox(height: 10),
+        //               Container(
+        //                 height: 40,
+        //                 width: model.value == 9 ? 250 : 500,
+        //                 padding: const EdgeInsets.only(left: 10, right: 10),
+        //                 decoration: BoxDecoration(
+        //                     borderRadius: BorderRadius.circular(10),
+        //                     border: Border.all(color: AppColor.GREY_DADADA)),
+        //                 child: Row(
+        //                   children: [
+        //                     SizedBox(
+        //                       height: 40,
+        //                       width: 220,
+        //                       child: DropdownButton<int>(
+        //                         isExpanded: true,
+        //                         value: model.value,
+        //                         underline: const SizedBox.shrink(),
+        //                         icon: const RotatedBox(
+        //                           quarterTurns: 5,
+        //                           child: Icon(
+        //                             Icons.arrow_forward_ios,
+        //                             size: 12,
+        //                           ),
+        //                         ),
+        //                         items: const [
+        //                           DropdownMenuItem<int>(
+        //                               value: 9,
+        //                               child: Text(
+        //                                 "Tất cả (mặc định)",
+        //                               )),
+        //                           DropdownMenuItem<int>(
+        //                               value: 0,
+        //                               child: Text(
+        //                                 "Đại lý",
+        //                               )),
+        //                           DropdownMenuItem<int>(
+        //                               value: 1,
+        //                               child: Text(
+        //                                 "Mã hoá đơn",
+        //                               )),
+        //                           DropdownMenuItem<int>(
+        //                               value: 2,
+        //                               child: Text(
+        //                                 "Số TK ngân hàng",
+        //                               )),
+        //                           DropdownMenuItem<int>(
+        //                               value: 3,
+        //                               child: Text(
+        //                                 "Tài khoản VietQR",
+        //                               )),
+        //                           DropdownMenuItem<int>(
+        //                               value: 4,
+        //                               child: Text(
+        //                                 "Trạng thái",
+        //                               )),
+        //                         ],
+        //                         onChanged: (value) {
+        //                           setState(() {
+        //                             type = value;
+        //                           });
+        //                           model.changeTypeInvoice(value);
+        //                         },
+        //                       ),
+        //                     ),
+        //                     if (model.value != null && model.value == 0)
+        //                       Expanded(
+        //                         child: Row(
+        //                           children: [
+        //                             const SizedBox(width: 8),
+        //                             const SizedBox(
+        //                               height: 40,
+        //                               child: VerticalDivider(
+        //                                 thickness: 1,
+        //                                 color: AppColor.GREY_DADADA,
+        //                               ),
+        //                             ),
+        //                             InkWell(
+        //                               onTap: () async {
+        //                                 await model.getMerchant('',
+        //                                     isGetList: true);
+        //                                 onSelectMerchant();
+        //                               },
+        //                               child: SizedBox(
+        //                                 width: 234,
+        //                                 // padding: const EdgeInsets.symmetric(
+        //                                 //     horizontal: 10),
+        //                                 child: Row(
+        //                                   mainAxisAlignment:
+        //                                       MainAxisAlignment.spaceBetween,
+        //                                   children: [
+        //                                     Text(
+        //                                       model.selectMerchantItem != null
+        //                                           ? model.selectMerchantItem!
+        //                                               .merchantName
+        //                                           : 'Chọn đại lý',
+        //                                       style: const TextStyle(
+        //                                           overflow:
+        //                                               TextOverflow.ellipsis,
+        //                                           color: AppColor.GREY_TEXT,
+        //                                           fontSize: 13),
+        //                                     ),
+        //                                     const Icon(
+        //                                       Icons.keyboard_arrow_down,
+        //                                       size: 20,
+        //                                       color: AppColor.GREY_TEXT,
+        //                                     ),
+        //                                   ],
+        //                                 ),
+        //                               ),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     if (model.value != null && model.value == 1)
+        //                       Expanded(
+        //                         child: Row(
+        //                           children: [
+        //                             const SizedBox(width: 8),
+        //                             const SizedBox(
+        //                               height: 40,
+        //                               child: VerticalDivider(
+        //                                 thickness: 1,
+        //                                 color: AppColor.GREY_DADADA,
+        //                               ),
+        //                             ),
+        //                             SizedBox(
+        //                               width: 234,
+        //                               child: TextField(
+        //                                 controller: _invoiceController,
+        //                                 decoration: const InputDecoration(
+        //                                   contentPadding:
+        //                                       EdgeInsets.only(bottom: 8),
+        //                                   border: InputBorder.none,
+        //                                   hintText: 'Nhập mã hoá đơn',
+        //                                   hintStyle: TextStyle(
+        //                                       fontSize: 13,
+        //                                       color: AppColor.GREY_TEXT),
+        //                                 ),
+        //                               ),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     if (model.value != null && model.value == 2)
+        //                       Expanded(
+        //                         child: Row(
+        //                           children: [
+        //                             const SizedBox(width: 8),
+        //                             const SizedBox(
+        //                               height: 40,
+        //                               child: VerticalDivider(
+        //                                 thickness: 1,
+        //                                 color: AppColor.GREY_DADADA,
+        //                               ),
+        //                             ),
+        //                             SizedBox(
+        //                               width: 234,
+        //                               // padding: const EdgeInsets.symmetric(
+        //                               //     horizontal: 10),
+        //                               child: TextField(
+        //                                 controller: _bankController,
+        //                                 decoration: const InputDecoration(
+        //                                   contentPadding:
+        //                                       EdgeInsets.only(bottom: 8),
+
+        //                                   // contentPadding:
+        //                                   //     EdgeInsets.only(bottom: 0),
+        //                                   border: InputBorder.none,
+        //                                   hintText: 'Nhập số TK ngân hàng',
+        //                                   hintStyle: TextStyle(
+        //                                       fontSize: 13,
+        //                                       color: AppColor.GREY_TEXT),
+        //                                 ),
+        //                               ),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     if (model.value != null && model.value == 3)
+        //                       Expanded(
+        //                         child: Row(
+        //                           children: [
+        //                             const SizedBox(width: 8),
+        //                             const SizedBox(
+        //                               height: 40,
+        //                               child: VerticalDivider(
+        //                                 thickness: 1,
+        //                                 color: AppColor.GREY_DADADA,
+        //                               ),
+        //                             ),
+        //                             SizedBox(
+        //                               width: 234,
+        //                               // padding: const EdgeInsets.symmetric(
+        //                               //     horizontal: 10),
+        //                               child: TextField(
+        //                                 controller: _accController,
+        //                                 decoration: const InputDecoration(
+        //                                   contentPadding:
+        //                                       EdgeInsets.only(bottom: 8),
+
+        //                                   // contentPadding:
+        //                                   //     EdgeInsets.only(bottom: 0),
+        //                                   border: InputBorder.none,
+        //                                   hintText: 'Nhập TK VietQR',
+        //                                   hintStyle: TextStyle(
+        //                                       fontSize: 13,
+        //                                       color: AppColor.GREY_TEXT),
+        //                                 ),
+        //                               ),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       ),
+        //                     if (model.value != null && model.value == 4)
+        //                       Expanded(
+        //                         child: Row(
+        //                           children: [
+        //                             const SizedBox(width: 8),
+        //                             const SizedBox(
+        //                               height: 40,
+        //                               child: VerticalDivider(
+        //                                 thickness: 1,
+        //                                 color: AppColor.GREY_DADADA,
+        //                               ),
+        //                             ),
+        //                             SizedBox(
+        //                               width: 234,
+        //                               height: 40,
+        //                               // padding: const EdgeInsets.symmetric(
+        //                               //     horizontal: 10),
+        //                               child: DropdownButton<int>(
+        //                                 isExpanded: true,
+        //                                 value: model.valueStatus,
+        //                                 underline: const SizedBox.shrink(),
+        //                                 icon: const RotatedBox(
+        //                                   quarterTurns: 5,
+        //                                   child: Icon(
+        //                                     Icons.arrow_forward_ios,
+        //                                     size: 12,
+        //                                   ),
+        //                                 ),
+        //                                 items: const [
+        //                                   DropdownMenuItem<int>(
+        //                                       value: 0,
+        //                                       child: Text(
+        //                                         "Chờ thanh toán",
+        //                                       )),
+        //                                   DropdownMenuItem<int>(
+        //                                       value: 1,
+        //                                       child: Text(
+        //                                         "Đã thanh toán",
+        //                                       )),
+        //                                 ],
+        //                                 onChanged: (value) {
+        //                                   setState(() {
+        //                                     status = value.toString();
+        //                                   });
+        //                                   model.changeStatus(value);
+        //                                 },
+        //                               ),
+        //                             ),
+        //                           ],
+        //                         ),
+        //                       ),
+        //                   ],
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //           const SizedBox(width: 15),
+        //           Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               const Text(
+        //                 "Thời gian",
+        //                 style: TextStyle(
+        //                     fontSize: 13, fontWeight: FontWeight.normal),
+        //               ),
+        //               const SizedBox(height: 10),
+        //               Container(
+        //                 width: 300,
+        //                 padding: const EdgeInsets.only(left: 10, right: 10),
+        //                 decoration: BoxDecoration(
+        //                     borderRadius: BorderRadius.circular(10),
+        //                     border: Border.all(color: AppColor.GREY_DADADA)),
+        //                 child: Row(
+        //                   children: [
+        //                     const SizedBox(
+        //                       width: 60,
+        //                       child: Center(
+        //                         child: Text('Tháng'),
+        //                       ),
+        //                     ),
+        //                     const SizedBox(width: 8),
+        //                     const SizedBox(
+        //                       height: 40,
+        //                       child: VerticalDivider(
+        //                         thickness: 1,
+        //                         color: AppColor.GREY_DADADA,
+        //                       ),
+        //                     ),
+        //                     Expanded(
+        //                       child: InkWell(
+        //                         onTap: () {
+        //                           _onPickMonth(model.getMonth());
+        //                         },
+        //                         child: Container(
+        //                           padding: const EdgeInsets.only(
+        //                               left: 10, right: 10),
+        //                           child: Row(
+        //                             mainAxisAlignment:
+        //                                 MainAxisAlignment.spaceBetween,
+        //                             children: [
+        //                               Text(
+        //                                 (selectDate == null
+        //                                     ? '${model.getMonth().month}/${model.getMonth().year}'
+        //                                     : '${selectDate?.month}/${selectDate?.year}'),
+        //                                 style: const TextStyle(fontSize: 13),
+        //                               ),
+        //                               const Icon(Icons.calendar_month_outlined)
+        //                             ],
+        //                           ),
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ],
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //           const SizedBox(width: 30),
+        //           Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               const Text(
+        //                 "Thời gian",
+        //                 style: TextStyle(fontSize: 13, color: AppColor.WHITE),
+        //               ),
+        //               const SizedBox(height: 10),
+        //               InkWell(
+        //                 onTap: () async {
+        //                   await model.filterListInvoice(
+        //                       time: selectDate!, page: 1, filter: textInput()!);
+        //                 },
+        //                 child: Container(
+        //                   height: 40,
+        //                   padding: const EdgeInsets.only(left: 20, right: 20),
+        //                   decoration: BoxDecoration(
+        //                     color: AppColor.BLUE_TEXT,
+        //                     borderRadius: BorderRadius.circular(10),
+        //                   ),
+        //                   child: const Row(
+        //                     mainAxisAlignment: MainAxisAlignment.center,
+        //                     children: [
+        //                       Icon(
+        //                         Icons.search,
+        //                         size: 15,
+        //                         color: AppColor.WHITE,
+        //                       ),
+        //                       SizedBox(width: 8),
+        //                       Text(
+        //                         "Tìm kiếm",
+        //                         style: TextStyle(
+        //                             color: AppColor.WHITE, fontSize: 13),
+        //                       )
+        //                     ],
+        //                   ),
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //           const SizedBox(width: 30),
+        //           Padding(
+        //             padding: const EdgeInsets.only(top: 30),
+        //             child: InkWell(
+        //               onTap: () {
+        //                 context.go('/create-invoice');
+        //               },
+        //               child: MButtonWidget(
+        //                 title: 'Tạo mới hoá đơn',
+        //                 isEnable: true,
+        //                 margin: EdgeInsets.zero,
+        //                 width: 150,
+        //                 colorEnableBgr: AppColor.WHITE,
+        //                 colorEnableText: AppColor.BLUE_TEXT,
+        //                 border: Border.all(color: AppColor.BLUE_TEXT),
+        //                 radius: 10,
+        //                 height: 40,
+        //               ),
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // );
       },
     );
   }
@@ -1436,4 +1645,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       ),
     );
   }
+}
+
+class FilterInvoice {
+  String title;
+  int type;
+
+  FilterInvoice({required this.title, required this.type});
 }

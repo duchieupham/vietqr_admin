@@ -16,6 +16,13 @@ class PlatformUtils {
     return check;
   }
 
+  bool isCloseMenu(double width) {
+    bool check = false;
+    check = width >= 1400 && kIsWeb;
+
+    return check;
+  }
+
   bool resizeWhen(double width, double widthResize) {
     bool check = false;
     check = ((width >= widthResize) && kIsWeb);

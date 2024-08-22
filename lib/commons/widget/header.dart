@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/commons/constants/configurations/app_image.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/utils/platform_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
-
 
 class Header extends StatelessWidget {
   const Header({super.key});
@@ -26,7 +26,11 @@ class Header extends StatelessWidget {
               builder: (context, provider, child) {
                 return InkWell(
                   onTap: () {
-                    provider.updateShowMenu(!provider.showMenu);
+                    bool isClose = !PlatformUtils.instance
+                        .isCloseMenu(MediaQuery.of(context).size.width);
+                    if (isClose) {
+                      Scaffold.of(context).openDrawer();
+                    }
                   },
                   child: BoxLayout(
                     width: 40,

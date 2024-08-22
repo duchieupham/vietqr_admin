@@ -68,6 +68,13 @@ class _QrBoxListScreenState extends State<QrBoxListScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    controller1.dispose();
+    controller2.dispose();
+  }
+
   void onShowPopup(QrBoxDTO dto) async {
     return await showDialog(
       context: context,
