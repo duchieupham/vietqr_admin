@@ -64,6 +64,8 @@ dependencies:
   toastification: ^2.0.0
   font_awesome_flutter: ^10.7.0
   file_picker: ^8.0.6
+  popover: ^0.3.0+1
+  dropdown_button2: ^2.3.9
   
 dependency_overrides:
   image: ^3.0.2

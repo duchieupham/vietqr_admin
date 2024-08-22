@@ -23,6 +23,7 @@ class MTextFieldCustom extends StatefulWidget {
   final bool? autoFocus;
   final bool? enable;
   final FocusNode? focusNode;
+  final TextStyle? styles;
   final int? maxLines;
   final int? maxLength;
   final TextAlign? textAlign;
@@ -57,6 +58,7 @@ class MTextFieldCustom extends StatefulWidget {
     this.textFieldType,
     this.title,
     this.unTitle,
+    this.styles,
     this.autoFocus,
     this.focusNode,
     this.maxLines,
@@ -134,9 +136,10 @@ class _TextFieldWidgetState extends State<MTextFieldCustom> {
       keyboardType: widget.inputType,
       maxLines: (widget.maxLines == null) ? 1 : widget.maxLines,
       textInputAction: widget.keyboardAction,
-      style: TextStyle(
-        fontSize: (widget.fontSize != null) ? widget.fontSize : 14,
-      ),
+      style: widget.styles ??
+          TextStyle(
+            fontSize: (widget.fontSize != null) ? widget.fontSize : 14,
+          ),
       decoration: InputDecoration(
         hintText: widget.hintText,
         border: InputBorder.none,

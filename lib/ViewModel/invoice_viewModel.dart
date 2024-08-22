@@ -6,12 +6,14 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
+import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
@@ -72,6 +74,15 @@ class InvoiceViewModel extends InvoiceStatus {
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
 
+  TextEditingController textEditingController = TextEditingController();
+  late DateTime selectedDate = getMonth();
+  DataFilter valueFilterTime = const DataFilter(id: 9, name: 'Tất cả');
+
+  List<DataFilter> listFilterTime = [
+    const DataFilter(id: 9, name: 'Tất cả'),
+    const DataFilter(id: 0, name: 'Tùy chọn')
+  ];
+
   int type = 0;
   int serviceType = 1;
   int value = 0;
@@ -125,6 +136,12 @@ class InvoiceViewModel extends InvoiceStatus {
     _dao = InvoiceDAO();
   }
 
+  init() {
+    selectedDate = getMonth();
+    valueFilterTime = const DataFilter(id: 9, name: 'Tất cả');
+    notifyListeners();
+  }
+
   clear() {
     listService = [];
     merchantDTO = null;
@@ -137,6 +154,16 @@ class InvoiceViewModel extends InvoiceStatus {
     totalVat = 0;
     totalAmountVat = 0;
     vatTextController.clear();
+  }
+
+  void selectDateTime(DateTime value) {
+    selectedDate = value;
+    notifyListeners();
+  }
+
+  void updateFilterTime(DataFilter value) {
+    valueFilterTime = value;
+    notifyListeners();
   }
 
   void onChangePage(PageInvoice page) {
@@ -652,18 +679,19 @@ class InvoiceViewModel extends InvoiceStatus {
     return null;
   }
 
-  Future<void> filterListInvoice({
-    required DateTime time,
-    required int page,
-    int? size,
-    required String filter,
-  }) async {
+  Future<void> filterListInvoice(
+      {required int page, int? size, String? filter}) async {
     try {
       String formattedDate = '';
-      formattedDate = DateFormat('yyyy-MM').format(time);
+      formattedDate = valueFilterTime.id == 9
+          ? ''
+          : DateFormat('yyyy-MM').format(selectedDate);
       setState(ViewStatus.Loading);
       invoiceDTO = await _dao.filterInvoiceList(
-          type: 9, time: formattedDate, page: page, filter: filter);
+          type: 9,
+          time: formattedDate,
+          page: page,
+          filter: filter ?? textEditingController.text);
       metadata = _dao.metaDataDTO;
       setState(ViewStatus.Completed);
     } catch (e) {

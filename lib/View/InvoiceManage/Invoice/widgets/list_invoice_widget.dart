@@ -80,16 +80,16 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
-        if (model.status == ViewStatus.Loading) {
-          return const Expanded(child: Center(child: Text('Đang tải...')));
-        }
+        // if (model.status == ViewStatus.Loading) {
+        //   return const Expanded(child: Center(child: Text('Đang tải...')));
+        // }
         if (model.status == ViewStatus.Error &&
             model.request != InvoiceType.REQUEST_PAYMENT) {
           return const SizedBox.shrink();
         }
         // List<InvoiceItem>? list = model.invoiceDTO?.items;
-        InvoiceDTO? invoiceDTO = model.invoiceDTO;
-        MetaDataDTO metadata = model.metadata!;
+        // InvoiceDTO? invoiceDTO = model.invoiceDTO;
+        // MetaDataDTO metadata = model.metadata!;
         List<Widget> buildItemList(
             List<InvoiceItem>? list, MetaDataDTO metadata) {
           if (list == null || list.isEmpty) {
@@ -144,21 +144,31 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                               children: [
                                 TitleItemInvoiceWidget(
                                     width: constraints.maxWidth),
-                                Expanded(
-                                    child: ScrollConfiguration(
-                                  behavior: ScrollConfiguration.of(context)
-                                      .copyWith(scrollbars: false),
-                                  child: SingleChildScrollView(
-                                    controller: _vertical,
-                                    physics: const ClampingScrollPhysics(),
-                                    child: Column(
-                                      children: [
-                                        ...buildItemList(
-                                            invoiceDTO!.items, metadata)
-                                      ],
+                                if (model.status == ViewStatus.Loading)
+                                  Expanded(
+                                    child: Container(
+                                      color: AppColor.BLUE_CARD,
                                     ),
-                                  ),
-                                ))
+                                  )
+                                else if (model.invoiceDTO != null)
+                                  Expanded(
+                                      child: ScrollConfiguration(
+                                    behavior: ScrollConfiguration.of(context)
+                                        .copyWith(scrollbars: false),
+                                    child: SingleChildScrollView(
+                                      controller: _vertical,
+                                      physics: const ClampingScrollPhysics(),
+                                      child: Column(
+                                        children: [
+                                          ...buildItemList(
+                                              model.invoiceDTO!.items,
+                                              model.metadata!)
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                                else
+                                  const SizedBox.shrink()
                               ],
                             ),
                           ),
@@ -217,29 +227,37 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                                 ],
                               ),
                             ),
-                            Expanded(
-                                child: SingleChildScrollView(
-                              controller: _vertical2,
-                              physics: const ClampingScrollPhysics(),
-                              child: Column(
-                                children: [
-                                  ...invoiceDTO.items.map(
-                                    (e) {
-                                      return Column(
-                                        children: [
-                                          _rightItem(e),
-                                          // if (index + 1 != list.length)
-                                          const SizedBox(
-                                              width: 220,
-                                              child: MySeparator(
-                                                  color: AppColor.GREY_DADADA)),
-                                        ],
-                                      );
-                                    },
-                                  )
-                                ],
-                              ),
-                            ))
+                            if (model.status == ViewStatus.Loading)
+                              Expanded(
+                                child: Container(
+                                  color: AppColor.BLUE_BGR,
+                                ),
+                              )
+                            else if (model.invoiceDTO != null)
+                              Expanded(
+                                  child: SingleChildScrollView(
+                                controller: _vertical2,
+                                physics: const ClampingScrollPhysics(),
+                                child: Column(
+                                  children: [
+                                    ...model.invoiceDTO!.items.map(
+                                      (e) {
+                                        return Column(
+                                          children: [
+                                            _rightItem(e),
+                                            // if (index + 1 != list.length)
+                                            const SizedBox(
+                                                width: 220,
+                                                child: MySeparator(
+                                                    color:
+                                                        AppColor.GREY_DADADA)),
+                                          ],
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ))
                           ],
                         ),
                       )
