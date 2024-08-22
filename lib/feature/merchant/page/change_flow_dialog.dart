@@ -7,7 +7,7 @@ class ChangeFlowDialog extends StatefulWidget {
   final String address;
   final Function(String address) onConfirm;
 
-  ChangeFlowDialog({
+  const ChangeFlowDialog({super.key, 
     required this.bankAccount,
     required this.bankCode,
     required this.customerBankName,
@@ -33,39 +33,39 @@ class _ChangeFlowDialogState extends State<ChangeFlowDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Chuyển luồng'),
+      title: const Text('Chuyển luồng'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: TextEditingController(text: widget.bankAccount),
             readOnly: true,
-            decoration: InputDecoration(labelText: 'Số tài khoản'),
+            decoration: const InputDecoration(labelText: 'Số tài khoản'),
           ),
           TextField(
             controller: TextEditingController(text: widget.bankCode),
             readOnly: true,
-            decoration: InputDecoration(labelText: 'Ngân hàng'),
+            decoration: const InputDecoration(labelText: 'Ngân hàng'),
           ),
           TextField(
             controller: TextEditingController(text: widget.customerBankName),
             readOnly: true,
-            decoration: InputDecoration(labelText: 'Chủ tài khoản'),
+            decoration: const InputDecoration(labelText: 'Chủ tài khoản'),
           ),
           TextField(
             controller: _addressController,
-            decoration: InputDecoration(labelText: 'Địa chỉ đại lý'),
+            decoration: const InputDecoration(labelText: 'Địa chỉ đại lý'),
             onChanged: (value) {
               setState(() {
                 _isAddressValid = value.isNotEmpty;
               });
             },
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           if (!_isAddressValid)
-            Align(
+            const Align(
               alignment: Alignment.centerRight,
-              child: const Text(
+              child: Text(
                 'Địa chỉ đại lý là bắt buộc',
                 style: TextStyle(color: Colors.red, fontSize: 10),
               ),
@@ -80,9 +80,9 @@ class _ChangeFlowDialogState extends State<ChangeFlowDialog> {
           style: TextButton.styleFrom(
             backgroundColor: Colors.grey.withOpacity(0.3),
             // foregroundColor: Colors.grey,
-            side: BorderSide(color: Colors.grey),
+            side: const BorderSide(color: Colors.grey),
           ),
-          child: Text(
+          child: const Text(
             'Hủy',
             style: TextStyle(color: Colors.black),
           ),

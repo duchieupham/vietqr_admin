@@ -1,12 +1,8 @@
 import 'package:clipboard/clipboard.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/invoice_detail_screen.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_button.dart';
@@ -15,25 +11,15 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_invoice_wid
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_merchant_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
-import 'package:vietqr_admin/View/InvoiceManage/invoice_manage_screen.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
-import 'package:vietqr_admin/commons/widget/button.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 import '../../../commons/constants/configurations/theme.dart';
 import '../../../commons/constants/enum/view_status.dart';
-import '../../../commons/constants/utils/custom_scroll.dart';
 import '../../../commons/constants/utils/string_utils.dart';
-import '../../../commons/widget/box_layout.dart';
-import '../../../commons/widget/dialog_pick_month.dart';
-import '../../../commons/widget/dialog_widget.dart';
 import '../../../commons/widget/separator_widget.dart';
-import '../../../main.dart';
 import '../../../models/DTO/metadata_dto.dart';
-import '../InvoiceCreate/widgets/popup_select_widget.dart';
-import '../widgets/item_invoice_widget.dart';
-import '../widgets/title_invoice_widget.dart';
 import 'views/invoice_edit_screen.dart';
 
 // ignore: constant_identifier_names
@@ -167,6 +153,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             const SizedBox(height: 16),
                             Expanded(
                               child: Container(
+                                width: 1980,
                                 decoration: BoxDecoration(
                                     color: AppColor.WHITE,
                                     borderRadius: BorderRadius.circular(10),
@@ -217,7 +204,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         },
                                       )
                                     else
-                                      ListMerchantWidget(),
+                                      const ListMerchantWidget(),
                                     const MySeparator(
                                         color: AppColor.GREY_DADADA),
                                     _pagingWidget()

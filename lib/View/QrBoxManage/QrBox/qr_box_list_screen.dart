@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/QrBoxManage/QrBox/widgets/title_item_qr_box_widget.dart';
-import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/time_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';

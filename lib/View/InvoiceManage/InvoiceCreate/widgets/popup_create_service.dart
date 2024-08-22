@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
-import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
 import '../../../../ViewModel/invoice_viewModel.dart';
@@ -617,7 +616,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(widget.dto!.timeProcess!,
+                                        Text(widget.dto!.timeProcess,
                                             style:
                                                 const TextStyle(fontSize: 15)),
                                         const Icon(
@@ -820,7 +819,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                   )
                 : SelectionArea(
                     child: Text(
-                      item!.unit,
+                      item.unit,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: const TextStyle(fontSize: 12),
@@ -839,12 +838,12 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                         totalAmount =
                             double.parse(amountInput ?? '0') * int.parse(value);
                         vatAmount = totalAmount! *
-                            double.parse(item!.vat.round().toString()) /
+                            double.parse(item.vat.round().toString()) /
                             100;
                       } else {
                         totalAmount = double.parse(amountInput ?? '0') * 1;
                         vatAmount = totalAmount! *
-                            double.parse(item!.vat.round().toString()) /
+                            double.parse(item.vat.round().toString()) /
                             100;
                       }
                       hasInputAmount = true;
@@ -865,7 +864,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                   )
                 : SelectionArea(
                     child: Text(
-                      item!.quantity.toString(),
+                      item.quantity.toString(),
                       textAlign: TextAlign.left,
                       style: const TextStyle(fontSize: 12),
                     ),
@@ -895,9 +894,9 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                           ? int.parse(_quantityController.text.isNotEmpty
                               ? _quantityController.text
                               : '1')
-                          : item!.quantity);
+                          : item.quantity);
                   vatAmount =
-                      totalAmount! * double.parse(item!.vat.toString()) / 100;
+                      totalAmount! * double.parse(item.vat.toString()) / 100;
                   hasInputAmount = true;
                 } else {
                   hasInputAmount = false;
@@ -911,7 +910,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
                     ? widget.dto != null
                         ? StringUtils.formatNumberWithOutVND(widget.dto?.amount)
                         : 'Nhập đơn giá'
-                    : StringUtils.formatNumberWithOutVND(item!.amount),
+                    : StringUtils.formatNumberWithOutVND(item.amount),
                 hintStyle: TextStyle(
                     fontSize: 12,
                     color: type == 9 ? AppColor.GREY_TEXT : AppColor.BLACK),
@@ -937,7 +936,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
               child: Text(
                 hasInputAmount == true
                     ? StringUtils.formatNumberWithOutVND(totalAmount)
-                    : StringUtils.formatNumberWithOutVND(item?.totalAmount),
+                    : StringUtils.formatNumberWithOutVND(item.totalAmount),
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -950,7 +949,7 @@ class _PopupCreateServiceWidgetState extends State<PopupCreateServiceWidget> {
             color: AppColor.GREY_DADADA,
             child: SelectionArea(
               child: Text(
-                item!.vat.toString(),
+                item.vat.toString(),
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
               ),

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,7 +13,6 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_ite
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
-import 'package:vietqr_admin/commons/constants/utils/file_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';

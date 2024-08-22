@@ -1,18 +1,12 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
-import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
@@ -727,6 +721,7 @@ class InvoiceViewModel extends InvoiceStatus {
         merchantData = result;
       }
       metadata = _dao.metaDataDTO;
+      await Future.delayed(const Duration(milliseconds: 500));
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

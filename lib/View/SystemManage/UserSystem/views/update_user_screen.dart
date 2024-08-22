@@ -7,7 +7,6 @@ import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/user_system_screen.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
-import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';

@@ -59,7 +59,7 @@ class ShareUtils {
     String timeCreate = '';
     String email = '';
     if (dto.vso.isNotEmpty) {
-      vso = '\VSO: ${dto.vso}';
+      vso = 'VSO: ${dto.vso}';
     }
     if (dto.email.isNotEmpty) {
       email = '\nEmail: ${dto.email}';

@@ -4,20 +4,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
-import 'package:vietqr_admin/View/InvoiceManage/widgets/item_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/item_merchant.dart';
-import 'package:vietqr_admin/View/InvoiceManage/widgets/title_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/title_merchant.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
-import 'package:vietqr_admin/commons/constants/utils/measure_size.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
-import 'package:vietqr_admin/commons/widget/box_layout.dart';
-import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
@@ -136,7 +130,9 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
                                 if (model.status == ViewStatus.Loading)
                                   Expanded(
                                     child: Container(
-                                      color: AppColor.BLUE_CARD,
+                                      width: constraints.maxWidth,
+                                      alignment: Alignment.center,
+                                      child: const CircularProgressIndicator(),
                                     ),
                                   )
                                 else if (model.merchantData != null)

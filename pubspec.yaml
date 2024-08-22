@@ -68,6 +68,9 @@ dependencies:
   dropdown_button2: ^2.3.9
   linked_scroll_controller: ^0.2.0
   
+  image: any
+  flutter_web_plugins: any
+  async: any
 dependency_overrides:
   image: ^3.0.2
   # flutter_web_plugins: any
