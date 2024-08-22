@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/views/add_user_screen.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -13,6 +14,7 @@ import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
 class SystemViewModel extends BaseModel {
   late SystemDAO _dao;
+  BankSystemDTO? bankSystemDTO;
   List<UserSystemDTO>? listUser = [];
   List<BankSystemDTO>? listBank = [];
   MetaDataDTO? metaDataDTO;
@@ -45,6 +47,18 @@ class SystemViewModel extends BaseModel {
       setState(ViewStatus.Error);
     }
   }
+
+  // Future<void> getListLinkedBank() async{
+  //       try {
+  //     setState(ViewStatus.Loading);
+  //     listBank = await _dao.getListBank(page: page, type: type, value: value);
+  //     metadata = _dao.metaDataDTO;
+  //     setState(ViewStatus.Completed);
+  //   } catch (e) {
+  //     LOG.error(e.toString());
+  //     setState(ViewStatus.Error);
+  //   }
+  // }
 
   Future<void> getListUser(
       {int page = 1, required int type, String value = ''}) async {
@@ -140,6 +154,26 @@ class SystemViewModel extends BaseModel {
     }
     return false;
   }
+
+  //   Future<void> filterListBank({
+  //   required DateTime time,
+  //   required int page,
+  //   int? size,
+  //   required String filter,
+  // }) async {
+  //   try {
+  //     String formattedDate = '';
+  //     formattedDate = DateFormat('yyyy-MM').format(time);
+  //     setState(ViewStatus.Loading);
+  //     invoiceDTO = await _dao.filter(
+  //         type: 9, time: formattedDate, page: page, filter: filter);
+  //     metadata = _dao.metaDataDTO;
+  //     setState(ViewStatus.Completed);
+  //   } catch (e) {
+  //     LOG.error(e.toString());
+  //     setState(ViewStatus.Error);
+  //   }
+  // }
 
   //  Future<ResponseMessageDTO?> checkLog(Map<String, dynamic> param) async {
   //   try {
