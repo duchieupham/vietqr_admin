@@ -307,6 +307,10 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                             setState(() {
                               _choiceChipSelected = (selected ? index : null)!;
                             });
+                            _model.filterListBank(
+                                size: pageSize,
+                                type: type,
+                                searchType: (_choiceChipSelected + 3));
                           },
                         );
                       },
@@ -408,7 +412,10 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
             onTap: () {
               if (_textController.text == '') {
                 _model.filterListBank(
-                    type: type, size: pageSize, value: _textController.text,  searchType: (_choiceChipSelected + 3));
+                    type: type,
+                    size: pageSize,
+                    value: _textController.text,
+                    searchType: (_choiceChipSelected + 3));
               } else {
                 _model.filterListBank(
                     type: type,
@@ -527,6 +534,10 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                           pageSize = value;
                         });
                       }
+                      _model.filterListBank(
+                          size: pageSize,
+                          type: type,
+                          searchType: (_choiceChipSelected + 3));
                     },
                   )),
               const SizedBox(width: 30),
