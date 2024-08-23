@@ -8,7 +8,7 @@ import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 
 class PopupCheckLogWidget extends StatefulWidget {
   final String bankAccount;
-  final BankSystemDTO dto;
+  final BankSystemItem dto;
 
   const PopupCheckLogWidget(
       {super.key, required this.bankAccount, required this.dto});

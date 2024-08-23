@@ -69,6 +69,30 @@ class SystemDAO extends BaseDAO {
     return [];
   }
 
+  Future<dynamic> filterBankList(
+      {required int page,
+      required int size,
+      required int type,
+      required String value,
+      required int searchType}) async {
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}new-list-bank-account?type=$type&value=$value&searchType=$searchType&page=$page&size=$size';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        metaDataDTO = MetaDataDTO.fromJson(data["metadata"]);
+        return BankSystemDTO.fromJson(data['data']);
+      }
+    } catch (e) {
+      LOG.error("Failed to fetch invoice data: ${e.toString()}");
+    }
+    return null;
+  }
+
   Future<bool?> updateUser(UserInfo dto) async {
     try {
       String url =

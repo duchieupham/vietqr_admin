@@ -6,7 +6,7 @@ import '../../../../commons/constants/configurations/theme.dart';
 
 class ItemBankWidget extends StatelessWidget {
   final int index;
-  final BankSystemDTO dto;
+  final BankSystemItem dto;
   const ItemBankWidget({super.key, required this.index, required this.dto});
 
   @override
@@ -20,15 +20,14 @@ class ItemBankWidget extends StatelessWidget {
       alignment: Alignment.center,
       child: SelectionArea(
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            //STT
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 50,
               child: Text(
                 '${index + 1}',
@@ -36,16 +35,14 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12),
               ),
             ),
+
+            //Số tk
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.bankAccount.isNotEmpty
                   ? Alignment.centerRight
                   : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 150,
               child: Text(
                 // dto.getTimeRegister.toString() != '0'
@@ -56,16 +53,14 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12),
               ),
             ),
+
+            //Chủ tk
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.bankAccountName.isNotEmpty
                   ? Alignment.centerRight
                   : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 150,
               child: Text(
                 dto.bankAccountName.isNotEmpty ? dto.bankAccountName : '-',
@@ -73,16 +68,14 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
+
+            //Ngân hàng
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.bankShortName.isNotEmpty
                   ? Alignment.centerRight
                   : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 120,
               child: Text(
                 dto.bankShortName.isNotEmpty ? dto.bankShortName : '-',
@@ -90,16 +83,14 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
+
+            //SĐT xác thực
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.phoneAuthenticated.isNotEmpty
                   ? Alignment.centerRight
                   : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 120,
               child: Text(
                 dto.phoneAuthenticated.isNotEmpty
@@ -109,48 +100,30 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12),
               ),
             ),
+
+            //Ngày kích hoạt
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
-              width: 100,
-              child: Text(
-                dto.mmsActive ? 'TF' : 'MF',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: dto.nationalId.isNotEmpty
-                  ? Alignment.centerRight
-                  : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              alignment:
+                  dto.validFrom != 0 ? Alignment.centerRight : Alignment.center,
+              height: 40,
               width: 120,
               child: Text(
-                dto.nationalId.isNotEmpty ? dto.nationalId : '-',
-                textAlign: TextAlign.center,
+                dto.validFrom.toString() != '0'
+                    ? formattedDateTimeRegister
+                    : '-',
+                textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
+
+            //Ngày hết hạn
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.validFeeTo != 0
                   ? Alignment.centerRight
                   : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 120,
               child: Text(
                 dto.validFeeTo.toString() != '0'
@@ -160,15 +133,41 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
+
+            //Luồng
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment: Alignment.center,
+              height: 40,
+              width: 100,
+              child: Text(
+                dto.mmsActive ? 'TF' : 'MF',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+              ),
+            ),
+
+            //CCCD/CMND
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment: dto.nationalId.isNotEmpty
+                  ? Alignment.centerRight
+                  : Alignment.center,
+              height: 40,
+              width: 120,
+              child: Text(
+                dto.nationalId.isNotEmpty ? dto.nationalId : '-',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+              ),
+            ),
+
+            //vso
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment:
                   dto.vso.isNotEmpty ? Alignment.centerRight : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 100,
               child: Text(
                 dto.vso.isNotEmpty ? dto.vso : '-',
@@ -176,16 +175,14 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
+
+            //TK VietQR
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.phoneNo.isNotEmpty
                   ? Alignment.centerRight
                   : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 120,
               child: Text(
                 dto.phoneNo.isNotEmpty ? dto.phoneNo : '-',
@@ -193,16 +190,14 @@ class ItemBankWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
+
+            //Email
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.email.isNotEmpty
                   ? Alignment.centerRight
                   : Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
+              height: 40,
               width: 200,
               child: Text(
                 dto.email.isNotEmpty ? dto.email : '-',
