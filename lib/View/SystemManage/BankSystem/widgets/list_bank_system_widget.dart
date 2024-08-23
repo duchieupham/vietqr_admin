@@ -1,10 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
+
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/item_bank_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_log.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/title_item_bank_widget.dart';
@@ -23,7 +24,11 @@ enum Actions {
 }
 
 class ListBankSystemWidget extends StatefulWidget {
-  const ListBankSystemWidget({super.key});
+  int pageSize;
+  ListBankSystemWidget({
+    super.key,
+    required this.pageSize,
+  });
 
   // final Function(InvoiceItem) onShowPopup;
   // final Function(InvoiceItem) onEdit;
@@ -87,12 +92,11 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
             return [];
           }
 
-          int itemsPerPage = 20;
           return list
               .asMap()
               .map((index, e) {
                 int calculatedIndex =
-                    index + ((metadata.page! - 1) * itemsPerPage);
+                    index + ((metadata.page! - 1) * widget.pageSize);
                 return MapEntry(
                     index,
                     Column(

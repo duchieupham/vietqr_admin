@@ -178,7 +178,9 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                   _filter(),
                   _filterWidget(),
                   // _buildList(),
-                  const ListBankSystemWidget(),
+                  ListBankSystemWidget(
+                    pageSize: pageSize,
+                  ),
                   const MySeparator(color: AppColor.GREY_DADADA),
                   _pagingWidget(),
                 ],
@@ -468,6 +470,9 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
         }
         double indexTotal =
             paging.page != 1 ? ((pageSize * paging.page!) / 2) + 1 : 1;
+        int totalOfCurrentPage = (pageSize * paging.page!) > paging.total!
+            ? paging.total!
+            : pageSize * paging.page!;
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
           child: Row(
@@ -542,7 +547,7 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                   )),
               const SizedBox(width: 30),
               Text(
-                '$indexTotal-${pageSize * paging.page!} của ${paging.total}',
+                '$indexTotal-$totalOfCurrentPage của ${paging.total}',
                 style: const TextStyle(fontSize: 13),
               ),
               const SizedBox(width: 15),
