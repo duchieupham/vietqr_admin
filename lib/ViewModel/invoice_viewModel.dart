@@ -92,51 +92,53 @@ class InvoiceViewModel extends InvoiceStatus {
   int totalEditVat = 0;
   int totalEditAmountVat = 0;
 
-  List<DropdownMenuItem<int>> listMenuDrop(int filterBy) {
-    List<DropdownMenuItem<int>> items = [];
-    if (filterBy == 0) {
-      items.addAll([
-        const DropdownMenuItem<int>(
-            value: 0,
-            child: Text(
-              "Mã hóa đơn",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 1,
-            child: Text(
-              "TK ngân hàng",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 2,
-            child: Text(
-              "TK VietQR",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 3,
-            child: Text(
-              "Đại lý",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-      ]);
-    } else {
-      items.addAll([
-        const DropdownMenuItem<int>(
-            value: 0,
-            child: Text(
-              "Tên đại lý",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 1,
-            child: Text(
-              "Mã VSO",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-      ]);
-    }
+  List<DropdownMenuItem<int>> listMenuDropInvoice() {
+    List<DropdownMenuItem<int>> items = [
+      const DropdownMenuItem<int>(
+          value: 0,
+          child: Text(
+            "Mã hóa đơn",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 1,
+          child: Text(
+            "TK ngân hàng",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 2,
+          child: Text(
+            "TK VietQR",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 3,
+          child: Text(
+            "Đại lý",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+    ];
+
+    return items;
+  }
+
+  List<DropdownMenuItem<int>> listMenuDropMerchant() {
+    List<DropdownMenuItem<int>> items = [
+      const DropdownMenuItem<int>(
+          value: 0,
+          child: Text(
+            "Tên đại lý",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 1,
+          child: Text(
+            "Mã VSO",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+    ];
+
     return items;
   }
 

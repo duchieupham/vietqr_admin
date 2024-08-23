@@ -34,6 +34,11 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
           margin: const EdgeInsets.fromLTRB(18, 12, 18, 12),
           child: Row(
             children: [
+              const Text(
+                'Tìm kiếm theo',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: 40,
@@ -50,6 +55,9 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                         isExpanded: true,
                         value: model.subMenuType,
                         underline: const SizedBox.shrink(),
+                        borderRadius: BorderRadius.circular(5),
+                        dropdownColor: AppColor.WHITE,
+                        elevation: 4,
                         icon: const RotatedBox(
                           quarterTurns: 5,
                           child: Icon(
@@ -57,7 +65,9 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                             size: 12,
                           ),
                         ),
-                        items: model.listMenuDrop(widget.filterBy),
+                        items: widget.filterBy == 0
+                            ? model.listMenuDropInvoice()
+                            : model.listMenuDropMerchant(),
                         onChanged: (value) {
                           if (value != null) {
                             // widget.controller.text = '';

@@ -146,11 +146,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Danh sách hoá đơn",
+                              "Lọc theo",
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 8),
                             Expanded(
                               child: Container(
                                 width: 1980,
@@ -307,6 +307,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         filterSelect = e;
                         textEditingController = TextEditingController();
                       });
+                      _model.changeTypeInvoice(0);
 
                       _model.filterListInvoice(
                         size: pageSize,
@@ -363,7 +364,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   model.pageType == PageInvoice.LIST
                       ? const Text(
                           "Danh sách hoá đơn",
-                          style: TextStyle(fontSize: 13),
+                          style: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.bold),
                         )
                       : InkWell(
                           onTap: () {
