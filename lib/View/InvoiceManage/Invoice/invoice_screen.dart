@@ -173,6 +173,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                       onCall: (subType) {
                                         textEditingController =
                                             TextEditingController();
+
                                         model.filterListInvoice(
                                           size: pageSize,
                                           page: 1,
@@ -188,6 +189,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                     // _filterWidget(),
                                     if (filterSelect.type == 0)
                                       ListInvoiceWidget(
+                                        pageSize: pageSize,
                                         onShowPopup: onShowPopup,
                                         onEdit: (dto) {
                                           setState(() {
@@ -204,7 +206,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         },
                                       )
                                     else
-                                      const ListMerchantWidget(),
+                                      ListMerchantWidget(
+                                        pageSize: pageSize,
+                                      ),
                                     const MySeparator(
                                         color: AppColor.GREY_DADADA),
                                     _pagingWidget()
@@ -542,11 +546,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         if (paging.page! != paging.totalPage!) {
           isPaging = true;
         }
-        double indexTotal =
-            paging.page != 1 ? ((pageSize * paging.page!) / 2) + 1 : 1;
+
         int totalOfCurrentPage = (pageSize * paging.page!) > paging.total!
             ? paging.total!
             : pageSize * paging.page!;
+        double indexTotal =
+            paging.page != 1 ? (totalOfCurrentPage - pageSize) + 1 : 1;
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
           child: Row(

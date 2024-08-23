@@ -30,6 +30,34 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
+        String inputText = '';
+        if (widget.filterBy == 0) {
+          switch (model.subMenuType) {
+            case 0:
+              inputText = 'mã hóa đơn';
+              break;
+            case 1:
+              inputText = 'TK ngân hàng';
+              break;
+            case 2:
+              inputText = 'TK VietQR';
+              break;
+            case 3:
+              inputText = 'đại lý';
+              break;
+            default:
+          }
+        } else {
+          switch (model.subMenuType) {
+            case 0:
+              inputText = 'tên đại lý';
+              break;
+            case 1:
+              inputText = 'mã vso';
+              break;
+            default:
+          }
+        }
         return Container(
           margin: const EdgeInsets.fromLTRB(18, 12, 18, 12),
           child: Row(
@@ -136,17 +164,17 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                                       search: value,
                                     );
                                   },
-                                  decoration: const InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(bottom: 2, top: 6),
-                                    prefixIcon: Icon(
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        bottom: 2, top: 6),
+                                    prefixIcon: const Icon(
                                       Icons.search,
                                       size: 16,
                                       color: AppColor.GREY_TEXT,
                                     ),
                                     border: InputBorder.none,
-                                    hintText: 'Nhập mã hoá đơn',
-                                    hintStyle: TextStyle(
+                                    hintText: 'Nhập $inputText',
+                                    hintStyle: const TextStyle(
                                         fontSize: 15,
                                         color: AppColor.GREY_TEXT),
                                   ),

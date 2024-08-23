@@ -22,7 +22,12 @@ enum Actions {
 }
 
 class ListMerchantWidget extends StatefulWidget {
-  const ListMerchantWidget({super.key});
+  final int pageSize;
+
+  const ListMerchantWidget({
+    super.key,
+    required this.pageSize,
+  });
 
   @override
   State<ListMerchantWidget> createState() => _ListMerchantWidgetState();
@@ -78,12 +83,11 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
             return [];
           }
 
-          int itemsPerPage = 20;
           return list
               .asMap()
               .map((index, e) {
                 int calculatedIndex =
-                    index + ((metadata.page! - 1) * itemsPerPage);
+                    index + ((metadata.page! - 1) * widget.pageSize);
                 return MapEntry(
                     index,
                     Column(

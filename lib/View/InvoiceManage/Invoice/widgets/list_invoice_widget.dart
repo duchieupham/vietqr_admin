@@ -31,12 +31,15 @@ class ListInvoiceWidget extends StatefulWidget {
   final Function(InvoiceItem) onShowPopup;
   final Function(InvoiceItem) onEdit;
   final Function(String) onDetail;
+  final int pageSize;
 
-  const ListInvoiceWidget(
-      {super.key,
-      required this.onShowPopup,
-      required this.onEdit,
-      required this.onDetail});
+  const ListInvoiceWidget({
+    super.key,
+    required this.onShowPopup,
+    required this.onEdit,
+    required this.onDetail,
+    required this.pageSize,
+  });
 
   @override
   State<ListInvoiceWidget> createState() => _ListInvoiceWidgetState();
@@ -73,9 +76,9 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
-        // if (model.status == ViewStatus.Loading) {
-        //   return const Expanded(child: Center(child: Text('Đang tải...')));
-        // }
+        if (model.status == ViewStatus.Loading) {
+          if (_horizontal.hasClients) _horizontal.jumpTo(0.0);
+        }
         if (model.status == ViewStatus.Error &&
             model.request != InvoiceType.REQUEST_PAYMENT) {
           return const SizedBox.shrink();
@@ -89,12 +92,11 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
             return [];
           }
 
-          int itemsPerPage = 20;
           return list
               .asMap()
               .map((index, e) {
                 int calculatedIndex =
-                    index + ((metadata.page! - 1) * itemsPerPage);
+                    index + ((metadata.page! - 1) * widget.pageSize);
                 return MapEntry(
                     index,
                     Column(
