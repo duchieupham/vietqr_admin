@@ -140,19 +140,12 @@ class _ItemMenuHomeState extends State<ItemMenuHome>
                         ),
                       )
                     else
-                      ShaderMask(
-                        shaderCallback: (bounds) => widget.isSelect
-                            ? VietQRTheme.gradientColor.brightBlueLinear
-                                .createShader(bounds)
-                            : VietQRTheme.gradientColor.disableTextLinear
-                                .createShader(bounds),
-                        child: Text(
-                          widget.title,
-                          style: TextStyle(
-                            fontSize: widget.titleSize,
-                            color: AppColor.WHITE,
-                            fontWeight: widget.bold ? FontWeight.bold : null,
-                          ),
+                      Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontSize: widget.titleSize,
+                          color: AppColor.BLACK,
+                          fontWeight: widget.bold ? FontWeight.bold : null,
                         ),
                       ),
                   ],

@@ -440,7 +440,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(
-                                width: 100,
+                                width: 110,
                                 child: Text(
                                   'HĐ chưa TT:',
                                   style: TextStyle(fontSize: 13),
@@ -456,7 +456,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(
-                                width: 100,
+                                width: 110,
                                 child: Text(
                                   'Số tiền chưa TT:',
                                   style: TextStyle(fontSize: 13),
@@ -483,7 +483,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(
-                                width: 100,
+                                width: 110,
                                 child: Text(
                                   'HĐ đã TT:',
                                   style: TextStyle(fontSize: 13),
@@ -499,7 +499,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(
-                                width: 100,
+                                width: 110,
                                 child: Text(
                                   'Số tiền đã TT:',
                                   style: TextStyle(fontSize: 13),
