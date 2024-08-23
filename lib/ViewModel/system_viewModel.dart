@@ -22,6 +22,8 @@ class SystemViewModel extends BaseModel {
   Gender? selectGender;
   TotalUserDTO? totalUserDTO;
 
+  BankSystemDTO? bankSystemDTO;
+
   SystemViewModel() {
     _dao = SystemDAO();
     listUser = [];
@@ -33,12 +35,41 @@ class SystemViewModel extends BaseModel {
     notifyListeners();
   }
 
-  Future<void> getListBank(
-      {int page = 1, required int type, String value = ''}) async {
+  // Future<void> getListBank(
+  //     {int page = 1, required int type, String value = ''}) async {
+  //   try {
+  //     setState(ViewStatus.Loading);
+  //     listBank = await _dao.getListBank(page: page, type: type, value: value);
+  //     metadata = _dao.metaDataDTO;
+  //     setState(ViewStatus.Completed);
+  //   } catch (e) {
+  //     LOG.error(e.toString());
+  //     setState(ViewStatus.Error);
+  //   }
+  // }
+
+  Future<void> filterListBank({
+    int page = 1,
+    required int size,
+    required int type,
+    String value = '',
+    int? searchType,
+  }) async {
     try {
+      // String formattedDate = '';
+      // formattedDate = valueFilterTime.id == 9
+      //     ? ''
+      //     : DateFormat('yyyy-MM').format(selectedDate);
       setState(ViewStatus.Loading);
-      listBank = await _dao.getListBank(page: page, type: type, value: value);
+      final result = await _dao.filterBankList(
+          page: page,
+          size: size,
+          type: type,
+          value: value,
+          searchType: searchType);
+      bankSystemDTO = result;
       metadata = _dao.metaDataDTO;
+      await Future.delayed(const Duration(milliseconds: 500));
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

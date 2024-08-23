@@ -99,7 +99,7 @@ class ShareUtils {
     return result;
   }
 
-  String getBankSharing(BankSystemDTO dto) {
+  String getBankSharing(BankSystemItem dto) {
     String formattedDateTimePaid = dto.validFeeTo.toString().isNotEmpty
         ? DateFormat('yyyy-MM-dd HH:mm:ss')
             .format(DateTime.fromMillisecondsSinceEpoch(dto.validFeeTo * 1000))
