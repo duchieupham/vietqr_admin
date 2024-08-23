@@ -74,16 +74,10 @@ class SystemDAO extends BaseDAO {
       required int size,
       required int type,
       required String value,
-      int? searchType}) async {
+      required int searchType}) async {
     try {
-      String url = '';
-      if (searchType != null) {
-        url =
-            '${EnvConfig.instance.getBaseUrl()}new-list-bank-account?type=$type&value=$value&searchType=$searchType&page=$page&size=$size';
-      } else {
-        url =
-            '${EnvConfig.instance.getBaseUrl()}new-list-bank-account?type=$type&value=$value&searchType=&page=$page&size=$size';
-      }
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}new-list-bank-account?type=$type&value=$value&searchType=$searchType&page=$page&size=$size';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

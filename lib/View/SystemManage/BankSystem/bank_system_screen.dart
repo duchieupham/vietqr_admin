@@ -70,7 +70,11 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
   }
 
   void initData() {
-    _model.filterListBank(size: pageSize, type: type, value: '');
+    _model.filterListBank(
+        size: pageSize,
+        type: type,
+        value: '',
+        searchType: (_choiceChipSelected + 3));
   }
 
   void initController() {
@@ -213,11 +217,11 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                       // _model.changeTypeInvoice(0);
 
                       _model.filterListBank(
-                        size: pageSize,
-                        page: 1,
-                        type: type,
-                        value: '',
-                      );
+                          size: pageSize,
+                          page: 1,
+                          type: type,
+                          value: '',
+                          searchType: (_choiceChipSelected + 3));
                     },
                   );
                 },
@@ -269,21 +273,24 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                                 left: 10, right: 10, top: 10, bottom: 10),
                             child: Row(
                               children: [
-                               _choiceChipSelected == index ? Container(
-                                margin: const EdgeInsets.only(right: 4),
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child:const Center(
-                                      child: Icon(
-                                    Icons.check,
-                                    color: AppColor.BLUE_TEXT,
-                                    size: 15,
-                                  )),
-                                ) : const SizedBox.shrink(),
+                                _choiceChipSelected == index
+                                    ? Container(
+                                        margin: const EdgeInsets.only(right: 4),
+                                        height: 20,
+                                        width: 20,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                        ),
+                                        child: const Center(
+                                            child: Icon(
+                                          Icons.check,
+                                          color: AppColor.BLUE_TEXT,
+                                          size: 15,
+                                        )),
+                                      )
+                                    : const SizedBox.shrink(),
                                 Text(
                                   listChoiceChips[index].title,
                                   style: TextStyle(
@@ -340,7 +347,9 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                                       _model.filterListBank(
                                           type: type,
                                           size: pageSize,
-                                          value: value);
+                                          value: value,
+                                          searchType:
+                                              (_choiceChipSelected + 3));
                                     } else {
                                       _model.filterListBank(
                                           type: type,
@@ -399,7 +408,7 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
             onTap: () {
               if (_textController.text == '') {
                 _model.filterListBank(
-                    type: type, size: pageSize, value: _textController.text);
+                    type: type, size: pageSize, value: _textController.text,  searchType: (_choiceChipSelected + 3));
               } else {
                 _model.filterListBank(
                     type: type,

@@ -53,7 +53,7 @@ class SystemViewModel extends BaseModel {
     required int size,
     required int type,
     String value = '',
-    int? searchType,
+    required int searchType,
   }) async {
     try {
       // String formattedDate = '';
