@@ -1,18 +1,12 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:vietqr_admin/ViewModel/base_model.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
-import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_excel_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_info_dto.dart';
@@ -98,51 +92,53 @@ class InvoiceViewModel extends InvoiceStatus {
   int totalEditVat = 0;
   int totalEditAmountVat = 0;
 
-  List<DropdownMenuItem<int>> listMenuDrop(int filterBy) {
-    List<DropdownMenuItem<int>> items = [];
-    if (filterBy == 0) {
-      items.addAll([
-        const DropdownMenuItem<int>(
-            value: 0,
-            child: Text(
-              "Mã hóa đơn",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 1,
-            child: Text(
-              "TK ngân hàng",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 2,
-            child: Text(
-              "TK VietQR",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 3,
-            child: Text(
-              "Đại lý",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-      ]);
-    } else {
-      items.addAll([
-        const DropdownMenuItem<int>(
-            value: 0,
-            child: Text(
-              "Tên đại lý",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-        const DropdownMenuItem<int>(
-            value: 1,
-            child: Text(
-              "Mã VSO",
-              style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
-            )),
-      ]);
-    }
+  List<DropdownMenuItem<int>> listMenuDropInvoice() {
+    List<DropdownMenuItem<int>> items = [
+      const DropdownMenuItem<int>(
+          value: 0,
+          child: Text(
+            "Mã hóa đơn",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 1,
+          child: Text(
+            "TK ngân hàng",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 2,
+          child: Text(
+            "TK VietQR",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 3,
+          child: Text(
+            "Đại lý",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+    ];
+
+    return items;
+  }
+
+  List<DropdownMenuItem<int>> listMenuDropMerchant() {
+    List<DropdownMenuItem<int>> items = [
+      const DropdownMenuItem<int>(
+          value: 0,
+          child: Text(
+            "Tên đại lý",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 1,
+          child: Text(
+            "Mã VSO",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+    ];
+
     return items;
   }
 
@@ -727,6 +723,7 @@ class InvoiceViewModel extends InvoiceStatus {
         merchantData = result;
       }
       metadata = _dao.metaDataDTO;
+      await Future.delayed(const Duration(milliseconds: 500));
       setState(ViewStatus.Completed);
     } catch (e) {
       LOG.error(e.toString());

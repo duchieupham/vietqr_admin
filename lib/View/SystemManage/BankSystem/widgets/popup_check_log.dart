@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Để sử dụng FilteringTextInputFormatter
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
-import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 
@@ -13,7 +10,7 @@ class PopupCheckLogWidget extends StatefulWidget {
   final String bankAccount;
   final BankSystemDTO dto;
 
-  PopupCheckLogWidget(
+  const PopupCheckLogWidget(
       {super.key, required this.bankAccount, required this.dto});
 
   @override

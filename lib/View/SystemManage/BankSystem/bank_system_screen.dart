@@ -1,17 +1,13 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/bank_system_button.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_log.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/item_bank_widget.dart';
-import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/item_user_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/title_item_bank_widget.dart';
-import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/title_item_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -22,7 +18,6 @@ import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
-import 'package:vietqr_admin/models/DTO/user_system_dto.dart';
 
 enum Actions {
   copy,

@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/item_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/title_invoice_widget.dart';
@@ -13,7 +12,6 @@ import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
-import 'package:vietqr_admin/commons/constants/utils/measure_size.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
@@ -124,7 +122,7 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                   Positioned.fill(
                     right: 220,
                     child: SizedBox(
-                      width: constraints.maxWidth,
+                      width: 1760,
                       child: RawScrollbar(
                         thumbVisibility: true,
                         controller: _horizontal,
@@ -142,7 +140,9 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                                 if (model.status == ViewStatus.Loading)
                                   Expanded(
                                     child: Container(
-                                      color: AppColor.BLUE_CARD,
+                                      width: constraints.maxWidth,
+                                      alignment: Alignment.center,
+                                      child: const CircularProgressIndicator(),
                                     ),
                                   )
                                 else if (model.invoiceDTO != null)
@@ -171,92 +171,93 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColor.WHITE,
-                          boxShadow: [
-                            BoxShadow(
-                                color: AppColor.BLACK.withOpacity(0.1),
-                                blurRadius: 5,
-                                spreadRadius: 1,
-                                offset: const Offset(-1, 0)),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                      height: 40,
-                                      width: 120,
-                                      alignment: Alignment.center,
-                                      child: const Text(
-                                        'Trạng thái',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: AppColor.BLACK,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                  Container(
-                                      height: 40,
-                                      width: 100,
-                                      alignment: Alignment.center,
-                                      child: const Text(
-                                        'Thao tác',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: AppColor.BLACK,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                ],
-                              ),
-                            ),
-                            if (model.status == ViewStatus.Loading)
-                              Expanded(
-                                child: Container(
-                                  color: AppColor.BLUE_BGR,
+                  SizedBox(
+                    width: 1980,
+                    child: Row(
+                      children: [
+                        const Expanded(child: SizedBox()),
+                        // const Spacer(),
+                        // SizedBox(width: constraints.maxWidth),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColor.WHITE,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: AppColor.BLACK.withOpacity(0.1),
+                                  blurRadius: 5,
+                                  spreadRadius: 1,
+                                  offset: const Offset(-1, 0)),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: AppColor.BLUE_TEXT.withOpacity(0.3),
                                 ),
-                              )
-                            else if (model.invoiceDTO != null)
-                              Expanded(
-                                  child: SingleChildScrollView(
-                                controller: _vertical2,
-                                physics: const ClampingScrollPhysics(),
-                                child: Column(
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    ...model.invoiceDTO!.items.map(
-                                      (e) {
-                                        return Column(
-                                          children: [
-                                            _rightItem(e),
-                                            // if (index + 1 != list.length)
-                                            const SizedBox(
-                                                width: 220,
-                                                child: MySeparator(
-                                                    color:
-                                                        AppColor.GREY_DADADA)),
-                                          ],
-                                        );
-                                      },
-                                    )
+                                    Container(
+                                        height: 40,
+                                        width: 120,
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Trạng thái',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: AppColor.BLACK,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                    Container(
+                                        height: 40,
+                                        width: 100,
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                          'Thao tác',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: AppColor.BLACK,
+                                              fontWeight: FontWeight.bold),
+                                        )),
                                   ],
                                 ),
-                              ))
-                          ],
-                        ),
-                      )
-                    ],
+                              ),
+                              if (model.status == ViewStatus.Loading)
+                                const SizedBox.shrink()
+                              else if (model.invoiceDTO != null)
+                                Expanded(
+                                    child: SingleChildScrollView(
+                                  controller: _vertical2,
+                                  physics: const ClampingScrollPhysics(),
+                                  child: Column(
+                                    children: [
+                                      ...model.invoiceDTO!.items.map(
+                                        (e) {
+                                          return Column(
+                                            children: [
+                                              _rightItem(e),
+                                              // if (index + 1 != list.length)
+                                              const SizedBox(
+                                                  width: 220,
+                                                  child: MySeparator(
+                                                      color: AppColor
+                                                          .GREY_DADADA)),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   )
                 ],
               );

@@ -50,16 +50,21 @@ class FilterInvoiceButton extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 6),
-                Container(
-                  height: 3,
-                  width: textWidth,
-                  decoration: BoxDecoration(
-                    gradient: isSelect
-                        ? VietQRTheme.gradientColor.brightBlueLinear
-                        : VietQRTheme.gradientColor.disableButtonLinear,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                )
+                if (isSelect)
+                  Container(
+                    height: 3,
+                    width: textWidth,
+                    decoration: BoxDecoration(
+                      gradient: isSelect
+                          ? VietQRTheme.gradientColor.brightBlueLinear
+                          : VietQRTheme.gradientColor.disableButtonLinear,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  )
+                else
+                  const SizedBox(
+                    height: 3,
+                  )
               ],
             ),
           ),

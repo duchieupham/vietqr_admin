@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class CreateUserDTO {
   final String phoneNo;

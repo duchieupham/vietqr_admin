@@ -8,7 +8,6 @@ import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/encrypt_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
-import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/pin_widget.dart';
 import 'package:vietqr_admin/feature/integration_connectivity/new_connect/new_connect_screen.dart';
@@ -574,19 +573,11 @@ class DateInputFormatter extends TextInputFormatter {
     text = text.replaceAll(RegExp(r'[^0-9]'), '');
 
     if (text.length >= 5 && text.length <= 6) {
-      text = text.substring(0, 2) +
-          '/' +
-          text.substring(2, 4) +
-          '/' +
-          text.substring(4, 6);
+      text = '${text.substring(0, 2)}/${text.substring(2, 4)}/${text.substring(4, 6)}';
     } else if (text.length >= 7) {
-      text = text.substring(0, 2) +
-          '/' +
-          text.substring(2, 4) +
-          '/' +
-          text.substring(4, 8);
+      text = '${text.substring(0, 2)}/${text.substring(2, 4)}/${text.substring(4, 8)}';
     } else if (text.length >= 3) {
-      text = text.substring(0, 2) + '/' + text.substring(2, 4);
+      text = '${text.substring(0, 2)}/${text.substring(2, 4)}';
     }
 
     return text;

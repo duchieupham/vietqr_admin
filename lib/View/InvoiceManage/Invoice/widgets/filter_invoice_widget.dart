@@ -1,14 +1,10 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:popover/popover.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
-import 'package:vietqr_admin/commons/constants/utils/dropdown_button.dart';
 import 'package:vietqr_admin/commons/widget/button.dart';
 import 'package:vietqr_admin/commons/widget/dialog_pick_month.dart';
-import 'package:vietqr_admin/main.dart';
 import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 
 class FilterInvoiceWidget extends StatefulWidget {
@@ -38,6 +34,11 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
           margin: const EdgeInsets.fromLTRB(18, 12, 18, 12),
           child: Row(
             children: [
+              const Text(
+                'Tìm kiếm theo',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: 40,
@@ -54,6 +55,9 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                         isExpanded: true,
                         value: model.subMenuType,
                         underline: const SizedBox.shrink(),
+                        borderRadius: BorderRadius.circular(5),
+                        dropdownColor: AppColor.WHITE,
+                        elevation: 4,
                         icon: const RotatedBox(
                           quarterTurns: 5,
                           child: Icon(
@@ -61,7 +65,9 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                             size: 12,
                           ),
                         ),
-                        items: model.listMenuDrop(widget.filterBy),
+                        items: widget.filterBy == 0
+                            ? model.listMenuDropInvoice()
+                            : model.listMenuDropMerchant(),
                         onChanged: (value) {
                           if (value != null) {
                             // widget.controller.text = '';

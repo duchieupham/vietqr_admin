@@ -250,7 +250,7 @@ class _ListConnectScreenState extends State<_ListConnectScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Tìm kiếm theo tên đại lý',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),

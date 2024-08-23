@@ -5,7 +5,7 @@ class RootViewModel extends BaseModel {
 
   get pinLength => _pinLength;
 
-  RootViewModel() {}
+  RootViewModel();
 
   void updatePinLength(int length) {
     _pinLength = length;
