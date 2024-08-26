@@ -645,7 +645,10 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                               ),
                               Text(
                                 nearlyExpireCount.toString(),
-                                style: const TextStyle(fontSize: 13),
+                                 style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.ORANGE_DARK),
                               )
                             ],
                           ),
@@ -665,7 +668,7 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                                 style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColor.ORANGE_DARK),
+                                    color: AppColor.RED_TEXT),
                               )
                             ],
                           )

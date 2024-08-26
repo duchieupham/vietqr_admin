@@ -28,7 +28,7 @@ class ItemMerchantWidget extends StatelessWidget {
             ),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             height: 40,
             width: 150,
             child: TextButton(
@@ -57,7 +57,7 @@ class ItemMerchantWidget extends StatelessWidget {
                 )),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             height: 40,
             width: 200,
             child: TextButton(
@@ -86,7 +86,7 @@ class ItemMerchantWidget extends StatelessWidget {
                 )),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             height: 40,
             width: 150,
             child: TextButton(
@@ -123,7 +123,7 @@ class ItemMerchantWidget extends StatelessWidget {
                 )),
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             height: 40,
             width: 150,
             child: TextButton(
@@ -157,6 +157,35 @@ class ItemMerchantWidget extends StatelessWidget {
                           ? AppColor.BLACK
                           : AppColor.GREEN,
                       fontWeight: FontWeight.bold),
+                )),
+          ),
+            Container(
+            alignment: Alignment.center,
+            height: 40,
+            width: 200,
+            child: TextButton(
+                onPressed: () async {
+                  await FlutterClipboard.copy(dto.email).then(
+                    (value) => Fluttertoast.showToast(
+                      msg: 'Đã sao chép',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: AppColor.WHITE,
+                      textColor: AppColor.BLACK,
+                      fontSize: 15,
+                      webBgColor: 'rgba(255, 255, 255)',
+                      webPosition: 'center',
+                    ),
+                  );
+                },
+                child: Text(
+                  dto.email.isNotEmpty ? dto.email : '-',
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColor.BLACK,
+                  ),
                 )),
           ),
         ],

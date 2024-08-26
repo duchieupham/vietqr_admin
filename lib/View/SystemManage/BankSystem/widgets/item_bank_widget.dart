@@ -15,6 +15,10 @@ class ItemBankWidget extends StatelessWidget {
         ? DateFormat('yyyy-MM-dd HH:mm:ss')
             .format(DateTime.fromMillisecondsSinceEpoch(dto.validFeeTo * 1000))
         : '-';
+    String formattedDateTimeStared = dto.validFrom.toString().isNotEmpty
+        ? DateFormat('yyyy-MM-dd HH:mm:ss')
+            .format(DateTime.fromMillisecondsSinceEpoch(dto.validFeeTo * 1000))
+        : '-';
     return Container(
       // color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,
@@ -110,7 +114,7 @@ class ItemBankWidget extends StatelessWidget {
               width: 120,
               child: Text(
                 dto.validFrom.toString() != '0'
-                    ? formattedDateTimeRegister
+                    ? formattedDateTimeStared
                     : '-',
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
