@@ -538,7 +538,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 ),
                 const SizedBox(width: 8),
                 PopupMenuButton<DataFilter>(
-                  offset: const Offset(-100, 0),
+                  tooltip: '',
+                  offset: const Offset(0, 50),
                   padding: const EdgeInsets.all(0),
                   onSelected: (DataFilter result) async {
                     model.updateFilterTime(result);
