@@ -4,14 +4,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_check_email_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/item_merchant.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/title_merchant.dart';
+import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_log.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
+import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
@@ -185,7 +189,7 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
                           children: [
                             Container(
                               height: 40,
-                              width: 200,
+                              width: 240,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: AppColor.BLUE_TEXT.withOpacity(0.3),
@@ -199,6 +203,34 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
+                            if (model.status == ViewStatus.Loading)
+                              const SizedBox.shrink()
+                            else if (model.merchantData != null)
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  controller: _vertical2,
+                                  physics: const ClampingScrollPhysics(),
+                                  child: Column(
+                                    children: [
+                                      ...model.merchantData!.items.map(
+                                        (e) {
+                                          return Column(
+                                            children: [
+                                              _rightItem(e),
+                                              const SizedBox(
+                                                width: 220,
+                                                child: MySeparator(
+                                                  color: AppColor.GREY_DADADA,
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
                           ],
                         ),
                       )
@@ -213,20 +245,116 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
     );
   }
 
-  List<PopupMenuEntry<Actions>> _buildMenuItems(int status) {
-    List<PopupMenuEntry<Actions>> items = [
-      const PopupMenuItem<Actions>(
-        value: Actions.sendMail,
-        child: Text('Gửi TT qua email'),
-      ),
-      const PopupMenuItem<Actions>(
-        value: Actions.payment,
-        child: Text('Thanh toán'),
-      ),
-    ];
-
-    return items;
+  Widget _rightItem(ItemMerchant e) {
+    return Container(
+      alignment: Alignment.center,
+      child: e.completeAmount != 0
+          ? const SizedBox(
+              height: 40,
+              child: Center(
+                child: Text(
+                  'Đã TT',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: AppColor.GREEN,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            )
+          : Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 130,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PopupCheckEmailWidget(
+                            dto: e,
+                          );
+                        },
+                      );
+                    },
+                    child: const Text(
+                      'Gửi TT qua email',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.underline,
+                        // decorationColor: AppColor.BLUE_TEXT,
+                        color: AppColor.BLUE_TEXT,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 40,
+                  width: 110,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: InkWell(
+                    onTap: () {
+                      // onSelectInvoice();
+                      // void onShowPopup(InvoiceItem dto) async {
+                      //   return await showDialog(
+                      //     context: context,
+                      //     // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
+                      //     builder: (context) => PopupPaymentRequestWidget(
+                      //       dto: dto,
+                      //       onPop: (id) {
+                      //         _model.onChangePage(PageInvoice.DETAIL);
+                      //         selectInvoiceId = id;
+                      //         setState(() {});
+                      //       },
+                      //     ),
+                      //   );
+                      // }
+                    },
+                    child: const Text(
+                      'Thanh toán',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.underline,
+                        // decorationColor: AppColor.BLUE_TEXT,
+                        color: AppColor.BLUE_TEXT,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
   }
+
+  // void onSelectInvoice({String? id}) async {
+  //   return await showDialog(
+  //     context: context,
+  //     builder: (context) =>
+  //         PopupSelectTypeWidget(type: 0, merchantId: id ?? '', isGetList: true),
+  //   );
+  // }
+
+  // List<PopupMenuEntry<Actions>> _buildMenuItems(int status) {
+  //   List<PopupMenuEntry<Actions>> items = [
+  //     const PopupMenuItem<Actions>(
+  //       value: Actions.sendMail,
+  //       child: Text('Gửi TT qua email'),
+  //     ),
+  //     const PopupMenuItem<Actions>(
+  //       value: Actions.payment,
+  //       child: Text('Thanh toán'),
+  //     ),
+  //   ];
+
+  //   return items;
+  // }
 
   void onCopy({required InvoiceItem dto}) async {
     await FlutterClipboard.copy(ShareUtils.instance.getTextSharing(dto)).then(

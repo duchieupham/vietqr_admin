@@ -7,6 +7,7 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/item_bank_widget.dart';
+import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_bank_detail_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_log.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/title_item_bank_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
@@ -21,6 +22,7 @@ import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 
 enum Actions {
   copy,
+  detail,
 }
 
 class ListBankSystemWidget extends StatefulWidget {
@@ -285,16 +287,6 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
           Container(
             padding: const EdgeInsets.only(right: 10),
             alignment: Alignment.center,
-            // decoration: BoxDecoration(
-            //   border: Border(
-            //     // left:
-            //     //     BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
-            //     // bottom: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
-            //     // right: BorderSide(
-            //     //   color: AppColor.GREY_TEXT.withOpacity(0.3),
-            //     // ),
-            //   ),
-            // ),
             height: 40,
             width: 120,
             child: SelectionArea(
@@ -329,9 +321,12 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                       case Actions.copy:
                         onCopy(dto: e);
                         break;
+                      case Actions.detail:
+                        onDetail(dto: e);
+                        break;
                     }
                   },
-                  itemBuilder: (BuildContext context) => _buildMenuItems(),
+                  itemBuilder: (BuildContext context) => _buildMenuItems(e),
                   icon: Container(
                     width: 30,
                     height: 30,
@@ -403,11 +398,28 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
     );
   }
 
-  List<PopupMenuEntry<Actions>> _buildMenuItems() {
+  void onDetail({required BankSystemItem dto}) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopupBankDetailWidget(
+          dto: dto,
+        );
+      },
+    );
+  }
+
+  List<PopupMenuEntry<Actions>> _buildMenuItems(BankSystemItem e) {
     List<PopupMenuEntry<Actions>> items = [
       const PopupMenuItem<Actions>(
         value: Actions.copy,
         child: Text('Copy'),
+      ),
+      PopupMenuItem<Actions>(
+        value: Actions.detail,
+        child: e.validService
+            ? const Text('Gia hạn Key')
+            : const Text('Kích hoạt Key'),
       ),
     ];
     return items;
