@@ -71,7 +71,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     ChoiceChipItem(title: 'Nạp tiền ĐT', value: 2),
   ];
 
-  int _choiceChipSelected = 0;
+  int _choiceChipSelected = 9;
 
   List<FilterInvoice> listFilter = [
     FilterInvoice(title: 'Hóa đơn', type: 0),
@@ -186,12 +186,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                             showCheckmark: false,
                                             label: Container(
                                               decoration: BoxDecoration(
-                                                gradient:
-                                                    _choiceChipSelected == index
-                                                        ? VietQRTheme
-                                                            .gradientColor
-                                                            .brightBlueLinear
-                                                        : null,
+                                                gradient: _choiceChipSelected ==
+                                                        listChoiceChips[index]
+                                                            .value
+                                                    ? VietQRTheme.gradientColor
+                                                        .brightBlueLinear
+                                                    : null,
                                                 borderRadius:
                                                     BorderRadius.circular(10.0),
                                               ),
@@ -202,7 +202,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                   bottom: 10),
                                               child: Row(
                                                 children: [
-                                                  _choiceChipSelected == index
+                                                  _choiceChipSelected ==
+                                                          listChoiceChips[index]
+                                                              .value
                                                       ? Container(
                                                           margin:
                                                               const EdgeInsets
@@ -233,7 +235,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                     style: TextStyle(
                                                       color:
                                                           _choiceChipSelected ==
-                                                                  index
+                                                                  listChoiceChips[
+                                                                          index]
+                                                                      .value
                                                               ? Colors.white
                                                               : Colors.black,
                                                     ),
@@ -241,12 +245,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                 ],
                                               ),
                                             ),
-                                            selected:
-                                                _choiceChipSelected == index,
+                                            selected: _choiceChipSelected ==
+                                                listChoiceChips[index].value,
                                             onSelected: (bool selected) {
                                               setState(() {
-                                                _choiceChipSelected =
-                                                    (selected ? index : null)!;
+                                                _choiceChipSelected = (selected
+                                                    ? listChoiceChips[index]
+                                                        .value
+                                                    : null)!;
                                               });
                                               model.filterListInvoice(
                                                 invoiceType:
@@ -596,8 +602,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     PopupMenuButton<DataFilter>(
                       offset: const Offset(-100, 0),
                       padding: const EdgeInsets.all(0),
-                      onSelected: (DataFilter result) {
+                      onSelected: (DataFilter result) async {
                         model.updateFilterTime(result);
+                        model.selectDateTime(model.getMonth());
+                        await model.filterListInvoice(
+                          invoiceType: _choiceChipSelected,
+                          size: pageSize,
+                          page: 1,
+                          filterType: filterSelect.type,
+                          search: textEditingController.text,
+                        );
                       },
                       itemBuilder: (BuildContext context) => _buildMenuItems(
                           model.listFilterTime, model.valueFilterTime),
