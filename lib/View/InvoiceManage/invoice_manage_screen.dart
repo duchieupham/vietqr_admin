@@ -1,9 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
+import 'package:vietqr_admin/commons/constants/configurations/app_image.dart';
+import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/utils/platform_utils.dart';
+import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
+import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
 import 'dart:html' as html;
 
 import '../../commons/constants/enum/type_menu_home.dart';
@@ -24,39 +29,147 @@ class InvoiceManageScreen extends StatefulWidget {
   State<InvoiceManageScreen> createState() => _InvoiceManageScreenState();
 }
 
-class _InvoiceManageScreenState extends State<InvoiceManageScreen> {
+class _InvoiceManageScreenState extends State<InvoiceManageScreen>
+    with SingleTickerProviderStateMixin {
   Invoice type = Invoice.LIST;
   late InvoiceViewModel _model;
+  late AnimationController _controller;
+  ValueNotifier<bool> isCloseNotifier = ValueNotifier<bool>(false);
 
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
-
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
     type = widget.type;
-    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // return Scaffold(
+    //   backgroundColor: AppColor.WHITE,
+    //   body: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Container(
+    //         height: 60,
+    //         color: AppColor.BLUE_BGR,
+    //         padding: const EdgeInsets.only(left: 20),
+    //         width: MediaQuery.of(context).size.width,
+    //         child: Row(
+    //           children: [
+    //             InkWell(
+    //               onTap: () {
+    //                 isCloseNotifier.value = !isCloseNotifier.value;
+    //                 isCloseNotifier.value
+    //                     ? _controller.forward()
+    //                     : _controller.reverse();
+    //                 // bool isClose = !PlatformUtils.instance
+    //                 //     .isCloseMenu(MediaQuery.of(context).size.width);
+    //                 // if (isClose) {
+    //                 //   Scaffold.of(context).openDrawer();
+    //                 // }
+    //               },
+    //               child: BoxLayout(
+    //                 width: 40,
+    //                 height: 40,
+    //                 borderRadius: 100,
+    //                 alignment: Alignment.center,
+    //                 padding: const EdgeInsets.all(0),
+    //                 bgColor: AppColor.WHITE,
+    //                 border: Border.all(color: AppColor.BLACK, width: 1),
+    //                 child: AnimatedIcon(
+    //                     icon: AnimatedIcons.close_menu,
+    //                     progress: _controller,
+    //                     size: 20,
+    //                     color: Theme.of(context).hintColor),
+    //               ),
+    //             ),
+    //             const SizedBox(
+    //               width: 20,
+    //             ),
+    //             SizedBox(
+    //               height: 40,
+    //               width: 100,
+    //               child: Image.asset(
+    //                 AppImages.icVietQrAdmin,
+    //                 height: 40,
+    //                 fit: BoxFit.fitHeight,
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //       Expanded(
+    //           child: Container(
+    //         color: AppColor.TRANSPARENT,
+    //         child: Row(
+    //           children: [
+    //             ValueListenableBuilder<bool>(
+    //               valueListenable: isCloseNotifier,
+    //               builder: (context, value, child) {
+    //                 return AnimatedContainer(
+    //                   duration: const Duration(milliseconds: 300),
+    //                   width: value ? 0 : 250,
+    //                   child: SingleChildScrollView(
+    //                     physics: const NeverScrollableScrollPhysics(),
+    //                     scrollDirection: Axis.horizontal,
+    //                     child: MenuLeft(
+    //                       currentType: MenuType.INVOICE,
+    //                       subMenuInvoice: [
+    //                         ItemDropDownMenu(
+    //                           title: 'Danh sách hoá đơn',
+    //                           isSelect: type == Invoice.LIST,
+    //                           onTap: () => onTapMenu(Invoice.LIST),
+    //                         ),
+    //                         ItemDropDownMenu(
+    //                           title: 'Tạo mới hoá đơn',
+    //                           isSelect: type == Invoice.CREATE,
+    //                           onTap: () => onTapMenu(Invoice.CREATE),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 );
+    //               },
+    //             ),
+    //             Expanded(
+    //               child: Container(),
+    //             )
+    //           ],
+    //         ),
+    //       ))
+    //     ],
+    //   ),
+    // );
     return FrameViewWidget(
-        title: const SizedBox(),
-        menu: MenuLeft(
-          currentType: MenuType.INVOICE,
-          subMenuInvoice: [
-            ItemDropDownMenu(
-              title: 'Danh sách hoá đơn',
-              isSelect: type == Invoice.LIST,
-              onTap: () => onTapMenu(Invoice.LIST),
-            ),
-            ItemDropDownMenu(
-              title: 'Tạo mới hoá đơn',
-              isSelect: type == Invoice.CREATE,
-              onTap: () => onTapMenu(Invoice.CREATE),
-            ),
-          ],
-        ),
-        child: _buildBody());
+      title: const SizedBox(),
+      menu: MenuLeft(
+        currentType: MenuType.INVOICE,
+        subMenuInvoice: [
+          ItemDropDownMenu(
+            title: 'Danh sách hoá đơn',
+            isSelect: type == Invoice.LIST,
+            onTap: () => onTapMenu(Invoice.LIST),
+          ),
+          ItemDropDownMenu(
+            title: 'Tạo mới hoá đơn',
+            isSelect: type == Invoice.CREATE,
+            onTap: () => onTapMenu(Invoice.CREATE),
+          ),
+        ],
+      ),
+      child: _buildBody(),
+    );
   }
 
   void onTapMenu(Invoice value) {
