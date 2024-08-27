@@ -6,17 +6,11 @@ import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/filter_bank_button.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/list_bank_system_widget.dart';
-// import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/bank_system_button.dart';
-import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_log.dart';
-import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/item_bank_widget.dart';
-import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/title_item_bank_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
-import 'package:vietqr_admin/commons/widget/box_layout.dart';
-import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
@@ -133,28 +127,10 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // // _filter(),
-          // // const SizedBox(height: 20),
           const Text(
             "Lọc theo:",
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
           ),
-          // // const SizedBox(height: 20),
-          // _filterWidget(),
-          // const SizedBox(height: 20),
-          // const MySeparator(
-          //   color: AppColor.GREY_DADADA,
-          // ),
-          // const SizedBox(height: 20),
-          // const Text(
-          //   "Danh sách tài khoản ngân hàng",
-          //   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-          // ),
-          // const SizedBox(height: 30),
-          // _buildList(),
-          // const SizedBox(height: 10),
-          // _pagingWidget(),
-          // const SizedBox(height: 10),
           const SizedBox(
             height: 10,
           ),
@@ -464,136 +440,139 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
           return const SizedBox.shrink();
         }
 
-        MetaDataDTO paging = model.metadata!;
-        if (paging.page! != paging.totalPage!) {
-          isPaging = true;
-        }
-        double indexTotal =
-            paging.page != 1 ? ((pageSize * paging.page!) / 2) + 1 : 1;
-        int totalOfCurrentPage = (pageSize * paging.page!) > paging.total!
-            ? paging.total!
-            : pageSize * paging.page!;
-        return Container(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              const Text(
-                'Số hàng:',
-                style: TextStyle(fontSize: 13),
-              ),
-              const SizedBox(width: 15),
-              Container(
-                  width: 50,
-                  height: 25,
-                  padding: const EdgeInsets.fromLTRB(5, 2, 7, 2),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: AppColor.GREY_TEXT.withOpacity(0.3)),
-                  child: DropdownButton<int>(
-                    isExpanded: true,
-                    isDense: true,
-                    value: pageSize,
-                    borderRadius: BorderRadius.circular(10),
-                    // dropdownColor: AppColor.WHITE,
-                    underline: const SizedBox.shrink(),
-                    iconSize: 12,
-                    elevation: 16,
-                    dropdownColor: Colors.white,
+        if (model.metadata != null) {
+          MetaDataDTO paging = model.metadata!;
+          if (paging.page! != paging.totalPage!) {
+            isPaging = true;
+          }
+          double indexTotal =
+              paging.page != 1 ? ((pageSize * paging.page!) / 2) + 1 : 1;
+          int totalOfCurrentPage = (pageSize * paging.page!) > paging.total!
+              ? paging.total!
+              : pageSize * paging.page!;
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Text(
+                  'Số hàng:',
+                  style: TextStyle(fontSize: 13),
+                ),
+                const SizedBox(width: 15),
+                Container(
+                    width: 50,
+                    height: 25,
+                    padding: const EdgeInsets.fromLTRB(5, 2, 7, 2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                    child: DropdownButton<int>(
+                      isExpanded: true,
+                      isDense: true,
+                      value: pageSize,
+                      borderRadius: BorderRadius.circular(10),
+                      // dropdownColor: AppColor.WHITE,
+                      underline: const SizedBox.shrink(),
+                      iconSize: 12,
+                      elevation: 16,
+                      dropdownColor: Colors.white,
 
-                    icon: const RotatedBox(
-                      quarterTurns: 5,
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        color: AppColor.GREY_TEXT,
-                        size: 10,
-                      ),
-                    ),
-                    items: <int>[20, 50, 100]
-                        .map<DropdownMenuItem<int>>((int value) {
-                      return DropdownMenuItem<int>(
-                        value: value,
-                        child: Text(
-                          value.toString(),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                          ),
+                      icon: const RotatedBox(
+                        quarterTurns: 5,
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColor.GREY_TEXT,
+                          size: 10,
                         ),
-                      );
-                    }).toList(),
-                    selectedItemBuilder: (BuildContext context) {
-                      return [20, 50, 100].map<Widget>((int item) {
-                        return Text(
-                          item.toString(),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
+                      ),
+                      items: <int>[20, 50, 100]
+                          .map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text(
+                            value.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
                           ),
                         );
-                      }).toList();
-                    },
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          pageSize = value;
-                        });
-                      }
-                      _model.filterListBank(
-                          size: pageSize,
+                      }).toList(),
+                      selectedItemBuilder: (BuildContext context) {
+                        return [20, 50, 100].map<Widget>((int item) {
+                          return Text(
+                            item.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                          );
+                        }).toList();
+                      },
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            pageSize = value;
+                          });
+                        }
+                        _model.filterListBank(
+                            size: pageSize,
+                            type: type,
+                            searchType: (_choiceChipSelected + 3));
+                      },
+                    )),
+                const SizedBox(width: 30),
+                Text(
+                  '$indexTotal-$totalOfCurrentPage của ${paging.total}',
+                  style: const TextStyle(fontSize: 13),
+                ),
+                const SizedBox(width: 15),
+                InkWell(
+                  onTap: () async {
+                    if (paging.page != 1) {
+                      await _model.filterListBank(
+                          page: paging.page! - 1,
                           type: type,
-                          searchType: (_choiceChipSelected + 3));
-                    },
-                  )),
-              const SizedBox(width: 30),
-              Text(
-                '$indexTotal-$totalOfCurrentPage của ${paging.total}',
-                style: const TextStyle(fontSize: 13),
-              ),
-              const SizedBox(width: 15),
-              InkWell(
-                onTap: () async {
-                  if (paging.page != 1) {
-                    await _model.filterListBank(
-                        page: paging.page! - 1,
-                        type: type,
-                        size: pageSize,
-                        searchType: (_choiceChipSelected + 3),
-                        value: _textController.text);
-                  }
-                },
-                child: Icon(
-                  Icons.keyboard_arrow_left_rounded,
-                  size: 25,
-                  color: paging.page != 1
-                      ? AppColor.BLACK
-                      : AppColor.GREY_TEXT.withOpacity(0.5),
+                          size: pageSize,
+                          searchType: (_choiceChipSelected + 3),
+                          value: _textController.text);
+                    }
+                  },
+                  child: Icon(
+                    Icons.keyboard_arrow_left_rounded,
+                    size: 25,
+                    color: paging.page != 1
+                        ? AppColor.BLACK
+                        : AppColor.GREY_TEXT.withOpacity(0.5),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 6),
-              InkWell(
-                onTap: () async {
-                  if (isPaging) {
-                    await _model.filterListBank(
-                        size: pageSize,
-                        page: paging.page! + 1,
-                        searchType: (_choiceChipSelected + 3),
-                        type: type,
-                        value: _textController.text);
-                  }
-                },
-                child: Icon(
-                  Icons.keyboard_arrow_right_rounded,
-                  size: 25,
-                  color: isPaging
-                      ? AppColor.BLACK
-                      : AppColor.GREY_TEXT.withOpacity(0.5),
+                const SizedBox(width: 6),
+                InkWell(
+                  onTap: () async {
+                    if (isPaging) {
+                      await _model.filterListBank(
+                          size: pageSize,
+                          page: paging.page! + 1,
+                          searchType: (_choiceChipSelected + 3),
+                          type: type,
+                          value: _textController.text);
+                    }
+                  },
+                  child: Icon(
+                    Icons.keyboard_arrow_right_rounded,
+                    size: 25,
+                    color: isPaging
+                        ? AppColor.BLACK
+                        : AppColor.GREY_TEXT.withOpacity(0.5),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 22),
-            ],
-          ),
-        );
+                const SizedBox(width: 22),
+              ],
+            ),
+          );
+        }
+        return Container();
       },
     );
   }
@@ -648,14 +627,6 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                     notRegisteredCount =
                         model.bankSystemDTO!.extraData.notRegisteredCount;
                   }
-                  // else if (filterSelect.type == 1 &&
-                  //     model.merchantData != null) {
-                  //   pendingCount = model.merchantData!.extraData.pendingCount;
-                  //   completeCount = model.merchantData!.extraData.completeCount;
-                  //   pendingAmount = model.merchantData!.extraData.pendingAmount;
-                  //   completeAmount =
-                  //       model.merchantData!.extraData.completeAmount;
-                  // }
                   return Row(
                     children: [
                       Column(
@@ -674,7 +645,10 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                               ),
                               Text(
                                 nearlyExpireCount.toString(),
-                                style: const TextStyle(fontSize: 13),
+                                 style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColor.ORANGE_DARK),
                               )
                             ],
                           ),
@@ -694,7 +668,7 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                                 style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColor.ORANGE_DARK),
+                                    color: AppColor.RED_TEXT),
                               )
                             ],
                           )
@@ -769,16 +743,6 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
       ),
     );
   }
-
-  List<PopupMenuEntry<Actions>> _buildMenuItems() {
-    List<PopupMenuEntry<Actions>> items = [
-      const PopupMenuItem<Actions>(
-        value: Actions.copy,
-        child: Text('Copy'),
-      ),
-    ];
-    return items;
-  }
 }
 
 class FilterBankSystem {
@@ -793,26 +757,4 @@ class ChoiceChipItem {
   final int value;
 
   ChoiceChipItem({required this.title, required this.value});
-}
-
-Widget choiceChipButton(
-    {required String text, required bool isSelected, Function()? onTap}) {
-  return InkWell(
-    onTap: onTap,
-    child: Container(
-      decoration: BoxDecoration(
-          color: isSelected
-              ? AppColor.BLUE_TEXT.withOpacity(0.5)
-              : AppColor.GREY_DADADA),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-              color: isSelected ? AppColor.BLUE_TEXT : Colors.black,
-              fontSize: 12,
-              fontWeight: FontWeight.normal),
-        ),
-      ),
-    ),
-  );
 }

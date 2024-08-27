@@ -61,6 +61,48 @@ class BankSystemItem {
     required this.authenticated,
   });
 
+  BankSystemItem copyWith({
+    String? bankId,
+    String? bankAccount,
+    String? bankAccountName,
+    String? bankShortName,
+    String? phoneAuthenticated,
+    bool? mmsActive,
+    bool? status,
+    int? validFeeTo,
+    int? validFrom,
+    int? timeCreate,
+    String? nationalId,
+    String? phoneNo,
+    String? email,
+    String? vso,
+    String? bankCode,
+    int? bankTypeStatus,
+    bool? validService,
+    bool? authenticated,
+  }) {
+    return BankSystemItem(
+      bankId: bankId ?? this.bankId,
+      bankAccount: bankAccount ?? this.bankAccount,
+      bankAccountName: bankAccountName ?? this.bankAccountName,
+      bankShortName: bankShortName ?? this.bankShortName,
+      phoneAuthenticated: phoneAuthenticated ?? this.phoneAuthenticated,
+      mmsActive: mmsActive ?? this.mmsActive,
+      status: status ?? this.status,
+      validFeeTo: validFeeTo ?? this.validFeeTo,
+      validFrom: validFrom ?? this.validFrom,
+      timeCreate: timeCreate ?? this.timeCreate,
+      nationalId: nationalId ?? this.nationalId,
+      phoneNo: phoneNo ?? this.phoneNo,
+      email: email ?? this.email,
+      vso: vso ?? this.vso,
+      bankCode: bankCode ?? this.bankCode,
+      bankTypeStatus: bankTypeStatus ?? this.bankTypeStatus,
+      validService: validService ?? this.validService,
+      authenticated: authenticated ?? this.authenticated,
+    );
+  }
+
   // Convert a UserSystemDTO object to a Map
   Map<String, dynamic> toJson() {
     return {

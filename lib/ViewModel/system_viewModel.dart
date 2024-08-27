@@ -21,7 +21,6 @@ class SystemViewModel extends BaseModel {
   MetaDataDTO? metadata;
   Gender? selectGender;
   TotalUserDTO? totalUserDTO;
-
   BankSystemDTO? bankSystemDTO;
 
   SystemViewModel() {
@@ -35,18 +34,18 @@ class SystemViewModel extends BaseModel {
     notifyListeners();
   }
 
-  // Future<void> getListBank(
-  //     {int page = 1, required int type, String value = ''}) async {
-  //   try {
-  //     setState(ViewStatus.Loading);
-  //     listBank = await _dao.getListBank(page: page, type: type, value: value);
-  //     metadata = _dao.metaDataDTO;
-  //     setState(ViewStatus.Completed);
-  //   } catch (e) {
-  //     LOG.error(e.toString());
-  //     setState(ViewStatus.Error);
-  //   }
-  // }
+  Future<void> getListBank(
+      {int page = 1, required int type, String value = ''}) async {
+    try {
+      setState(ViewStatus.Loading);
+      listBank = await _dao.getListBank(page: page, type: type, value: value);
+      metadata = _dao.metaDataDTO;
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
 
   Future<void> filterListBank({
     int page = 1,
@@ -189,6 +188,66 @@ class SystemViewModel extends BaseModel {
     try {
       setState(ViewStatus.Loading);
       final result = await _dao.checkLog(param);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+      return ResponseMessageDTO(
+          status: 'FAILED', message: 'Error occurred: ${e.toString()}');
+    }
+  }
+
+  Future<dynamic> requestActiveKey(
+      {required String bankId,
+      required String checkSum,
+      required String keyActive}) async {
+    try {
+      setState(ViewStatus.Updating);
+      Map<String, dynamic> param = {
+        'bankId': bankId,
+        'checkSum': checkSum,
+        'keyActive': keyActive,
+      };
+      final result = await _dao.requestActiveKey(param);
+      setState(ViewStatus.Completed);
+      return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+      return ResponseMessageDTO(
+          status: 'FAILED', message: 'Error occurred: ${e.toString()}');
+    }
+  }
+
+  Future<ResponseMessageDTO> confirmActiveKey(
+      {required String bankId,
+      required String checkSum,
+      required String keyActive,
+      required String otp}) async {
+    try {
+      setState(ViewStatus.Updating);
+      Map<String, dynamic> param = {
+        'bankId': bankId,
+        'checkSum': checkSum,
+        'keyActive': keyActive,
+        'otp': otp,
+      };
+      final result = await _dao.confirmActiveKey(param);
+      if (result.status == 'SUCCESS') {
+        if (bankSystemDTO != null) {
+          var bankItem = bankSystemDTO!.items
+              .where(
+                (e) => e.bankId == bankId,
+              )
+              .first;
+          if (bankItem != null) {
+            if (bankItem.validService == false) {
+              bankItem.copyWith(validService: true);
+            }
+          }
+        }
+      }
       setState(ViewStatus.Completed);
       return result;
     } catch (e) {

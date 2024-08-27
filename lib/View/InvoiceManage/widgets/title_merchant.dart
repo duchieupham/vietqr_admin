@@ -40,6 +40,11 @@ class TitleItemMerchantWidget extends StatelessWidget {
               width: 150,
               alignment: Alignment.center,
               textAlign: TextAlign.center),
+          _buildItemTitle('Email',
+              height: 40,
+              width: 200,
+              alignment: Alignment.center,
+              textAlign: TextAlign.center),
           Expanded(
             child: Container(
               height: 40,

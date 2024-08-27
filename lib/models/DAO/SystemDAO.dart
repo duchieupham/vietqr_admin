@@ -162,6 +162,43 @@ class SystemDAO extends BaseDAO {
     return false;
   }
 
+  Future<dynamic> requestActiveKey(Map<String, dynamic> param) async {
+    try {
+      String url = '${EnvConfig.instance.getBaseUrl()}account-bank/admin/request-active';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        body: param,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return ResponseDataDTO.fromJson(data);
+      } else {
+        var data = jsonDecode(response.body);
+        return ResponseMessageDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+  }
+
+  Future<ResponseMessageDTO> confirmActiveKey(
+      Map<String, dynamic> param) async {
+    try {
+      String url = '${EnvConfig.instance.getBaseUrl()}account-bank/admin/confirm-active';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        body: param,
+        type: AuthenticationType.SYSTEM,
+      );
+      var data = jsonDecode(response.body);
+      return ResponseMessageDTO.fromJson(data);
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return const ResponseMessageDTO(status: 'Failed', message: 'Đã xảy ra lỗi.');
+  }
+
   Future<bool?> changeLinkedUser(String? userId, int? status) async {
     try {
       Map<String, dynamic> param = {};
