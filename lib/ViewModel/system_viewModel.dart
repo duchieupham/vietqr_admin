@@ -203,13 +203,14 @@ class SystemViewModel extends BaseModel {
       required String checkSum,
       required String keyActive}) async {
     try {
-      // setState(ViewStatus.Loading);
+      setState(ViewStatus.Updating);
       Map<String, dynamic> param = {
         'bankId': bankId,
         'checkSum': checkSum,
         'keyActive': keyActive,
       };
       final result = await _dao.requestActiveKey(param);
+      setState(ViewStatus.Completed);
       return result;
     } catch (e) {
       LOG.error(e.toString());
@@ -225,7 +226,7 @@ class SystemViewModel extends BaseModel {
       required String keyActive,
       required String otp}) async {
     try {
-      // setState(ViewStatus.Loading);
+      setState(ViewStatus.Updating);
       Map<String, dynamic> param = {
         'bankId': bankId,
         'checkSum': checkSum,
@@ -247,6 +248,7 @@ class SystemViewModel extends BaseModel {
           }
         }
       }
+      setState(ViewStatus.Completed);
       return result;
     } catch (e) {
       LOG.error(e.toString());

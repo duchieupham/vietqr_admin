@@ -92,7 +92,9 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                             InkWell(
                               onTap: () async {
                                 await model.getMerchant('', isGetList: true);
-                                onSelectMerchant();
+                                onSelectMerchant(
+                                    filterBy: widget.filterBy,
+                                    pageSize: widget.pageSize);
                               },
                               child: SizedBox(
                                 width: 234,
@@ -323,11 +325,17 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
     return items;
   }
 
-  void onSelectMerchant({String? id}) async {
+  void onSelectMerchant(
+      {String? id, required int pageSize, required int filterBy}) async {
     return await showDialog(
       context: context,
-      builder: (context) =>
-          PopupSelectTypeWidget(type: 0, merchantId: id ?? '', isGetList: true),
+      builder: (context) => PopupSelectTypeWidget(
+        type: 0,
+        merchantId: id ?? '',
+        isGetList: true,
+        pageSize: pageSize,
+        filterBy: filterBy,
+      ),
     );
   }
 }
