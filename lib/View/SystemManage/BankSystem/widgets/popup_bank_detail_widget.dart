@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -423,6 +424,7 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
               : initialValue
           : null,
       readOnly: readOnly,
+      inputFormatters: [VietnameseNameInputFormatter()],
       style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.normal,
@@ -485,5 +487,21 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
         ? DateFormat('dd/MM/yy')
             .format(DateTime.fromMillisecondsSinceEpoch(date * 1000))
         : '-';
+  }
+}
+
+class VietnameseNameInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final RegExp regExp = RegExp(
+      r'^[a-zA-ZÀ-ỹẠ-ỵ0-9\s]*$',
+    );
+    if (regExp.hasMatch(newValue.text)) {
+      return newValue;
+    }
+    return oldValue;
   }
 }
