@@ -203,6 +203,11 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
+  void clearSelectMerchant() {
+    selectMerchantItem = null;
+    notifyListeners();
+  }
+
   void clearItem() {
     listService = [];
     totalAmount = 0;

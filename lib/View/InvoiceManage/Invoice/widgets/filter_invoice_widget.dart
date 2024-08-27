@@ -28,6 +28,11 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final List<ItemSearch> listHintSearch = [
+      ItemSearch(id: 0, title: 'mã hóa đơn'),
+      ItemSearch(id: 1, title: 'TK ngân hàng'),
+      ItemSearch(id: 2, title: 'Tk VietQR'),
+    ];
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return Container(
@@ -73,6 +78,9 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                             // widget.controller.text = '';
                             model.changeTypeInvoice(value);
                             widget.onCall(value);
+                            if (widget.filterBy != 3) {
+                              model.clearSelectMerchant();
+                            }
                           }
                         },
                       ),
@@ -138,17 +146,18 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                                       search: value,
                                     );
                                   },
-                                  decoration: const InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(bottom: 2, top: 6),
-                                    prefixIcon: Icon(
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        bottom: 2, top: 6),
+                                    prefixIcon: const Icon(
                                       Icons.search,
                                       size: 16,
                                       color: AppColor.GREY_TEXT,
                                     ),
                                     border: InputBorder.none,
-                                    hintText: 'Nhập mã hoá đơn',
-                                    hintStyle: TextStyle(
+                                    hintText:
+                                        'Nhập ${listHintSearch[model.subMenuType].title}',
+                                    hintStyle: const TextStyle(
                                         fontSize: 15,
                                         color: AppColor.GREY_TEXT),
                                   ),
@@ -225,8 +234,24 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
               PopupMenuButton<DataFilter>(
                 offset: const Offset(-100, 0),
                 padding: const EdgeInsets.all(0),
-                onSelected: (DataFilter result) {
+                onSelected: (DataFilter result) async {
                   model.updateFilterTime(result);
+                  if (model.valueFilterTime.id == 0) {
+                    model.getMonth();
+                    model.filterListInvoice(
+                      size: widget.pageSize,
+                      page: 1,
+                      filterType: widget.filterBy,
+                      search: widget.controller.text,
+                    );
+                  } else {
+                    model.filterListInvoice(
+                      size: widget.pageSize,
+                      page: 1,
+                      filterType: widget.filterBy,
+                      search: widget.controller.text,
+                    );
+                  }
                 },
                 itemBuilder: (BuildContext context) => _buildMenuItems(
                     model.listFilterTime, model.valueFilterTime),
@@ -338,4 +363,11 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
       ),
     );
   }
+}
+
+class ItemSearch {
+  final int id;
+  final String title;
+
+  ItemSearch({required this.id, required this.title});
 }
