@@ -14,6 +14,7 @@ import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_exce
 import 'package:vietqr_admin/View/SystemManage/BankSystem/bank_system_screen.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
+import 'package:vietqr_admin/commons/widget/dialog_pick_month.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
@@ -473,6 +474,22 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   }
 
   Widget _headerWidget(InvoiceViewModel model) {
+    String invoiceType = '';
+    switch (_choiceChipSelected) {
+      case 9:
+        invoiceType = 'Tất cả';
+        break;
+      case 0:
+        invoiceType = 'Phí GD';
+        break;
+      case 1:
+        invoiceType = 'Phí kích hoạt';
+        break;
+      case 2:
+        invoiceType = 'Nạp tiền ĐT';
+        break;
+      default:
+    }
     return Container(
       padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
       // width: MediaQuery.of(context).size.width *
@@ -514,6 +531,92 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     );
                   },
                 ),
+                const SizedBox(width: 8),
+                PopupMenuButton<DataFilter>(
+                  offset: const Offset(-100, 0),
+                  padding: const EdgeInsets.all(0),
+                  onSelected: (DataFilter result) async {
+                    model.updateFilterTime(result);
+                    model.selectDateTime(model.getMonth());
+                    await model.filterListInvoice(
+                      invoiceType: _choiceChipSelected,
+                      size: pageSize,
+                      page: 1,
+                      filterType: filterSelect.type,
+                      search: textEditingController.text,
+                    );
+                  },
+                  itemBuilder: (BuildContext context) => _buildMenuItems(
+                      model.listFilterTime, model.valueFilterTime),
+                  elevation: 4,
+                  initialValue: model.valueFilterTime,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  icon: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: isHover
+                            ? AppColor.GREY_TEXT.withOpacity(0.1)
+                            : AppColor.TRANSPARENT),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.filter_alt,
+                            size: 15, color: AppColor.GREY_TEXT),
+                        SizedBox(width: 4),
+                        Text(
+                          'Thời gian',
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: AppColor.GREY_TEXT,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (model.valueFilterTime.id == 0) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 140,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColor.GREY_DADADA)),
+                    child: InkWell(
+                      onTap: () async {
+                        await _onPickMonth(model, model.getMonth()).then(
+                          (time) {
+                            if (time != null) {
+                              model.filterListInvoice(
+                                invoiceType: _choiceChipSelected,
+                                size: pageSize,
+                                page: 1,
+                                filterType: filterSelect.type,
+                                search: textEditingController.text,
+                              );
+                            }
+                          },
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${model.selectedDate.month}/${model.selectedDate.year}',
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                            const Icon(Icons.calendar_month_outlined)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+
                 // const Spacer(),
               ],
             ),
@@ -598,53 +701,53 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               }
               return Row(
                 children: [
-                  if (model.pageType == PageInvoice.LIST) ...[
-                    PopupMenuButton<DataFilter>(
-                      offset: const Offset(-100, 0),
-                      padding: const EdgeInsets.all(0),
-                      onSelected: (DataFilter result) async {
-                        model.updateFilterTime(result);
-                        model.selectDateTime(model.getMonth());
-                        await model.filterListInvoice(
-                          invoiceType: _choiceChipSelected,
-                          size: pageSize,
-                          page: 1,
-                          filterType: filterSelect.type,
-                          search: textEditingController.text,
-                        );
-                      },
-                      itemBuilder: (BuildContext context) => _buildMenuItems(
-                          model.listFilterTime, model.valueFilterTime),
-                      elevation: 4,
-                      initialValue: model.valueFilterTime,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      icon: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: isHover
-                                ? AppColor.GREY_TEXT.withOpacity(0.1)
-                                : AppColor.TRANSPARENT),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.filter_alt,
-                                size: 15, color: AppColor.GREY_TEXT),
-                            SizedBox(width: 4),
-                            Text(
-                              'Thời gian',
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: Text(
+                              'Loại HĐ:',
                               style: TextStyle(
-                                  fontSize: 13,
-                                  color: AppColor.GREY_TEXT,
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 13, color: AppColor.BLUE_TEXT),
                             ),
-                          ],
-                        ),
+                          ),
+                          Text(
+                            invoiceType,
+                            style: const TextStyle(
+                                fontSize: 13, color: AppColor.BLUE_TEXT),
+                          )
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                  ],
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: Text(
+                              'Thời gian:',
+                              style: TextStyle(
+                                  fontSize: 13, color: AppColor.BLUE_TEXT),
+                            ),
+                          ),
+                          Text(
+                            model.valueFilterTime.id == 9
+                                ? model.valueFilterTime.name
+                                : 'Tháng ${model.selectedDate.month}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColor.BLUE_TEXT,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(width: 35),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -889,6 +992,35 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         );
       },
     );
+  }
+
+  Future<dynamic> _onPickMonth(
+      InvoiceViewModel model, DateTime dateTime) async {
+    DateTime? result = await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Material(
+          color: AppColor.TRANSPARENT,
+          child: Center(
+            child: DialogPickDate(
+              year: 2,
+              dateTime: dateTime,
+            ),
+          ),
+        );
+      },
+    );
+    if (result != null) {
+      model.selectDateTime(result);
+      return result;
+      // setState(() {
+      //   selectDate = result;
+      // });
+      // _model.filterListInvoice(time: selectDate!, page: 1);
+    } else {
+      // selectDate = _model.getMonth();
+    }
   }
 
   List<PopupMenuEntry<DataFilter>> _buildMenuItems(
