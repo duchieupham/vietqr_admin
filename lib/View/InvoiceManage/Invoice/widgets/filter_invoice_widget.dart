@@ -242,6 +242,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                         onChanged: (value) {
                           if (value != null) {
                             // widget.controller.text = '';
+                            model.clearSelectMerchant();
                             model.changeTypeInvoice(value);
                             widget.onCall(value);
                           }

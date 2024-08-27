@@ -255,6 +255,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                                         .value
                                                     : null)!;
                                               });
+                                              textEditingController.clear();
+                                              model.clearSelectMerchant();
                                               model.filterListInvoice(
                                                 invoiceType:
                                                     _choiceChipSelected,
@@ -335,6 +337,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                             selectInvoiceId = dto.invoiceId;
                                           });
                                           _model.onChangePage(PageInvoice.EDIT);
+                                          textEditingController.clear();
                                         },
                                         onDetail: (invoiceId) {
                                           setState(() {
@@ -342,6 +345,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           });
                                           _model
                                               .onChangePage(PageInvoice.DETAIL);
+                                          textEditingController.clear();
                                         },
                                       )
                                     else
@@ -517,6 +521,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         setState(() {
                           filterSelect = e;
                           textEditingController = TextEditingController();
+                          _choiceChipSelected = 9;
                         });
                         _model.changeTypeInvoice(0);
 

@@ -193,7 +193,7 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                         type = e.type;
                       });
                       // _model.changeTypeInvoice(0);
-
+                      _choiceChipSelected = 0;
                       _model.filterListBank(
                           size: pageSize,
                           page: 1,
@@ -645,7 +645,7 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                               ),
                               Text(
                                 nearlyExpireCount.toString(),
-                                 style: const TextStyle(
+                                style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
                                     color: AppColor.ORANGE_DARK),
