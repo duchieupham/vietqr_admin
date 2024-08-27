@@ -701,6 +701,7 @@ class InvoiceViewModel extends InvoiceStatus {
     required int page,
     required int size,
     required int filterType,
+    required int invoiceType,
     int? subType,
     required String search,
   }) async {
@@ -715,6 +716,7 @@ class InvoiceViewModel extends InvoiceStatus {
           size: size,
           filterType: filterType,
           subFilterType: subType ?? subMenuType,
+          invoiceType: invoiceType,
           time: formattedDate,
           value: search);
       if (result is InvoiceDTO) {

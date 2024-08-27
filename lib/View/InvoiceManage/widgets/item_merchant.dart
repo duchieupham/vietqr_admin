@@ -19,7 +19,7 @@ class ItemMerchantWidget extends StatelessWidget {
         children: [
           Container(
             alignment: Alignment.center,
-            height: 40,
+            height: 50,
             width: 40,
             child: Text(
               '${index + 1}',
@@ -29,7 +29,7 @@ class ItemMerchantWidget extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
                 onPressed: () async {
@@ -58,7 +58,7 @@ class ItemMerchantWidget extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
-            height: 40,
+            height: 50,
             width: 200,
             child: TextButton(
                 onPressed: () async {
@@ -87,7 +87,7 @@ class ItemMerchantWidget extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
                 onPressed: () async {
@@ -124,7 +124,7 @@ class ItemMerchantWidget extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
                 onPressed: () async {
@@ -159,9 +159,9 @@ class ItemMerchantWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 )),
           ),
-            Container(
+          Container(
             alignment: Alignment.center,
-            height: 40,
+            height: 50,
             width: 200,
             child: TextButton(
                 onPressed: () async {

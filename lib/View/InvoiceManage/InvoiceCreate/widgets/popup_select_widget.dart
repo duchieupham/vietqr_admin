@@ -14,11 +14,14 @@ class PopupSelectTypeWidget extends StatefulWidget {
   final bool? isGetList;
   final String merchantId;
   final int type;
+  final int? invoiceType;
+
   final int? pageSize;
   final int? filterBy;
   const PopupSelectTypeWidget({
     super.key,
     required this.type,
+    this.invoiceType,
     required this.merchantId,
     required this.isGetList,
     this.pageSize,
@@ -51,14 +54,17 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
   void onConfirm() {
     if (hasSelect == true && selectItem != null) {
       _model.selectMerchant(selectItem!);
-      if (widget.pageSize != null && widget.filterBy != null) {
-        final int pageSize = widget.pageSize as int;
-        final filterBy = widget.filterBy as int;
+      if (widget.pageSize != null &&
+          widget.filterBy != null &&
+          widget.invoiceType != null) {
+        final int pageSize = widget.pageSize!;
+        final int filterBy = widget.filterBy!;
         final String valueSearch = _model.selectMerchantItem != null
             ? _model.selectMerchantItem!.merchantId
             : '';
         _model.filterListInvoice(
-          size:pageSize,
+          invoiceType: widget.invoiceType!,
+          size: pageSize,
           page: 1,
           filterType: filterBy,
           search: valueSearch,

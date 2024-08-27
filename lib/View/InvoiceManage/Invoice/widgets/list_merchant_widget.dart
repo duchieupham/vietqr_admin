@@ -250,7 +250,7 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
       alignment: Alignment.center,
       child: e.completeAmount != 0
           ? const SizedBox(
-              height: 40,
+              height: 50,
               child: Center(
                 child: Text(
                   'Đã TT',
@@ -264,7 +264,7 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
           : Row(
               children: [
                 Container(
-                  height: 40,
+                  height: 50,
                   width: 130,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -293,7 +293,7 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
                   ),
                 ),
                 Container(
-                  height: 40,
+                  height: 50,
                   width: 110,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
