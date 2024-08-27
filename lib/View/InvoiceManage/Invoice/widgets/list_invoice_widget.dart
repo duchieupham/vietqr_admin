@@ -286,7 +286,7 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
             //             BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
             //         right: BorderSide(
             //             color: AppColor.GREY_TEXT.withOpacity(0.3)))),
-            height: 40,
+            height: 50,
             width: 120,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
@@ -327,7 +327,7 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
             //     right: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3)),
             //   ),
             // ),
-            height: 40,
+            height: 50,
             width: 100,
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,

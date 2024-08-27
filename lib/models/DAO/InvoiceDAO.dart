@@ -329,11 +329,12 @@ class InvoiceDAO extends BaseDAO {
     required int size,
     required int subFilterType,
     required int filterType,
+    required int invoiceType,
     required String value,
   }) async {
     try {
       String url =
-          '${EnvConfig.instance.getBaseUrl()}new-invoice-list?filterType=$filterType&subFilterType=$subFilterType&value=$value&page=$page&size=$size&time=$time';
+          '${EnvConfig.instance.getBaseUrl()}new-invoice-list?filterType=$filterType&invoiceType=$invoiceType&subFilterType=$subFilterType&value=$value&page=$page&size=$size&time=$time';
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,

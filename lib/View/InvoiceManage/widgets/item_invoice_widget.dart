@@ -34,7 +34,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 40,
             child: Text(
               '${index + 1}',
@@ -49,7 +49,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 200,
             child: TextButton(
                 onPressed: () async {
@@ -83,7 +83,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
                 onPressed: () async {
@@ -117,7 +117,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
                 onPressed: () async {
@@ -148,7 +148,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
                 onPressed: () async {
@@ -197,7 +197,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 120,
             child: TextButton(
                 onPressed: () async {
@@ -228,7 +228,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 120,
             child: TextButton(
                 onPressed: () async {
@@ -270,7 +270,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
               onPressed: () async {
@@ -309,7 +309,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 250,
             child: TextButton(
               onPressed: () async {
@@ -350,7 +350,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
                 onPressed: () async {
@@ -383,7 +383,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 150,
             child: TextButton(
               onPressed: () async {
@@ -422,7 +422,7 @@ class ItemInvoiceWidget extends StatelessWidget {
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 40,
+            height: 50,
             width: 130,
             child: TextButton(
               onPressed: () async {
