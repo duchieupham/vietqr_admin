@@ -7,5 +7,6 @@ enum ViewStatus {
   Completed,
   Error,
   LoadMore,
-  Refreshing
+  Refreshing,
+  Updating
 }

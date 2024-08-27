@@ -21,9 +21,6 @@ class ResponseDataDTO {
 
   factory ResponseDataDTO.fromJson(Map<String, dynamic> json) {
     final KeyDTO data = KeyDTO.fromJson(json['data']);
-    return ResponseDataDTO(
-      status: json['status'] ?? '',
-      data: data,
-    );
+    return ResponseDataDTO(status: json['status'] ?? '', data: data,);
   }
 }

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
-import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
-import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:get/get.dart';
 
 import '../../../../models/DTO/invoice_dto.dart';
@@ -40,7 +38,20 @@ class _PopupCheckEmailWidgetState extends State<PopupCheckEmailWidget> {
     return ScopedModel<InvoiceViewModel>(
       model: _model,
       child: AlertDialog(
-        title: const Text("Thông tin kiểm tra"),
+           title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Thông tin kiểm tra",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+              InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.close))
+          ],
+        ),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
         content: SizedBox(

@@ -324,11 +324,9 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                       case Actions.detail:
                         onDetail(dto: e);
                         break;
-
-
                     }
                   },
-                  itemBuilder: (BuildContext context) => _buildMenuItems(),
+                  itemBuilder: (BuildContext context) => _buildMenuItems(e),
                   icon: Container(
                     width: 30,
                     height: 30,
@@ -411,16 +409,17 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
     );
   }
 
-
-  List<PopupMenuEntry<Actions>> _buildMenuItems() {
+  List<PopupMenuEntry<Actions>> _buildMenuItems(BankSystemItem e) {
     List<PopupMenuEntry<Actions>> items = [
       const PopupMenuItem<Actions>(
         value: Actions.copy,
         child: Text('Copy'),
       ),
-      const PopupMenuItem<Actions>(
+      PopupMenuItem<Actions>(
         value: Actions.detail,
-        child: Text('Chi tiết'),
+        child: e.validService
+            ? const Text('Gia hạn Key')
+            : const Text('Kích hoạt Key'),
       ),
     ];
     return items;

@@ -8,6 +8,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 
@@ -51,9 +52,19 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
     return ScopedModel<SystemViewModel>(
       model: _model,
       child: AlertDialog(
-        title: const Text(
-          "Thông tin TK ngân hàng",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Thông tin TK ngân hàng",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.close))
+          ],
         ),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
@@ -189,7 +200,9 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
                       label: 'Mã Key',
                       hint: 'Nhập mã key',
                       controller: _keyController,
-                      readOnly: false),
+                      readOnly: (_model.status == ViewStatus.Updating)
+                          ? true
+                          : false),
                 ),
               ),
               if (_statusMessage != null) ...[
@@ -204,102 +217,74 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
               ],
               const SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: widget.dto.validService ? () {} : null,
-                    style: ButtonStyle(
-                      backgroundColor: widget.dto.validService
-                          ? WidgetStateProperty.resolveWith<Color>(
-                              (Set<WidgetState> states) {
-                                return Colors.white;
-                              },
-                            )
-                          : WidgetStateProperty.resolveWith<Color>(
-                              (Set<WidgetState> states) {
-                                return AppColor.GREY_DADADA;
-                              },
-                            ),
-                      foregroundColor: widget.dto.validService
-                          ? WidgetStateProperty.resolveWith<Color>(
-                              (Set<WidgetState> states) {
-                                return Colors.black;
-                              },
-                            )
-                          : WidgetStateProperty.resolveWith<Color>(
-                              (Set<WidgetState> states) {
-                                return AppColor.GREY_TEXT;
-                              },
-                            ),
-                      padding: WidgetStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(
-                              vertical: 16.0, horizontal: 24.0)),
-                    ),
-                    child: const Text(
-                      'Tắt kích hoạt',
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      //checkSum: hashMD5 từ: “VietQRAccesskey” + bankId + keyActive
-                      String keyActive = _keyController.text;
-                      if (keyActive == '') {
-                        setState(() {
-                          _statusMessage = 'Key không được bỏ trống.';
-                        });
-                      } else if (keyActive.length > 12) {
-                        setState(() {
-                          _statusMessage = 'Key không quá 12 ký tự.';
-                        });
-                      } else {
-                        final String checkSum = _generateMd5(
-                            'VietQRAccesskey${widget.dto.bankId}$keyActive');
-                        final resultRequest = await _model.requestActiveKey(
-                            bankId: widget.dto.bankId,
-                            checkSum: checkSum,
-                            keyActive: keyActive);
-                        if (resultRequest is ResponseDataDTO) {
-                          final String otp = resultRequest.data.otp;
-                          //checkSum: hashMD5 từ: “VietQRAccesskey” + otp + keyActive
-                          final String checkSumOTP =
-                              _generateMd5('VietQRAccesskey$otp$keyActive');
-                          final resultConfirm = await _model.confirmActiveKey(
-                              bankId: widget.dto.bankId,
-                              checkSum: checkSumOTP,
-                              keyActive: keyActive,
-                              otp: otp);
-                          if (resultConfirm.status == 'SUCCESS') {
-                            Navigator.pop(context);
-                            toastification.show(
-                              context: context,
-                              type: ToastificationType.success,
-                              style: ToastificationStyle.flat,
-                              title: const Text(
-                                'Kích hoạt Key thành công',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              showProgressBar: false,
-                              alignment: Alignment.topRight,
-                              autoCloseDuration: const Duration(seconds: 5),
-                              boxShadow: highModeShadow,
-                              dragToClose: true,
-                              pauseOnHover: true,
-                            );
-                          } else {
-                            final String errorMessage = (resultConfirm).message;
-                            setErrorKey(errorMessage);
-                          }
-                        }
-                        if (resultRequest is ResponseMessageDTO) {
-                          final String errorMessage = (resultRequest).message;
-                          setErrorKey(errorMessage);
-                        }
-                      }
-                    },
+                    onPressed: (_model.status == ViewStatus.Updating)
+                        ? () {}
+                        : () async {
+                            //checkSum: hashMD5 từ: “VietQRAccesskey” + bankId + keyActive
+                            String keyActive = _keyController.text;
+                            if (keyActive == '') {
+                              setState(() {
+                                _statusMessage = 'Key không được bỏ trống.';
+                              });
+                            } else if (keyActive.length > 12) {
+                              setState(() {
+                                _statusMessage = 'Key không quá 12 ký tự.';
+                              });
+                            } else {
+                              final String checkSum = _generateMd5(
+                                  'VietQRAccesskey${widget.dto.bankId}$keyActive');
+                              final resultRequest =
+                                  await _model.requestActiveKey(
+                                      bankId: widget.dto.bankId,
+                                      checkSum: checkSum,
+                                      keyActive: keyActive);
+                              if (resultRequest is ResponseDataDTO) {
+                                final String otp = resultRequest.data.otp;
+                                //checkSum: hashMD5 từ: “VietQRAccesskey” + otp + keyActive
+                                final String checkSumOTP = _generateMd5(
+                                    'VietQRAccesskey$otp$keyActive');
+                                final resultConfirm =
+                                    await _model.confirmActiveKey(
+                                        bankId: widget.dto.bankId,
+                                        checkSum: checkSumOTP,
+                                        keyActive: keyActive,
+                                        otp: otp);
+                                if (resultConfirm.status == 'SUCCESS') {
+                                  Navigator.pop(context);
+                                  toastification.show(
+                                    context: context,
+                                    type: ToastificationType.success,
+                                    style: ToastificationStyle.flat,
+                                    title: const Text(
+                                      'Kích hoạt Key thành công',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    showProgressBar: false,
+                                    alignment: Alignment.topRight,
+                                    autoCloseDuration:
+                                        const Duration(seconds: 5),
+                                    boxShadow: highModeShadow,
+                                    dragToClose: true,
+                                    pauseOnHover: true,
+                                  );
+                                } else {
+                                  final String errorMessage =
+                                      (resultConfirm).message;
+                                  setErrorKey(errorMessage);
+                                }
+                              }
+                              if (resultRequest is ResponseMessageDTO) {
+                                final String errorMessage =
+                                    (resultRequest).message;
+                                setErrorKey(errorMessage);
+                              }
+                            }
+                          },
                     child: Text(
                       widget.dto.validService ? 'Gia hạn Key' : 'Kích hoạt Key',
                       style: const TextStyle(

@@ -14,11 +14,16 @@ class PopupSelectTypeWidget extends StatefulWidget {
   final bool? isGetList;
   final String merchantId;
   final int type;
-  const PopupSelectTypeWidget(
-      {super.key,
-      required this.type,
-      required this.merchantId,
-      required this.isGetList});
+  final int? pageSize;
+  final int? filterBy;
+  const PopupSelectTypeWidget({
+    super.key,
+    required this.type,
+    required this.merchantId,
+    required this.isGetList,
+    this.pageSize,
+    this.filterBy,
+  });
 
   @override
   State<PopupSelectTypeWidget> createState() => _PopupSelectTypeWidgetState();
@@ -46,6 +51,19 @@ class _PopupSelectTypeWidgetState extends State<PopupSelectTypeWidget> {
   void onConfirm() {
     if (hasSelect == true && selectItem != null) {
       _model.selectMerchant(selectItem!);
+      if (widget.pageSize != null && widget.filterBy != null) {
+        final int pageSize = widget.pageSize as int;
+        final filterBy = widget.filterBy as int;
+        final String valueSearch = _model.selectMerchantItem != null
+            ? _model.selectMerchantItem!.merchantId
+            : '';
+        _model.filterListInvoice(
+          size:pageSize,
+          page: 1,
+          filterType: filterBy,
+          search: valueSearch,
+        );
+      }
     }
     if (hasSelect == true && selectBank != null) {
       _model.bankSelect(selectBank!);
