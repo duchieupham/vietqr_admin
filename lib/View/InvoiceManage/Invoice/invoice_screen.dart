@@ -336,7 +336,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                             selectInvoiceId = dto.invoiceId;
                                           });
                                           _model.onChangePage(PageInvoice.EDIT);
-                                          textEditingController.clear();
+                                          _clearFilter();
                                         },
                                         onDetail: (invoiceId) {
                                           setState(() {
@@ -344,7 +344,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           });
                                           _model
                                               .onChangePage(PageInvoice.DETAIL);
-                                          textEditingController.clear();
+                                          _clearFilter();
                                         },
                                       )
                                     else
@@ -431,6 +431,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
       ),
     );
+  }
+
+  void _clearFilter() {
+    _choiceChipSelected = 9;
+    textEditingController.clear();
   }
 
   Widget _filter() {
