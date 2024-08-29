@@ -67,8 +67,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   List<ChoiceChipItem> listChoiceChips = [
     ChoiceChipItem(title: 'Tất cả', value: 9),
-    ChoiceChipItem(title: 'Phí GD', value: 0),
-    ChoiceChipItem(title: 'Phí kích hoạt DV', value: 1),
+    ChoiceChipItem(title: 'Phí kích hoạt DV', value: 0),
+    ChoiceChipItem(title: 'Phí GD', value: 1),
     ChoiceChipItem(title: 'Nạp tiền ĐT', value: 2),
   ];
 
