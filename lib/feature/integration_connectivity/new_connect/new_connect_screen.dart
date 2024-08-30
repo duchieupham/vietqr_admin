@@ -143,558 +143,565 @@ class NewConnectScreen extends StatelessWidget {
     return BlocProvider<NewConnectBloc>(
       create: (BuildContext context) => NewConnectBloc(),
       child: Consumer<NewConnectProvider>(builder: (context, provider, child) {
-        return ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          children: [
-            const Text(
-              'Thông tin đại lý',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BorderLayout(
-              height: 50,
-              isError: provider.errorMerchant,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText: 'Merchant Name\u002A (VIẾT HOA, không khoảng trắng)',
-                // controller: TextEditingController(),
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                inputFormatter: [
-                  UpperCaseTextFormatter(),
-                  FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
-                ],
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updateMerchant(value as String);
-                },
-              ),
-            ),
-            if (provider.errorMerchant) ...[
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
-                ),
-              )
-            ],
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Địa chỉ kết nối',
-                  style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Transform.scale(
-                  scale: 0.9,
-                  child: Radio<int>(
-                      value: 0,
-                      activeColor: AppColor.BLUE_TEXT,
-                      groupValue: provider.valueTypeConnect,
-                      onChanged: (value) {
-                        provider.changeTypeConnect(value ?? 0);
-                      }),
-                ),
-                const Text(
-                  'URL',
-                  style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
-                ),
-                const SizedBox(
-                  width: 28,
-                ),
-                Transform.scale(
-                  scale: 0.9,
-                  child: Radio<int>(
-                      value: 1,
-                      activeColor: AppColor.BLUE_TEXT,
-                      groupValue: provider.valueTypeConnect,
-                      onChanged: (value) {
-                        provider.changeTypeConnect(value ?? 0);
-                      }),
-                ),
-                const Text(
-                  'IP + PORT',
-                  style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            if (provider.valueTypeConnect == 0)
-              BorderLayout(
-                height: 50,
-                isError: false,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TextFieldWidget(
-                  isObscureText: false,
-                  maxLines: 1,
-                  disableBorder: true,
-                  hintText: 'URL kết nối',
-                  inputType: TextInputType.text,
-                  keyboardAction: TextInputAction.next,
-                  onTapOutside: (value) {},
-                  onChange: (value) {
-                    provider.updateUrlConnect(value as String);
-                  },
-                ),
-              )
-            else
-              Row(
-                children: [
-                  Expanded(
-                    child: BorderLayout(
-                      height: 50,
-                      isError: false,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFieldWidget(
-                        isObscureText: false,
-                        maxLines: 1,
-                        disableBorder: true,
-                        hintText: 'IP',
-                        inputType: TextInputType.text,
-                        keyboardAction: TextInputAction.next,
-                        onTapOutside: (value) {},
-                        onChange: (value) {
-                          provider.updateIpConnect(value as String);
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: BorderLayout(
-                      height: 50,
-                      isError: false,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: TextFieldWidget(
-                        isObscureText: false,
-                        maxLines: 1,
-                        disableBorder: true,
-                        hintText: 'PORT',
-                        inputType: TextInputType.text,
-                        keyboardAction: TextInputAction.next,
-                        onTapOutside: (value) {},
-                        onChange: (value) {
-                          provider.updatePortConnect(value as String);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            const SizedBox(height: 4),
-            Visibility(
-                visible: provider.urlError,
-                child: Text(
-                  provider.valueTypeConnect == 0
-                      ? 'URL không đúng định dạng'
-                      : 'IP không phù hợp',
-                  style:
-                      const TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
-                )),
-            const SizedBox(
-              height: 16,
-            ),
-            BorderLayout(
-              height: 50,
-              isError: false,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText: 'URL Path',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updateSuffixConnect(value as String);
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BorderLayout(
-              height: 50,
-              isError: provider.errorAddress,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText:
-                    'Địa chỉ KH\u002A (Không dấu, chi tiết để tránh trùng lặp)',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updateAddress(value as String);
-                },
-              ),
-            ),
-            if (provider.errorAddress) ...[
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
-                ),
-              )
-            ],
-            const SizedBox(
-              height: 16,
-            ),
-            Container(
-              width: 500,
-              height: 50,
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: AppColor.GREY_DADADA)),
-              child: DropdownButton<BankTypeDTO>(
-                value: selectBank,
-                underline: const SizedBox.shrink(),
-                icon: const RotatedBox(
-                  quarterTurns: 5,
-                  child: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 12,
-                  ),
-                ),
-                isExpanded: true,
-                items: listBank.map((e) {
-                  if (e.id == '0') {
-                    return DropdownMenuItem<BankTypeDTO>(
-                      value: e,
-                      child: Text(e.bankName),
-                    );
-                  }
-                  return DropdownMenuItem<BankTypeDTO>(
-                      value: e,
-                      child: Text('${e.bankShortName} - ${e.bankName}'));
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    onSelectBank(value);
-                  }
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
+        return SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                const Text(
+                  'Thông tin đại lý',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                BorderLayout(
+                  height: 50,
+                  isError: provider.errorMerchant,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFieldWidget(
+                    isObscureText: false,
+                    maxLines: 1,
+                    disableBorder: true,
+                    hintText:
+                        'Merchant Name\u002A (VIẾT HOA, không khoảng trắng)',
+                    // controller: TextEditingController(),
+                    inputType: TextInputType.text,
+                    keyboardAction: TextInputAction.next,
+                    inputFormatter: [
+                      UpperCaseTextFormatter(),
+                      FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                    ],
+                    onTapOutside: (value) {},
+                    onChange: (value) {
+                      provider.updateMerchant(value as String);
+                    },
+                  ),
+                ),
+                if (provider.errorMerchant) ...[
+                  const Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Không được để trống',
+                      style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
+                    ),
+                  )
+                ],
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Địa chỉ kết nối',
+                      style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Transform.scale(
+                      scale: 0.9,
+                      child: Radio<int>(
+                          value: 0,
+                          activeColor: AppColor.BLUE_TEXT,
+                          groupValue: provider.valueTypeConnect,
+                          onChanged: (value) {
+                            provider.changeTypeConnect(value ?? 0);
+                          }),
+                    ),
+                    const Text(
+                      'URL',
+                      style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                    ),
+                    const SizedBox(
+                      width: 28,
+                    ),
+                    Transform.scale(
+                      scale: 0.9,
+                      child: Radio<int>(
+                          value: 1,
+                          activeColor: AppColor.BLUE_TEXT,
+                          groupValue: provider.valueTypeConnect,
+                          onChanged: (value) {
+                            provider.changeTypeConnect(value ?? 0);
+                          }),
+                    ),
+                    const Text(
+                      'IP + PORT',
+                      style: TextStyle(fontSize: 12, color: AppColor.GREY_TEXT),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                if (provider.valueTypeConnect == 0)
+                  BorderLayout(
+                    height: 50,
+                    isError: false,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: TextFieldWidget(
+                      isObscureText: false,
+                      maxLines: 1,
+                      disableBorder: true,
+                      hintText: 'URL kết nối',
+                      inputType: TextInputType.text,
+                      keyboardAction: TextInputAction.next,
+                      onTapOutside: (value) {},
+                      onChange: (value) {
+                        provider.updateUrlConnect(value as String);
+                      },
+                    ),
+                  )
+                else
+                  Row(
                     children: [
-                      BorderLayout(
-                        height: 50,
-                        isError: provider.errorBankAccount,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: TextFieldWidget(
-                          isObscureText: false,
-                          maxLines: 1,
-                          disableBorder: true,
-                          hintText: 'Số Tài khoản MB Bank\u002A',
-                          inputType: TextInputType.text,
-                          keyboardAction: TextInputAction.next,
-                          onTapOutside: (value) {},
-                          onChange: (value) {
-                            provider.updateBankAccount(value as String,
-                                code: selectBank.bankCode,
-                                cai: selectBank.caiValue);
-                          },
+                      Expanded(
+                        child: BorderLayout(
+                          height: 50,
+                          isError: false,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: TextFieldWidget(
+                            isObscureText: false,
+                            maxLines: 1,
+                            disableBorder: true,
+                            hintText: 'IP',
+                            inputType: TextInputType.text,
+                            keyboardAction: TextInputAction.next,
+                            onTapOutside: (value) {},
+                            onChange: (value) {
+                              provider.updateIpConnect(value as String);
+                            },
+                          ),
                         ),
                       ),
-                      if (provider.errorBankAccount) ...[
-                        const Padding(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Text(
-                            'Số tài khoản không đúng định dạng',
-                            style: TextStyle(
-                                fontSize: 12, color: AppColor.RED_TEXT),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Expanded(
+                        child: BorderLayout(
+                          height: 50,
+                          isError: false,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: TextFieldWidget(
+                            isObscureText: false,
+                            maxLines: 1,
+                            disableBorder: true,
+                            hintText: 'PORT',
+                            inputType: TextInputType.text,
+                            keyboardAction: TextInputAction.next,
+                            onTapOutside: (value) {},
+                            onChange: (value) {
+                              provider.updatePortConnect(value as String);
+                            },
                           ),
-                        )
-                      ],
+                        ),
+                      ),
                     ],
+                  ),
+                const SizedBox(height: 4),
+                Visibility(
+                    visible: provider.urlError,
+                    child: Text(
+                      provider.valueTypeConnect == 0
+                          ? 'URL không đúng định dạng'
+                          : 'IP không phù hợp',
+                      style: const TextStyle(
+                          fontSize: 12, color: AppColor.RED_TEXT),
+                    )),
+                const SizedBox(
+                  height: 16,
+                ),
+                BorderLayout(
+                  height: 50,
+                  isError: false,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFieldWidget(
+                    isObscureText: false,
+                    maxLines: 1,
+                    disableBorder: true,
+                    hintText: 'URL Path',
+                    inputType: TextInputType.text,
+                    keyboardAction: TextInputAction.next,
+                    onTapOutside: (value) {},
+                    onChange: (value) {
+                      provider.updateSuffixConnect(value as String);
+                    },
                   ),
                 ),
                 const SizedBox(
-                  width: 16,
+                  height: 16,
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BorderLayout(
-                        height: 50,
-                        isError: provider.errorUserBankName,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: TextFieldWidget(
-                          isObscureText: false,
-                          maxLines: 1,
-                          controller: provider.accountName,
-                          disableBorder: true,
-                          hintText: 'Tên chủ TK\u002A (Không dấu)',
-                          inputType: TextInputType.text,
-                          keyboardAction: TextInputAction.next,
-                          onTapOutside: (value) {},
-                          onChange: (value) {
-                            provider.updateUserBankName(value as String);
-                          },
-                        ),
-                      ),
-                      if (provider.errorUserBankName) ...[
-                        const Padding(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Text(
-                            'Không được để trống',
-                            style: TextStyle(
-                                fontSize: 12, color: AppColor.RED_TEXT),
-                          ),
-                        )
-                      ],
-                    ],
+                BorderLayout(
+                  height: 50,
+                  isError: provider.errorAddress,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFieldWidget(
+                    isObscureText: false,
+                    maxLines: 1,
+                    disableBorder: true,
+                    hintText:
+                        'Địa chỉ KH\u002A (Không dấu, chi tiết để tránh trùng lặp)',
+                    inputType: TextInputType.text,
+                    keyboardAction: TextInputAction.next,
+                    onTapOutside: (value) {},
+                    onChange: (value) {
+                      provider.updateAddress(value as String);
+                    },
                   ),
+                ),
+                if (provider.errorAddress) ...[
+                  const Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Không được để trống',
+                      style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
+                    ),
+                  )
+                ],
+                const SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  width: 500,
+                  height: 50,
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: AppColor.GREY_DADADA)),
+                  child: DropdownButton<BankTypeDTO>(
+                    value: selectBank,
+                    underline: const SizedBox.shrink(),
+                    icon: const RotatedBox(
+                      quarterTurns: 5,
+                      child: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 12,
+                      ),
+                    ),
+                    isExpanded: true,
+                    items: listBank.map((e) {
+                      if (e.id == '0') {
+                        return DropdownMenuItem<BankTypeDTO>(
+                          value: e,
+                          child: Text(e.bankName),
+                        );
+                      }
+                      return DropdownMenuItem<BankTypeDTO>(
+                          value: e,
+                          child: Text('${e.bankShortName} - ${e.bankName}'));
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        onSelectBank(value);
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BorderLayout(
+                            height: 50,
+                            isError: provider.errorBankAccount,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: TextFieldWidget(
+                              isObscureText: false,
+                              maxLines: 1,
+                              disableBorder: true,
+                              hintText: 'Số Tài khoản MB Bank\u002A',
+                              inputType: TextInputType.text,
+                              keyboardAction: TextInputAction.next,
+                              onTapOutside: (value) {},
+                              onChange: (value) {
+                                provider.updateBankAccount(value as String,
+                                    code: selectBank.bankCode,
+                                    cai: selectBank.caiValue);
+                              },
+                            ),
+                          ),
+                          if (provider.errorBankAccount) ...[
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4),
+                              child: Text(
+                                'Số tài khoản không đúng định dạng',
+                                style: TextStyle(
+                                    fontSize: 12, color: AppColor.RED_TEXT),
+                              ),
+                            )
+                          ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BorderLayout(
+                            height: 50,
+                            isError: provider.errorUserBankName,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: TextFieldWidget(
+                              isObscureText: false,
+                              maxLines: 1,
+                              controller: provider.accountName,
+                              disableBorder: true,
+                              hintText: 'Tên chủ TK\u002A (Không dấu)',
+                              inputType: TextInputType.text,
+                              keyboardAction: TextInputAction.next,
+                              onTapOutside: (value) {},
+                              onChange: (value) {
+                                provider.updateUserBankName(value as String);
+                              },
+                            ),
+                          ),
+                          if (provider.errorUserBankName) ...[
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4),
+                              child: Text(
+                                'Không được để trống',
+                                style: TextStyle(
+                                    fontSize: 12, color: AppColor.RED_TEXT),
+                              ),
+                            )
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Basic Authentication',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                BorderLayout(
+                  height: 50,
+                  isError: provider.errorUsername,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFieldWidget(
+                    isObscureText: false,
+                    maxLines: 1,
+                    disableBorder: true,
+                    hintText: 'Username\u002A',
+                    inputType: TextInputType.text,
+                    keyboardAction: TextInputAction.next,
+                    onTapOutside: (value) {},
+                    onChange: (value) {
+                      provider.updateUsername(value as String);
+                    },
+                  ),
+                ),
+                if (provider.errorUsername) ...[
+                  const Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Không được để trống',
+                      style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
+                    ),
+                  )
+                ],
+                const SizedBox(
+                  height: 16,
+                ),
+                BorderLayout(
+                  height: 50,
+                  isError: provider.errorPassword,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFieldWidget(
+                    isObscureText: false,
+                    maxLines: 1,
+                    disableBorder: true,
+                    hintText: 'Password\u002A',
+                    inputType: TextInputType.text,
+                    keyboardAction: TextInputAction.next,
+                    onTapOutside: (value) {},
+                    onChange: (value) {
+                      provider.updatePassword(value as String);
+                    },
+                  ),
+                ),
+                if (provider.errorPassword) ...[
+                  const Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Không được để trống',
+                      style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
+                    ),
+                  )
+                ],
+                const SizedBox(
+                  height: 16,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: UnconstrainedBox(
+                    child: ButtonWidget(
+                      height: 32,
+                      width: 150,
+                      text: 'Test Get Token của KH',
+                      borderRadius: 5,
+                      sizeTitle: 12,
+                      textColor: AppColor.WHITE,
+                      bgColor: AppColor.BLUE_TEXT,
+                      function: () {
+                        if (provider.ipConnect.isEmpty &&
+                            provider.urlConnect.isEmpty &&
+                            provider.portConnect.isEmpty) {
+                          DialogWidget.instance.openMsgDialog(
+                              title: 'Thông tin không hợp lệ',
+                              msg:
+                                  'Vui lòng nhập thông tin url hoặc ip và port');
+                        } else {
+                          if (provider.username.isEmpty) {
+                            DialogWidget.instance.openMsgDialog(
+                                title: 'Thông tin không hợp lệ',
+                                msg: 'Vui lòng nhập thông tin username');
+                          } else if (provider.password.isEmpty) {
+                            DialogWidget.instance.openMsgDialog(
+                                title: 'Thông tin không hợp lệ',
+                                msg: 'Vui lòng nhập thông tin password');
+                          } else {
+                            Map<String, dynamic> param = {};
+                            param['url'] = provider.getUrl();
+                            param['username'] = provider.username;
+                            param['password'] = provider.password;
+                            BlocProvider.of<NewConnectBloc>(context)
+                                .add(GetTokenEvent(param: param));
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                BlocConsumer<NewConnectBloc, NewConnectState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is NewConnectGetTokenLoadingState) {
+                      return const SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (state is GetTokenSuccessfulState) {
+                      return InkWell(
+                        onTap: () async {
+                          await FlutterClipboard.copy(state.dto.message).then(
+                            (value) => Fluttertoast.showToast(
+                              msg: 'Đã sao chép',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: AppColor.WHITE,
+                              textColor: AppColor.BLACK,
+                              fontSize: 15,
+                              webBgColor: 'rgba(255, 255, 255)',
+                              webPosition: 'center',
+                            ),
+                          );
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: AppColor.BLUE_TEXT.withOpacity(0.3)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Thành công!',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.BLUE_TEXT),
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  state.dto.message,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: AppColor.BLUE_TEXT),
+                                )
+                              ],
+                            )),
+                      );
+                    }
+                    if (state is GetTokenFailedState) {
+                      return InkWell(
+                        onTap: () async {
+                          await FlutterClipboard.copy(state.dto.message).then(
+                            (value) => Fluttertoast.showToast(
+                              msg: 'Đã sao chép',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: AppColor.WHITE,
+                              textColor: AppColor.BLACK,
+                              fontSize: 15,
+                              webBgColor: 'rgba(255, 255, 255)',
+                              webPosition: 'center',
+                            ),
+                          );
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: AppColor.RED_TEXT.withOpacity(0.3)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Thất bại!',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.RED_TEXT),
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  errorText(state.dto.message),
+                                  style: const TextStyle(
+                                      fontSize: 12, color: AppColor.RED_TEXT),
+                                )
+                              ],
+                            )),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+                const SizedBox(
+                  height: 80,
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              'Basic Authentication',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BorderLayout(
-              height: 50,
-              isError: provider.errorUsername,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText: 'Username\u002A',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updateUsername(value as String);
-                },
-              ),
-            ),
-            if (provider.errorUsername) ...[
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
-                ),
-              )
-            ],
-            const SizedBox(
-              height: 16,
-            ),
-            BorderLayout(
-              height: 50,
-              isError: provider.errorPassword,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TextFieldWidget(
-                isObscureText: false,
-                maxLines: 1,
-                disableBorder: true,
-                hintText: 'Password\u002A',
-                inputType: TextInputType.text,
-                keyboardAction: TextInputAction.next,
-                onTapOutside: (value) {},
-                onChange: (value) {
-                  provider.updatePassword(value as String);
-                },
-              ),
-            ),
-            if (provider.errorPassword) ...[
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  'Không được để trống',
-                  style: TextStyle(fontSize: 12, color: AppColor.RED_TEXT),
-                ),
-              )
-            ],
-            const SizedBox(
-              height: 16,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: UnconstrainedBox(
-                child: ButtonWidget(
-                  height: 32,
-                  width: 150,
-                  text: 'Test Get Token của KH',
-                  borderRadius: 5,
-                  sizeTitle: 12,
-                  textColor: AppColor.WHITE,
-                  bgColor: AppColor.BLUE_TEXT,
-                  function: () {
-                    if (provider.ipConnect.isEmpty &&
-                        provider.urlConnect.isEmpty &&
-                        provider.portConnect.isEmpty) {
-                      DialogWidget.instance.openMsgDialog(
-                          title: 'Thông tin không hợp lệ',
-                          msg: 'Vui lòng nhập thông tin url hoặc ip và port');
-                    } else {
-                      if (provider.username.isEmpty) {
-                        DialogWidget.instance.openMsgDialog(
-                            title: 'Thông tin không hợp lệ',
-                            msg: 'Vui lòng nhập thông tin username');
-                      } else if (provider.password.isEmpty) {
-                        DialogWidget.instance.openMsgDialog(
-                            title: 'Thông tin không hợp lệ',
-                            msg: 'Vui lòng nhập thông tin password');
-                      } else {
-                        Map<String, dynamic> param = {};
-                        param['url'] = provider.getUrl();
-                        param['username'] = provider.username;
-                        param['password'] = provider.password;
-                        BlocProvider.of<NewConnectBloc>(context)
-                            .add(GetTokenEvent(param: param));
-                      }
-                    }
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BlocConsumer<NewConnectBloc, NewConnectState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                if (state is NewConnectGetTokenLoadingState) {
-                  return const SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (state is GetTokenSuccessfulState) {
-                  return InkWell(
-                    onTap: () async {
-                      await FlutterClipboard.copy(state.dto.message).then(
-                        (value) => Fluttertoast.showToast(
-                          msg: 'Đã sao chép',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: AppColor.WHITE,
-                          textColor: AppColor.BLACK,
-                          fontSize: 15,
-                          webBgColor: 'rgba(255, 255, 255)',
-                          webPosition: 'center',
-                        ),
-                      );
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: AppColor.BLUE_TEXT.withOpacity(0.3)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Thành công!',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.BLUE_TEXT),
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              state.dto.message,
-                              style: const TextStyle(
-                                  fontSize: 12, color: AppColor.BLUE_TEXT),
-                            )
-                          ],
-                        )),
-                  );
-                }
-                if (state is GetTokenFailedState) {
-                  return InkWell(
-                    onTap: () async {
-                      await FlutterClipboard.copy(state.dto.message).then(
-                        (value) => Fluttertoast.showToast(
-                          msg: 'Đã sao chép',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: AppColor.WHITE,
-                          textColor: AppColor.BLACK,
-                          fontSize: 15,
-                          webBgColor: 'rgba(255, 255, 255)',
-                          webPosition: 'center',
-                        ),
-                      );
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: AppColor.RED_TEXT.withOpacity(0.3)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Thất bại!',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.RED_TEXT),
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              errorText(state.dto.message),
-                              style: const TextStyle(
-                                  fontSize: 12, color: AppColor.RED_TEXT),
-                            )
-                          ],
-                        )),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-            const SizedBox(
-              height: 80,
-            ),
-          ],
+          ),
         );
       }),
     );
