@@ -192,6 +192,26 @@ class ItemMerchant {
     required this.email,
   });
 
+  ItemMerchant copyWith({
+    String? invoiceId,
+    String? vso,
+    String? merchantName,
+    int? pendingAmount,
+    int? completeAmount,
+    String? vietQrAccount,
+    String? email,
+  }) {
+    return ItemMerchant(
+      invoiceId: invoiceId ?? this.invoiceId,
+      vso: vso ?? this.vso,
+      merchantName: merchantName ?? this.merchantName,
+      pendingAmount: pendingAmount ?? this.pendingAmount,
+      completeAmount: completeAmount ?? this.completeAmount,
+      vietQrAccount: vietQrAccount ?? this.vietQrAccount,
+      email: email ?? this.email,
+    );
+  }
+
   // Convert from JSON (deserialize)
   factory ItemMerchant.fromJson(Map<String, dynamic> json) {
     return ItemMerchant(
@@ -216,5 +236,68 @@ class ItemMerchant {
       'vietQrAccount': vietQrAccount,
       'email': email,
     };
+  }
+}
+
+class UnpaidInvoiceDTO {
+  List<UnpaidInvoiceItem> items;
+
+  UnpaidInvoiceDTO({required this.items,});
+
+  factory UnpaidInvoiceDTO.fromJson(Map<String, dynamic> json) {
+    return UnpaidInvoiceDTO(
+      items: List<UnpaidInvoiceItem>.from(
+          json['items'].map((x) => UnpaidInvoiceItem.fromJson(x))),
+      // extraData: InvoiceExtraData.fromJson(json['extraData']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'items': List<dynamic>.from(items.map((x) => x.toJson())),
+    };
+  }
+}
+
+class UnpaidInvoiceItem {
+  String invoiceId;
+  String vso;
+  String merchantName;
+  int pendingAmount;
+  int completeAmount;
+  String vietQrAccount;
+  String email;
+
+  UnpaidInvoiceItem(
+      {required this.invoiceId,
+      required this.vso,
+      required this.merchantName,
+      required this.pendingAmount,
+      required this.completeAmount,
+      required this.vietQrAccount,
+      required this.email});
+
+  factory UnpaidInvoiceItem.fromJson(Map<String, dynamic> json) {
+    return UnpaidInvoiceItem(
+      invoiceId: json['invoiceId'],
+      vso: json['vso'],
+      merchantName: json['merchantName'],
+      pendingAmount: json['pendingAmount'],
+      completeAmount: json['completeAmount'],
+      vietQrAccount: json['vietQrAccount'],
+      email: json['email'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['invoiceId'] = invoiceId;
+    data['vso'] = vso;
+    data['merchantName'] = merchantName;
+    data['pendingAmount'] = pendingAmount;
+    data['completeAmount'] = completeAmount;
+    data['vietQrAccount'] = vietQrAccount;
+    data['email'] = email;
+    return data;
   }
 }

@@ -145,6 +145,30 @@ class PaymentRequestDTO {
   }
 }
 
+class PaymentUnpaidRequestDTO {
+  String bankIdRecharge;
+  List<String> invoiceIds;
+
+  PaymentUnpaidRequestDTO({
+    required this.bankIdRecharge,
+    required this.invoiceIds,
+  });
+
+  factory PaymentUnpaidRequestDTO.fromJson(Map<String, dynamic> json) {
+    return PaymentUnpaidRequestDTO(
+      bankIdRecharge: json['bankIdRecharge'],
+      invoiceIds: json['invoiceIds'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['invoiceIds'] = invoiceIds;
+    data['bankIdRecharge'] = bankIdRecharge;
+    return data;
+  }
+}
+
 class InvoiceDetailDTO {
   List<CustomerDetailDTO> customerDetailDTOS;
   List<FeePackageDetailDTO> feePackageDetailDTOS;
