@@ -246,7 +246,7 @@ class ItemInvoiceWidget extends StatelessWidget {
                 },
                 child: Text(
                   dto.vso.isNotEmpty ? dto.vso : '-',
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
                 )),
           ),
