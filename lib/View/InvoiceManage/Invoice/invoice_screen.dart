@@ -156,117 +156,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // Column(
-                                //   crossAxisAlignment: CrossAxisAlignment.start,
-                                //   children: [
-                                //     const Text(
-                                //       "Loại hóa đơn:",
-                                //       style: TextStyle(
-                                //           fontSize: 13,
-                                //           fontWeight: FontWeight.bold),
-                                //     ),
-                                //     const SizedBox(height: 8),
-                                //     Wrap(
-                                //       spacing: 4.0,
-                                //       children: List<Widget>.generate(
-                                //         4,
-                                //         (int index) {
-                                //           return ChoiceChip(
-                                //             padding: EdgeInsets.zero,
-                                //             labelPadding: EdgeInsets.zero,
-                                //             selectedColor: Colors.transparent,
-                                //             side: const BorderSide(
-                                //                 color: Colors.transparent),
-                                //             backgroundColor: Colors.transparent,
-                                //             showCheckmark: false,
-                                //             label: Container(
-                                //               decoration: BoxDecoration(
-                                //                 gradient: _choiceChipSelected ==
-                                //                         listChoiceChips[index]
-                                //                             .value
-                                //                     ? VietQRTheme.gradientColor
-                                //                         .brightBlueLinear
-                                //                     : null,
-                                //                 borderRadius:
-                                //                     BorderRadius.circular(10.0),
-                                //               ),
-                                //               padding: const EdgeInsets.only(
-                                //                   left: 10,
-                                //                   right: 10,
-                                //                   top: 10,
-                                //                   bottom: 10),
-                                //               child: Row(
-                                //                 children: [
-                                //                   _choiceChipSelected ==
-                                //                           listChoiceChips[index]
-                                //                               .value
-                                //                       ? Container(
-                                //                           margin:
-                                //                               const EdgeInsets
-                                //                                   .only(
-                                //                                   right: 4),
-                                //                           height: 20,
-                                //                           width: 20,
-                                //                           decoration:
-                                //                               BoxDecoration(
-                                //                             color: Colors.white,
-                                //                             borderRadius:
-                                //                                 BorderRadius
-                                //                                     .circular(
-                                //                                         50),
-                                //                           ),
-                                //                           child: const Center(
-                                //                               child: Icon(
-                                //                             Icons.check,
-                                //                             color: AppColor
-                                //                                 .BLUE_TEXT,
-                                //                             size: 15,
-                                //                           )),
-                                //                         )
-                                //                       : const SizedBox.shrink(),
-                                //                   Text(
-                                //                     listChoiceChips[index]
-                                //                         .title,
-                                //                     style: TextStyle(
-                                //                       color:
-                                //                           _choiceChipSelected ==
-                                //                                   listChoiceChips[
-                                //                                           index]
-                                //                                       .value
-                                //                               ? Colors.white
-                                //                               : Colors.black,
-                                //                     ),
-                                //                   ),
-                                //                 ],
-                                //               ),
-                                //             ),
-                                //             selected: _choiceChipSelected ==
-                                //                 listChoiceChips[index].value,
-                                //             onSelected: (bool selected) {
-                                //               setState(() {
-                                //                 _choiceChipSelected = (selected
-                                //                     ? listChoiceChips[index]
-                                //                         .value
-                                //                     : null)!;
-                                //               });
-                                //               textEditingController.clear();
-                                //               model.clearSelectMerchant();
-                                //               model.filterListInvoice(
-                                //                 invoiceType:
-                                //                     _choiceChipSelected,
-                                //                 size: pageSize,
-                                //                 page: 1,
-                                //                 filterType: filterSelect.type,
-                                //                 search:
-                                //                     textEditingController.text,
-                                //               );
-                                //             },
-                                //           );
-                                //         },
-                                //       ).toList(),
-                                //     ),
-                                //   ],
-                                // ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -279,17 +168,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                     const SizedBox(height: 8),
                                     FilterInvoiceWidget(
                                       invoiceType: _choiceChipSelected,
-                                      onCall: (subType) {
-                                        textEditingController =
-                                            TextEditingController();
-
+                                      onCall: (subMenu) {
+                                        textEditingController.clear();
                                         model.filterListInvoice(
                                           invoiceType: _choiceChipSelected,
                                           size: pageSize,
                                           page: 1,
-                                          subType: subType,
+                                          // subType: subType,
                                           filterType: filterSelect.type,
-                                          search: '',
+                                          search: subMenu == 4 ? '0' : '',
                                         );
                                       },
                                       pageSize: pageSize,
@@ -298,7 +185,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                     ),
                                   ],
                                 ),
-
                                 Column(
                                   children: [
                                     const SizedBox(height: 21),

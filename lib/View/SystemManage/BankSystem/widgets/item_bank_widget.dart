@@ -52,7 +52,9 @@ class ItemBankWidget extends StatelessWidget {
                 // dto.getTimeRegister.toString() != '0'
                 //     ? formattedDateTimeRegister
                 //     : '-',
-                dto.bankAccount.isNotEmpty ? dto.bankAccount : '-',
+                dto.bankAccount.isNotEmpty
+                    ? '${dto.bankShortName} - ${dto.bankAccount}'
+                    : '-',
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -73,38 +75,6 @@ class ItemBankWidget extends StatelessWidget {
               ),
             ),
 
-            //Ngân hàng
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: dto.bankShortName.isNotEmpty
-                  ? Alignment.centerRight
-                  : Alignment.center,
-              height: 40,
-              width: 120,
-              child: Text(
-                dto.bankShortName.isNotEmpty ? dto.bankShortName : '-',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
-            ),
-
-            //SĐT xác thực
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: dto.phoneAuthenticated.isNotEmpty
-                  ? Alignment.centerRight
-                  : Alignment.center,
-              height: 40,
-              width: 120,
-              child: Text(
-                dto.phoneAuthenticated.isNotEmpty
-                    ? dto.phoneAuthenticated
-                    : '-',
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-
             //Ngày kích hoạt
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -113,9 +83,7 @@ class ItemBankWidget extends StatelessWidget {
               height: 40,
               width: 120,
               child: Text(
-                dto.validFrom.toString() != '0'
-                    ? formattedDateTimeStared
-                    : '-',
+                dto.validFrom.toString() != '0' ? formattedDateTimeStared : '-',
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
@@ -163,6 +131,23 @@ class ItemBankWidget extends StatelessWidget {
                 dto.nationalId.isNotEmpty ? dto.nationalId : '-',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+              ),
+            ),
+
+            //SĐT xác thực
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              alignment: dto.phoneAuthenticated.isNotEmpty
+                  ? Alignment.centerRight
+                  : Alignment.center,
+              height: 40,
+              width: 120,
+              child: Text(
+                dto.phoneAuthenticated.isNotEmpty
+                    ? dto.phoneAuthenticated
+                    : '-',
+                textAlign: TextAlign.right,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
 
