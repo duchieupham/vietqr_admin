@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
   late InvoiceDAO _dao;
   InvoiceDTO? invoiceDTO;
+  UnpaidInvoiceDTO? unpaidInvoiceDTO;
   MerchantData? merchantData;
   MerchantDTO? merchantDTO;
   BankInvoiceDTO? bankDTO;
@@ -63,6 +65,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<InvoiceInfoItem>? listInvoiceItem = [];
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
+  List<SelectUnpaidInvoiceItem> listUnpaidSelectInvoice = [];
   List<PaymentRequestDTO> listPaymentRequest = [];
   InvoiceExcelDTO? invoiceExcelDTO;
 
@@ -145,6 +148,7 @@ class InvoiceViewModel extends InvoiceStatus {
   bool? isInsert;
 
   MetaDataDTO? metadata;
+  MetaDataDTO? metaUnpaidInvoice;
   MetaDataDTO? createMetaData;
 
   PageInvoice pageType = PageInvoice.LIST;
@@ -185,6 +189,19 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void onChangePage(PageInvoice page) {
     pageType = page;
+    notifyListeners();
+  }
+
+  void updateEmail(String phoneNo, String newEmail) {
+    final listMerchant = merchantData!.items.map(
+      (e) {
+        if (e.vietQrAccount == phoneNo) {
+          return e.copyWith(email: newEmail);
+        }
+        return e;
+      },
+    ).toList();
+    merchantData!.items = listMerchant;
     notifyListeners();
   }
 
@@ -406,12 +423,23 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void appliedInvoiceItem(bool value, int index) {
     listSelectInvoice[index].isSelect = value;
+    notifyListeners();
+  }
 
+  void appliedUnpaidInvoiceItem(bool value, int index) {
+    listUnpaidSelectInvoice[index].isSelect = value;
     notifyListeners();
   }
 
   void appliedAllItem(bool value) {
     for (var e in listSelectInvoice) {
+      e.isSelect = value;
+    }
+    notifyListeners();
+  }
+
+  void appliedAllUnpaidItem(bool value) {
+    for (var e in listUnpaidSelectInvoice) {
       e.isSelect = value;
     }
     notifyListeners();
@@ -637,6 +665,14 @@ class InvoiceViewModel extends InvoiceStatus {
         .toList();
   }
 
+  List<SelectUnpaidInvoiceItem> mapToSelectUnpaidInvoiceItems(
+      List<UnpaidInvoiceItem> unpaidInvoiceItems) {
+    return unpaidInvoiceItems
+        .map((item) =>
+            SelectUnpaidInvoiceItem(isSelect: true, unpaidInvoiceItem: item))
+        .toList();
+  }
+
   Future<void> getInvoiceDetail(String id) async {
     try {
       // setState(ViewStatus.Empty);
@@ -829,6 +865,62 @@ class InvoiceViewModel extends InvoiceStatus {
       setState(ViewStatus.Error);
     }
   }
+
+  Future<bool> updateEmailMerchant(
+      {required String phoneNo, required String newEmail}) async {
+    try {
+      setState(ViewStatus.Updating);
+      final ResponseMessageDTO? data =
+          await _dao.updateEmailMerchant(phoneNo, newEmail);
+      if (data != null) {
+        if (data.status == 'SUCCESS') {
+          setState(ViewStatus.Completed);
+
+          // merchantData!.items
+          //     .where(
+          //       (e) => e.vietQrAccount == phoneNo,
+          //     )
+          //     .first
+          //     .copyWith(email: newEmail);
+          // notifyListeners();
+          return true;
+        }
+        return false;
+      }
+      return false;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
+
+  Future<void> getUnpaidInvoiceList({
+    required int page,
+    required int size,
+    required String merchantId,
+  }) async {
+    try {
+      setState(ViewStatus.Loading);
+      final result = await _dao.getUnpaidInvoiceList(
+          page: page, size: size, merchantId: merchantId);
+
+      if (result is UnpaidInvoiceDTO) {
+        unpaidInvoiceDTO = result;
+        if (unpaidInvoiceDTO!.items != null) {
+          listUnpaidSelectInvoice =
+              mapToSelectUnpaidInvoiceItems(unpaidInvoiceDTO!.items);
+        }
+      }
+      metaUnpaidInvoice = _dao.metaDataDTO;
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
 }
 
 class SelectInvoiceItem {
@@ -838,5 +930,15 @@ class SelectInvoiceItem {
   SelectInvoiceItem({
     this.isSelect,
     required this.invoiceItem,
+  });
+}
+
+class SelectUnpaidInvoiceItem {
+  bool? isSelect;
+  final UnpaidInvoiceItem unpaidInvoiceItem;
+
+  SelectUnpaidInvoiceItem({
+    this.isSelect,
+    required this.unpaidInvoiceItem,
   });
 }

@@ -236,16 +236,16 @@ class SystemViewModel extends BaseModel {
       final result = await _dao.confirmActiveKey(param);
       if (result.status == 'SUCCESS') {
         if (bankSystemDTO != null) {
-          var bankItem = bankSystemDTO!.items
-              .where(
-                (e) => e.bankId == bankId,
-              )
-              .first;
-          if (bankItem != null) {
-            if (bankItem.validService == false) {
-              bankItem.copyWith(validService: true);
-            }
-          }
+          final listBank = bankSystemDTO!.items.map(
+            (e) {
+              if (e.bankId == bankId) {
+                return e.copyWith(validService: true);
+              }
+              return e;
+            },
+          ).toList();
+          bankSystemDTO!.items = listBank;
+          notifyListeners();
         }
       }
       setState(ViewStatus.Completed);
