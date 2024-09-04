@@ -8,6 +8,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/item_bank_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_bank_detail_widget.dart';
+import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_key.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_log.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/title_item_bank_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
@@ -23,6 +24,7 @@ import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 enum Actions {
   copy,
   detail,
+  check,
 }
 
 class ListBankSystemWidget extends StatefulWidget {
@@ -324,6 +326,9 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                       case Actions.detail:
                         onDetail(dto: e);
                         break;
+                      case Actions.check:
+                        onCheckActiveKey(dto: e);
+                        break;
                     }
                   },
                   itemBuilder: (BuildContext context) => _buildMenuItems(e),
@@ -409,6 +414,17 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
     );
   }
 
+  void onCheckActiveKey({required BankSystemItem dto}) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PopupCheckKeyWidget(
+          dto: dto,
+        );
+      },
+    );
+  }
+
   List<PopupMenuEntry<Actions>> _buildMenuItems(BankSystemItem e) {
     List<PopupMenuEntry<Actions>> items = [
       const PopupMenuItem<Actions>(
@@ -420,6 +436,10 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
         child: e.validService
             ? const Text('Gia hạn Key')
             : const Text('Kích hoạt Key'),
+      ),
+      const PopupMenuItem<Actions>(
+        value: Actions.check,
+        child: Text('Kiểm tra Key'),
       ),
     ];
     return items;

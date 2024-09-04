@@ -1,37 +1,31 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
-import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
-import 'package:vietqr_admin/feature/integration_connectivity/new_connect/new_connect_screen.dart';
-import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
-import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
+import 'package:vietqr_admin/models/DTO/key_dto.dart';
 
-class PopupBankDetailWidget extends StatefulWidget {
-  final BankSystemItem dto;
+class PopupCheckKeyDetailWidget extends StatefulWidget {
+  final ResponseActiveKeyDTO dto;
 
-  const PopupBankDetailWidget({super.key, required this.dto});
+  const PopupCheckKeyDetailWidget({super.key, required this.dto});
 
   @override
-  State<PopupBankDetailWidget> createState() => _PopupBankDetailWidgetState();
+  State<PopupCheckKeyDetailWidget> createState() =>
+      _PopupCheckKeyDetailWidgetState();
 }
 
-class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
+class _PopupCheckKeyDetailWidgetState extends State<PopupCheckKeyDetailWidget> {
   final TextEditingController _keyController = TextEditingController();
   // final TextEditingController _phoneNumberController = TextEditingController();
   // final TextEditingController _identityController = TextEditingController();
   // final TextEditingController _accountNameController = TextEditingController();
   // final TextEditingController _bankCodeController = TextEditingController();
   late SystemViewModel _model;
-  String? _statusMessage;
-  bool _isSuccess = false;
+  // String? _statusMessage;
+  // bool _isSuccess = false;
 
   @override
   void initState() {
@@ -58,7 +52,7 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              "Thông tin TK ngân hàng",
+              "Thông tin Key chi tiết",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             InkWell(
@@ -85,7 +79,7 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
                       height: 40,
                       // color: Colors.red,
                       child: _buildTextFormFiledCustom(
-                          initialValue: widget.dto.bankAccountName,
+                          initialValue: widget.dto.userBankName,
                           label: 'Chủ tài khoản'),
                     ),
                   ),
@@ -99,7 +93,7 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
                       // color: Colors.red,
                       child: _buildTextFormFiledCustom(
                           initialValue:
-                              '${widget.dto.bankShortName} - ${widget.dto.bankAccount.isNotEmpty ? widget.dto.bankAccount : '-'}',
+                              '${widget.dto.bankShortName} - ${widget.dto.bankAccount.isNotEmpty ? widget.dto.bankAccount : ''}',
                           label: 'Tài khoản'),
                     ),
                   ),
@@ -113,8 +107,8 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
                   Flexible(
                     flex: 1,
                     child: _buildItem(
-                        label: 'TK VietQR',
-                        textContent: widget.dto.phoneNo,
+                        label: 'Số điện thoại',
+                        textContent: widget.dto.phoneNo.isNotEmpty ? widget.dto.phoneNo : '-',
                         isDate: false),
                   ),
                   const SizedBox(
@@ -124,7 +118,7 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
                     flex: 1,
                     child: _buildItem(
                         label: 'Ngày kích hoạt',
-                        textContent: _formatDate(widget.dto.validFrom),
+                        textContent: _formatDate(widget.dto.validFeeFrom),
                         isDate: true),
                   ),
                   const SizedBox(
@@ -145,10 +139,12 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     child: _buildItem(
-                        label: 'Luồng',
-                        textContent: widget.dto.mmsActive ? 'TF' : 'MF',
+                        label: 'Người sử dụng Key',
+                        textContent: widget.dto.fullName.isNotEmpty
+                            ? widget.dto.fullName
+                            : '-',
                         isDate: false),
                   ),
                   const SizedBox(
@@ -173,129 +169,37 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
                   Flexible(
                     flex: 1,
                     child: _buildItem(
-                        label: 'CCCD/CMND',
-                        textContent: widget.dto.nationalId.isNotEmpty
-                            ? widget.dto.nationalId
-                            : '-',
+                        label: 'Thời hạn của Key',
+                        textContent: '${widget.dto.duration}' != '0'
+                            ? '${widget.dto.duration}'
+                            : '0',
                         isDate: false),
                   ),
                   const SizedBox(
                     width: 5,
                   ),
                   Flexible(
-                    flex: 1,
+                    flex: 2,
                     child: _buildItem(
-                        label: 'VSO',
+                        label: 'Key',
                         textContent:
-                            widget.dto.vso.isNotEmpty ? widget.dto.vso : '-',
+                            widget.dto.key.isNotEmpty ? widget.dto.key : '-',
                         isDate: false),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              Flexible(
-                flex: 1,
-                child: SizedBox(
-                  height: 40,
-                  // color: Colors.red,
-                  child: _buildTextFormFiledCustom(
-                      label: 'Mã Key',
-                      hint: 'Nhập mã key',
-                      controller: _keyController,
-                      readOnly: (_model.status == ViewStatus.Updating)
-                          ? true
-                          : false),
-                ),
-              ),
-              if (_statusMessage != null) ...[
-                Text(
-                  _statusMessage!,
-                  style: TextStyle(
-                    color: _isSuccess ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20),
-              ],
-              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
-                    onPressed: (_model.status == ViewStatus.Updating)
-                        ? () {}
-                        : () async {
-                            //checkSum: hashMD5 từ: “VietQRAccesskey” + bankId + keyActive
-                            String keyActive = _keyController.text;
-                            if (keyActive == '') {
-                              setState(() {
-                                _statusMessage = 'Key không được bỏ trống.';
-                              });
-                            } else if (keyActive.length > 12) {
-                              setState(() {
-                                _statusMessage = 'Key không quá 12 ký tự.';
-                              });
-                            } else {
-                              final String checkSum = _generateMd5(
-                                  'VietQRAccesskey${widget.dto.bankId}$keyActive');
-                              final resultRequest =
-                                  await _model.requestActiveKey(
-                                      bankId: widget.dto.bankId,
-                                      checkSum: checkSum,
-                                      keyActive: keyActive);
-                              if (resultRequest is ResponseDataDTO) {
-                                final String otp = resultRequest.data.otp;
-                                //checkSum: hashMD5 từ: “VietQRAccesskey” + otp + keyActive
-                                final String checkSumOTP = _generateMd5(
-                                    'VietQRAccesskey$otp$keyActive');
-                                final resultConfirm =
-                                    await _model.confirmActiveKey(
-                                        bankId: widget.dto.bankId,
-                                        checkSum: checkSumOTP,
-                                        keyActive: keyActive,
-                                        otp: otp);
-                                if (resultConfirm.status == 'SUCCESS') {
-                                  Navigator.pop(context);
-                                  toastification.show(
-                                    context: context,
-                                    type: ToastificationType.success,
-                                    style: ToastificationStyle.flat,
-                                    title: const Text(
-                                      'Kích hoạt Key thành công',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    showProgressBar: false,
-                                    alignment: Alignment.topRight,
-                                    autoCloseDuration:
-                                        const Duration(seconds: 5),
-                                    boxShadow: highModeShadow,
-                                    dragToClose: true,
-                                    pauseOnHover: true,
-                                  );
-                                } else {
-                                  final String errorMessage =
-                                      (resultConfirm).message;
-                                  setErrorKey(errorMessage);
-                                }
-                              }
-                              if (resultRequest is ResponseMessageDTO) {
-                                final String errorMessage =
-                                    (resultRequest).message;
-                                setErrorKey(errorMessage);
-                              }
-                            }
-                          },
-                    child: Text(
-                      widget.dto.validService ? 'Gia hạn Key' : 'Kích hoạt Key',
-                      style: const TextStyle(
-                        color: Colors.black,
+                 Text(
+                      widget.dto.status == 1 ? 'Đã kích hoạt' : 'Chưa kích hoạt',
+                      style:  TextStyle(
+                        color: widget.dto.status == 1 ? AppColor.GREEN : AppColor.RED_TEXT,
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
                 ],
               ),
             ],
@@ -303,58 +207,6 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
         ),
       ),
     );
-  }
-
-  String _generateMd5(String input) {
-    return md5.convert(utf8.encode(input)).toString();
-  }
-
-  void setErrorKey(String errorMessage) {
-    setState(() {
-      switch (errorMessage) {
-        case 'E25':
-          setState(() {
-            _statusMessage =
-                'Không tìm thấy tài khoản ngân hàng trong hệ thống.';
-          });
-          break;
-        case 'E101':
-          setState(() {
-            _statusMessage = 'Tài khoản ngân hàng chưa được liên kết.';
-          });
-          break;
-        case 'E127':
-          setState(() {
-            _statusMessage = 'Key không chích xác, vui lòng thử lại.';
-          });
-          break;
-        case 'E128':
-          setState(() {
-            _statusMessage =
-                'Không tìm thấy tài khoản ngân hàng trong hệ thống.';
-          });
-          break;
-        case '129':
-          setState(() {
-            _statusMessage = 'Quá thời gian thực hiện, vui lòng thử lại.';
-          });
-          break;
-        case '130':
-          setState(() {
-            _statusMessage = 'Key đã được sử dụng, vui lòng thử lại.';
-          });
-          break;
-        case '131':
-          setState(() {
-            _statusMessage = 'Key không hợp lệ, vui lòng thử lại.';
-          });
-          break;
-        default:
-          setState(() {
-            _statusMessage = 'Đã xảy ra lỗi, vui lòng thử lại.';
-          });
-      }
-    });
   }
 
   Widget _buildItem(
@@ -425,11 +277,7 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
               : initialValue
           : null,
       readOnly: readOnly,
-      inputFormatters: [
-        VietnameseNameInputFormatter(),
-        LengthLimitingTextInputFormatter(12),
-        UpperCaseTextFormatter()
-      ],
+      inputFormatters: [VietnameseNameInputFormatter()],
       style: const TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.normal,
