@@ -266,6 +266,47 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                   ],
                 ),
               ),
+
+              if (model.valueFilterTime.id == 0) ...[
+                const SizedBox(width: 8),
+                Container(
+                  width: 140,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColor.GREY_DADADA)),
+                  child: InkWell(
+                    onTap: () async {
+                      await _onPickMonth(model, model.getMonth()).then(
+                        (time) {
+                          if (time != null) {
+                            model.filterListInvoice(
+                              invoiceType: widget.invoiceType,
+                              size: widget.pageSize,
+                              page: 1,
+                              filterType: widget.filterBy,
+                              search: widget.controller.text,
+                            );
+                          }
+                        },
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${model.selectedDate.month}/${model.selectedDate.year}',
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                          const Icon(Icons.calendar_month_outlined)
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(width: 8),
               VietQRButton.gradient(
                   borderRadius: 100,
@@ -288,6 +329,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                     size: 18,
                     color: AppColor.WHITE,
                   ))),
+
               // const Spacer(),
             ],
           ),
