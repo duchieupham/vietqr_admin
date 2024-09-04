@@ -323,6 +323,25 @@ class InvoiceDAO extends BaseDAO {
     return null;
   }
 
+  Future<ResponseMessageDTO?> updateEmailMerchant(
+      String phoneNo, String newEmail) async {
+    try {
+      String url = '${EnvConfig.instance.getBaseUrl()}change-email';
+      final response = await BaseAPIClient.putAPI(
+          url: url,
+          body: {
+            'phoneNo': phoneNo,
+            'newEmail': newEmail,
+          },
+          type: AuthenticationType.SYSTEM);
+      var data = jsonDecode(response.body);
+      return ResponseMessageDTO.fromJson(data);
+    } catch (e) {
+      LOG.error("Failed to fetch invoice data: ${e.toString()}");
+    }
+    return null;
+  }
+
   Future<dynamic> filterInvoiceList({
     required String time,
     required int page,
@@ -444,6 +463,29 @@ class InvoiceDAO extends BaseDAO {
       }
     } catch (e) {
       LOG.error(e.toString());
+    }
+    return null;
+  }
+
+  Future<dynamic> getUnpaidInvoiceList({
+    required int page,
+    required int size,
+    required String merchantId,
+  }) async {
+    try {
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}unpaid-invoice-list?merchantId=$merchantId&page=$page&size=$size';
+      final response = await BaseAPIClient.getAPI(
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        metaDataDTO = MetaDataDTO.fromJson(data["metadata"]);
+        return UnpaidInvoiceDTO.fromJson(data['data']);
+      }
+    } catch (e) {
+      LOG.error("Failed to fetch invoice data: ${e.toString()}");
     }
     return null;
   }

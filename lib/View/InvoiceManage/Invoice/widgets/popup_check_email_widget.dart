@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/utils/input_utils.dart';
 import 'package:get/get.dart';
@@ -38,18 +39,18 @@ class _PopupCheckEmailWidgetState extends State<PopupCheckEmailWidget> {
     return ScopedModel<InvoiceViewModel>(
       model: _model,
       child: AlertDialog(
-           title: Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
               "Thông tin kiểm tra",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-              InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(Icons.close))
+            InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.close))
           ],
         ),
         contentPadding:
@@ -86,6 +87,56 @@ class _PopupCheckEmailWidgetState extends State<PopupCheckEmailWidget> {
                         setState(() {
                           _statusMessage = 'Email không hợp lệ.';
                         });
+                      } else {
+                        _model
+                            .updateEmailMerchant(
+                                phoneNo: widget.dto.vietQrAccount,
+                                newEmail: email)
+                            .then(
+                          (value) {
+                            if (value) {
+                              _model.updateEmail(
+                                  widget.dto.vietQrAccount, email);
+                              Navigator.pop(context);
+                              toastification.show(
+                                context: context,
+                                type: ToastificationType.success,
+                                style: ToastificationStyle.flat,
+                                title: const Text(
+                                  'Cập nhật thành công',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                showProgressBar: false,
+                                alignment: Alignment.topRight,
+                                autoCloseDuration: const Duration(seconds: 5),
+                                boxShadow: highModeShadow,
+                                dragToClose: true,
+                                pauseOnHover: true,
+                              );
+                            } else {
+                              Navigator.pop(context);
+                              toastification.show(
+                                context: context,
+                                type: ToastificationType.error,
+                                style: ToastificationStyle.flat,
+                                title: const Text(
+                                  'Cập nhật thất bại',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                showProgressBar: false,
+                                alignment: Alignment.topRight,
+                                autoCloseDuration: const Duration(seconds: 5),
+                                boxShadow: highModeShadow,
+                                dragToClose: true,
+                                pauseOnHover: true,
+                              );
+                            }
+                          },
+                        );
                       }
                     },
                     child: const Text("Cập nhật"),

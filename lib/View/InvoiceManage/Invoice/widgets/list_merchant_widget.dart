@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_check_email_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_merchant_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/item_merchant.dart';
@@ -248,28 +249,16 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
   Widget _rightItem(ItemMerchant e) {
     return Container(
       alignment: Alignment.center,
-      child: e.completeAmount != 0
-          ? const SizedBox(
-              height: 50,
-              child: Center(
-                child: Text(
-                  'Đã TT',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: AppColor.GREEN,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            )
-          : Row(
-              children: [
-                Container(
-                  height: 50,
-                  width: 130,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {
+      child: Row(
+        children: [
+          Container(
+            height: 50,
+            width: 130,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: InkWell(
+              onTap: e.completeAmount == 0
+                  ? () {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -278,60 +267,89 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
                           );
                         },
                       );
-                    },
-                    child: const Text(
-                      'Gửi TT qua email',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                        decoration: TextDecoration.underline,
-                        // decorationColor: AppColor.BLUE_TEXT,
-                        color: AppColor.BLUE_TEXT,
-                      ),
-                    ),
-                  ),
+                    }
+                  : () {},
+              child: Text(
+                'Gửi TT qua email',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  decoration:
+                      e.completeAmount == 0 ? TextDecoration.underline : null,
+                  decorationColor: e.completeAmount == 0
+                      ? AppColor.BLUE_TEXT
+                      : AppColor.GREY_TEXT,
+                  // decorationColor: AppColor.BLUE_TEXT,
+                  color: e.completeAmount == 0
+                      ? AppColor.BLUE_TEXT
+                      : AppColor.GREY_TEXT,
                 ),
-                Container(
-                  height: 50,
-                  width: 110,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {
-                      // onSelectInvoice();
-                      // void onShowPopup(InvoiceItem dto) async {
-                      //   return await showDialog(
-                      //     context: context,
-                      //     // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
-                      //     builder: (context) => PopupPaymentRequestWidget(
-                      //       dto: dto,
-                      //       onPop: (id) {
-                      //         _model.onChangePage(PageInvoice.DETAIL);
-                      //         selectInvoiceId = id;
-                      //         setState(() {});
-                      //       },
-                      //     ),
-                      //   );
-                      // }
-                    },
-                    child: const Text(
-                      'Thanh toán',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                        decoration: TextDecoration.underline,
-                        // decorationColor: AppColor.BLUE_TEXT,
-                        color: AppColor.BLUE_TEXT,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
+          ),
+          Container(
+            height: 50,
+            width: 110,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: InkWell(
+              onTap: () async {
+                // onSelectInvoice();
+                // onShowPopup;
+                // await showDialog(
+                //   context: context,
+                //   // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
+                //   builder: (context) => PopupPaymentRequestMerchantWidget(
+                //     // dto: dto,
+                //     merchantId: '351c7cf3-65a8-4ab7-b5f9-9c9df7d23bc2',
+                //     onPop: (id) {
+                //       _model.onChangePage(PageInvoice.DETAIL);
+                //       // selectInvoiceId = id;
+                //       setState(() {});
+                //     },
+                //   ),
+                // );
+              },
+              child: Text(
+                'Thanh toán',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  decoration:
+                      e.completeAmount == 0 ? TextDecoration.underline : null,
+                  decorationColor: e.completeAmount == 0
+                      ? AppColor.BLUE_TEXT
+                      : AppColor.GREY_TEXT,
+                  // decorationColor: AppColor.BLUE_TEXT,
+                  color: e.completeAmount == 0
+                      ? AppColor.BLUE_TEXT
+                      : AppColor.GREY_TEXT,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
+
+  // void onShowPopup(InvoiceItem dto) async {
+  //   return await showDialog(
+  //     context: context,
+  //     // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
+  //     builder: (context) => PopupPaymentRequestMerchantWidget(
+  //       // dto: dto,
+  //       merchantId: '351c7cf3-65a8-4ab7-b5f9-9c9df7d23bc2',
+  //       onPop: (id) {
+  //         _model.onChangePage(PageInvoice.DETAIL);
+  //         // selectInvoiceId = id;
+  //         setState(() {});
+  //       },
+  //     ),
+  //   );
+  // }
 
   // void onSelectInvoice({String? id}) async {
   //   return await showDialog(
