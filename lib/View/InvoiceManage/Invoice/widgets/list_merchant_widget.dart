@@ -294,23 +294,25 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: InkWell(
-              onTap: () async {
-                // onSelectInvoice();
-                // onShowPopup;
-                // await showDialog(
-                //   context: context,
-                //   // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
-                //   builder: (context) => PopupPaymentRequestMerchantWidget(
-                //     // dto: dto,
-                //     merchantId: '351c7cf3-65a8-4ab7-b5f9-9c9df7d23bc2',
-                //     onPop: (id) {
-                //       _model.onChangePage(PageInvoice.DETAIL);
-                //       // selectInvoiceId = id;
-                //       setState(() {});
-                //     },
-                //   ),
-                // );
-              },
+              onTap: e.completeAmount == 0
+                  ? () async {
+                      // onSelectInvoice();
+                      // onShowPopup;
+                      await showDialog(
+                        context: context,
+                        // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
+                        builder: (context) => PopupPaymentRequestMerchantWidget(
+                          // dto: dto,
+                          merchantId: e.merchantId,
+                          onPop: (id) {
+                            _model.onChangePage(PageInvoice.DETAIL);
+                            _model.updateSelectInvoiceId(id);
+                            setState(() {});
+                          },
+                        ),
+                      );
+                    }
+                  : () {},
               child: Text(
                 'Thanh toán',
                 textAlign: TextAlign.center,

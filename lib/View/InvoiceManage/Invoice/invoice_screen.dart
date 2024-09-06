@@ -56,7 +56,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   bool isScrollingHorizontal = false;
   bool isHover = false;
 
-  String? selectInvoiceId;
+  // String? selectInvoiceId;
 
   int? type = 9;
   int pageSize = 20;
@@ -99,6 +99,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       filterType: filterSelect.type,
       search: textEditingController.text,
     );
+
+    _model.updateSelectInvoiceId('');
   }
 
   @override
@@ -114,7 +116,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         dto: dto,
         onPop: (id) {
           _model.onChangePage(PageInvoice.DETAIL);
-          selectInvoiceId = id;
+          _model.updateSelectInvoiceId(id);
           setState(() {});
         },
       ),
@@ -334,14 +336,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         onShowPopup: onShowPopup,
                                         onEdit: (dto) {
                                           setState(() {
-                                            selectInvoiceId = dto.invoiceId;
+                                            _model.updateSelectInvoiceId(
+                                                dto.invoiceId);
                                           });
                                           _model.onChangePage(PageInvoice.EDIT);
                                           _clearFilter();
                                         },
                                         onDetail: (invoiceId) {
                                           setState(() {
-                                            selectInvoiceId = invoiceId;
+                                            _model.updateSelectInvoiceId(
+                                                invoiceId);
                                           });
                                           _model
                                               .onChangePage(PageInvoice.DETAIL);
@@ -389,12 +393,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             //   pageType = PageInvoice.EDIT;
                             // });
                           },
-                          invoiceId: selectInvoiceId!),
+                          invoiceId: _model.selectInvoiceId!),
                     ),
                   ] else ...[
                     Expanded(
                       child: InvoiceEditScreen(
-                        invoiceId: selectInvoiceId!,
+                        invoiceId: _model.selectInvoiceId!,
                         onEdit: () async {
                           bool? result = await _model.editInvoice();
                           if (result!) {

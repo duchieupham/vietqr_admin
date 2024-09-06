@@ -89,6 +89,7 @@ class _PopupCheckKeyWidgetState extends State<PopupCheckKeyWidget> {
                 ),
               ),
               if (_statusMessage != null) ...[
+                const SizedBox(height: 10),
                 Text(
                   _statusMessage!,
                   style: TextStyle(
@@ -96,7 +97,7 @@ class _PopupCheckKeyWidgetState extends State<PopupCheckKeyWidget> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
               ],
               const SizedBox(height: 20),
               Row(

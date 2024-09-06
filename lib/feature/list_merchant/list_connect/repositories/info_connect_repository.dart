@@ -208,13 +208,11 @@ class InfoConnectRepository {
         type: AuthenticationType.SYSTEM,
         body: param,
       );
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
+      var data = jsonDecode(response.body);
         if (data != null) {
           result = ResponseMessageDTO.fromJson(data);
           return result;
         }
-      }
     } catch (e) {
       LOG.error(e.toString());
     }

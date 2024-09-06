@@ -181,16 +181,21 @@ class ItemMerchant {
   int completeAmount;
   String vietQrAccount;
   String email;
+  String merchantId;
+  String billNumber;
+  String invoiceName;
 
-  ItemMerchant({
-    required this.invoiceId,
-    required this.vso,
-    required this.merchantName,
-    required this.pendingAmount,
-    required this.completeAmount,
-    required this.vietQrAccount,
-    required this.email,
-  });
+  ItemMerchant(
+      {required this.invoiceId,
+      required this.vso,
+      required this.merchantName,
+      required this.pendingAmount,
+      required this.completeAmount,
+      required this.vietQrAccount,
+      required this.email,
+      required this.merchantId,
+      required this.billNumber,
+      required this.invoiceName});
 
   ItemMerchant copyWith({
     String? invoiceId,
@@ -200,16 +205,21 @@ class ItemMerchant {
     int? completeAmount,
     String? vietQrAccount,
     String? email,
+    String? merchantId,
+    String? billNumber,
+    String? invoiceName,
   }) {
     return ItemMerchant(
-      invoiceId: invoiceId ?? this.invoiceId,
-      vso: vso ?? this.vso,
-      merchantName: merchantName ?? this.merchantName,
-      pendingAmount: pendingAmount ?? this.pendingAmount,
-      completeAmount: completeAmount ?? this.completeAmount,
-      vietQrAccount: vietQrAccount ?? this.vietQrAccount,
-      email: email ?? this.email,
-    );
+        invoiceId: invoiceId ?? this.invoiceId,
+        vso: vso ?? this.vso,
+        merchantName: merchantName ?? this.merchantName,
+        pendingAmount: pendingAmount ?? this.pendingAmount,
+        completeAmount: completeAmount ?? this.completeAmount,
+        vietQrAccount: vietQrAccount ?? this.vietQrAccount,
+        email: email ?? this.email,
+        merchantId: merchantId ?? this.merchantId,
+        billNumber: billNumber ?? this.billNumber,
+        invoiceName: invoiceName ?? this.invoiceName);
   }
 
   // Convert from JSON (deserialize)
@@ -222,6 +232,9 @@ class ItemMerchant {
       completeAmount: json['completeAmount'],
       vietQrAccount: json['vietQrAccount'],
       email: json['email'],
+      merchantId: json['merchantId'],
+      invoiceName: json['invoiceName'] ?? '',
+      billNumber: json['billNumber'] ?? '',
     );
   }
 
@@ -235,6 +248,9 @@ class ItemMerchant {
       'completeAmount': completeAmount,
       'vietQrAccount': vietQrAccount,
       'email': email,
+      'merchantId': merchantId,
+      'invoiceName': invoiceName,
+      'billNumber': billNumber
     };
   }
 }
@@ -242,7 +258,9 @@ class ItemMerchant {
 class UnpaidInvoiceDTO {
   List<UnpaidInvoiceItem> items;
 
-  UnpaidInvoiceDTO({required this.items,});
+  UnpaidInvoiceDTO({
+    required this.items,
+  });
 
   factory UnpaidInvoiceDTO.fromJson(Map<String, dynamic> json) {
     return UnpaidInvoiceDTO(
@@ -267,6 +285,9 @@ class UnpaidInvoiceItem {
   int completeAmount;
   String vietQrAccount;
   String email;
+  String merchantId;
+  String billNumber;
+  String invoiceName;
 
   UnpaidInvoiceItem(
       {required this.invoiceId,
@@ -275,18 +296,23 @@ class UnpaidInvoiceItem {
       required this.pendingAmount,
       required this.completeAmount,
       required this.vietQrAccount,
-      required this.email});
+      required this.email,
+      required this.merchantId,
+      required this.billNumber,
+      required this.invoiceName});
 
   factory UnpaidInvoiceItem.fromJson(Map<String, dynamic> json) {
     return UnpaidInvoiceItem(
-      invoiceId: json['invoiceId'],
-      vso: json['vso'],
-      merchantName: json['merchantName'],
-      pendingAmount: json['pendingAmount'],
-      completeAmount: json['completeAmount'],
-      vietQrAccount: json['vietQrAccount'],
-      email: json['email'],
-    );
+        invoiceId: json['invoiceId'],
+        vso: json['vso'],
+        merchantName: json['merchantName'],
+        pendingAmount: json['pendingAmount'],
+        completeAmount: json['completeAmount'],
+        vietQrAccount: json['vietQrAccount'],
+        email: json['email'],
+        merchantId: json['merchantId'],
+        billNumber: json['billNumber'],
+        invoiceName: json['invoiceName']);
   }
 
   Map<String, dynamic> toJson() {
@@ -298,6 +324,9 @@ class UnpaidInvoiceItem {
     data['completeAmount'] = completeAmount;
     data['vietQrAccount'] = vietQrAccount;
     data['email'] = email;
+    data['merchantId'] = merchantId;
+    data['billNumber'] = billNumber;
+    data['invoiceName'] = invoiceName;
     return data;
   }
 }

@@ -305,6 +305,31 @@ class InvoiceDAO extends BaseDAO {
     return null;
   }
 
+   Future<UnpaidInvoiceDetailQrDTO?> requestPaymnetV2({
+    required List<String> invoiceIds,
+    String? bankIdRecharge,
+  }) async {
+    try {
+      Map<String, dynamic> param = {};
+      param['invoiceIds'] = invoiceIds;
+      param['bankIdRecharge'] = bankIdRecharge;
+
+      String url = '${EnvConfig.instance.getBaseUrl()}invoice/request-payment/v2';
+      final response = await BaseAPIClient.postAPI(
+        body: param,
+        url: url,
+        type: AuthenticationType.SYSTEM,
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        return UnpaidInvoiceDetailQrDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error("Failed to request payment: ${e.toString()}");
+    }
+    return null;
+  }
+
   Future<InvoiceDetailQrDTO?> getDetailQr(String invoiceId) async {
     try {
       String url =
