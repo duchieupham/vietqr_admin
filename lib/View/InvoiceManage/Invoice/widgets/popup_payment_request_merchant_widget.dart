@@ -49,27 +49,19 @@ class _PopupPaymentRequestMerchantWidgetState
               //     PagePaymentRequestWidget(onPop: widget.onPop)
               //   ],
               // );
-              return PageView.builder(
+              return PageView(
                 controller: _model.pageController,
-                physics: const NeverScrollableScrollPhysics(),
+                // physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (value) {
                   _model.updatePagePopupUnpaid(value);
                 },
-                itemCount: 2, // Number of pages
-                itemBuilder: (context, index) {
-                  switch (index) {
-                    case 0:
-                      return PagePaymentRequestMerchantWidget(
-                        onPop: widget.onPop,
-                        merchantId: widget.merchantId,
-                      );
-                    case 1:
-                      return PagePaymentRequestWidget(onPop: widget.onPop);
-                    default:
-                      return const SizedBox
-                          .shrink(); // Return an empty widget if index is out of range
-                  }
-                },
+                children: [
+                  PagePaymentRequestMerchantWidget(
+                    onPop: widget.onPop,
+                    merchantId: widget.merchantId,
+                  ),
+                  PagePaymentRequestWidget(onPop: widget.onPop)
+                ],
               );
             },
           )),

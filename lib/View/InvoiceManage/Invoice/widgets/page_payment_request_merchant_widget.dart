@@ -42,12 +42,19 @@ class _PagePaymentRequestMerchantWidgetState
     // ignore: unnecessary_null_comparison
 
     _model.clearTotalUnpaidInvoice();
+    scrollController.addListener(
+      () {
+        _model.loadMoreUnpaidInvoiceList(
+            merchantId: widget.merchantId, scrollController: scrollController);
+      },
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
     _model.pageController.dispose();
+    scrollController.dispose();
   }
 
   @override
@@ -236,130 +243,128 @@ class _PagePaymentRequestMerchantWidgetState
         bool isAllApplied = model.listUnpaidSelectInvoice
             .every((element) => element.isSelect == true);
         return Expanded(
-          child: CustomScrollView(
-            controller: scrollController,
-            shrinkWrap: true,
-            slivers: [
-              SliverToBoxAdapter(
-                child: RepaintBoundary(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 30),
-                      Container(
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                                color: AppColor.GREY_DADADA, width: 1),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 100,
-                              alignment: Alignment.centerLeft,
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                    activeColor: AppColor.BLUE_TEXT,
-                                    value: isAllApplied,
-                                    onChanged: (value) {
-                                      model.appliedAllUnpaidItem(value!);
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                        side: BorderSide(
-                                            color: AppColor.GREY_TEXT
-                                                .withOpacity(0.3))),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Text(
-                                    'Tất cả',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                            const BuildItemlTitle(
-                                title: 'STT',
-                                textAlign: TextAlign.center,
-                                width: 50,
-                                height: 50,
-                                alignment: Alignment.centerLeft),
-                            const BuildItemlTitle(
-                                title: 'Hóa đơn',
-                                textAlign: TextAlign.center,
-                                width: 200,
-                                height: 50,
-                                alignment: Alignment.centerLeft),
-                            const BuildItemlTitle(
-                                title: 'Mã hóa đơn',
-                                height: 50,
-                                width: 150,
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(right: 4),
-                                textAlign: TextAlign.center),
-                            const BuildItemlTitle(
-                                title: 'Tổng tiền (VND)',
-                                height: 50,
-                                width: 150,
-                                alignment: Alignment.centerLeft,
-                                textAlign: TextAlign.center),
-                            const BuildItemlTitle(
-                                title: 'VSO',
-                                height: 50,
-                                width: 120,
-                                alignment: Alignment.centerLeft,
-                                textAlign: TextAlign.center),
-                            const BuildItemlTitle(
-                                title: 'Chưa TT(VND)',
-                                height: 50,
-                                width: 150,
-                                alignment: Alignment.centerLeft,
-                                textAlign: TextAlign.center),
-                            const BuildItemlTitle(
-                                title: 'Đã TT(VND)',
-                                height: 50,
-                                width: 100,
-                                alignment: Alignment.centerLeft,
-                                textAlign: TextAlign.center),
-                            const BuildItemlTitle(
-                                title: 'Thao tác',
-                                height: 50,
-                                width: 80,
-                                alignment: Alignment.centerLeft,
-                                textAlign: TextAlign.center),
-                          ],
-                        ),
-                      ),
-                    ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
                   ),
                 ),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Container(
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom:
-                              BorderSide(color: AppColor.GREY_DADADA, width: 1),
-                        ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 100,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            activeColor: AppColor.BLUE_TEXT,
+                            value: isAllApplied,
+                            onChanged: (value) {
+                              model.appliedAllUnpaidItem(value!);
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                                side: BorderSide(
+                                    color:
+                                        AppColor.GREY_TEXT.withOpacity(0.3))),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Tất cả',
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.bold),
+                          )
+                        ],
                       ),
-                      child: _invoiceItemWidget(
-                        index: index,
-                        dto: model.listUnpaidSelectInvoice[index],
-                      ),
-                    );
-                  },
-                  childCount: model.listUnpaidSelectInvoice.length,
+                    ),
+                    const BuildItemlTitle(
+                        title: 'STT',
+                        textAlign: TextAlign.center,
+                        width: 50,
+                        height: 50,
+                        alignment: Alignment.centerLeft),
+                    const BuildItemlTitle(
+                        title: 'Hóa đơn',
+                        textAlign: TextAlign.center,
+                        width: 200,
+                        height: 50,
+                        alignment: Alignment.centerLeft),
+                    const BuildItemlTitle(
+                        title: 'Mã hóa đơn',
+                        height: 50,
+                        width: 150,
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(right: 4),
+                        textAlign: TextAlign.center),
+                    const BuildItemlTitle(
+                        title: 'Tổng tiền (VND)',
+                        height: 50,
+                        width: 150,
+                        alignment: Alignment.centerLeft,
+                        textAlign: TextAlign.center),
+                    const BuildItemlTitle(
+                        title: 'VSO',
+                        height: 50,
+                        width: 120,
+                        alignment: Alignment.centerLeft,
+                        textAlign: TextAlign.center),
+                    const BuildItemlTitle(
+                        title: 'Chưa TT(VND)',
+                        height: 50,
+                        width: 150,
+                        alignment: Alignment.centerLeft,
+                        textAlign: TextAlign.center),
+                    const BuildItemlTitle(
+                        title: 'Đã TT(VND)',
+                        height: 50,
+                        width: 100,
+                        alignment: Alignment.centerLeft,
+                        textAlign: TextAlign.center),
+                    const BuildItemlTitle(
+                        title: 'Thao tác',
+                        height: 50,
+                        width: 80,
+                        alignment: Alignment.centerLeft,
+                        textAlign: TextAlign.center),
+                  ],
                 ),
               ),
+              Expanded(
+                  child: SizedBox(
+                height: 400,
+                child: ListView.builder(
+                  controller: scrollController,
+                  shrinkWrap: true,
+                  itemCount: model.hasReachedMax
+                      ? model.listUnpaidSelectInvoice.length
+                      : model.listUnpaidSelectInvoice.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index >= model.listUnpaidSelectInvoice.length) {
+                      return Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        height: 50,
+                        width: 15,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColor.BLUE_TEXT,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return _invoiceItemWidget(
+                        index: index,
+                        dto: model.listUnpaidSelectInvoice[index],
+                      );
+                    }
+                  },
+                ),
+              ))
             ],
           ),
         );
@@ -372,164 +377,170 @@ class _PagePaymentRequestMerchantWidgetState
     required SelectUnpaidInvoiceItem dto,
   }) {
     return Container(
-      alignment: Alignment.center,
-      child: Row(
-        children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            width: 100,
-            height: 50,
-            child: Checkbox(
-              activeColor: AppColor.BLUE_TEXT,
-              value: dto.isSelect,
-              onChanged: (value) {
-                _model.appliedUnpaidInvoiceItem(value!, index);
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  side: BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3))),
-            ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 50,
-            child: SelectionArea(
-              child: Text(
-                (index + 1).toString(),
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
+        ),
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        child: Row(
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              width: 100,
+              height: 50,
+              child: Checkbox(
+                activeColor: AppColor.BLUE_TEXT,
+                value: dto.isSelect,
+                onChanged: (value) {
+                  _model.appliedUnpaidInvoiceItem(value!, index);
+                },
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side:
+                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3))),
               ),
             ),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 200,
-            padding: const EdgeInsets.only(right: 4),
-            child: SelectionArea(
-              child: Text(
-                dto.unpaidInvoiceItem.invoiceName,
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          //mã hóa đơn
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 150,
-            padding: const EdgeInsets.only(right: 4),
-            child: SelectionArea(
-              child: Text(
-                dto.unpaidInvoiceItem.billNumber,
-                // textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          //tổng tiền
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 150,
-            child: SelectionArea(
-              child: Text(
-                StringUtils.formatNumberWithOutVND(
-                    dto.unpaidInvoiceItem.pendingAmount),
-                style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.GREEN),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          //vso
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 120,
-            child: SelectionArea(
-              child: Text(
-                dto.unpaidInvoiceItem.vso,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 50,
+              child: SelectionArea(
+                child: Text(
+                  (index + 1).toString(),
+                  // textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
-          ),
-          //chưa TT
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 150,
-            child: SelectionArea(
-              child: Text(
-                StringUtils.formatNumberWithOutVND(
-                    dto.unpaidInvoiceItem.pendingAmount),
-                style: const TextStyle(
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 200,
+              padding: const EdgeInsets.only(right: 4),
+              child: SelectionArea(
+                child: Text(
+                  dto.unpaidInvoiceItem.invoiceName,
+                  // textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            //mã hóa đơn
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 150,
+              padding: const EdgeInsets.only(right: 4),
+              child: SelectionArea(
+                child: Text(
+                  dto.unpaidInvoiceItem.billNumber,
+                  // textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            //tổng tiền
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 150,
+              child: SelectionArea(
+                child: Text(
+                  StringUtils.formatNumberWithOutVND(
+                      dto.unpaidInvoiceItem.pendingAmount),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.GREEN),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            //vso
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 120,
+              child: SelectionArea(
+                child: Text(
+                  dto.unpaidInvoiceItem.vso,
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: AppColor.ORANGE),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-          ),
-          //đã TT
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 100,
-            child: SelectionArea(
-              child: Text(
-                StringUtils.formatNumberWithOutVND(
-                    dto.unpaidInvoiceItem.completeAmount),
-                style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.GREEN),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            //chưa TT
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 150,
+              child: SelectionArea(
+                child: Text(
+                  StringUtils.formatNumberWithOutVND(
+                      dto.unpaidInvoiceItem.pendingAmount),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.ORANGE),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
-          ),
+            //đã TT
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 100,
+              child: SelectionArea(
+                child: Text(
+                  StringUtils.formatNumberWithOutVND(
+                      dto.unpaidInvoiceItem.completeAmount),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.GREEN),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
 
-          Container(
-            alignment: Alignment.centerLeft,
-            height: 50,
-            width: 80,
-            child: InkWell(
-              onTap: () {
-                _model.currentInvoiceId = dto.unpaidInvoiceItem.invoiceId;
-                _model.pageController.nextPage(
-                    duration: const Duration(microseconds: 150),
-                    curve: Curves.easeOutBack);
-              },
-              child: const Text(
-                'Chi tiết',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    decoration: TextDecoration.underline,
-                    decorationColor: AppColor.BLUE_TEXT,
-                    // decorationColor: AppColor.BLUE_TEXT,
-                    color: AppColor.BLUE_TEXT),
+            Container(
+              alignment: Alignment.centerLeft,
+              height: 50,
+              width: 80,
+              child: InkWell(
+                onTap: () {
+                  _model.currentInvoiceId = dto.unpaidInvoiceItem.invoiceId;
+                  _model.pageController.jumpToPage(1);
+                },
+                child: const Text(
+                  'Chi tiết',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColor.BLUE_TEXT,
+                      // decorationColor: AppColor.BLUE_TEXT,
+                      color: AppColor.BLUE_TEXT),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

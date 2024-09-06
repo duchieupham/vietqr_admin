@@ -45,8 +45,7 @@ class InvoiceStatus extends BaseModel {
 
 class InvoiceViewModel extends InvoiceStatus {
   TextEditingController vatTextController = TextEditingController();
-  PageController pageController =
-      PageController(keepPage: false, initialPage: 0);
+  PageController pageController = PageController(initialPage: 0);
 
   late InvoiceDAO _dao;
   InvoiceDTO? invoiceDTO;
@@ -68,6 +67,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<SelectInvoiceItem> listSelectInvoice = [];
   List<SelectUnpaidInvoiceItem> listUnpaidSelectInvoice = [];
   List<PaymentRequestDTO> listPaymentRequest = [];
+  List<UnpaidInvoiceItem> listUnpaidInvoiceItem = [];
   PaymentUnpaidRequestDTO paymentUnpaidRequest =
       PaymentUnpaidRequestDTO(bankIdRecharge: '', invoiceIds: []);
   InvoiceExcelDTO? invoiceExcelDTO;
@@ -90,6 +90,7 @@ class InvoiceViewModel extends InvoiceStatus {
   int? valueStatus = 0;
   int? filterByDate = 1;
   int pagingPage = 1;
+  int pagingUnpaidInvoicePage = 1;
   String? selectInvoiceId;
 
   int totalAmount = 0;
@@ -154,6 +155,7 @@ class InvoiceViewModel extends InvoiceStatus {
   }
 
   bool? isInsert;
+  bool hasReachedMax = false;
 
   MetaDataDTO? metadata;
   MetaDataDTO? metaUnpaidInvoice;
@@ -724,6 +726,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
   List<SelectUnpaidInvoiceItem> mapToSelectUnpaidInvoiceItems(
       List<UnpaidInvoiceItem> unpaidInvoiceItems) {
+    paymentUnpaidRequest.invoiceIds = [];
     for (var e in unpaidInvoiceItems) {
       paymentUnpaidRequest.invoiceIds.add(e.invoiceId);
     }
@@ -994,11 +997,24 @@ class InvoiceViewModel extends InvoiceStatus {
       if (result is UnpaidInvoiceDTO) {
         unpaidInvoiceDTO = result;
         // ignore: unnecessary_null_comparison
+        metaUnpaidInvoice = _dao.metaDataDTO;
+
+        // ignore: unnecessary_null_comparison
         if (unpaidInvoiceDTO!.items != null) {
+          if (metaUnpaidInvoice != null) {
+            if (metaUnpaidInvoice!.total == unpaidInvoiceDTO!.items.length) {
+              hasReachedMax = true;
+              listUnpaidInvoiceItem = unpaidInvoiceDTO!.items;
+            } else {
+              hasReachedMax = false;
+              listUnpaidInvoiceItem = unpaidInvoiceDTO!.items;
+            }
+          }
           listUnpaidSelectInvoice =
-              mapToSelectUnpaidInvoiceItems(unpaidInvoiceDTO!.items);
+              mapToSelectUnpaidInvoiceItems(listUnpaidInvoiceItem);
           for (var e in listUnpaidSelectInvoice) {
             if (e.isSelect != null) {
+              totalUnpaidInvoice = 0;
               if (e.isSelect!) {
                 totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
               }
@@ -1007,7 +1023,66 @@ class InvoiceViewModel extends InvoiceStatus {
           notifyListeners();
         }
       }
-      metaUnpaidInvoice = _dao.metaDataDTO;
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
+  Future<void> loadMoreUnpaidInvoiceList({
+    required ScrollController scrollController,
+    required String merchantId,
+  }) async {
+    try {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (hasReachedMax) {
+          hasReachedMax = true;
+          listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem);
+        } else {
+          // isLoadingMore = true;
+          pagingUnpaidInvoicePage++;
+          final result = await _dao.getUnpaidInvoiceList(
+              page: pagingUnpaidInvoicePage, size: 20, merchantId: merchantId);
+          if (result is UnpaidInvoiceDTO) {
+            unpaidInvoiceDTO = result;
+            // ignore: unnecessary_null_comparison
+            metaUnpaidInvoice = _dao.metaDataDTO;
+            // ignore: unnecessary_null_comparison
+            if (unpaidInvoiceDTO!.items != null) {
+              if (metaUnpaidInvoice != null) {
+                if (unpaidInvoiceDTO!.items.isEmpty) {
+                  hasReachedMax = true;
+                  listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem);
+                  pagingUnpaidInvoicePage = 1;
+                } else {
+                  hasReachedMax = false;
+                  listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem)
+                    ..addAll(unpaidInvoiceDTO!.items);
+                }
+              }
+
+              //map list select
+              listUnpaidSelectInvoice =
+                  mapToSelectUnpaidInvoiceItems(listUnpaidInvoiceItem);
+
+              //sum of unpaid invoice
+              totalUnpaidInvoice = 0;
+              for (var e in listUnpaidSelectInvoice) {
+                if (e.isSelect != null) {
+                  if (e.isSelect!) {
+                    totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
+                  }
+                }
+              }
+              notifyListeners();
+            }
+          }
+        }
+      }
 
       await Future.delayed(const Duration(milliseconds: 500));
       setState(ViewStatus.Completed);
