@@ -993,7 +993,7 @@ class InvoiceViewModel extends InvoiceStatus {
       setState(ViewStatus.Loading);
       final result = await _dao.getUnpaidInvoiceList(
           page: page, size: size, merchantId: merchantId);
-
+      listUnpaidInvoiceItem = [];
       if (result is UnpaidInvoiceDTO) {
         unpaidInvoiceDTO = result;
         // ignore: unnecessary_null_comparison
