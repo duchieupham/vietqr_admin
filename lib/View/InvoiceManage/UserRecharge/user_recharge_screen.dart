@@ -640,9 +640,11 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                 builder: (context, constraints) {
                   return Stack(
                     children: [
+                      
                       Positioned.fill(
+                        right: 200,
                         child: SizedBox(
-                          width: 1490,
+                          width: 1460,
                           child: RawScrollbar(
                             thumbVisibility: true,
                             controller: _horizontal,
@@ -681,7 +683,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                         ),
                       ),
                       SizedBox(
-                        width: 1490,
+                        width: 1660,
                         child: Row(
                           children: [
                             const Expanded(child: SizedBox()),
@@ -712,7 +714,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                                       children: [
                                         Container(
                                             height: 50,
-                                            width: 120,
+                                            width: 100,
                                             alignment: Alignment.center,
                                             child: const Text(
                                               'Trạng thái',
@@ -753,7 +755,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                                                   _rightItem(e),
                                                   // if (index + 1 != list.length)
                                                   const SizedBox(
-                                                      width: 220,
+                                                      width: 200,
                                                       child: MySeparator(
                                                           color: AppColor
                                                               .GREY_DADADA)),
@@ -789,7 +791,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
             alignment: Alignment.center,
 
             height: 50,
-            width: 120,
+            width: 100,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
               decoration: BoxDecoration(
@@ -821,42 +823,35 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             height: 50,
             width: 100,
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 4),
-                const Spacer(),
-                PopupMenuButton<Actions>(
-                  padding: const EdgeInsets.all(0),
-                  onSelected: (Actions result) {
-                    switch (result) {
-                      case Actions.copy:
-                        onCopy(dto: e);
-                        break;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) =>
-                      _buildMenuItems(e.status),
-                  icon: Container(
-                    width: 30,
-                    height: 30,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: AppColor.BLUE_TEXT.withOpacity(0.3),
-                    ),
-                    child: const Icon(
-                      size: 18,
-                      Icons.more_vert,
-                      color: AppColor.BLUE_TEXT,
-                    ),
-                  ),
+            child: PopupMenuButton<Actions>(
+              padding: const EdgeInsets.all(0),
+              onSelected: (Actions result) {
+                switch (result) {
+                  case Actions.copy:
+                    onCopy(dto: e);
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) =>
+                  _buildMenuItems(e.status),
+              icon: Container(
+                width: 30,
+                height: 30,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: AppColor.BLUE_TEXT.withOpacity(0.3),
                 ),
-              ],
+                child: const Icon(
+                  size: 18,
+                  Icons.more_vert,
+                  color: AppColor.BLUE_TEXT,
+                ),
+              ),
             ),
           ),
         ],

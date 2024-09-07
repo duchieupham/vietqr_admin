@@ -56,7 +56,7 @@ class ItemWidget extends StatelessWidget {
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
-            width: 150,
+            width: 120,
             child: InkWell(
               onTap: () async {
                 String time = dto.timePaid != 0

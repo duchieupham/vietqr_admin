@@ -19,7 +19,7 @@ class TitleItemWidget extends StatelessWidget {
               textAlign: TextAlign.center),
           _buildItemTitle('Thời gian TT',
               height: 50,
-              width: 150,
+              width: 120,
               alignment: Alignment.center,
               textAlign: TextAlign.center),
           _buildItemTitle('Số tiền (VND)',
