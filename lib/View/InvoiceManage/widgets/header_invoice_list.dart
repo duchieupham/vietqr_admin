@@ -32,14 +32,14 @@ class _HeaderInvoiceListState extends State<HeaderInvoiceList> {
             if (model.pageType == PageInvoice.DETAIL) {
               return const Spacer();
             }
-            return Expanded(
+            return const Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Row(
                     children: [
                       Text(
-                        "Quản lý hoá đơn",
+                        "Quản lý thu phí",
                         style: TextStyle(fontSize: 13),
                       ),
                       Text(
@@ -54,23 +54,23 @@ class _HeaderInvoiceListState extends State<HeaderInvoiceList> {
                     ],
                   ),
                   // const Spacer(),
-                  Row(
-                    children: [
-                      MButtonWidget(
-                        onTap: widget.onCreateInvoice,
-                        title: 'Tạo mới hoá đơn',
-                        isEnable: true,
-                        margin: EdgeInsets.zero,
-                        width: 150,
-                        colorEnableBgr: AppColor.WHITE,
-                        colorEnableText: AppColor.BLUE_TEXT,
-                        border: Border.all(color: AppColor.BLUE_TEXT),
-                        radius: 10,
-                        height: 40,
-                      ),
-                      const SizedBox(width: 16),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     MButtonWidget(
+                  //       onTap: widget.onCreateInvoice,
+                  //       title: 'Tạo mới hoá đơn',
+                  //       isEnable: true,
+                  //       margin: EdgeInsets.zero,
+                  //       width: 150,
+                  //       colorEnableBgr: AppColor.WHITE,
+                  //       colorEnableText: AppColor.BLUE_TEXT,
+                  //       border: Border.all(color: AppColor.BLUE_TEXT),
+                  //       radius: 10,
+                  //       height: 40,
+                  //     ),
+                  //     const SizedBox(width: 16),
+                  //   ],
+                  // ),
                 ],
               ),
             );

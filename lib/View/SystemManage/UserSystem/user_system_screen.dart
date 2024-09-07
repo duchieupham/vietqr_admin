@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:toastification/toastification.dart';
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/views/user_detail_screen.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/item_user_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/UserSystem/widgets/popup_reset_pass_widget.dart';

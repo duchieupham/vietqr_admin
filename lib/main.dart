@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toastification/toastification.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/invoice_create_manage_screen.dart';
 import 'package:vietqr_admin/View/SystemManage/system_manage_screen.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/setup.dart';
@@ -162,19 +163,6 @@ final GoRouter _router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/user-recharge',
-      redirect: (context, state) =>
-          userId.isNotEmpty ? '/user-recharge' : '/login',
-      builder: (BuildContext context, GoRouterState state) =>
-          const TransManageScreen(type: Transtype.RECHARGE_TRANS),
-      pageBuilder: (context, state) {
-        return buildPageWithoutAnimation(
-            context: context,
-            state: state,
-            child: const TransManageScreen(type: Transtype.RECHARGE_TRANS));
-      },
-    ),
-    GoRoute(
       path: '/sys-trans-statistics',
       redirect: (context, state) =>
           userId.isNotEmpty ? '/sys-trans-statistics' : '/login',
@@ -243,16 +231,30 @@ final GoRouter _router = GoRouter(
       },
     ),
     GoRoute(
+      path: '/user-recharge',
+      redirect: (context, state) =>
+          userId.isNotEmpty ? '/user-recharge' : '/login',
+      builder: (BuildContext context, GoRouterState state) =>
+          const InvoiceManageScreen(type: Invoice.RECHARGE_TRANS),
+      pageBuilder: (context, state) {
+        return buildPageWithoutAnimation(
+          context: context,
+          state: state,
+          child: const InvoiceManageScreen(type: Invoice.RECHARGE_TRANS),
+        );
+      },
+    ),
+    GoRoute(
       path: '/create-invoice',
       redirect: (context, state) =>
           userId.isNotEmpty ? '/create-invoice' : '/login',
       builder: (BuildContext context, GoRouterState state) =>
-          const InvoiceManageScreen(type: Invoice.CREATE),
+          const InvoiceCreateManageScreen(),
       pageBuilder: (context, state) {
         return buildPageWithoutAnimation(
             context: context,
             state: state,
-            child: const InvoiceManageScreen(type: Invoice.CREATE));
+            child: const InvoiceCreateManageScreen());
       },
     ),
     GoRoute(

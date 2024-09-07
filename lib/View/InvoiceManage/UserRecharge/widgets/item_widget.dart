@@ -1,4 +1,6 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../commons/constants/configurations/theme.dart';
@@ -55,7 +57,25 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: InkWell(
+              onTap: () async {
+                String time = dto.timePaid != 0
+                    ? '${DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))} ${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))}'
+                    : '-';
+                await FlutterClipboard.copy(time).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +115,22 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(dto.amount.toString()).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Text(
                 StringUtils.formatNumber(dto.amount.toString()),
                 textAlign: TextAlign.center,
@@ -118,7 +153,22 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(dto.billNumber).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Text(
                 dto.billNumber.isNotEmpty ? dto.billNumber : '-',
                 textAlign: TextAlign.center,
@@ -137,7 +187,22 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(service).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Text(
                 service,
                 textAlign: TextAlign.center,
@@ -154,7 +219,22 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(dto.fullName).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Text(
                 dto.fullName,
                 textAlign: TextAlign.left,
@@ -171,7 +251,22 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(dto.phoneNo).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Text(
                 dto.phoneNo,
                 textAlign: TextAlign.center,
@@ -188,7 +283,22 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 130,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(dto.additionData).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -219,7 +329,25 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                final time = dto.timeCreated.toString().isNotEmpty
+                    ? '${DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(dto.timeCreated * 1000))} ${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(dto.timeCreated * 1000))}'
+                    : '-';
+                await FlutterClipboard.copy(time).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,

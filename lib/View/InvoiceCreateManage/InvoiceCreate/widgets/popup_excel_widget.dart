@@ -9,7 +9,7 @@ import 'dart:html' as html;
 
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
-import 'item_title_widget.dart';
+import '../item_title_widget.dart';
 
 class PopupExcelInvoice extends StatefulWidget {
   final String invoiceId;
@@ -130,18 +130,16 @@ class _PopupExcelInvoiceState extends State<PopupExcelInvoice> {
                                       ...model.invoiceExcelDTO!.transactions
                                           .asMap()
                                           .map(
-                                            (index, x) {
-                                              return MapEntry(
-                                                index,
-                                                _buildItemInfoTransaction(
-                                                  index + 1,
-                                                  x,
-                                                ),
-                                              );
-                                            },
-                                          )
-                                          .values
-                                          
+                                        (index, x) {
+                                          return MapEntry(
+                                            index,
+                                            _buildItemInfoTransaction(
+                                              index + 1,
+                                              x,
+                                            ),
+                                          );
+                                        },
+                                      ).values
                                   ],
                                 ),
                               ),

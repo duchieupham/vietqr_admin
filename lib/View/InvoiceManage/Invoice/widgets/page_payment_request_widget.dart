@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_qr_widget.dart';
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -71,8 +71,7 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
                         InkWell(
                           onTap: () {
                             // _model.pageController.jumpToPage(0);
-                            _model.onChangePageUnpaid(
-                                PageUnpaidInvoice.LIST);
+                            _model.onChangePageUnpaid(PageUnpaidInvoice.LIST);
                             _model.updatePagePopupUnpaid(0);
                           },
                           child: const Icon(
@@ -94,23 +93,22 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
                     const SizedBox(height: 40),
                     const Text(
                       'Tạo mã VietQR để yêu cầu thanh toán',
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     _buildInvoiceDetailWidget(model.invoiceDetailDTO!),
                     const MySeparator(color: AppColor.GREY_DADADA),
                     const SizedBox(height: 30),
                     const Text(
                       'Danh mục hàng hoá / dịch vụ',
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     _buildInvoiceWidget(),
                     const SizedBox(height: 50),
                     if (model.invoiceDetailDTO != null)
                       _buildReqPayment(
-                          model.invoiceDetailDTO!.paymentRequestDTOS,
-                          isEnable),
+                          model.invoiceDetailDTO!.paymentRequestDTOS, isEnable),
                   ],
                 ),
                 Positioned(

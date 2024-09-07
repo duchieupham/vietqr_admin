@@ -1,8 +1,12 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:vietqr_admin/View/TransManage/UserRecharge/widgets/item_widget.dart';
-import 'package:vietqr_admin/View/TransManage/UserRecharge/widgets/title_item_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/UserRecharge/widgets/item_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/UserRecharge/widgets/title_item_widget.dart';
+import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 
 import '../../../ViewModel/userRecharge_viewModel.dart';
 import '../../../commons/constants/configurations/theme.dart';
@@ -16,6 +20,10 @@ import '../../../models/DTO/data_filter_dto.dart';
 import '../../../models/DTO/metadata_dto.dart';
 import '../../../models/DTO/user_recharge_dto.dart';
 
+enum Actions {
+  copy,
+}
+
 class UserRechargeScreen extends StatefulWidget {
   const UserRechargeScreen({super.key});
 
@@ -27,8 +35,14 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
   TextEditingController controller = TextEditingController(text: '');
   late ScrollController controller1;
   late ScrollController controller2;
+
   bool isScrollingDown1 = false;
   bool isScrollingDown2 = false;
+
+  late LinkedScrollControllerGroup _linkedScrollControllerGroup;
+  late ScrollController _horizontal;
+  late ScrollController _vertical;
+  late ScrollController _vertical2;
 
   late UserRechargeViewModel _model;
   DateTime? selectDate;
@@ -38,6 +52,12 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
   void initState() {
     super.initState();
     _model = Get.find<UserRechargeViewModel>();
+
+    _linkedScrollControllerGroup = LinkedScrollControllerGroup();
+    _vertical = _linkedScrollControllerGroup.addAndGet();
+    _vertical2 = _linkedScrollControllerGroup.addAndGet();
+    _horizontal = ScrollController();
+
     _model.filterUserRecharge(
         page: 1, value: searchValue!.isEmpty ? searchValue! : '');
 
@@ -88,6 +108,9 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
   void dispose() {
     controller1.dispose();
     controller2.dispose();
+    _vertical.dispose();
+    _vertical2.dispose();
+    _horizontal.dispose();
     super.dispose();
   }
 
@@ -151,13 +174,13 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
 
   Widget _headerWidget() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(30, 15, 30, 10),
+      padding: const EdgeInsets.fromLTRB(30, 15, 0, 10),
       width: MediaQuery.of(context).size.width * 0.22,
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Quản lý giao dịch",
+            "Quản lý thu phí",
             style: TextStyle(fontSize: 15),
           ),
           Text(
@@ -165,7 +188,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
             style: TextStyle(fontSize: 15),
           ),
           Text(
-            "Giao dịch thu phí VietQR",
+            "Thu phí thường niên",
             style: TextStyle(fontSize: 15),
           ),
         ],
@@ -613,144 +636,231 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
 
         MetaDataDTO metadata = model.metadata!;
         return list != null
-            ? Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 220,
-                    child: Stack(
-                      children: [
-                        SingleChildScrollView(
-                          controller: controller1,
-                          child: ScrollConfiguration(
-                            behavior: MyCustomScrollBehavior(),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: SizedBox(
-                                width: 1360,
+            ? Expanded(child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: SizedBox(
+                          width: 1490,
+                          child: RawScrollbar(
+                            thumbVisibility: true,
+                            controller: _horizontal,
+                            child: ScrollConfiguration(
+                              behavior: MyCustomScrollBehavior(),
+                              child: SingleChildScrollView(
+                                physics: const ClampingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                controller: _horizontal,
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const TitleItemWidget(),
-                                    ...buildItemList(list, metadata),
+                                    Expanded(
+                                      child: ScrollConfiguration(
+                                        behavior:
+                                            ScrollConfiguration.of(context)
+                                                .copyWith(scrollbars: false),
+                                        child: SingleChildScrollView(
+                                          controller: _vertical,
+                                          physics:
+                                              const ClampingScrollPhysics(),
+                                          child: Column(
+                                            children: [
+                                              ...buildItemList(list, metadata),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 1360,
-                          child: Row(
-                            children: [
-                              const Expanded(child: SizedBox()),
-                              SingleChildScrollView(
-                                controller: controller2,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Container(
+                      ),
+                      SizedBox(
+                        width: 1490,
+                        child: Row(
+                          children: [
+                            const Expanded(child: SizedBox()),
+                            // const Spacer(),
+                            // SizedBox(width: constraints.maxWidth),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppColor.WHITE,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: AppColor.BLACK.withOpacity(0.1),
+                                      blurRadius: 5,
+                                      spreadRadius: 1,
+                                      offset: const Offset(-1, 0)),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: AppColor.WHITE,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: AppColor.GREY_BORDER
-                                                .withOpacity(0.8),
-                                            blurRadius: 5,
-                                            spreadRadius: 1,
-                                            offset: const Offset(0, 0)),
-                                      ],
+                                      color:
+                                          AppColor.BLUE_TEXT.withOpacity(0.3),
                                     ),
-                                    child: Column(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                              color: AppColor.BLUE_TEXT
-                                                  .withOpacity(0.3)),
-                                          child: Container(
-                                              height: 50,
-                                              width: 130,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: AppColor.GREY_TEXT
-                                                          .withOpacity(0.3))),
-                                              child: const Text(
-                                                'Trạng thái',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: AppColor.BLACK,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )),
-                                        ),
-                                        ...list.map(
-                                          (e) {
-                                            return Container(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10),
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                    border: Border(
-                                                        left: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                        bottom: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)),
-                                                        right: BorderSide(
-                                                            color: AppColor
-                                                                .GREY_TEXT
-                                                                .withOpacity(
-                                                                    0.3)))),
-                                                height: 50,
-                                                width: 130,
-                                                child: SelectionArea(
-                                                  child: Text(
-                                                    e.status == 0
-                                                        ? 'Chưa TT'
-                                                        : (e.status == 1
-                                                            ? 'Đã TT'
-                                                            : 'Đã huỷ'),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: e.status == 0
-                                                          ? AppColor.ORANGE_DARK
-                                                          : (e.status == 1
-                                                              ? AppColor.GREEN
-                                                              : AppColor
-                                                                  .GREY_TEXT),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        )
+                                            height: 50,
+                                            width: 120,
+                                            alignment: Alignment.center,
+                                            child: const Text(
+                                              'Trạng thái',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: AppColor.BLACK,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                            height: 50,
+                                            width: 100,
+                                            alignment: Alignment.center,
+                                            child: const Text(
+                                              'Thao tác',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: AppColor.BLACK,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
                                       ],
                                     ),
                                   ),
-                                ),
+                                  if (model.status == ViewStatus.Loading)
+                                    const SizedBox.shrink()
+                                  else if (list != null)
+                                    Expanded(
+                                        child: SingleChildScrollView(
+                                      controller: _vertical2,
+                                      physics: const ClampingScrollPhysics(),
+                                      child: Column(
+                                        children: [
+                                          ...list.map(
+                                            (e) {
+                                              return Column(
+                                                children: [
+                                                  _rightItem(e),
+                                                  // if (index + 1 != list.length)
+                                                  const SizedBox(
+                                                      width: 220,
+                                                      child: MySeparator(
+                                                          color: AppColor
+                                                              .GREY_DADADA)),
+                                                ],
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ))
+                                ],
                               ),
-                            ],
-                          ),
+                            )
+                          ],
                         ),
-                      ],
+                      )
+                    ],
+                  );
+                },
+              ))
+            : const SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _rightItem(RechargeItem e) {
+    return Container(
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          Container(
+            // padding: const EdgeInsets.only(right: 10),
+            alignment: Alignment.center,
+
+            height: 50,
+            width: 120,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              decoration: BoxDecoration(
+                color: e.status == 0
+                    ? AppColor.ORANGE_DARK.withOpacity(0.3)
+                    : e.status == 1
+                        ? AppColor.GREEN.withOpacity(0.3)
+                        : AppColor.GREEN_STATUS.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Text(
+                e.status == 0
+                    ? 'Chờ TT'
+                    : e.status == 1
+                        ? 'Đã TT'
+                        : 'Chưa TT hết',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: e.status == 0
+                      ? AppColor.ORANGE_DARK
+                      : e.status == 1
+                          ? AppColor.GREEN
+                          : AppColor.GREEN_STATUS,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 100,
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(width: 4),
+                const Spacer(),
+                PopupMenuButton<Actions>(
+                  padding: const EdgeInsets.all(0),
+                  onSelected: (Actions result) {
+                    switch (result) {
+                      case Actions.copy:
+                        onCopy(dto: e);
+                        break;
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      _buildMenuItems(e.status),
+                  icon: Container(
+                    width: 30,
+                    height: 30,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: AppColor.BLUE_TEXT.withOpacity(0.3),
+                    ),
+                    child: const Icon(
+                      size: 18,
+                      Icons.more_vert,
+                      color: AppColor.BLUE_TEXT,
                     ),
                   ),
                 ),
-              )
-            : const SizedBox.shrink();
-      },
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -842,6 +952,34 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
               )
             : const SizedBox.shrink();
       },
+    );
+  }
+
+  List<PopupMenuEntry<Actions>> _buildMenuItems(int status) {
+    List<PopupMenuEntry<Actions>> items = [
+      const PopupMenuItem<Actions>(
+        value: Actions.copy,
+        child: Text('Copy'),
+      ),
+    ];
+
+    return items;
+  }
+
+  void onCopy({required RechargeItem dto}) async {
+    await FlutterClipboard.copy(ShareUtils.instance.getTextRechargeItem(dto))
+        .then(
+      (value) => Fluttertoast.showToast(
+        msg: 'Đã sao chép',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Theme.of(context).cardColor,
+        textColor: Colors.black,
+        fontSize: 15,
+        webBgColor: 'rgba(255, 255, 255)',
+        webPosition: 'center',
+      ),
     );
   }
 }

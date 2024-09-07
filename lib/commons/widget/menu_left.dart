@@ -105,24 +105,32 @@ class MenuLeft extends StatelessWidget {
                   context.go('/sys-trans-statistics');
                 },
               ),
+              // ItemMenuHome(
+              //   title: 'Quản lý thu phí',
+              //   enableDropDownList: true,
+              //   listItemDrop: subMenuTransFee,
+              //   isSelect: currentType == MenuType.TRANS_FEE,
+              //   bold: true,
+              //   onTap: () {
+              //     context.go('/trans-fee');
+              //   },
+              // ),
               ItemMenuHome(
                 title: 'Quản lý thu phí',
-                enableDropDownList: true,
-                listItemDrop: subMenuTransFee,
-                isSelect: currentType == MenuType.TRANS_FEE,
-                bold: true,
-                onTap: () {
-                  context.go('/trans-fee');
-                },
-              ),
-              ItemMenuHome(
-                title: 'Quản lý hóa đơn',
                 enableDropDownList: true,
                 listItemDrop: subMenuInvoice,
                 isSelect: currentType == MenuType.INVOICE,
                 bold: true,
                 onTap: () {
                   context.go('/invoice-list');
+                },
+              ),
+              ItemMenuHome(
+                title: 'Tạo mới hóa đơn',
+                isSelect: currentType == MenuType.INVOICE_CREATE,
+                bold: true,
+                onTap: () {
+                  context.go('/create-invoice');
                 },
               ),
               ItemMenuHome(

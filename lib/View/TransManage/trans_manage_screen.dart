@@ -6,7 +6,6 @@ import '../../commons/widget/frame_view_widget.dart';
 import '../../commons/widget/item_menu_dropdown.dart';
 import '../../commons/widget/menu_left.dart';
 import 'SysTrans/transaction_screen.dart';
-import 'UserRecharge/user_recharge_screen.dart';
 
 // ignore: constant_identifier_names
 enum Transtype { SYS_TRANS, RECHARGE_TRANS }
@@ -41,11 +40,7 @@ class _TransManageScreenState extends State<TransManageScreen> {
               isSelect: type == Transtype.SYS_TRANS,
               onTap: () => onTapMenu(Transtype.SYS_TRANS),
             ),
-            ItemDropDownMenu(
-              title: 'Thu phí VietQR',
-              isSelect: type == Transtype.RECHARGE_TRANS,
-              onTap: () => onTapMenu(Transtype.RECHARGE_TRANS),
-            ),
+          
           ],
         ),
         child: _buildBody());
@@ -55,18 +50,21 @@ class _TransManageScreenState extends State<TransManageScreen> {
     if (value == Transtype.SYS_TRANS) {
       html.window.history.pushState(null, '/trans-manage', '/sys-trans');
       type = value;
-    } else if (value == Transtype.RECHARGE_TRANS) {
-      html.window.history.pushState(null, '/trans-manage', '/user-recharge');
-      type = value;
-    }
+    } 
+    // else if (value == Transtype.RECHARGE_TRANS) {
+    //   html.window.history.pushState(null, '/trans-manage', '/user-recharge');
+    //   type = value;
+    // }
     setState(() {});
   }
 
   Widget _buildBody() {
-    if (type == Transtype.SYS_TRANS) {
+    // if (type == Transtype.SYS_TRANS) {
+    //   return const SysTransactionScreen();
+    // } else {
+    //   return const UserRechargeScreen();
+    // }
       return const SysTransactionScreen();
-    } else {
-      return const UserRechargeScreen();
-    }
+
   }
 }

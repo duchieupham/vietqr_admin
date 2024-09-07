@@ -1,4 +1,3 @@
-
 import 'package:clipboard/clipboard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +9,16 @@ import 'package:go_router/go_router.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_create_service.dart';
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_select_widget.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/widgets/popup_create_service.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/widgets/popup_select_widget.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
-import '../../../ViewModel/invoice_viewModel.dart';
-import '../../../commons/constants/configurations/theme.dart';
-import '../../../models/DTO/service_item_dto.dart';
+import '../../../../ViewModel/invoice_viewModel.dart';
+import '../../../../commons/constants/configurations/theme.dart';
+import '../../../../models/DTO/service_item_dto.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
   final Function(String, String, String, Uint8List?) onCreate;
@@ -100,7 +99,6 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _headerWidget(),
                       const Divider(
                         color: AppColor.GREY_DADADA,
                       ),
@@ -1210,30 +1208,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
     );
   }
 
-  Widget _headerWidget() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
-
-      // width: MediaQuery.of(context).size.width,
-      child: const Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Quản lý hoá đơn",
-            style: TextStyle(fontSize: 13),
-          ),
-          Text(
-            "   /   ",
-            style: TextStyle(fontSize: 13),
-          ),
-          Text(
-            "Tạo mới hoá đơn",
-            style: TextStyle(fontSize: 13),
-          ),
-        ],
-      ),
-    );
-  }
+  
 
   Widget _itemTitleWidget() {
     return Container(

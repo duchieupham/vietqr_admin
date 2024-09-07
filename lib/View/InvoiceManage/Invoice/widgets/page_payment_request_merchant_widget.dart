@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_unpaid_qr_widget.dart';
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
@@ -91,8 +91,8 @@ class _PagePaymentRequestMerchantWidgetState
                   children: [
                     const Text(
                       'Tạo mã VietQR để yêu cầu thanh toán',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     InkWell(
                       onTap: () {
@@ -109,8 +109,7 @@ class _PagePaymentRequestMerchantWidgetState
                 const SizedBox(height: 40),
                 const Text(
                   'Danh sách hóa đơn chưa thanh toán',
-                  style:
-                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 _buildUnpaidInvoiceWidget(),
                 const SizedBox(
@@ -394,7 +393,6 @@ class _PagePaymentRequestMerchantWidgetState
                   ),
                 ),
               )
-           
             ],
           ),
         );

@@ -4,9 +4,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/widgets/popup_edit_vso.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/bank_account_item.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_qr_widget.dart';
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_edit_vso.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/env/env_config.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
@@ -16,7 +17,6 @@ import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
 import '../../../../commons/widget/separator_widget.dart';
 import '../../../../models/DTO/invoice_detail_dto.dart';
-import '../../InvoiceCreate/widgets/item_title_widget.dart';
 
 class InvoiceDetailScreen extends StatefulWidget {
   final String invoiceId;
