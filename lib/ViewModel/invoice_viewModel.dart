@@ -32,6 +32,8 @@ enum InvoiceType {
   REQUEST_PAYMENT,
 }
 
+enum PageUnpaidInvoice { LIST, DETAIL }
+
 class InvoiceStatus extends BaseModel {
   InvoiceType _request = InvoiceType.NONE;
   InvoiceType get request => _request;
@@ -45,7 +47,7 @@ class InvoiceStatus extends BaseModel {
 
 class InvoiceViewModel extends InvoiceStatus {
   TextEditingController vatTextController = TextEditingController();
-  PageController pageController = PageController(initialPage: 0);
+  // PageController pageController = PageController(initialPage: 0);
 
   late InvoiceDAO _dao;
   InvoiceDTO? invoiceDTO;
@@ -187,6 +189,7 @@ class InvoiceViewModel extends InvoiceStatus {
   MetaDataDTO? createMetaData;
 
   PageInvoice pageType = PageInvoice.LIST;
+  PageUnpaidInvoice pageUnpaidType = PageUnpaidInvoice.LIST;
 
   InvoiceViewModel() {
     _dao = InvoiceDAO();
@@ -224,6 +227,11 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void onChangePage(PageInvoice page) {
     pageType = page;
+    notifyListeners();
+  }
+
+  void onChangePageUnpaid(PageUnpaidInvoice page) {
+    pageUnpaidType = page;
     notifyListeners();
   }
 
@@ -1021,7 +1029,7 @@ class InvoiceViewModel extends InvoiceStatus {
     required String merchantId,
   }) async {
     try {
-      setState(ViewStatus.Loading);
+      setState(ViewStatus.Loading_Page_View);
       final result = await _dao.getUnpaidInvoiceList(
           page: page, size: size, merchantId: merchantId);
       listUnpaidInvoiceItem = [];
@@ -1043,9 +1051,10 @@ class InvoiceViewModel extends InvoiceStatus {
           }
           listUnpaidSelectInvoice =
               mapToSelectUnpaidInvoiceItems(listUnpaidInvoiceItem);
+          totalUnpaidInvoice = 0;
+
           for (var e in listUnpaidSelectInvoice) {
             if (e.isSelect != null) {
-              totalUnpaidInvoice = 0;
               if (e.isSelect!) {
                 totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
               }
@@ -1073,11 +1082,12 @@ class InvoiceViewModel extends InvoiceStatus {
         if (hasReachedMax) {
           hasReachedMax = true;
           listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem);
+          pagingUnpaidInvoicePage = 1;
         } else {
           // isLoadingMore = true;
           pagingUnpaidInvoicePage++;
           final result = await _dao.getUnpaidInvoiceList(
-              page: pagingUnpaidInvoicePage, size: 20, merchantId: merchantId);
+              page: pagingUnpaidInvoicePage, size: 50, merchantId: merchantId);
           if (result is UnpaidInvoiceDTO) {
             unpaidInvoiceDTO = result;
             // ignore: unnecessary_null_comparison

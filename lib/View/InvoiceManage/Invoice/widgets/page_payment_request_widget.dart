@@ -49,89 +49,88 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
         width: 1150,
         height: 750,
         padding: const EdgeInsets.all(20),
-        child: ScopedModel<InvoiceViewModel>(
-            model: _model,
-            child: ScopedModelDescendant<InvoiceViewModel>(
-              builder: (context, child, model) {
-                bool isEnable = false;
-                if (model.listSelectInvoice.isNotEmpty) {
-                  isEnable =
-                      model.listSelectInvoice.any((x) => x.isSelect == true) &&
-                          model.invoiceDetailDTO!.paymentRequestDTOS
-                              .any((x) => x.isChecked);
-                }
-                if (model.invoiceDetailDTO == null) {
-                  return const SizedBox.shrink();
-                }
-                return Stack(
+        child: ScopedModelDescendant<InvoiceViewModel>(
+          builder: (context, child, model) {
+            bool isEnable = false;
+            if (model.listSelectInvoice.isNotEmpty) {
+              isEnable =
+                  model.listSelectInvoice.any((x) => x.isSelect == true) &&
+                      model.invoiceDetailDTO!.paymentRequestDTOS
+                          .any((x) => x.isChecked);
+            }
+            if (model.invoiceDetailDTO == null) {
+              return const SizedBox.shrink();
+            }
+            return Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            if (_model.currentPagePopupUnpaid == 1)
-                              InkWell(
-                                onTap: () {
-                                  _model.pageController.jumpToPage(0);
-                                  _model.updatePagePopupUnpaid(0);
-                                },
-                                child: const Icon(
-                                  Icons.arrow_back_ios,
-                                  color: Colors.black,
-                                  size: 20,
-                                ),
-                              ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Text(
-                              'Tạo mã VietQR để yêu cầu thanh toán',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                        InkWell(
+                          onTap: () {
+                            // _model.pageController.jumpToPage(0);
+                            _model.onChangePageUnpaid(
+                                PageUnpaidInvoice.LIST);
+                            _model.updatePagePopupUnpaid(0);
+                          },
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.black,
+                            size: 20,
+                          ),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         const Text(
                           'Tạo mã VietQR để yêu cầu thanh toán',
                           style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        _buildInvoiceDetailWidget(model.invoiceDetailDTO!),
-                        const MySeparator(color: AppColor.GREY_DADADA),
-                        const SizedBox(height: 30),
-                        const Text(
-                          'Danh mục hàng hoá / dịch vụ',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                        _buildInvoiceWidget(),
-                        const SizedBox(height: 50),
-                        if (model.invoiceDetailDTO != null)
-                          _buildReqPayment(
-                              model.invoiceDetailDTO!.paymentRequestDTOS,
-                              isEnable),
                       ],
                     ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Icon(
-                          Icons.close,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
-                    )
+                    const SizedBox(height: 40),
+                    const Text(
+                      'Tạo mã VietQR để yêu cầu thanh toán',
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    _buildInvoiceDetailWidget(model.invoiceDetailDTO!),
+                    const MySeparator(color: AppColor.GREY_DADADA),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Danh mục hàng hoá / dịch vụ',
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    _buildInvoiceWidget(),
+                    const SizedBox(height: 50),
+                    if (model.invoiceDetailDTO != null)
+                      _buildReqPayment(
+                          model.invoiceDetailDTO!.paymentRequestDTOS,
+                          isEnable),
                   ],
-                );
-              },
-            )),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/item_title
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_detail_dto.dart';
@@ -37,7 +38,7 @@ class _PagePaymentRequestMerchantWidgetState
     _model = Get.find<InvoiceViewModel>();
     // _model.getInvoiceDetail(widget.dto.invoiceId);
     _model.getUnpaidInvoiceList(
-        page: 1, size: 20, merchantId: widget.merchantId);
+        page: 1, size: 50, merchantId: widget.merchantId);
     _model.getListRequestPayment();
     // ignore: unnecessary_null_comparison
 
@@ -53,7 +54,6 @@ class _PagePaymentRequestMerchantWidgetState
   @override
   void dispose() {
     super.dispose();
-    _model.pageController.dispose();
     scrollController.dispose();
   }
 
@@ -63,72 +63,68 @@ class _PagePaymentRequestMerchantWidgetState
       child: Container(
         color: AppColor.WHITE,
         width: 1150,
-        height: 750,
+        height: 700,
         padding: const EdgeInsets.all(20),
-        child: ScopedModel<InvoiceViewModel>(
-            model: _model,
-            child: ScopedModelDescendant<InvoiceViewModel>(
-              builder: (context, child, model) {
-                for (var e in _model.listPaymentRequest) {
-                  if (e.isChecked) _model.updateBankIdRecharge(e.bankId);
-                }
-                bool isEnable = false;
-                if (model.listUnpaidSelectInvoice.isNotEmpty) {
-                  isEnable = model.listUnpaidSelectInvoice
-                          .any((x) => x.isSelect == true) &&
-                      model.paymentUnpaidRequest.invoiceIds.isNotEmpty &&
-                      model.listPaymentRequest.any(
-                        (x) => x.isChecked == true,
-                      );
-                }
-                if (model.unpaidInvoiceDTO?.items == null) {
-                  return const SizedBox.shrink();
-                }
-                return Stack(
+        child: ScopedModelDescendant<InvoiceViewModel>(
+          builder: (context, child, model) {
+            for (var e in _model.listPaymentRequest) {
+              if (e.isChecked) _model.updateBankIdRecharge(e.bankId);
+            }
+            bool isEnable = false;
+            if (model.listUnpaidSelectInvoice.isNotEmpty) {
+              isEnable = model.listUnpaidSelectInvoice
+                      .any((x) => x.isSelect == true) &&
+                  model.paymentUnpaidRequest.invoiceIds.isNotEmpty &&
+                  model.listPaymentRequest.any(
+                    (x) => x.isChecked == true,
+                  );
+            }
+            if (model.unpaidInvoiceDTO?.items == null) {
+              return const SizedBox.shrink();
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Tạo mã VietQR để yêu cầu thanh toán',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 40),
-                        const Text(
-                          'Danh sách hóa đơn chưa thanh toán',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                        _buildUnpaidInvoiceWidget(),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        _buildTotal(),
-                        const SizedBox(height: 50),
-                        // ignore: unnecessary_null_comparison
-                        if (model.listPaymentRequest != null)
-                          _buildReqPayment(model.listPaymentRequest, isEnable),
-                      ],
+                    const Text(
+                      'Tạo mã VietQR để yêu cầu thanh toán',
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Icon(
-                          Icons.close,
-                          color: Colors.black,
-                          size: 20,
-                        ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.black,
+                        size: 20,
                       ),
-                    )
+                    ),
                   ],
-                );
-              },
-            )),
+                ),
+                const SizedBox(height: 40),
+                const Text(
+                  'Danh sách hóa đơn chưa thanh toán',
+                  style:
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                _buildUnpaidInvoiceWidget(),
+                const SizedBox(
+                  height: 50,
+                ),
+                _buildTotal(),
+                const SizedBox(height: 50),
+                // ignore: unnecessary_null_comparison
+                if (model.listPaymentRequest != null)
+                  _buildReqPayment(model.listPaymentRequest, isEnable),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -137,23 +133,32 @@ class _PagePaymentRequestMerchantWidgetState
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
         return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Tổng tiền (VND):',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              width: 5,
+            Row(
+              children: [
+                const Text(
+                  'Tổng tiền (VND):',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  StringUtils.formatNumberWithOutVND(model.totalUnpaidInvoice),
+                  style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.GREEN),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
             Text(
-              StringUtils.formatNumberWithOutVND(model.totalUnpaidInvoice),
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.GREEN),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
+              'Đang hiển thị: ${model.listUnpaidInvoiceItem.length}/${model.metaUnpaidInvoice?.total}',
+              style: const TextStyle(fontSize: 10),
+            )
           ],
         );
       },
@@ -231,7 +236,7 @@ class _PagePaymentRequestMerchantWidgetState
   Widget _buildUnpaidInvoiceWidget() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
-        if (model.status == ViewStatus.Loading) {
+        if (model.status == ViewStatus.Loading_Page_View) {
           return const Expanded(
               child: Center(
             child: CircularProgressIndicator(),
@@ -336,35 +341,60 @@ class _PagePaymentRequestMerchantWidgetState
                 ),
               ),
               Expanded(
-                  child: SizedBox(
-                height: 400,
-                child: ListView.builder(
+                child: SingleChildScrollView(
                   controller: scrollController,
-                  shrinkWrap: true,
-                  itemCount: model.hasReachedMax
-                      ? model.listUnpaidSelectInvoice.length
-                      : model.listUnpaidSelectInvoice.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index >= model.listUnpaidSelectInvoice.length) {
-                      return Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        height: 50,
-                        width: 15,
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColor.BLUE_TEXT,
+                  child: ListView.builder(
+                    // controller: scrollController,
+                    addRepaintBoundaries: false,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: model.hasReachedMax
+                        ? model.listUnpaidSelectInvoice.length
+                        : model.listUnpaidSelectInvoice.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index >= model.listUnpaidSelectInvoice.length) {
+                        return Container(
+                          key: const ValueKey('loading_indicator'),
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 50,
+                          width: 15,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.BLUE_TEXT,
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return _invoiceItemWidget(
-                        index: index,
-                        dto: model.listUnpaidSelectInvoice[index],
-                      );
-                    }
-                  },
+                        );
+                      } else {
+                        return _invoiceItemWidget(
+                            index: index,
+                            dto: model.listUnpaidSelectInvoice[index],
+                            model: model,
+                            onTap: () {
+                              final invoiceId = model
+                                  .listUnpaidSelectInvoice[index]
+                                  .unpaidInvoiceItem
+                                  .invoiceId;
+                              model.updateCurrentInvoiceId(invoiceId);
+                              // _model.pageController.jumpToPage(1);
+                              // Navigator.pop(context);
+                              // WidgetsBinding.instance.addPostFrameCallback((_) {
+                              //   if (mounted) {
+                              //     _model.pageController.jumpToPage(1);
+                              //   }
+                              // });
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (mounted) {
+                                  model.onChangePageUnpaid(
+                                      PageUnpaidInvoice.DETAIL);
+                                }
+                              });
+                            });
+                      }
+                    },
+                  ),
                 ),
-              ))
+              )
+           
             ],
           ),
         );
@@ -372,10 +402,11 @@ class _PagePaymentRequestMerchantWidgetState
     );
   }
 
-  Widget _invoiceItemWidget({
-    required int index,
-    required SelectUnpaidInvoiceItem dto,
-  }) {
+  Widget _invoiceItemWidget(
+      {required int index,
+      required SelectUnpaidInvoiceItem dto,
+      required InvoiceViewModel model,
+      required Function() onTap}) {
     return Container(
       decoration: const BoxDecoration(
         border: Border(
@@ -394,7 +425,7 @@ class _PagePaymentRequestMerchantWidgetState
                 activeColor: AppColor.BLUE_TEXT,
                 value: dto.isSelect,
                 onChanged: (value) {
-                  _model.appliedUnpaidInvoiceItem(value!, index);
+                  model.appliedUnpaidInvoiceItem(value!, index);
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
@@ -522,10 +553,7 @@ class _PagePaymentRequestMerchantWidgetState
               height: 50,
               width: 80,
               child: InkWell(
-                onTap: () {
-                  _model.currentInvoiceId = dto.unpaidInvoiceItem.invoiceId;
-                  _model.pageController.jumpToPage(1);
-                },
+                onTap: onTap,
                 child: const Text(
                   'Chi tiết',
                   textAlign: TextAlign.center,

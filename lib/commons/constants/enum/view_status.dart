@@ -4,6 +4,7 @@ enum ViewStatus {
   Empty,
   Loading,
   Loading_Page,
+  Loading_Page_View,
   Completed,
   Error,
   LoadMore,

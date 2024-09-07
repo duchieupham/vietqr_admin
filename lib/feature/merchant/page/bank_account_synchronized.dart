@@ -81,6 +81,24 @@ class _ListTransactionState extends State<ListBankAccountSync> {
               .add(GetListBankSyncEvent(Session.instance.connectDTO.id, 0));
           Navigator.pop(context);
         }
+        // if (stateInfo is AddBankConnectFailedState) {
+        //   Navigator.pop(context);
+        //   toastification.show(
+        //     context: context,
+        //     type: ToastificationType.error,
+        //     style: ToastificationStyle.flat,
+        //     title: const Text(
+        //       'Thêm thất bại',
+        //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        //     ),
+        //     showProgressBar: false,
+        //     alignment: Alignment.topRight,
+        //     autoCloseDuration: const Duration(seconds: 5),
+        //     boxShadow: highModeShadow,
+        //     dragToClose: true,
+        //     pauseOnHover: true,
+        //   );
+        // }
         if (stateInfo is RemoveBankConnectSuccessState) {
           merchantBloc
               .add(GetListBankSyncEvent(Session.instance.connectDTO.id, 0));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/page_payment_request_merchant_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/page_payment_request_widget.dart';
@@ -29,42 +28,30 @@ class _PopupPaymentRequestMerchantWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColor.TRANSPARENT,
-      child: ScopedModel<InvoiceViewModel>(
-          model: _model,
-          child: ScopedModelDescendant<InvoiceViewModel>(
-            builder: (context, child, model) {
-              // return PageView(
-              //   controller: _model.pageController,
-              //   physics: const NeverScrollableScrollPhysics(),
-              //   onPageChanged: (value) {
-              //     _model.updatePagePopupUnpaid(value);
-              //   },
-              //   children: [
-              //     PagePaymentRequestMerchantWidget(
-              //       onPop: widget.onPop,
-              //       merchantId: widget.merchantId,
-              //     ),
-              //     PagePaymentRequestWidget(onPop: widget.onPop)
-              //   ],
-              // );
-              return PageView(
-                controller: _model.pageController,
-                // physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: (value) {
-                  _model.updatePagePopupUnpaid(value);
-                },
-                children: [
-                  PagePaymentRequestMerchantWidget(
-                    onPop: widget.onPop,
-                    merchantId: widget.merchantId,
-                  ),
-                  PagePaymentRequestWidget(onPop: widget.onPop)
-                ],
-              );
-            },
-          )),
+    return ScopedModel<InvoiceViewModel>(
+      model: _model,
+      child: ScopedModelDescendant<InvoiceViewModel>(
+        builder: (context, child, model) {
+          if (model.pageUnpaidType == PageUnpaidInvoice.LIST) {
+            return Material(
+              color: AppColor.TRANSPARENT,
+              child: PagePaymentRequestMerchantWidget(
+                onPop: widget.onPop,
+                merchantId: widget.merchantId,
+              ),
+            );
+          } else {
+            return Material(
+                color: AppColor.TRANSPARENT,
+                child: PagePaymentRequestWidget(onPop: widget.onPop));
+          }
+        },
+      ),
     );
   }
 }
+// PagePaymentRequestMerchantWidget(
+//                     onPop: widget.onPop,
+//                     merchantId: widget.merchantId,
+//                   ),
+//                   PagePaymentRequestWidget(onPop: widget.onPop)
