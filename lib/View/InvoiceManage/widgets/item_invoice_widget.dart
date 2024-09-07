@@ -43,6 +43,35 @@ class ItemInvoiceWidget extends StatelessWidget {
             ),
           ),
           Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 250,
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(dto.invoiceName).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
+              child: Text(
+                dto.invoiceName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.left,
+                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+              ),
+            ),
+          ),
+          Container(
             // padding: const EdgeInsets.only(left: 5),
             alignment: Alignment.centerLeft,
             // decoration: const BoxDecoration(
@@ -217,7 +246,7 @@ class ItemInvoiceWidget extends StatelessWidget {
                 },
                 child: Text(
                   dto.vso.isNotEmpty ? dto.vso : '-',
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
                 )),
           ),
@@ -296,52 +325,6 @@ class ItemInvoiceWidget extends StatelessWidget {
                 style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
               ),
             ),
-            // child: Text(
-            //   dto.midName.isNotEmpty ? dto.midName : '-',
-            //   textAlign: TextAlign.left,
-            //   style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-            // ),
-          ),
-          Container(
-            // padding: const EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
-            // decoration: const BoxDecoration(
-            //     border: Border(
-            //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
-            //         right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 50,
-            width: 250,
-            child: TextButton(
-              onPressed: () async {
-                await FlutterClipboard.copy(dto.invoiceName).then(
-                  (value) => Fluttertoast.showToast(
-                    msg: 'Đã sao chép',
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: AppColor.WHITE,
-                    textColor: AppColor.BLACK,
-                    fontSize: 15,
-                    webBgColor: 'rgba(255, 255, 255)',
-                    webPosition: 'center',
-                  ),
-                );
-              },
-              child: Text(
-                dto.invoiceName,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.left,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-              ),
-            ),
-            // child: Text(
-            //   dto.invoiceName,
-            //   maxLines: 2,
-            //   overflow: TextOverflow.ellipsis,
-            //   textAlign: TextAlign.left,
-            //   style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
-            // ),
           ),
           Container(
             // padding: const EdgeInsets.only(left: 5),

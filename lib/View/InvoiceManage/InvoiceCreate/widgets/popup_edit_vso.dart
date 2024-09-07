@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/utils/text_field_custom.dart';
@@ -258,8 +259,43 @@ class _PopupEditVsoWidgetState extends State<PopupEditVsoWidget> {
                             .then(
                           (value) {
                             if (value == true) {
-                              Navigator.of(context).pop();
-                            } else {}
+                              // Navigator.of(context).pop();
+                              toastification.show(
+                                context: context,
+                                type: ToastificationType.success,
+                                style: ToastificationStyle.flat,
+                                title: const Text(
+                                  'Cập nhật thành công',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                showProgressBar: false,
+                                alignment: Alignment.topRight,
+                                autoCloseDuration: const Duration(seconds: 5),
+                                boxShadow: highModeShadow,
+                                dragToClose: true,
+                                pauseOnHover: true,
+                              );
+                            } else {
+                              toastification.show(
+                                context: context,
+                                type: ToastificationType.error,
+                                style: ToastificationStyle.flat,
+                                title: const Text(
+                                  'Cập nhật thất bại',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                showProgressBar: false,
+                                alignment: Alignment.topRight,
+                                autoCloseDuration: const Duration(seconds: 5),
+                                boxShadow: highModeShadow,
+                                dragToClose: true,
+                                pauseOnHover: true,
+                              );
+                            }
                           },
                         );
                       },

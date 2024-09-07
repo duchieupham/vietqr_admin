@@ -9,6 +9,7 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_b
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_merchant_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_filter_invoice.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/bank_system_screen.dart';
@@ -45,7 +46,7 @@ class InvoiceScreen extends StatefulWidget {
 class _InvoiceScreenState extends State<InvoiceScreen> {
   late ScrollController controller1;
   late ScrollController controller2;
-
+  GlobalKey buttonKey = GlobalKey();
   final controller3 = ScrollController();
   final controller4 = ScrollController();
   final controllerHorizontal = ScrollController();
@@ -64,13 +65,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   String? status = '';
 
   late InvoiceViewModel _model;
-
-  List<ChoiceChipItem> listChoiceChips = [
-    ChoiceChipItem(title: 'Tất cả', value: 9),
-    ChoiceChipItem(title: 'Phí kích hoạt DV', value: 0),
-    ChoiceChipItem(title: 'Phí GD', value: 1),
-    ChoiceChipItem(title: 'Nạp tiền ĐT', value: 2),
-  ];
 
   int _choiceChipSelected = 9;
 
@@ -168,117 +162,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      "Loại hóa đơn:",
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Wrap(
-                                      spacing: 4.0,
-                                      children: List<Widget>.generate(
-                                        4,
-                                        (int index) {
-                                          return ChoiceChip(
-                                            padding: EdgeInsets.zero,
-                                            labelPadding: EdgeInsets.zero,
-                                            selectedColor: Colors.transparent,
-                                            side: const BorderSide(
-                                                color: Colors.transparent),
-                                            backgroundColor: Colors.transparent,
-                                            showCheckmark: false,
-                                            label: Container(
-                                              decoration: BoxDecoration(
-                                                gradient: _choiceChipSelected ==
-                                                        listChoiceChips[index]
-                                                            .value
-                                                    ? VietQRTheme.gradientColor
-                                                        .brightBlueLinear
-                                                    : null,
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              padding: const EdgeInsets.only(
-                                                  left: 10,
-                                                  right: 10,
-                                                  top: 10,
-                                                  bottom: 10),
-                                              child: Row(
-                                                children: [
-                                                  _choiceChipSelected ==
-                                                          listChoiceChips[index]
-                                                              .value
-                                                      ? Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 4),
-                                                          height: 20,
-                                                          width: 20,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50),
-                                                          ),
-                                                          child: const Center(
-                                                              child: Icon(
-                                                            Icons.check,
-                                                            color: AppColor
-                                                                .BLUE_TEXT,
-                                                            size: 15,
-                                                          )),
-                                                        )
-                                                      : const SizedBox.shrink(),
-                                                  Text(
-                                                    listChoiceChips[index]
-                                                        .title,
-                                                    style: TextStyle(
-                                                      color:
-                                                          _choiceChipSelected ==
-                                                                  listChoiceChips[
-                                                                          index]
-                                                                      .value
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            selected: _choiceChipSelected ==
-                                                listChoiceChips[index].value,
-                                            onSelected: (bool selected) {
-                                              setState(() {
-                                                _choiceChipSelected = (selected
-                                                    ? listChoiceChips[index]
-                                                        .value
-                                                    : null)!;
-                                              });
-                                              textEditingController.clear();
-                                              model.clearSelectMerchant();
-                                              model.filterListInvoice(
-                                                invoiceType:
-                                                    _choiceChipSelected,
-                                                size: pageSize,
-                                                page: 1,
-                                                filterType: filterSelect.type,
-                                                search:
-                                                    textEditingController.text,
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ).toList(),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    const Text(
                                       'Tìm kiếm theo',
                                       style: TextStyle(
                                           fontSize: 13,
@@ -287,17 +170,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                     const SizedBox(height: 8),
                                     FilterInvoiceWidget(
                                       invoiceType: _choiceChipSelected,
-                                      onCall: (subType) {
-                                        textEditingController =
-                                            TextEditingController();
-
+                                      onCall: (subMenu) {
+                                        textEditingController.clear();
                                         model.filterListInvoice(
                                           invoiceType: _choiceChipSelected,
                                           size: pageSize,
                                           page: 1,
-                                          subType: subType,
+                                          // subType: subType,
                                           filterType: filterSelect.type,
-                                          search: '',
+                                          search: subMenu == 4 ? '0' : '',
                                         );
                                       },
                                       pageSize: pageSize,
@@ -306,6 +187,55 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                     ),
                                   ],
                                 ),
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 21),
+                                    InkWell(
+                                      key: buttonKey,
+                                      onTap: () async {
+                                        await onFilter();
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: AppColor.GREY_TEXT
+                                                .withOpacity(0.1)),
+                                        child: const Stack(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'Bộ lọc hóa đơn',
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: AppColor.GREY_TEXT,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(width: 4),
+                                                Icon(Icons.filter_alt,
+                                                    size: 15,
+                                                    color: AppColor.GREY_TEXT),
+                                                SizedBox(width: 2),
+                                              ],
+                                            ),
+                                            Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: Icon(
+                                                  Icons.circle,
+                                                  color: AppColor.RED_TEXT,
+                                                  size: 8,
+                                                ))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
 
@@ -545,92 +475,92 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
-                PopupMenuButton<DataFilter>(
-                  tooltip: '',
-                  offset: const Offset(0, 50),
-                  padding: const EdgeInsets.all(0),
-                  onSelected: (DataFilter result) async {
-                    model.updateFilterTime(result);
-                    model.selectDateTime(model.getMonth());
-                    await model.filterListInvoice(
-                      invoiceType: _choiceChipSelected,
-                      size: pageSize,
-                      page: 1,
-                      filterType: filterSelect.type,
-                      search: textEditingController.text,
-                    );
-                  },
-                  itemBuilder: (BuildContext context) => _buildMenuItems(
-                      model.listFilterTime, model.valueFilterTime),
-                  elevation: 4,
-                  initialValue: model.valueFilterTime,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  icon: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: isHover
-                            ? AppColor.GREY_TEXT.withOpacity(0.1)
-                            : AppColor.TRANSPARENT),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.filter_alt,
-                            size: 15, color: AppColor.GREY_TEXT),
-                        SizedBox(width: 4),
-                        Text(
-                          'Thời gian',
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: AppColor.GREY_TEXT,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                if (model.valueFilterTime.id == 0) ...[
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 140,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AppColor.GREY_DADADA)),
-                    child: InkWell(
-                      onTap: () async {
-                        await _onPickMonth(model, model.getMonth()).then(
-                          (time) {
-                            if (time != null) {
-                              model.filterListInvoice(
-                                invoiceType: _choiceChipSelected,
-                                size: pageSize,
-                                page: 1,
-                                filterType: filterSelect.type,
-                                search: textEditingController.text,
-                              );
-                            }
-                          },
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${model.selectedDate.month}/${model.selectedDate.year}',
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                            const Icon(Icons.calendar_month_outlined)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                // const SizedBox(width: 8),
+                // PopupMenuButton<DataFilter>(
+                //   tooltip: '',
+                //   offset: const Offset(0, 50),
+                //   padding: const EdgeInsets.all(0),
+                //   onSelected: (DataFilter result) async {
+                //     model.updateFilterTime(result);
+                //     model.selectDateTime(model.getMonth());
+                //     await model.filterListInvoice(
+                //       invoiceType: _choiceChipSelected,
+                //       size: pageSize,
+                //       page: 1,
+                //       filterType: filterSelect.type,
+                //       search: textEditingController.text,
+                //     );
+                //   },
+                //   itemBuilder: (BuildContext context) => _buildMenuItems(
+                //       model.listFilterTime, model.valueFilterTime),
+                //   elevation: 4,
+                //   initialValue: model.valueFilterTime,
+                //   shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(5)),
+                //   icon: Container(
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                //     decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(5),
+                //         color: isHover
+                //             ? AppColor.GREY_TEXT.withOpacity(0.1)
+                //             : AppColor.TRANSPARENT),
+                //     child: const Row(
+                //       children: [
+                //         Icon(Icons.filter_alt,
+                //             size: 15, color: AppColor.GREY_TEXT),
+                //         SizedBox(width: 4),
+                //         Text(
+                //           'Thời gian',
+                //           style: TextStyle(
+                //               fontSize: 13,
+                //               color: AppColor.GREY_TEXT,
+                //               fontWeight: FontWeight.bold),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // if (model.valueFilterTime.id == 0) ...[
+                //   const SizedBox(width: 8),
+                //   Container(
+                //     width: 140,
+                //     height: 40,
+                //     decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(10),
+                //         border: Border.all(color: AppColor.GREY_DADADA)),
+                //     child: InkWell(
+                //       onTap: () async {
+                //         await _onPickMonth(model, model.getMonth()).then(
+                //           (time) {
+                //             if (time != null) {
+                //               model.filterListInvoice(
+                //                 invoiceType: _choiceChipSelected,
+                //                 size: pageSize,
+                //                 page: 1,
+                //                 filterType: filterSelect.type,
+                //                 search: textEditingController.text,
+                //               );
+                //             }
+                //           },
+                //         );
+                //       },
+                //       child: Container(
+                //         padding: const EdgeInsets.only(left: 10, right: 10),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             Text(
+                //               '${model.selectedDate.month}/${model.selectedDate.year}',
+                //               style: const TextStyle(fontSize: 13),
+                //             ),
+                //             const Icon(Icons.calendar_month_outlined)
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ],
 
                 // const Spacer(),
               ],
@@ -1082,6 +1012,58 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         webBgColor: 'rgba(255, 255, 255)',
         webPosition: 'center',
       ),
+    );
+  }
+
+  Future<void> onFilter() async {
+    final RenderBox renderBox =
+        buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final Offset position = renderBox.localToGlobal(Offset.zero);
+    final Size size = renderBox.size;
+    await showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(
+          position.dx,
+          position.dy + size.height + 10,
+          position.dx,
+          0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        constraints: const BoxConstraints(maxWidth: 720),
+        items: [
+          PopupMenuItem<int>(
+            value: 1,
+            child: PopupFilterInvoice(
+              choiceChipSelected: _choiceChipSelected,
+              onSelectTime: (time) {
+                _model.filterListInvoice(
+                  invoiceType: time,
+                  size: pageSize,
+                  page: 1,
+                  filterType: filterSelect.type,
+                  search: textEditingController.text,
+                );
+              },
+              onSelectChips: (chip) {
+                setState(() {
+                  _choiceChipSelected = chip;
+                });
+                textEditingController.clear();
+                _model.clearSelectMerchant();
+                _model.filterListInvoice(
+                  invoiceType: chip,
+                  size: pageSize,
+                  page: 1,
+                  filterType: filterSelect.type,
+                  search: textEditingController.text,
+                );
+              },
+            ),
+          ),
+        ]).then(
+      (value) {},
     );
   }
 }

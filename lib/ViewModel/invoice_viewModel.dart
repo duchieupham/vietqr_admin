@@ -130,6 +130,31 @@ class InvoiceViewModel extends InvoiceStatus {
             "Đại lý",
             style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
           )),
+      const DropdownMenuItem<int>(
+          value: 4,
+          child: Text(
+            "Trạng thái HĐ",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+    ];
+
+    return items;
+  }
+
+  List<DropdownMenuItem<int>> listMenuDropStatus() {
+    List<DropdownMenuItem<int>> items = [
+      const DropdownMenuItem<int>(
+          value: 0,
+          child: Text(
+            "Chờ thanh toán",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
+      const DropdownMenuItem<int>(
+          value: 1,
+          child: Text(
+            "Đã thanh toán",
+            style: TextStyle(fontSize: 15, color: AppColor.GREY_TEXT),
+          )),
     ];
 
     return items;
@@ -849,11 +874,17 @@ class InvoiceViewModel extends InvoiceStatus {
           invoiceType: invoiceType,
           time: formattedDate,
           value: search);
-      if (result is InvoiceDTO) {
-        invoiceDTO = result;
+      if (result != null) {
+        if (result is InvoiceDTO) {
+          invoiceDTO = result;
+        } else {
+          merchantData = result;
+        }
       } else {
-        merchantData = result;
+        setState(ViewStatus.Error);
+        return;
       }
+
       metadata = _dao.metaDataDTO;
       await Future.delayed(const Duration(milliseconds: 500));
       setState(ViewStatus.Completed);
