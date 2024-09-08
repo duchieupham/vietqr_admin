@@ -235,7 +235,7 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen>
                             currentType: MenuType.INVOICE,
                             subMenuInvoice: [
                               ItemDropDownMenu(
-                                title: 'Danh sách hoá đơn',
+                                title: 'Thu phí giao dịch',
                                 isSelect: type == Invoice.LIST,
                                 onTap: () => onTapMenu(Invoice.LIST),
                               ),
