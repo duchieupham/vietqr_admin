@@ -181,16 +181,46 @@ class ItemMerchant {
   int completeAmount;
   String vietQrAccount;
   String email;
+  String merchantId;
+  String billNumber;
+  String invoiceName;
 
-  ItemMerchant({
-    required this.invoiceId,
-    required this.vso,
-    required this.merchantName,
-    required this.pendingAmount,
-    required this.completeAmount,
-    required this.vietQrAccount,
-    required this.email,
-  });
+  ItemMerchant(
+      {required this.invoiceId,
+      required this.vso,
+      required this.merchantName,
+      required this.pendingAmount,
+      required this.completeAmount,
+      required this.vietQrAccount,
+      required this.email,
+      required this.merchantId,
+      required this.billNumber,
+      required this.invoiceName});
+
+  ItemMerchant copyWith({
+    String? invoiceId,
+    String? vso,
+    String? merchantName,
+    int? pendingAmount,
+    int? completeAmount,
+    String? vietQrAccount,
+    String? email,
+    String? merchantId,
+    String? billNumber,
+    String? invoiceName,
+  }) {
+    return ItemMerchant(
+        invoiceId: invoiceId ?? this.invoiceId,
+        vso: vso ?? this.vso,
+        merchantName: merchantName ?? this.merchantName,
+        pendingAmount: pendingAmount ?? this.pendingAmount,
+        completeAmount: completeAmount ?? this.completeAmount,
+        vietQrAccount: vietQrAccount ?? this.vietQrAccount,
+        email: email ?? this.email,
+        merchantId: merchantId ?? this.merchantId,
+        billNumber: billNumber ?? this.billNumber,
+        invoiceName: invoiceName ?? this.invoiceName);
+  }
 
   // Convert from JSON (deserialize)
   factory ItemMerchant.fromJson(Map<String, dynamic> json) {
@@ -202,6 +232,9 @@ class ItemMerchant {
       completeAmount: json['completeAmount'],
       vietQrAccount: json['vietQrAccount'],
       email: json['email'],
+      merchantId: json['merchantId'],
+      invoiceName: json['invoiceName'] ?? '',
+      billNumber: json['billNumber'] ?? '',
     );
   }
 
@@ -215,6 +248,85 @@ class ItemMerchant {
       'completeAmount': completeAmount,
       'vietQrAccount': vietQrAccount,
       'email': email,
+      'merchantId': merchantId,
+      'invoiceName': invoiceName,
+      'billNumber': billNumber
     };
+  }
+}
+
+class UnpaidInvoiceDTO {
+  List<UnpaidInvoiceItem> items;
+
+  UnpaidInvoiceDTO({
+    required this.items,
+  });
+
+  factory UnpaidInvoiceDTO.fromJson(Map<String, dynamic> json) {
+    return UnpaidInvoiceDTO(
+      items: List<UnpaidInvoiceItem>.from(
+          json['items'].map((x) => UnpaidInvoiceItem.fromJson(x))),
+      // extraData: InvoiceExtraData.fromJson(json['extraData']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'items': List<dynamic>.from(items.map((x) => x.toJson())),
+    };
+  }
+}
+
+class UnpaidInvoiceItem {
+  String invoiceId;
+  String vso;
+  String merchantName;
+  int pendingAmount;
+  int completeAmount;
+  String vietQrAccount;
+  String email;
+  String merchantId;
+  String billNumber;
+  String invoiceName;
+
+  UnpaidInvoiceItem(
+      {required this.invoiceId,
+      required this.vso,
+      required this.merchantName,
+      required this.pendingAmount,
+      required this.completeAmount,
+      required this.vietQrAccount,
+      required this.email,
+      required this.merchantId,
+      required this.billNumber,
+      required this.invoiceName});
+
+  factory UnpaidInvoiceItem.fromJson(Map<String, dynamic> json) {
+    return UnpaidInvoiceItem(
+        invoiceId: json['invoiceId'],
+        vso: json['vso'],
+        merchantName: json['merchantName'],
+        pendingAmount: json['pendingAmount'],
+        completeAmount: json['completeAmount'],
+        vietQrAccount: json['vietQrAccount'],
+        email: json['email'],
+        merchantId: json['merchantId'],
+        billNumber: json['billNumber'],
+        invoiceName: json['invoiceName']);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['invoiceId'] = invoiceId;
+    data['vso'] = vso;
+    data['merchantName'] = merchantName;
+    data['pendingAmount'] = pendingAmount;
+    data['completeAmount'] = completeAmount;
+    data['vietQrAccount'] = vietQrAccount;
+    data['email'] = email;
+    data['merchantId'] = merchantId;
+    data['billNumber'] = billNumber;
+    data['invoiceName'] = invoiceName;
+    return data;
   }
 }

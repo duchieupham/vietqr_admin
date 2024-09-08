@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/View/TransStatistics/SystemTransStatistics/system_transaction_screen.dart';
-import 'package:vietqr_admin/View/TransManage/UserRecharge/user_recharge_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/UserRecharge/user_recharge_screen.dart';
 import 'package:vietqr_admin/commons/constants/enum/check_type.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/feature/bank_account/request_register_bank_account/request_bank_account.dart';

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
+import 'package:vietqr_admin/models/DTO/user_recharge_dto.dart';
 
 import '../../utils/log.dart';
 
@@ -35,6 +36,72 @@ class ShareUtils {
     } catch (e) {
       LOG.error(e.toString());
     }
+  }
+
+  String getTextRechargeItem(RechargeItem dto) {
+    String formattedDateTimePaid = dto.timePaid.toString().isNotEmpty
+        ? DateFormat('yyyy-MM-dd HH:mm:ss')
+            .format(DateTime.fromMillisecondsSinceEpoch(dto.timePaid * 1000))
+        : '-';
+    String formattedDateTimeCreated = dto.timeCreated.toString().isNotEmpty
+        ? DateFormat('yyyy-MM-dd HH:mm:ss')
+            .format(DateTime.fromMillisecondsSinceEpoch(dto.timeCreated * 1000))
+        : '-';
+    String result = '';
+    String amount = '';
+    String timePaid = '';
+    String billNumber = '';
+    String service = '';
+    if (dto.paymentType == 0) {
+      service = 'Nạp tiền VQR';
+    } else if (dto.paymentType == 1) {
+      service = 'Nạp tiền điện thoại';
+    } else {
+      service = 'Phần mềm VietQR';
+    }
+
+    String fullName = '';
+    String phoneNo = '';
+    String additionData = '';
+    bool hasData2 = false;
+    if (dto.additionData2 != null || dto.additionData2.isNotEmpty) {
+      hasData2 = true;
+    }
+    String timeCreate = '';
+
+    if (dto.amount != 0) {
+      amount =
+          '\nTổng tiền: ${StringUtils.formatNumberWithOutVND(dto.amount.toString())}';
+    }
+    if (dto.timePaid != 0) {
+      timePaid = '\nThời gian thanh toán: $formattedDateTimePaid';
+    }
+    if (dto.billNumber.isNotEmpty) {
+      billNumber = '\nMã hoá đơn: ${dto.billNumber}';
+    }
+    if (service.isNotEmpty) {
+      service = '\nDịch vụ: $service';
+    }
+    if (dto.fullName.isNotEmpty) {
+      fullName = '\nNgười thực hiện: ${dto.fullName}';
+    }
+    if (dto.phoneNo.isNotEmpty) {
+      phoneNo = '\nSĐT: ${dto.phoneNo}';
+    }
+    if (dto.additionData.isNotEmpty && hasData2) {
+      additionData =
+          '\nThông tin thêm: ${dto.additionData} - ${dto.additionData2}';
+    } else if (dto.additionData.isNotEmpty && !hasData2) {
+      additionData = '\nThông tin thêm: ${dto.additionData}';
+    }
+    if (dto.timeCreated != 0) {
+      timeCreate = '\nThời gian tạo: $formattedDateTimeCreated';
+    }
+
+    result =
+        '$timePaid $amount $billNumber $service $fullName $phoneNo $additionData $timeCreate\nBy VIETQR.VN';
+
+    return result;
   }
 
   String getTextSharing(InvoiceItem dto) {

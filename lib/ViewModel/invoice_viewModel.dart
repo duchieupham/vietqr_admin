@@ -23,7 +23,6 @@ import '../models/DTO/invoice_detail_qr_dto.dart';
 import '../models/DTO/invoice_dto.dart';
 import '../models/DTO/service_item_dto.dart';
 
-// ignore: constant_identifier_names
 enum PageInvoice { LIST, DETAIL, EDIT }
 
 enum InvoiceType {
@@ -32,6 +31,8 @@ enum InvoiceType {
   GET_INVOICE_DETAIL,
   REQUEST_PAYMENT,
 }
+
+enum PageUnpaidInvoice { LIST, DETAIL }
 
 class InvoiceStatus extends BaseModel {
   InvoiceType _request = InvoiceType.NONE;
@@ -46,9 +47,11 @@ class InvoiceStatus extends BaseModel {
 
 class InvoiceViewModel extends InvoiceStatus {
   TextEditingController vatTextController = TextEditingController();
+  // PageController pageController = PageController(initialPage: 0);
 
   late InvoiceDAO _dao;
   InvoiceDTO? invoiceDTO;
+  UnpaidInvoiceDTO? unpaidInvoiceDTO;
   MerchantData? merchantData;
   MerchantDTO? merchantDTO;
   BankInvoiceDTO? bankDTO;
@@ -58,14 +61,20 @@ class InvoiceViewModel extends InvoiceStatus {
   ResponseMessageDTO? responseMsg;
 
   InvoiceDetailQrDTO? detailQrDTO;
+  UnpaidInvoiceDetailQrDTO? unpaidDetailQrDTO;
   InvoiceDetailDTO? invoiceDetailDTO;
   InvoiceInfoDTO? invoiceInfo;
   List<InvoiceInfoItem>? listInvoiceItem = [];
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
+  List<SelectUnpaidInvoiceItem> listUnpaidSelectInvoice = [];
   List<PaymentRequestDTO> listPaymentRequest = [];
+  List<UnpaidInvoiceItem> listUnpaidInvoiceItem = [];
+  PaymentUnpaidRequestDTO paymentUnpaidRequest =
+      PaymentUnpaidRequestDTO(bankIdRecharge: '', invoiceIds: []);
   InvoiceExcelDTO? invoiceExcelDTO;
 
+  int totalUnpaidInvoice = 0;
   MerchantItem? selectMerchantItem;
   BankItem? selectBank;
 
@@ -83,6 +92,8 @@ class InvoiceViewModel extends InvoiceStatus {
   int? valueStatus = 0;
   int? filterByDate = 1;
   int pagingPage = 1;
+  int pagingUnpaidInvoicePage = 1;
+  String? selectInvoiceId;
 
   int totalAmount = 0;
   int totalVat = 0;
@@ -91,6 +102,9 @@ class InvoiceViewModel extends InvoiceStatus {
   int totalEditAmount = 0;
   int totalEditVat = 0;
   int totalEditAmountVat = 0;
+
+  int currentPagePopupUnpaid = 0;
+  String? currentInvoiceId;
 
   List<DropdownMenuItem<int>> listMenuDropInvoice() {
     List<DropdownMenuItem<int>> items = [
@@ -168,11 +182,14 @@ class InvoiceViewModel extends InvoiceStatus {
   }
 
   bool? isInsert;
+  bool hasReachedMax = false;
 
   MetaDataDTO? metadata;
+  MetaDataDTO? metaUnpaidInvoice;
   MetaDataDTO? createMetaData;
 
   PageInvoice pageType = PageInvoice.LIST;
+  PageUnpaidInvoice pageUnpaidType = PageUnpaidInvoice.LIST;
 
   InvoiceViewModel() {
     _dao = InvoiceDAO();
@@ -210,6 +227,39 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void onChangePage(PageInvoice page) {
     pageType = page;
+    notifyListeners();
+  }
+
+  void onChangePageUnpaid(PageUnpaidInvoice page) {
+    pageUnpaidType = page;
+    notifyListeners();
+  }
+
+  void updateSelectInvoiceId(String selectInvoiceId) {
+    this.selectInvoiceId = selectInvoiceId;
+    notifyListeners();
+  }
+
+  void updatePagePopupUnpaid(int currentPage) {
+    currentPagePopupUnpaid = currentPage;
+    notifyListeners();
+  }
+
+  void updateCurrentInvoiceId(String invoiceId) {
+    currentInvoiceId = invoiceId;
+    notifyListeners();
+  }
+
+  void updateEmail(String phoneNo, String newEmail) {
+    final listMerchant = merchantData!.items.map(
+      (e) {
+        if (e.vietQrAccount == phoneNo) {
+          return e.copyWith(email: newEmail);
+        }
+        return e;
+      },
+    ).toList();
+    merchantData!.items = listMerchant;
     notifyListeners();
   }
 
@@ -255,6 +305,17 @@ class InvoiceViewModel extends InvoiceStatus {
     selectMerchantItem = null;
     selectBank = null;
     bankDetail = null;
+    notifyListeners();
+  }
+
+  void updateBankIdRecharge(String id) {
+    paymentUnpaidRequest.bankIdRecharge = id;
+    notifyListeners();
+  }
+
+  void clearPaymentUnpaidRequest() {
+    paymentUnpaidRequest =
+        PaymentUnpaidRequestDTO(bankIdRecharge: '', invoiceIds: []);
     notifyListeners();
   }
 
@@ -413,6 +474,11 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
+  void clearTotalUnpaidInvoice() {
+    totalUnpaidInvoice = 0;
+    notifyListeners();
+  }
+
   void selectPayment(int index) {
     for (var e in invoiceDetailDTO!.paymentRequestDTOS) {
       e.isChecked = false;
@@ -431,6 +497,22 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void appliedInvoiceItem(bool value, int index) {
     listSelectInvoice[index].isSelect = value;
+    notifyListeners();
+  }
+
+  void appliedUnpaidInvoiceItem(bool value, int index) {
+    listUnpaidSelectInvoice[index].isSelect = value;
+    if (value) {
+      paymentUnpaidRequest.invoiceIds
+          .add(listUnpaidSelectInvoice[index].unpaidInvoiceItem.invoiceId);
+      totalUnpaidInvoice +=
+          listUnpaidSelectInvoice[index].unpaidInvoiceItem.pendingAmount;
+    } else {
+      paymentUnpaidRequest.invoiceIds
+          .remove(listUnpaidSelectInvoice[index].unpaidInvoiceItem.invoiceId);
+      totalUnpaidInvoice -=
+          listUnpaidSelectInvoice[index].unpaidInvoiceItem.pendingAmount;
+    }
 
     notifyListeners();
   }
@@ -438,6 +520,19 @@ class InvoiceViewModel extends InvoiceStatus {
   void appliedAllItem(bool value) {
     for (var e in listSelectInvoice) {
       e.isSelect = value;
+    }
+    notifyListeners();
+  }
+
+  void appliedAllUnpaidItem(bool value) {
+    paymentUnpaidRequest.invoiceIds = [];
+    totalUnpaidInvoice = 0;
+    for (var e in listUnpaidSelectInvoice) {
+      e.isSelect = value;
+      if (value) {
+        paymentUnpaidRequest.invoiceIds.add(e.unpaidInvoiceItem.invoiceId);
+        totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
+      }
     }
     notifyListeners();
   }
@@ -662,6 +757,18 @@ class InvoiceViewModel extends InvoiceStatus {
         .toList();
   }
 
+  List<SelectUnpaidInvoiceItem> mapToSelectUnpaidInvoiceItems(
+      List<UnpaidInvoiceItem> unpaidInvoiceItems) {
+    paymentUnpaidRequest.invoiceIds = [];
+    for (var e in unpaidInvoiceItems) {
+      paymentUnpaidRequest.invoiceIds.add(e.invoiceId);
+    }
+    return unpaidInvoiceItems
+        .map((item) =>
+            SelectUnpaidInvoiceItem(isSelect: true, unpaidInvoiceItem: item))
+        .toList();
+  }
+
   Future<void> getInvoiceDetail(String id) async {
     try {
       // setState(ViewStatus.Empty);
@@ -714,6 +821,32 @@ class InvoiceViewModel extends InvoiceStatus {
         setInvoiceState(
             status: ViewStatus.Completed, request: InvoiceType.REQUEST_PAYMENT);
         return detailQrDTO;
+      } else {
+        setInvoiceState(
+            status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENT);
+        return null;
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+      setInvoiceState(
+          status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENT);
+    }
+    return null;
+  }
+
+  Future<UnpaidInvoiceDetailQrDTO?> requestPaymentV2(
+      {required PaymentUnpaidRequestDTO request}) async {
+    try {
+      setInvoiceState(
+          status: ViewStatus.Loading, request: InvoiceType.REQUEST_PAYMENT);
+      unpaidDetailQrDTO = await _dao.requestPaymnetV2(
+          invoiceIds: request.invoiceIds,
+          bankIdRecharge: request.bankIdRecharge);
+      if (unpaidDetailQrDTO != null) {
+        setInvoiceState(
+            status: ViewStatus.Completed, request: InvoiceType.REQUEST_PAYMENT);
+        clearPaymentUnpaidRequest();
+        return unpaidDetailQrDTO;
       } else {
         setInvoiceState(
             status: ViewStatus.Error, request: InvoiceType.REQUEST_PAYMENT);
@@ -860,6 +993,145 @@ class InvoiceViewModel extends InvoiceStatus {
       setState(ViewStatus.Error);
     }
   }
+
+  Future<bool> updateEmailMerchant(
+      {required String phoneNo, required String newEmail}) async {
+    try {
+      setState(ViewStatus.Updating);
+      final ResponseMessageDTO? data =
+          await _dao.updateEmailMerchant(phoneNo, newEmail);
+      if (data != null) {
+        if (data.status == 'SUCCESS') {
+          setState(ViewStatus.Completed);
+
+          // merchantData!.items
+          //     .where(
+          //       (e) => e.vietQrAccount == phoneNo,
+          //     )
+          //     .first
+          //     .copyWith(email: newEmail);
+          // notifyListeners();
+          return true;
+        }
+        return false;
+      }
+      return false;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
+  }
+
+  Future<void> getUnpaidInvoiceList({
+    required int page,
+    required int size,
+    required String merchantId,
+  }) async {
+    try {
+      setState(ViewStatus.Loading_Page_View);
+      final result = await _dao.getUnpaidInvoiceList(
+          page: page, size: size, merchantId: merchantId);
+      listUnpaidInvoiceItem = [];
+      if (result is UnpaidInvoiceDTO) {
+        unpaidInvoiceDTO = result;
+        // ignore: unnecessary_null_comparison
+        metaUnpaidInvoice = _dao.metaDataDTO;
+
+        // ignore: unnecessary_null_comparison
+        if (unpaidInvoiceDTO!.items != null) {
+          if (metaUnpaidInvoice != null) {
+            if (metaUnpaidInvoice!.total == unpaidInvoiceDTO!.items.length) {
+              hasReachedMax = true;
+              listUnpaidInvoiceItem = unpaidInvoiceDTO!.items;
+            } else {
+              hasReachedMax = false;
+              listUnpaidInvoiceItem = unpaidInvoiceDTO!.items;
+            }
+          }
+          listUnpaidSelectInvoice =
+              mapToSelectUnpaidInvoiceItems(listUnpaidInvoiceItem);
+          totalUnpaidInvoice = 0;
+
+          for (var e in listUnpaidSelectInvoice) {
+            if (e.isSelect != null) {
+              if (e.isSelect!) {
+                totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
+              }
+            }
+          }
+          notifyListeners();
+        }
+      }
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
+  Future<void> loadMoreUnpaidInvoiceList({
+    required ScrollController scrollController,
+    required String merchantId,
+  }) async {
+    try {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (hasReachedMax) {
+          hasReachedMax = true;
+          listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem);
+          pagingUnpaidInvoicePage = 1;
+        } else {
+          // isLoadingMore = true;
+          pagingUnpaidInvoicePage++;
+          final result = await _dao.getUnpaidInvoiceList(
+              page: pagingUnpaidInvoicePage, size: 50, merchantId: merchantId);
+          if (result is UnpaidInvoiceDTO) {
+            unpaidInvoiceDTO = result;
+            // ignore: unnecessary_null_comparison
+            metaUnpaidInvoice = _dao.metaDataDTO;
+            // ignore: unnecessary_null_comparison
+            if (unpaidInvoiceDTO!.items != null) {
+              if (metaUnpaidInvoice != null) {
+                if (unpaidInvoiceDTO!.items.isEmpty) {
+                  hasReachedMax = true;
+                  listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem);
+                  pagingUnpaidInvoicePage = 1;
+                } else {
+                  hasReachedMax = false;
+                  listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem)
+                    ..addAll(unpaidInvoiceDTO!.items);
+                }
+              }
+
+              //map list select
+              listUnpaidSelectInvoice =
+                  mapToSelectUnpaidInvoiceItems(listUnpaidInvoiceItem);
+
+              //sum of unpaid invoice
+              totalUnpaidInvoice = 0;
+              for (var e in listUnpaidSelectInvoice) {
+                if (e.isSelect != null) {
+                  if (e.isSelect!) {
+                    totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
+                  }
+                }
+              }
+              notifyListeners();
+            }
+          }
+        }
+      }
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
 }
 
 class SelectInvoiceItem {
@@ -869,5 +1141,15 @@ class SelectInvoiceItem {
   SelectInvoiceItem({
     this.isSelect,
     required this.invoiceItem,
+  });
+}
+
+class SelectUnpaidInvoiceItem {
+  bool? isSelect;
+  final UnpaidInvoiceItem unpaidInvoiceItem;
+
+  SelectUnpaidInvoiceItem({
+    this.isSelect,
+    required this.unpaidInvoiceItem,
   });
 }

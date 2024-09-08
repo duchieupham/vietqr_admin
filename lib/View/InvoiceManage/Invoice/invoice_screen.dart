@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/invoice_detail_screen.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_button.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/filter_invoice_widget.dart';
@@ -11,7 +12,6 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_invoice_wid
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_merchant_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_filter_invoice.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
-import 'package:vietqr_admin/View/InvoiceManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/bank_system_screen.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
@@ -57,7 +57,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   bool isScrollingHorizontal = false;
   bool isHover = false;
 
-  String? selectInvoiceId;
+  // String? selectInvoiceId;
 
   int? type = 9;
   int pageSize = 20;
@@ -93,6 +93,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       filterType: filterSelect.type,
       search: textEditingController.text,
     );
+
+    _model.updateSelectInvoiceId('');
   }
 
   @override
@@ -108,7 +110,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         dto: dto,
         onPop: (id) {
           _model.onChangePage(PageInvoice.DETAIL);
-          selectInvoiceId = id;
+          _model.updateSelectInvoiceId(id);
           setState(() {});
         },
       ),
@@ -264,14 +266,16 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                         onShowPopup: onShowPopup,
                                         onEdit: (dto) {
                                           setState(() {
-                                            selectInvoiceId = dto.invoiceId;
+                                            _model.updateSelectInvoiceId(
+                                                dto.invoiceId);
                                           });
                                           _model.onChangePage(PageInvoice.EDIT);
                                           _clearFilter();
                                         },
                                         onDetail: (invoiceId) {
                                           setState(() {
-                                            selectInvoiceId = invoiceId;
+                                            _model.updateSelectInvoiceId(
+                                                invoiceId);
                                           });
                                           _model
                                               .onChangePage(PageInvoice.DETAIL);
@@ -319,12 +323,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             //   pageType = PageInvoice.EDIT;
                             // });
                           },
-                          invoiceId: selectInvoiceId!),
+                          invoiceId: _model.selectInvoiceId!),
                     ),
                   ] else ...[
                     Expanded(
                       child: InvoiceEditScreen(
-                        invoiceId: selectInvoiceId!,
+                        invoiceId: _model.selectInvoiceId!,
                         onEdit: () async {
                           bool? result = await _model.editInvoice();
                           if (result!) {
@@ -565,7 +569,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             Row(
               children: [
                 const Text(
-                  "Quản lý hoá đơn",
+                  "Quản lý thu phí",
                   style: TextStyle(fontSize: 13),
                 ),
                 const Text(

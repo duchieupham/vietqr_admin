@@ -5,6 +5,7 @@ import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/DAO/SystemDAO.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
+import 'package:vietqr_admin/models/DTO/key_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 import 'package:vietqr_admin/models/DTO/total_user_dto.dart';
@@ -22,6 +23,7 @@ class SystemViewModel extends BaseModel {
   Gender? selectGender;
   TotalUserDTO? totalUserDTO;
   BankSystemDTO? bankSystemDTO;
+  ResponseActiveKeyDTO? responseActiveKeyDTO;
 
   SystemViewModel() {
     _dao = SystemDAO();
@@ -236,20 +238,46 @@ class SystemViewModel extends BaseModel {
       final result = await _dao.confirmActiveKey(param);
       if (result.status == 'SUCCESS') {
         if (bankSystemDTO != null) {
-          var bankItem = bankSystemDTO!.items
-              .where(
-                (e) => e.bankId == bankId,
-              )
-              .first;
-          if (bankItem != null) {
-            if (bankItem.validService == false) {
-              bankItem.copyWith(validService: true);
-            }
-          }
+          final listBank = bankSystemDTO!.items.map(
+            (e) {
+              if (e.bankId == bankId) {
+                return e.copyWith(validService: true);
+              }
+              return e;
+            },
+          ).toList();
+          bankSystemDTO!.items = listBank;
+          notifyListeners();
         }
       }
       setState(ViewStatus.Completed);
       return result;
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+      return ResponseMessageDTO(
+          status: 'FAILED', message: 'Error occurred: ${e.toString()}');
+    }
+  }
+
+  Future<dynamic> checkActiveKey({
+    required String keyActive,
+  }) async {
+    try {
+      setState(ViewStatus.Updating);
+
+      final result = await _dao.checkActiveKey(keyActive);
+      if (result is ResponseActiveKeyDTO) {
+        responseActiveKeyDTO = result;
+        setState(ViewStatus.Completed);
+
+        return responseActiveKeyDTO;
+      } else if (result is ResponseMessageDTO) {
+        setState(ViewStatus.Completed);
+
+        return ResponseMessageDTO(
+            status: result.status, message: 'Key không tồn tại.');
+      }
     } catch (e) {
       LOG.error(e.toString());
       setState(ViewStatus.Error);

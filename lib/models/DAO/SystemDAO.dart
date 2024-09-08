@@ -6,6 +6,7 @@ import 'package:vietqr_admin/commons/constants/utils/log.dart';
 import 'package:vietqr_admin/models/DAO/BaseDAO.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/create_user_dto.dart';
+import 'package:vietqr_admin/models/DTO/key_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 import 'package:vietqr_admin/models/DTO/total_user_dto.dart';
@@ -164,7 +165,8 @@ class SystemDAO extends BaseDAO {
 
   Future<dynamic> requestActiveKey(Map<String, dynamic> param) async {
     try {
-      String url = '${EnvConfig.instance.getBaseUrl()}account-bank/admin/request-active';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}account-bank/admin/request-active';
       final response = await BaseAPIClient.postAPI(
         url: url,
         body: param,
@@ -185,7 +187,8 @@ class SystemDAO extends BaseDAO {
   Future<ResponseMessageDTO> confirmActiveKey(
       Map<String, dynamic> param) async {
     try {
-      String url = '${EnvConfig.instance.getBaseUrl()}account-bank/admin/confirm-active';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}account-bank/admin/confirm-active';
       final response = await BaseAPIClient.postAPI(
         url: url,
         body: param,
@@ -196,7 +199,29 @@ class SystemDAO extends BaseDAO {
     } catch (e) {
       LOG.error(e.toString());
     }
-    return const ResponseMessageDTO(status: 'Failed', message: 'Đã xảy ra lỗi.');
+    return const ResponseMessageDTO(
+        status: 'Failed', message: 'Đã xảy ra lỗi.');
+  }
+
+  Future<dynamic> checkActiveKey(String keyActive) async {
+    try {
+      String url = '${EnvConfig.instance.getBaseUrl()}key/check-active';
+      final response = await BaseAPIClient.postAPI(
+        url: url,
+        body: {'keyActive': keyActive},
+        type: AuthenticationType.SYSTEM,
+      );
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        return ResponseActiveKeyDTO.fromJson(data);
+      } else {
+        return ResponseMessageDTO.fromJson(data);
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+    }
+    return const ResponseMessageDTO(
+        status: 'Failed', message: 'Đã xảy ra lỗi.');
   }
 
   Future<bool?> changeLinkedUser(String? userId, int? status) async {

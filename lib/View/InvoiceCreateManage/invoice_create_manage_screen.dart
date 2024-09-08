@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:vietqr_admin/View/InvoiceManage/UserRecharge/user_recharge_screen.dart';
-import 'package:vietqr_admin/View/InvoiceManage/widgets/header_invoice_list.dart';
+import 'package:toastification/toastification.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/widgets/invoice_create_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/invoice_manage_screen.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/app_image.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
+import 'package:vietqr_admin/commons/constants/enum/type_menu_home.dart';
 import 'package:vietqr_admin/commons/utils/platform_utils.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
+import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
+import 'package:vietqr_admin/commons/widget/item_menu_dropdown.dart';
+import 'package:vietqr_admin/commons/widget/menu_left.dart';
 import 'package:vietqr_admin/feature/dashboard/provider/menu_provider.dart';
-import 'dart:html' as html;
 
-import '../../commons/constants/enum/type_menu_home.dart';
-import '../../commons/widget/item_menu_dropdown.dart';
-import '../../commons/widget/menu_left.dart';
-import 'Invoice/invoice_screen.dart';
-
-// ignore: constant_identifier_names
-enum Invoice { LIST, RECHARGE_TRANS }
-
-class InvoiceManageScreen extends StatefulWidget {
-  final Invoice type;
-  const InvoiceManageScreen({super.key, required this.type});
+class InvoiceCreateManageScreen extends StatefulWidget {
+  const InvoiceCreateManageScreen({super.key});
 
   @override
-  State<InvoiceManageScreen> createState() => _InvoiceManageScreenState();
+  State<InvoiceCreateManageScreen> createState() =>
+      _InvoiceCreateManageScreenState();
 }
 
-class _InvoiceManageScreenState extends State<InvoiceManageScreen>
+class _InvoiceCreateManageScreenState extends State<InvoiceCreateManageScreen>
     with SingleTickerProviderStateMixin {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Invoice type = Invoice.LIST;
@@ -44,7 +41,6 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    type = widget.type;
   }
 
   @override
@@ -64,20 +60,8 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen>
     }
     return Scaffold(
       key: _scaffoldKey,
-      drawer: MenuLeft(
-        currentType: MenuType.INVOICE,
-        subMenuInvoice: [
-          ItemDropDownMenu(
-            title: 'Danh sách hoá đơn',
-            isSelect: type == Invoice.LIST,
-            onTap: () => onTapMenu(Invoice.LIST),
-          ),
-          ItemDropDownMenu(
-            title: 'Thu phí thường niên',
-            isSelect: type == Invoice.RECHARGE_TRANS,
-            onTap: () => onTapMenu(Invoice.RECHARGE_TRANS),
-          ),
-        ],
+      drawer: const MenuLeft(
+        currentType: MenuType.INVOICE_CREATE,
       ),
       backgroundColor: AppColor.WHITE,
       body: Column(
@@ -142,18 +126,18 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen>
                     ],
                   ),
                 ),
-                if (type == Invoice.LIST)
-                  HeaderInvoiceList(
-                    onCreateInvoice: () {
-                      html.window.history
-                          .pushState(null, '/invoice', '/user-recharge');
-                      setState(() {
-                        type = Invoice.RECHARGE_TRANS;
-                      });
-                    },
-                  )
-                else
-                  const Spacer(),
+                // if (type == Invoice.LIST)
+                //   HeaderInvoiceList(
+                //     onCreateInvoice: () {
+                //       html.window.history
+                //           .pushState(null, '/invoice', '/create-invoice');
+                //       setState(() {
+                //         type = Invoice.CREATE;
+                //       });
+                //     },
+                //   )
+                // else
+                const Spacer(),
                 SizedBox(
                   height: 60,
                   child: Column(
@@ -228,22 +212,17 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen>
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         width: value ? 0 : 250,
-                        child: SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
+                        child: const SingleChildScrollView(
+                          physics: NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           child: MenuLeft(
-                            currentType: MenuType.INVOICE,
+                            currentType: MenuType.INVOICE_CREATE,
                             subMenuInvoice: [
-                              ItemDropDownMenu(
-                                title: 'Thu phí giao dịch',
-                                isSelect: type == Invoice.LIST,
-                                onTap: () => onTapMenu(Invoice.LIST),
-                              ),
-                              ItemDropDownMenu(
-                                title: 'Thu phí thường niên',
-                                isSelect: type == Invoice.RECHARGE_TRANS,
-                                onTap: () => onTapMenu(Invoice.RECHARGE_TRANS),
-                              ),
+                              // ItemDropDownMenu(
+                              //   title: 'Tạo mới hoá đơn',
+                              //   isSelect: type == Invoice.CREATE,
+                              //   onTap: () => onTapMenu(Invoice.CREATE),
+                              // ),
                             ],
                           ),
                         ),
@@ -280,74 +259,60 @@ class _InvoiceManageScreenState extends State<InvoiceManageScreen>
     // );
   }
 
-  void onTapMenu(Invoice value) {
-    if (value == Invoice.LIST) {
-      html.window.history.pushState(null, '/invoice', '/invoice-list');
-      setState(() {
-        type = value;
-      });
-    } else if (value == Invoice.RECHARGE_TRANS) {
-      html.window.history.pushState(null, '/invoice', '/user-recharge');
-      type = value;
-    }
-    setState(() {});
-    // else if (value == Invoice.CREATE) {
-    //   html.window.history.pushState(null, '/invoice', '/create-invoice');
-    //   setState(() {
-    //     type = value;
-    //   });
-    // }
-  }
+  // void onTapMenu(Invoice value) {
+  //   if (value == Invoice.LIST) {
+  //     html.window.history.pushState(null, '/invoice', '/invoice-list');
+  //     setState(() {
+  //       type = value;
+  //     });
+  //   }
+  //   // else if (value == Invoice.CREATE) {
+  //   //   html.window.history.pushState(null, '/invoice', '/create-invoice');
+  //   //   setState(() {
+  //   //     type = value;
+  //   //   });
+  //   // }
+  // }
 
   Widget _buildBody() {
-    if (type == Invoice.LIST) {
-      return const InvoiceScreen();
-    } else {
-      return const UserRechargeScreen();
-    }
-    // if (type == Invoice.LIST) {
-    //   return const InvoiceScreen();
-    // }
-    // else {
-    //   return CreateInvoiceScreen(
-    //     onCreate: (invoice, desciption, fileName, bytes) async {
-    //       // File? file = File(filePath);
-    //       // File? compressedFile = FileUtils.instance.compressImage(file);
-    //       await _model
-    //           .createInvoice(
-    //               invoiceName: invoice,
-    //               description: desciption,
-    //               fileName: fileName,
-    //               bytes: bytes)
-    //           .then(
-    //         (value) {
-    //           if (value == true) {
-    //             toastification.show(
-    //               context: context,
-    //               type: ToastificationType.success,
-    //               style: ToastificationStyle.flat,
-    //               title: const Text(
-    //                 'Tạo hóa đơn thành công',
-    //                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-    //               ),
-    //               showProgressBar: false,
-    //               alignment: Alignment.topRight,
-    //               autoCloseDuration: const Duration(seconds: 5),
-    //               boxShadow: highModeShadow,
-    //               dragToClose: true,
-    //               pauseOnHover: true,
-    //             );
-    //             onTapMenu(Invoice.LIST);
-    //           } else {
-    //             DialogWidget.instance.openMsgDialog(
-    //                 title: "Không thể tạo hoá đơn",
-    //                 msg:
-    //                     'Hoá đơn chứa danh mục hàng hoá\nđã tồn tại trong hoá đơn khác.');
-    //           }
-    //         },
-    //       );
-    //     },
-    //   );
-    // }
+    return CreateInvoiceScreen(
+      onCreate: (invoice, desciption, fileName, bytes) async {
+        // File? file = File(filePath);
+        // File? compressedFile = FileUtils.instance.compressImage(file);
+        await _model
+            .createInvoice(
+                invoiceName: invoice,
+                description: desciption,
+                fileName: fileName,
+                bytes: bytes)
+            .then(
+          (value) {
+            if (value == true) {
+              toastification.show(
+                context: context,
+                type: ToastificationType.success,
+                style: ToastificationStyle.flat,
+                title: const Text(
+                  'Tạo hóa đơn thành công',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                showProgressBar: false,
+                alignment: Alignment.topRight,
+                autoCloseDuration: const Duration(seconds: 5),
+                boxShadow: highModeShadow,
+                dragToClose: true,
+                pauseOnHover: true,
+              );
+              // onTapMenu(Invoice.LIST);
+            } else {
+              DialogWidget.instance.openMsgDialog(
+                  title: "Không thể tạo hoá đơn",
+                  msg:
+                      'Hoá đơn chứa danh mục hàng hoá\nđã tồn tại trong hoá đơn khác.');
+            }
+          },
+        );
+      },
+    );
   }
 }

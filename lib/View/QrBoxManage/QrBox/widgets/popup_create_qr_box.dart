@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
 import 'package:vietqr_admin/ViewModel/qr_box_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/widget/dialog_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 
 import '../../../../models/DTO/qr_box_dto.dart';
-import '../../../InvoiceManage/InvoiceCreate/widgets/item_title_widget.dart';
 
 class PopupCreateQrBoxWidget extends StatefulWidget {
   final QrBoxDTO dto;

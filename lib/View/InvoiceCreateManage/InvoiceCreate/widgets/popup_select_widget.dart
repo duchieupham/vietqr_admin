@@ -8,7 +8,7 @@ import '../../../../commons/constants/enum/view_status.dart';
 import '../../../../models/DTO/bank_invoice_dto.dart';
 import '../../../../models/DTO/invocie_merchant_dto.dart';
 import '../../../../models/DTO/metadata_dto.dart';
-import 'item_title_widget.dart';
+import '../item_title_widget.dart';
 
 class PopupSelectTypeWidget extends StatefulWidget {
   final bool? isGetList;

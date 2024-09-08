@@ -14,101 +14,120 @@ import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 
 import 'bank_account_item.dart';
 
-class PopupPaymentRequestWidget extends StatefulWidget {
-  final InvoiceItem dto;
+class PagePaymentRequestWidget extends StatefulWidget {
   final Function(String) onPop;
-  const PopupPaymentRequestWidget(
-      {super.key, required this.dto, required this.onPop});
+  const PagePaymentRequestWidget({super.key, required this.onPop});
 
   @override
-  State<PopupPaymentRequestWidget> createState() =>
-      _PopupPaymentRequestWidgetState();
+  State<PagePaymentRequestWidget> createState() =>
+      _PagePaymentRequestWidgetState();
 }
 
-class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
+class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
   late InvoiceViewModel _model;
+  InvoiceItem? dtoItem;
 
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
-    _model.getInvoiceDetail(widget.dto.invoiceId);
+    dtoItem = _model.invoiceDTO!.items
+        .where(
+          (e) => e.invoiceId == _model.currentInvoiceId,
+        )
+        .first;
+    if (dtoItem != null) {
+      _model.getInvoiceDetail(dtoItem!.invoiceId);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColor.TRANSPARENT,
-      child: Center(
-        child: Container(
-          color: AppColor.WHITE,
-          width: 1150,
-          height: 750,
-          padding: const EdgeInsets.all(20),
-          child: ScopedModel<InvoiceViewModel>(
-              model: _model,
-              child: ScopedModelDescendant<InvoiceViewModel>(
-                builder: (context, child, model) {
-                  bool isEnable = false;
-                  if (model.listSelectInvoice.isNotEmpty) {
-                    isEnable = model.listSelectInvoice
-                            .any((x) => x.isSelect == true) &&
-                        model.invoiceDetailDTO!.paymentRequestDTOS
-                            .any((x) => x.isChecked);
-                  }
-                  if (model.invoiceDetailDTO == null) {
-                    return const SizedBox.shrink();
-                  }
-                  return Stack(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Tạo mã VietQR để yêu cầu thanh toán',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 40),
-                          const Text(
-                            'Tạo mã VietQR để yêu cầu thanh toán',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          _buildInvoiceDetailWidget(model.invoiceDetailDTO!),
-                          const MySeparator(color: AppColor.GREY_DADADA),
-                          const SizedBox(height: 30),
-                          const Text(
-                            'Danh mục hàng hoá / dịch vụ',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          _buildInvoiceWidget(),
-                          const SizedBox(height: 50),
-                          if (model.invoiceDetailDTO != null)
-                            _buildReqPayment(
-                                model.invoiceDetailDTO!.paymentRequestDTOS,
-                                isEnable),
-                        ],
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: InkWell(
+    return Center(
+      child: Container(
+        color: AppColor.WHITE,
+        width: 1150,
+        height: 750,
+        padding: const EdgeInsets.all(20),
+        child: ScopedModelDescendant<InvoiceViewModel>(
+          builder: (context, child, model) {
+            bool isEnable = false;
+            if (model.listSelectInvoice.isNotEmpty) {
+              isEnable =
+                  model.listSelectInvoice.any((x) => x.isSelect == true) &&
+                      model.invoiceDetailDTO!.paymentRequestDTOS
+                          .any((x) => x.isChecked);
+            }
+            if (model.invoiceDetailDTO == null) {
+              return const SizedBox.shrink();
+            }
+            return Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
                           onTap: () {
-                            Navigator.of(context).pop();
+                            // _model.pageController.jumpToPage(0);
+                            _model.onChangePageUnpaid(PageUnpaidInvoice.LIST);
+                            _model.updatePagePopupUnpaid(0);
                           },
                           child: const Icon(
-                            Icons.close,
+                            Icons.arrow_back_ios,
                             color: Colors.black,
                             size: 20,
                           ),
                         ),
-                      )
-                    ],
-                  );
-                },
-              )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Tạo mã VietQR để yêu cầu thanh toán',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                    const Text(
+                      'Tạo mã VietQR để yêu cầu thanh toán',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    _buildInvoiceDetailWidget(model.invoiceDetailDTO!),
+                    const MySeparator(color: AppColor.GREY_DADADA),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Danh mục hàng hoá / dịch vụ',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    _buildInvoiceWidget(),
+                    const SizedBox(height: 50),
+                    if (model.invoiceDetailDTO != null)
+                      _buildReqPayment(
+                          model.invoiceDetailDTO!.paymentRequestDTOS, isEnable),
+                  ],
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
@@ -155,18 +174,21 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
           margin: EdgeInsets.zero,
           onTap: isEnable
               ? () async {
-                  final result = await _model.requestPayment(
-                      invoiceId: widget.dto.invoiceId);
-                  if (result != null) {
-                    if (!mounted) return;
-                    Navigator.of(context).pop();
-                    await showDialog(
-                      context: context,
-                      builder: (context) => PopupQrCodeInvoice(
-                        onPop: widget.onPop,
-                        invoiceId: result.invoiceId,
-                      ),
-                    );
+                  final invoiceId = _model.currentInvoiceId;
+                  if (invoiceId != null) {
+                    final result =
+                        await _model.requestPayment(invoiceId: invoiceId);
+                    if (result != null) {
+                      if (!mounted) return;
+                      Navigator.of(context).pop();
+                      await showDialog(
+                        context: context,
+                        builder: (context) => PopupQrCodeInvoice(
+                          onPop: widget.onPop,
+                          invoiceId: result.invoiceId,
+                        ),
+                      );
+                    }
                   }
                 }
               : null,
@@ -181,110 +203,120 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
         if (model.status == ViewStatus.Loading &&
             model.request == InvoiceType.GET_INVOICE_DETAIL) {
           return const Expanded(
-              child: Center(
-            child: CircularProgressIndicator(),
-          ));
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         }
         if (model.invoiceDetailDTO == null ||
             model.listInvoiceDetailItem.isEmpty) {
           return const SizedBox.shrink();
         }
+
         bool isAllApplied = model.listSelectInvoice
             .every((element) => element.isSelect == true);
+
         return Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 30),
-              Container(
-                width: 700,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
-                  ),
-                ),
-                child: Row(
+          child: CustomScrollView(
+            slivers: [
+              // Header section with SliverToBoxAdapter
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 30),
                     Container(
-                      height: 50,
-                      width: 100,
-                      alignment: Alignment.centerLeft,
+                      width: 700,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom:
+                              BorderSide(color: AppColor.GREY_DADADA, width: 1),
+                        ),
+                      ),
                       child: Row(
                         children: [
-                          Checkbox(
-                            activeColor: AppColor.BLUE_TEXT,
-                            value: isAllApplied,
-                            onChanged: (value) {
-                              model.appliedAllItem(value!);
-                            },
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                side: BorderSide(
-                                    color:
-                                        AppColor.GREY_TEXT.withOpacity(0.3))),
+                          Container(
+                            height: 50,
+                            width: 100,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  activeColor: AppColor.BLUE_TEXT,
+                                  value: isAllApplied,
+                                  onChanged: (value) {
+                                    model.appliedAllItem(value!);
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      side: BorderSide(
+                                          color: AppColor.GREY_TEXT
+                                              .withOpacity(0.3))),
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Tất cả',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Tất cả',
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
-                          )
+                          const BuildItemlTitle(
+                            title: 'STT',
+                            textAlign: TextAlign.center,
+                            width: 50,
+                            height: 50,
+                            alignment: Alignment.centerLeft,
+                          ),
+                          const BuildItemlTitle(
+                            title: 'Nội dung hoá đơn thanh toán',
+                            height: 50,
+                            width: 250,
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.only(right: 4),
+                            textAlign: TextAlign.center,
+                          ),
+                          const BuildItemlTitle(
+                            title: 'Tổng tiền (VND)',
+                            height: 50,
+                            width: 150,
+                            alignment: Alignment.centerLeft,
+                            textAlign: TextAlign.center,
+                          ),
+                          const BuildItemlTitle(
+                            title: 'Trạng thái',
+                            height: 50,
+                            width: 120,
+                            alignment: Alignment.centerLeft,
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
-                    const BuildItemlTitle(
-                        title: 'STT',
-                        textAlign: TextAlign.center,
-                        width: 50,
-                        height: 50,
-                        alignment: Alignment.centerLeft),
-                    const BuildItemlTitle(
-                        title: 'Nội dung hoá đơn thanh toán',
-                        height: 50,
-                        width: 250,
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(right: 4),
-                        textAlign: TextAlign.center),
-                    const BuildItemlTitle(
-                        title: 'Tổng tiền (VND)',
-                        height: 50,
-                        width: 150,
-                        alignment: Alignment.centerLeft,
-                        textAlign: TextAlign.center),
-                    const BuildItemlTitle(
-                        title: 'Trạng thái',
-                        height: 50,
-                        width: 120,
-                        alignment: Alignment.centerLeft,
-                        textAlign: TextAlign.center),
                   ],
                 ),
               ),
-              Expanded(
-                  child: SizedBox(
-                width: 700,
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Container(
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: AppColor.GREY_DADADA, width: 1)))),
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
+              // Sliver list for the invoice items
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                     bool isAlreadyPay =
                         model.listInvoiceDetailItem[index].status == 1;
                     if (isAlreadyPay) {
                       model.appliedInvoiceItem(isAlreadyPay, index);
                     }
                     return _invoiceItemWidget(
-                        index: index,
-                        dto: model.listSelectInvoice[index],
-                        isAlreadyPay: isAlreadyPay);
+                      index: index,
+                      dto: model.listSelectInvoice[index],
+                      isAlreadyPay: isAlreadyPay,
+                    );
                   },
-                  itemCount: model.listSelectInvoice.length,
+                  childCount: model.listSelectInvoice.length,
                 ),
-              )),
+              ),
             ],
           ),
         );
@@ -458,7 +490,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                widget.dto.billNumber,
+                dtoItem != null ? dtoItem!.billNumber : '-',
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -485,7 +517,7 @@ class _PopupPaymentRequestWidgetState extends State<PopupPaymentRequestWidget> {
             width: 100,
             child: SelectionArea(
               child: Text(
-                widget.dto.vso.isNotEmpty ? widget.dto.vso : '-',
+                dtoItem != null ? dtoItem!.vso : '-',
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
               ),
