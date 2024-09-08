@@ -16,7 +16,9 @@ import 'bank_account_item.dart';
 
 class PagePaymentRequestWidget extends StatefulWidget {
   final Function(String) onPop;
-  const PagePaymentRequestWidget({super.key, required this.onPop});
+  final SelectUnpaidInvoiceItem dto;
+  const PagePaymentRequestWidget(
+      {super.key, required this.onPop, required this.dto});
 
   @override
   State<PagePaymentRequestWidget> createState() =>
@@ -25,19 +27,15 @@ class PagePaymentRequestWidget extends StatefulWidget {
 
 class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
   late InvoiceViewModel _model;
-  InvoiceItem? dtoItem;
+  // InvoiceItem? dtoItem;
 
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
-    dtoItem = _model.invoiceDTO!.items
-        .where(
-          (e) => e.invoiceId == _model.currentInvoiceId,
-        )
-        .first;
-    if (dtoItem != null) {
-      _model.getInvoiceDetail(dtoItem!.invoiceId);
+
+    if (widget.dto != null) {
+      _model.getInvoiceDetail(widget.dto.unpaidInvoiceItem.invoiceId);
     }
   }
 
@@ -105,7 +103,6 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     _buildInvoiceWidget(),
-                    const SizedBox(height: 50),
                     if (model.invoiceDetailDTO != null)
                       _buildReqPayment(
                           model.invoiceDetailDTO!.paymentRequestDTOS, isEnable),
@@ -490,7 +487,9 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
             width: 150,
             child: SelectionArea(
               child: Text(
-                dtoItem != null ? dtoItem!.billNumber : '-',
+                widget.dto != null
+                    ? widget.dto.unpaidInvoiceItem.billNumber
+                    : '-',
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
               ),
@@ -517,7 +516,9 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
             width: 100,
             child: SelectionArea(
               child: Text(
-                dtoItem != null ? dtoItem!.vso : '-',
+                widget.dto.unpaidInvoiceItem != null
+                    ? widget.dto.unpaidInvoiceItem.vso
+                    : '-',
                 textAlign: TextAlign.left,
                 style: const TextStyle(fontSize: 12),
               ),
