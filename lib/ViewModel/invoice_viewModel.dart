@@ -68,6 +68,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
   List<SelectUnpaidInvoiceItem> listUnpaidSelectInvoice = [];
+  SelectUnpaidInvoiceItem? currentSelectUnpaidInvoiceItem;
   List<PaymentRequestDTO> listPaymentRequest = [];
   List<UnpaidInvoiceItem> listUnpaidInvoiceItem = [];
   PaymentUnpaidRequestDTO paymentUnpaidRequest =
@@ -237,6 +238,12 @@ class InvoiceViewModel extends InvoiceStatus {
 
   void updateSelectInvoiceId(String selectInvoiceId) {
     this.selectInvoiceId = selectInvoiceId;
+    notifyListeners();
+  }
+
+  void updateCurrentSelectUnpaid(
+      SelectUnpaidInvoiceItem? selectUnpaidInvoiceId) {
+    currentSelectUnpaidInvoiceItem = selectUnpaidInvoiceId;
     notifyListeners();
   }
 

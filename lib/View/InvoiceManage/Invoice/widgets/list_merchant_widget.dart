@@ -307,6 +307,10 @@ class _ListMerchantWidgetState extends State<ListMerchantWidget> {
                             setState(() {});
                           },
                         ),
+                      ).then(
+                        (value) {
+                          _model.onChangePageUnpaid(PageUnpaidInvoice.LIST);
+                        },
                       );
                     }
                   : () {},

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/item_unpaid_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_unpaid_qr_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
@@ -41,7 +42,7 @@ class _PagePaymentRequestMerchantWidgetState
         page: 1, size: 50, merchantId: widget.merchantId);
     _model.getListRequestPayment();
     // ignore: unnecessary_null_comparison
-
+    _model.updateCurrentSelectUnpaid(null);
     _model.clearTotalUnpaidInvoice();
     scrollController.addListener(
       () {
@@ -340,17 +341,18 @@ class _PagePaymentRequestMerchantWidgetState
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  controller: scrollController,
+                child: SizedBox(
+                  height: 400,
                   child: ListView.builder(
-                    // controller: scrollController,
-                    addRepaintBoundaries: false,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    controller: scrollController,
+                    // physics: const NeverScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: model.hasReachedMax
                         ? model.listUnpaidSelectInvoice.length
                         : model.listUnpaidSelectInvoice.length + 1,
                     itemBuilder: (context, index) {
+                      List<SelectUnpaidInvoiceItem> list =
+                          model.listUnpaidSelectInvoice;
                       if (index >= model.listUnpaidSelectInvoice.length) {
                         return Container(
                           key: const ValueKey('loading_indicator'),
@@ -364,30 +366,19 @@ class _PagePaymentRequestMerchantWidgetState
                           ),
                         );
                       } else {
-                        return _invoiceItemWidget(
-                            index: index,
-                            dto: model.listUnpaidSelectInvoice[index],
-                            model: model,
-                            onTap: () {
-                              final invoiceId = model
-                                  .listUnpaidSelectInvoice[index]
-                                  .unpaidInvoiceItem
-                                  .invoiceId;
-                              model.updateCurrentInvoiceId(invoiceId);
-                              // _model.pageController.jumpToPage(1);
-                              // Navigator.pop(context);
-                              // WidgetsBinding.instance.addPostFrameCallback((_) {
-                              //   if (mounted) {
-                              //     _model.pageController.jumpToPage(1);
-                              //   }
-                              // });
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (mounted) {
-                                  model.onChangePageUnpaid(
-                                      PageUnpaidInvoice.DETAIL);
-                                }
-                              });
-                            });
+                        return UnpaidInvoiceItemWidget(
+                          index: index,
+                          // dto: model.listUnpaidSelectInvoice[index],
+                          dto: list[index],
+                          model: model,
+                          onTap: () {
+                            model.updateCurrentSelectUnpaid(list[index]);
+                            final invoiceId =
+                                list[index].unpaidInvoiceItem.invoiceId;
+                            model.updateCurrentInvoiceId(invoiceId);
+                            model.onChangePageUnpaid(PageUnpaidInvoice.DETAIL);
+                          },
+                        );
                       }
                     },
                   ),
@@ -397,177 +388,6 @@ class _PagePaymentRequestMerchantWidgetState
           ),
         );
       },
-    );
-  }
-
-  Widget _invoiceItemWidget(
-      {required int index,
-      required SelectUnpaidInvoiceItem dto,
-      required InvoiceViewModel model,
-      required Function() onTap}) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: AppColor.GREY_DADADA, width: 1),
-        ),
-      ),
-      child: Container(
-        alignment: Alignment.center,
-        child: Row(
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              width: 100,
-              height: 50,
-              child: Checkbox(
-                activeColor: AppColor.BLUE_TEXT,
-                value: dto.isSelect,
-                onChanged: (value) {
-                  model.appliedUnpaidInvoiceItem(value!, index);
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side:
-                        BorderSide(color: AppColor.GREY_TEXT.withOpacity(0.3))),
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 50,
-              child: SelectionArea(
-                child: Text(
-                  (index + 1).toString(),
-                  // textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 200,
-              padding: const EdgeInsets.only(right: 4),
-              child: SelectionArea(
-                child: Text(
-                  dto.unpaidInvoiceItem.invoiceName,
-                  // textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            //mã hóa đơn
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 150,
-              padding: const EdgeInsets.only(right: 4),
-              child: SelectionArea(
-                child: Text(
-                  dto.unpaidInvoiceItem.billNumber,
-                  // textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            //tổng tiền
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 150,
-              child: SelectionArea(
-                child: Text(
-                  StringUtils.formatNumberWithOutVND(
-                      dto.unpaidInvoiceItem.pendingAmount),
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.GREEN),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            //vso
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 120,
-              child: SelectionArea(
-                child: Text(
-                  dto.unpaidInvoiceItem.vso,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            //chưa TT
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 150,
-              child: SelectionArea(
-                child: Text(
-                  StringUtils.formatNumberWithOutVND(
-                      dto.unpaidInvoiceItem.pendingAmount),
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.ORANGE),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            //đã TT
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 100,
-              child: SelectionArea(
-                child: Text(
-                  StringUtils.formatNumberWithOutVND(
-                      dto.unpaidInvoiceItem.completeAmount),
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.GREEN),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 50,
-              width: 80,
-              child: InkWell(
-                onTap: onTap,
-                child: const Text(
-                  'Chi tiết',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColor.BLUE_TEXT,
-                      // decorationColor: AppColor.BLUE_TEXT,
-                      color: AppColor.BLUE_TEXT),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

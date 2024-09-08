@@ -35,15 +35,31 @@ class _PopupPaymentRequestMerchantWidgetState
           if (model.pageUnpaidType == PageUnpaidInvoice.LIST) {
             return Material(
               color: AppColor.TRANSPARENT,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               child: PagePaymentRequestMerchantWidget(
                 onPop: widget.onPop,
                 merchantId: widget.merchantId,
               ),
             );
           } else {
-            return Material(
+            // return AlertDialog(
+            //     color: AppColor.TRANSPARENT,
+            //     child: PagePaymentRequestWidget(onPop: widget.onPop));
+            if (model.currentSelectUnpaidInvoiceItem != null) {
+              return Material(
                 color: AppColor.TRANSPARENT,
-                child: PagePaymentRequestWidget(onPop: widget.onPop));
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: PagePaymentRequestWidget(
+                  onPop: widget.onPop,
+                  dto: model.currentSelectUnpaidInvoiceItem!,
+                ),
+              );
+            } else
+              return const SizedBox.shrink();
           }
         },
       ),
