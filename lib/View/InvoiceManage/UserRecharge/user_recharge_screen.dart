@@ -644,7 +644,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                       Positioned.fill(
                         right: 200,
                         child: SizedBox(
-                          width: 1460,
+                          width: 1200,
                           child: RawScrollbar(
                             thumbVisibility: true,
                             controller: _horizontal,
@@ -683,7 +683,7 @@ class _UserRechargeScreenState extends State<UserRechargeScreen> {
                         ),
                       ),
                       SizedBox(
-                        width: 1660,
+                        width: 1400,
                         child: Row(
                           children: [
                             const Expanded(child: SizedBox()),

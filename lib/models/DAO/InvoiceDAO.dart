@@ -305,7 +305,7 @@ class InvoiceDAO extends BaseDAO {
     return null;
   }
 
-   Future<UnpaidInvoiceDetailQrDTO?> requestPaymnetV2({
+  Future<UnpaidInvoiceDetailQrDTO?> requestPaymnetV2({
     required List<String> invoiceIds,
     String? bankIdRecharge,
   }) async {
@@ -314,7 +314,8 @@ class InvoiceDAO extends BaseDAO {
       param['invoiceIds'] = invoiceIds;
       param['bankIdRecharge'] = bankIdRecharge;
 
-      String url = '${EnvConfig.instance.getBaseUrl()}invoice/request-payment/v2';
+      String url =
+          '${EnvConfig.instance.getBaseUrl()}invoice/request-payment/v2';
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
@@ -377,8 +378,20 @@ class InvoiceDAO extends BaseDAO {
     required String value,
   }) async {
     try {
-      String url =
-          '${EnvConfig.instance.getBaseUrl()}new-invoice-list?filterType=$filterType&invoiceType=$invoiceType&subFilterType=$subFilterType&value=$value&page=$page&size=$size&time=$time';
+      String url = '';
+      if (subFilterType == 4) {
+        if (invoiceType == 9) {
+          url =
+              '${EnvConfig.instance.getBaseUrl()}new-invoice-list?filterType=0&invoiceType=0&subFilterType=$subFilterType&value=$value&page=$page&size=$size&time=$time';
+        } else {
+          url =
+              '${EnvConfig.instance.getBaseUrl()}new-invoice-list?filterType=0&invoiceType=$invoiceType&subFilterType=$subFilterType&value=$value&page=$page&size=$size&time=$time';
+        }
+      } else {
+        url =
+            '${EnvConfig.instance.getBaseUrl()}new-invoice-list?filterType=$filterType&invoiceType=$invoiceType&subFilterType=$subFilterType&value=$value&page=$page&size=$size&time=$time';
+      }
+
       final response = await BaseAPIClient.getAPI(
         url: url,
         type: AuthenticationType.SYSTEM,
