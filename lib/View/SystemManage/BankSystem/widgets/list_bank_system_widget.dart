@@ -24,7 +24,7 @@ import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 enum Actions {
   copy,
   detail,
-  check,
+  // check,
 }
 
 class ListBankSystemWidget extends StatefulWidget {
@@ -326,9 +326,9 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                       case Actions.detail:
                         onDetail(dto: e);
                         break;
-                      case Actions.check:
-                        onCheckActiveKey(dto: e);
-                        break;
+                      // case Actions.check:
+                      //   onCheckActiveKey(dto: e);
+                      //   break;
                     }
                   },
                   itemBuilder: (BuildContext context) => _buildMenuItems(e),
@@ -414,16 +414,16 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
     );
   }
 
-  void onCheckActiveKey({required BankSystemItem dto}) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PopupCheckKeyWidget(
-          dto: dto,
-        );
-      },
-    );
-  }
+  // void onCheckActiveKey({required BankSystemItem dto}) async {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return PopupCheckKeyWidget(
+  //         dto: dto,
+  //       );
+  //     },
+  //   );
+  // }
 
   List<PopupMenuEntry<Actions>> _buildMenuItems(BankSystemItem e) {
     List<PopupMenuEntry<Actions>> items = [
@@ -437,10 +437,10 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
             ? const Text('Gia hạn Key')
             : const Text('Kích hoạt Key'),
       ),
-      const PopupMenuItem<Actions>(
-        value: Actions.check,
-        child: Text('Kiểm tra Key'),
-      ),
+      // const PopupMenuItem<Actions>(
+      //   value: Actions.check,
+      //   child: Text('Kiểm tra Key'),
+      // ),
     ];
     return items;
   }

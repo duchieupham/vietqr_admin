@@ -6,11 +6,13 @@ import 'package:get/get.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/filter_bank_button.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/list_bank_system_widget.dart';
+import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_key.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
+import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
@@ -176,9 +178,9 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Row(
-            mainAxisSize: MainAxisSize.min,
             children: [
               ...listFilter.map(
                 (e) {
@@ -203,8 +205,27 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                     },
                   );
                 },
-              )
+              ),
             ],
+          ),
+          MButtonWidget(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const PopupCheckKeyWidget();
+                },
+              );
+            },
+            title: 'Kiểm tra Key',
+            isEnable: true,
+            margin: EdgeInsets.zero,
+            width: 150,
+            colorEnableBgr: AppColor.WHITE,
+            colorEnableText: AppColor.BLUE_TEXT,
+            border: Border.all(color: AppColor.BLUE_TEXT),
+            radius: 10,
+            height: 40,
           ),
         ],
       ),

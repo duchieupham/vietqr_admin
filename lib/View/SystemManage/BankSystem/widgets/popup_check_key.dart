@@ -13,9 +13,8 @@ import 'package:vietqr_admin/models/DTO/key_dto.dart';
 import 'package:vietqr_admin/models/DTO/response_message_dto.dart';
 
 class PopupCheckKeyWidget extends StatefulWidget {
-  final BankSystemItem dto;
 
-  const PopupCheckKeyWidget({super.key, required this.dto});
+  const PopupCheckKeyWidget({super.key});
 
   @override
   State<PopupCheckKeyWidget> createState() => _PopupCheckKeyWidgetState();
@@ -36,9 +35,6 @@ class _PopupCheckKeyWidgetState extends State<PopupCheckKeyWidget> {
     super.initState();
     // Khởi tạo giá trị của các controller từ widget.dto
     _model = Get.find<SystemViewModel>();
-    // _accountNameController.text = widget.dto.bankAccountName;
-    // _accountNameController.text = widget.dto.bankAccountName;
-    // _bankCodeController.text = widget.dto.bankCode;
   }
 
   @override

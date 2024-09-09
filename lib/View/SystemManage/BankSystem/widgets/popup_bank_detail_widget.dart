@@ -75,148 +75,159 @@ class _PopupBankDetailWidgetState extends State<PopupBankDetailWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 40,
-                      // color: Colors.red,
-                      child: _buildTextFormFiledCustom(
-                          initialValue: widget.dto.bankAccountName,
-                          label: 'Chủ tài khoản'),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 40,
-                      // color: Colors.red,
-                      child: _buildTextFormFiledCustom(
-                          initialValue:
-                              '${widget.dto.bankShortName} - ${widget.dto.bankAccount.isNotEmpty ? widget.dto.bankAccount : '-'}',
-                          label: 'Tài khoản'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: _buildItem(
-                        label: 'TK VietQR',
-                        textContent: widget.dto.phoneNo,
-                        isDate: false),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: _buildItem(
-                        label: 'Ngày kích hoạt',
-                        textContent: _formatDate(widget.dto.validFrom),
-                        isDate: true),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: _buildItem(
-                        label: 'Ngày hết hạn',
-                        textContent: _formatDate(widget.dto.validFeeTo),
-                        isDate: true),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: _buildItem(
-                        label: 'Luồng',
-                        textContent: widget.dto.mmsActive ? 'TF' : 'MF',
-                        isDate: false),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Flexible(
-                    flex: 2,
-                    child: _buildItem(
-                        label: 'Email',
-                        textContent: widget.dto.email.isNotEmpty
-                            ? widget.dto.email
-                            : '-',
-                        isDate: false),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: _buildItem(
-                        label: 'CCCD/CMND',
-                        textContent: widget.dto.nationalId.isNotEmpty
-                            ? widget.dto.nationalId
-                            : '-',
-                        isDate: false),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: _buildItem(
-                        label: 'VSO',
-                        textContent:
-                            widget.dto.vso.isNotEmpty ? widget.dto.vso : '-',
-                        isDate: false),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
               Flexible(
-                flex: 1,
-                child: SizedBox(
-                  height: 40,
-                  // color: Colors.red,
-                  child: _buildTextFormFiledCustom(
-                      label: 'Mã Key',
-                      hint: 'Nhập mã key',
-                      controller: _keyController,
-                      readOnly: (_model.status == ViewStatus.Updating)
-                          ? true
-                          : false),
-                ),
-              ),
-              if (_statusMessage != null) ...[
-                Text(
-                  _statusMessage!,
-                  style: TextStyle(
-                    color: _isSuccess ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
+                // height: 500,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: SizedBox(
+                          height: 40,
+                          // color: Colors.red,
+                          child: _buildTextFormFiledCustom(
+                              label: 'Mã Key',
+                              hint: 'Nhập mã key',
+                              controller: _keyController,
+                              readOnly: (_model.status == ViewStatus.Updating)
+                                  ? true
+                                  : false),
+                        ),
+                      ),
+                      if (_statusMessage != null) ...[
+                        Text(
+                          _statusMessage!,
+                          style: TextStyle(
+                            color: _isSuccess ? Colors.green : Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 40,
+                              // color: Colors.red,
+                              child: _buildTextFormFiledCustom(
+                                  initialValue: widget.dto.bankAccountName,
+                                  label: 'Chủ tài khoản'),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 40,
+                              // color: Colors.red,
+                              child: _buildTextFormFiledCustom(
+                                  initialValue:
+                                      '${widget.dto.bankShortName} - ${widget.dto.bankAccount.isNotEmpty ? widget.dto.bankAccount : '-'}',
+                                  label: 'Tài khoản'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: _buildItem(
+                                label: 'TK VietQR',
+                                textContent: widget.dto.phoneNo,
+                                isDate: false),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: _buildItem(
+                                label: 'Ngày kích hoạt',
+                                textContent: _formatDate(widget.dto.validFrom),
+                                isDate: true),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: _buildItem(
+                                label: 'Ngày hết hạn',
+                                textContent: _formatDate(widget.dto.validFeeTo),
+                                isDate: true),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: _buildItem(
+                                label: 'Luồng',
+                                textContent: widget.dto.mmsActive ? 'TF' : 'MF',
+                                isDate: false),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Flexible(
+                            flex: 2,
+                            child: _buildItem(
+                                label: 'Email',
+                                textContent: widget.dto.email.isNotEmpty
+                                    ? widget.dto.email
+                                    : '-',
+                                isDate: false),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: _buildItem(
+                                label: 'CCCD/CMND',
+                                textContent: widget.dto.nationalId.isNotEmpty
+                                    ? widget.dto.nationalId
+                                    : '-',
+                                isDate: false),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: _buildItem(
+                                label: 'VSO',
+                                textContent: widget.dto.vso.isNotEmpty
+                                    ? widget.dto.vso
+                                    : '-',
+                                isDate: false),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
-              ],
+              ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
