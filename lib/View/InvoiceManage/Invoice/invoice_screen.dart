@@ -423,10 +423,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         invoiceType = 'Tất cả';
         break;
       case 0:
-        invoiceType = 'Phí GD';
+        invoiceType = 'Phí kích hoạt DV';
         break;
       case 1:
-        invoiceType = 'Phí kích hoạt';
+        invoiceType = 'Phí giao dịch';
         break;
       case 2:
         invoiceType = 'Nạp tiền ĐT';
