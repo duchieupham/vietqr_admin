@@ -38,6 +38,10 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
       ItemSearch(id: 1, title: 'TK ngân hàng'),
       ItemSearch(id: 2, title: 'Tk VietQR'),
     ];
+    final List<ItemSearch> listHintMerchantSearch = [
+      ItemSearch(id: 0, title: 'tên đại lý'),
+      ItemSearch(id: 1, title: 'mã VSO'),
+    ];
 
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
@@ -214,8 +218,9 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
                                       color: AppColor.GREY_TEXT,
                                     ),
                                     border: InputBorder.none,
-                                    hintText:
-                                        'Nhập ${listHintSearch[model.subMenuType].title}',
+                                    hintText: widget.filterBy == 0
+                                        ? 'Nhập ${listHintSearch[model.subMenuType].title}'
+                                        : 'Nhập ${listHintMerchantSearch[model.subMenuType].title}',
                                     hintStyle: const TextStyle(
                                         fontSize: 15,
                                         color: AppColor.GREY_TEXT),

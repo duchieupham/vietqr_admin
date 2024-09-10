@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 
 import '../../../../models/DTO/transaction_detail_dto.dart';
 import '../../../../models/DTO/transaction_dto.dart';
@@ -30,6 +31,16 @@ class TransactionGetListSuccessState extends TransactionState {
 
   @override
   List<Object?> get props => [result];
+}
+
+class TransactionFilterListSuccessState extends TransactionState {
+  final TransactionDTO result;
+  final MetaDataDTO meta;
+
+  const TransactionFilterListSuccessState(
+      {required this.result, required this.meta});
+  @override
+  List<Object?> get props => [result, meta];
 }
 
 class TransactionGetDetailSuccessState extends TransactionState {

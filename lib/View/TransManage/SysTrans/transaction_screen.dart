@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:vietqr_admin/View/SystemManage/BankSystem/bank_system_screen.dart';
+import 'package:vietqr_admin/View/TransManage/SysTrans/widget/filter_transaction_widget.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/mixin/events.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
@@ -14,6 +18,7 @@ import 'package:vietqr_admin/View/TransManage/SysTrans/bloc/transaction_bloc.dar
 import 'package:vietqr_admin/View/TransManage/SysTrans/event/transaction_event.dart';
 import 'package:vietqr_admin/View/TransManage/SysTrans/state/transaction_state.dart';
 import 'package:vietqr_admin/View/TransManage/SysTrans/widget/transaction_detail.dart';
+import 'package:vietqr_admin/models/DTO/metadata_dto.dart';
 import 'package:vietqr_admin/service/shared_references/session.dart';
 
 import '../../../models/DTO/transaction_dto.dart';
@@ -40,39 +45,26 @@ class _TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<_TransactionScreen> {
   StreamSubscription? _subscription;
   late TransactionBloc _bloc;
-  final PageController pageViewController = PageController();
-  List<TransactionDTO> transactionList = [];
+  final PageController pageViewController = PageController(initialPage: 0);
+  List<TransactionItem> transactionList = [];
   int offset = 0;
   ScrollController scrollControllerList = ScrollController();
   bool isCalling = true;
   MonthCalculator monthCalculator = MonthCalculator();
+  List<ChoiceChipItem> listChoiceChips = [
+    ChoiceChipItem(title: 'Tất cả', value: 9),
+    ChoiceChipItem(title: 'Số tài khoản', value: 0),
+    ChoiceChipItem(title: 'Mã giao dịch', value: 1),
+    ChoiceChipItem(title: 'Order Id', value: 2),
+    ChoiceChipItem(title: 'Nội dung', value: 3),
+    ChoiceChipItem(title: 'Cửa hàng', value: 4),
+  ];
+  final TextEditingController _textController = TextEditingController();
+  int type = 9;
+  int pageSize = 20;
+  MetaDataDTO metadata = MetaDataDTO();
   @override
   void initState() {
-    super.initState();
-    var provider = Provider.of<TransactionProvider>(context, listen: false);
-    scrollControllerList.addListener(() {
-      if (isCalling) {
-        if (scrollControllerList.offset ==
-            scrollControllerList.position.maxScrollExtent) {
-          Map<String, dynamic> param = {};
-          offset = offset + 20;
-          param['type'] = provider.valueFilter.id;
-          if (provider.valueTimeFilter.id == 0 ||
-              (provider.valueFilter.id != 0 && provider.valueFilter.id != 9)) {
-            param['from'] = '0';
-            param['to'] = '0';
-          } else {
-            param['from'] =
-                TimeUtils.instance.getCurrentDate(provider.fromDate);
-            param['to'] = TimeUtils.instance.getCurrentDate(provider.toDate);
-          }
-          param['value'] = provider.keywordSearch;
-          param['offset'] = offset;
-          _bloc.add(TransactionGetListEvent(param: param, isLoadMore: true));
-          isCalling = false;
-        }
-      }
-    });
     DateTime now = DateTime.now();
     DateTime fromDate = DateTime(now.year, now.month, now.day);
     DateTime endDate = fromDate.subtract(const Duration(days: 7));
@@ -80,45 +72,215 @@ class _TransactionScreenState extends State<_TransactionScreen> {
     fromDate = fromDate
         .add(const Duration(days: 1))
         .subtract(const Duration(seconds: 1));
-    Map<String, dynamic> param = {};
-    param['type'] = 9;
-    param['value'] = '';
-    param['from'] = TimeUtils.instance.getCurrentDate(endDate);
-    param['to'] = TimeUtils.instance.getCurrentDate(fromDate);
-    param['offset'] = 0;
     _bloc = TransactionBloc()
-      ..add(TransactionGetListEvent(param: param, isLoadingPage: true));
-    _subscription = eventBus.on<RefreshTransaction>().listen((data) {
-      _bloc.add(TransactionGetListEvent(param: param, isLoadingPage: true));
-      provider.resetFilter();
-    });
+      ..add(TransactionFilterListEvent(
+          page: 1,
+          size: pageSize,
+          from: TimeUtils.instance.getCurrentDate(endDate),
+          to: TimeUtils.instance.getCurrentDate(fromDate),
+          value: '',
+          type: type));
+    // _subscription = eventBus.on<RefreshTransaction>().listen((data) {
+    //   _bloc.add(TransactionGetListEvent(param: param, isLoadingPage: true));
+    // Provider.of<TransactionProvider>(context, listen: false).resetFilter();
+    // });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<TransactionBloc>(
-      create: (context) => _bloc,
-      child: Container(
-        color: AppColor.WHITE,
-        child: Column(
-          children: [
-            _buildTitle(),
-            Expanded(
+    return Scaffold(
+      backgroundColor: AppColor.BLUE_BGR,
+      body: BlocProvider<TransactionBloc>(
+        create: (context) => _bloc,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            color: AppColor.WHITE,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _headerWidget(),
+              const Divider(
+                color: AppColor.GREY_DADADA,
+              ),
+              Expanded(
                 child: PageView(
-              controller: pageViewController,
-              children: [_buildListTransaction(), TransactionDetailScreen()],
-            ))
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageViewController,
+                  children: [_bodyWidget(), TransactionDetailScreen()],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bodyWidget() {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BlocProvider.value(
+              value: _bloc,
+              child: FilterTransactionWidget(
+                pageSize: pageSize,
+                controller: _textController,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: AppColor.WHITE,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColor.BLACK.withOpacity(0.1),
+                        spreadRadius: 1,
+                        blurRadius: 10,
+                        offset: const Offset(0, 1),
+                      )
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        child: _buildListTransaction(),
+                      ),
+                    ),
+                    _pagingWidget()
+                    // ListBankSystemWidget(
+                    //   pageSize: pageSize,
+                    // ),
+                    // const MySeparator(color: AppColor.GREY_DADADA),
+                    // _pagingWidget(),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
+ Widget _headerWidget() {
+    return Consumer<TransactionProvider>(builder: (context, provider, child) {
+      return Container(
+        padding: const EdgeInsets.fromLTRB(0, 20, 30, 10),
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+                  child: Row(
+                    children: [
+                      if (Provider.of<TransactionProvider>(context,
+                                  listen: false)
+                              .currentPage ==
+                          1)
+                        InkWell(
+                          onTap: () {
+                            Provider.of<TransactionProvider>(context,
+                                    listen: false)
+                                .updateCurrentPage(0);
+                            pageViewController.previousPage(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeIn);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                top: 8, bottom: 8, left: 16, right: 24),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: AppColor.BLUE_TEXT.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.arrow_back_ios,
+                                  color: AppColor.BLUE_TEXT,
+                                  size: 12,
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  'Trở về',
+                                  style: TextStyle(
+                                      fontSize: 11, color: AppColor.BLUE_TEXT),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      const Text(
+                        "Quản lý giao dịch",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      const Text(
+                        "   /   ",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      const Text(
+                        "Giao dịch hệ thống",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      if (Provider.of<TransactionProvider>(context,
+                                  listen: false)
+                              .currentPage ==
+                          1) ...[
+                        const Text(
+                          "   /   ",
+                          style: TextStyle(fontSize: 13),
+                        ),
+                        const Text(
+                          'Chi tiết giao dịch',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                        ),
+                      ]
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
   Widget _buildTitle() {
     return Container(
       height: 45,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(color: AppColor.BLUE_TEXT.withOpacity(0.2)),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColor.GREY_DADADA),
+        ),
+      ),
       child: Consumer<TransactionProvider>(builder: (context, provider, child) {
         return Row(
           children: [
@@ -482,84 +644,79 @@ class _TransactionScreenState extends State<_TransactionScreen> {
   }
 
   Widget _buildListTransaction() {
-    return LayoutBuilder(builder: (context, constraints) {
-      return BlocConsumer<TransactionBloc, TransactionState>(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return BlocConsumer<TransactionBloc, TransactionState>(
           listener: (context, state) {
-        if (state is TransactionGetListLoadingState) {
-          DialogWidget.instance.openLoadingDialog();
-        }
-        if (state is TransactionGetListSuccessState) {
-          if (state.isLoadMore) {
-            transactionList.addAll(state.result);
-            if (state.result.isNotEmpty) {
-              isCalling = true;
+            if (state is TransactionFilterListSuccessState) {
+              transactionList = state.result.items;
+              metadata = state.meta;
             }
-          } else {
-            if (state.isPopLoading) {
-              Navigator.pop(context);
-            }
-            transactionList = state.result;
-          }
-        }
-      }, builder: (context, state) {
-        if (state is TransactionLoadingState) {
-          return const Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Center(child: Text('Đang tải...')),
-          );
-        } else {
-          if (transactionList.isEmpty) {
-            return const Padding(
-              padding: EdgeInsets.only(top: 40),
-              child: Center(child: Text('Không có dữ liệu')),
-            );
-          } else {
-            return Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollControllerList,
-                    child: ScrollConfiguration(
-                      behavior: MyCustomScrollBehavior(),
+          },
+          builder: (context, state) {
+            if (state is TransactionGetListLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.BLUE_TEXT,
+                ),
+              );
+            } else {
+              if (transactionList.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 40),
+                  child: Center(child: Text('Không có dữ liệu')),
+                );
+              } else {
+                return Column(
+                  children: [
+                    Expanded(
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          width: constraints.maxWidth > 1350
-                              ? constraints.maxWidth
-                              : 1350,
-                          child: Column(
-                            children: [
-                              _buildTitleItem(),
-                              ...transactionList.map((e) {
-                                int index = transactionList.indexOf(e) + 1;
-
-                                return _buildItem(e, index);
-                              }),
-                              const SizedBox(width: 12),
-                            ],
+                        controller: scrollControllerList,
+                        child: ScrollConfiguration(
+                          behavior: MyCustomScrollBehavior(),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              width: constraints.maxWidth > 1350
+                                  ? constraints.maxWidth
+                                  : 1350,
+                              child: Column(
+                                children: [
+                                  _buildTitleItem(),
+                                  ...transactionList.map((e) {
+                                    int index = transactionList.indexOf(e) + 1;
+                                    int calculatedIndex = index +
+                                        ((metadata.page! - 1) * pageSize);
+                                    return _buildItem(e, calculatedIndex);
+                                  }),
+                                  const SizedBox(width: 12),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                if (state is TransactionGetListLoadingLoadMoreState)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text('Đang tải...'),
-                  )
-              ],
-            );
-          }
-        }
-      });
-    });
+                    if (state is TransactionGetListLoadingLoadMoreState)
+                      const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColor.BLUE_TEXT,
+                        ),
+                      )
+                  ],
+                );
+              }
+            }
+          },
+        );
+      },
+    );
   }
 
   Widget _buildTitleItem() {
     return Container(
       alignment: Alignment.center,
-      decoration: const BoxDecoration(color: AppColor.BLUE_DARK),
+      decoration: BoxDecoration(color: AppColor.BLUE_TEXT.withOpacity(0.3)),
       child: Row(
         children: [
           _buildItemTitle('No.',
@@ -621,7 +778,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
     );
   }
 
-  Widget _buildItem(TransactionDTO dto, int index) {
+  Widget _buildItem(TransactionItem dto, int index) {
     return Container(
       color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,
@@ -834,7 +991,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
       child: Text(
         title,
         textAlign: textAlign,
-        style: const TextStyle(fontSize: 12, color: AppColor.WHITE),
+        style: const TextStyle(
+            fontSize: 12, color: AppColor.BLACK, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -863,6 +1021,193 @@ class _TransactionScreenState extends State<_TransactionScreen> {
       param['merchantId'] = Session.instance.connectDTO.id;
 
       _bloc.add(TransactionGetListEvent(param: param));
+    } else {
+      DialogWidget.instance.openMsgDialog(
+          title: 'Không hợp lệ',
+          msg: 'Ngày bắt đầu không được lớn hơn ngày kết thúc');
+    }
+  }
+
+  Widget _pagingWidget() {
+    return BlocBuilder<TransactionBloc, TransactionState>(
+      builder: (context, state) {
+        bool isPaging = false;
+        if (state is TransactionFilterListSuccessState) {
+          MetaDataDTO paging = state.meta;
+          if (paging.page! != paging.totalPage!) {
+            isPaging = true;
+          }
+
+          int totalOfCurrentPage = (pageSize * paging.page!) > paging.total!
+              ? paging.total!
+              : pageSize * paging.page!;
+          double indexTotal =
+              paging.page != 1 ? (totalOfCurrentPage - pageSize) + 1 : 1;
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Text(
+                  'Số hàng:',
+                  style: TextStyle(fontSize: 13),
+                ),
+                const SizedBox(width: 15),
+                Container(
+                    width: 50,
+                    height: 25,
+                    padding: const EdgeInsets.fromLTRB(5, 2, 7, 2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColor.GREY_TEXT.withOpacity(0.3)),
+                    child: DropdownButton<int>(
+                      isExpanded: true,
+                      isDense: true,
+                      value: pageSize,
+                      borderRadius: BorderRadius.circular(10),
+                      // dropdownColor: AppColor.WHITE,
+                      underline: const SizedBox.shrink(),
+                      iconSize: 12,
+                      elevation: 16,
+                      dropdownColor: Colors.white,
+
+                      icon: const RotatedBox(
+                        quarterTurns: 5,
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColor.GREY_TEXT,
+                          size: 10,
+                        ),
+                      ),
+
+                      items: <int>[20, 50, 100]
+                          .map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          onTap: () {
+                            onSearchV2(
+                                Provider.of<TransactionProvider>(context,
+                                    listen: false),
+                                paging.page!,
+                                value);
+                          },
+                          child: Text(
+                            value.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      selectedItemBuilder: (BuildContext context) {
+                        return [20, 50, 100].map<Widget>((int item) {
+                          return Text(
+                            item.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                            ),
+                          );
+                        }).toList();
+                      },
+
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            pageSize = value;
+                          });
+                        }
+                      },
+                    )),
+                const SizedBox(width: 30),
+                Text(
+                  '$indexTotal-$totalOfCurrentPage của ${paging.total}',
+                  style: const TextStyle(fontSize: 13),
+                ),
+                const SizedBox(width: 15),
+                InkWell(
+                  onTap: () async {
+                    if (paging.page != 1) {
+                      onSearchV2(
+                          Provider.of<TransactionProvider>(context,
+                              listen: false),
+                          paging.page! - 1,
+                          pageSize);
+                    }
+                  },
+                  child: Icon(
+                    Icons.keyboard_arrow_left_rounded,
+                    size: 25,
+                    color: paging.page != 1
+                        ? AppColor.BLACK
+                        : AppColor.GREY_TEXT.withOpacity(0.5),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                InkWell(
+                  onTap: () async {
+                    if (isPaging) {
+                      onSearchV2(
+                          Provider.of<TransactionProvider>(context,
+                              listen: false),
+                          paging.page! + 1,
+                          pageSize);
+                    }
+                  },
+                  child: Icon(
+                    Icons.keyboard_arrow_right_rounded,
+                    size: 25,
+                    color: isPaging
+                        ? AppColor.BLACK
+                        : AppColor.GREY_TEXT.withOpacity(0.5),
+                  ),
+                ),
+                const SizedBox(width: 22),
+              ],
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+
+  void onSearchV2(TransactionProvider provider, int? page, int? size) {
+    if (provider.fromDate.millisecondsSinceEpoch <=
+        provider.toDate.millisecondsSinceEpoch) {
+      final type = provider.valueFilter.id;
+      String from = '';
+      String to = '';
+      String value = '';
+      if (provider.valueTimeFilter.id == TypeTimeFilter.ALL.id ||
+          (provider.valueFilter.id.type != TypeFilter.BANK_NUMBER &&
+              provider.valueFilter.id.type != TypeFilter.ALL &&
+              provider.valueFilter.id.type != TypeFilter.CODE_SALE)) {
+        from = '0';
+        to = '0';
+      } else {
+        from = TimeUtils.instance.getCurrentDate(provider.fromDate);
+        to = TimeUtils.instance.getCurrentDate(provider.toDate);
+      }
+      from = TimeUtils.instance.getCurrentDate(provider.fromDate);
+      to = TimeUtils.instance.getCurrentDate(provider.toDate);
+      value = provider.keywordSearch;
+
+      // param['offset'] = 0;
+      // param['merchantId'] = Session.instance.connectDTO.id;
+
+      _bloc.add(
+        TransactionFilterListEvent(
+          size: size ?? pageSize,
+          from: from,
+          to: to,
+          type: type,
+          page: page ?? 1,
+          value: value,
+        ),
+      );
     } else {
       DialogWidget.instance.openMsgDialog(
           title: 'Không hợp lệ',

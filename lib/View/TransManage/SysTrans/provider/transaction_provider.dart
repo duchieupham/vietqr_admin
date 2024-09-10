@@ -7,7 +7,8 @@ class TransactionProvider with ChangeNotifier {
     const FilterTransaction(id: 0, title: 'Số tài khoản'),
     const FilterTransaction(id: 1, title: 'Mã giao dịch'),
     const FilterTransaction(id: 2, title: 'Order ID'),
-    const FilterTransaction(id: 3, title: 'Nội dung')
+    const FilterTransaction(id: 3, title: 'Nội dung'),
+    const FilterTransaction(id: 4, title: 'Cửa hàng'),
   ];
 
   FilterTransaction _valueFilter =
@@ -23,7 +24,7 @@ class TransactionProvider with ChangeNotifier {
     const FilterTimeTransaction(id: 5, title: 'Khoảng thời gian'),
   ];
   FilterTimeTransaction _valueTimeFilter =
-      const FilterTimeTransaction(id: 2, title: '7 ngày gần nhất');
+      const FilterTimeTransaction(id: 0, title: 'Tất cả');
   FilterTimeTransaction get valueTimeFilter => _valueTimeFilter;
   DateTime _toDate = DateTime.now();
   DateTime get toDate => _toDate;

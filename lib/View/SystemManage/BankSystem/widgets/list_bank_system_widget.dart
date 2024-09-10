@@ -8,7 +8,6 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/item_bank_widget.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_bank_detail_widget.dart';
-import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_key.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/popup_check_log.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/widgets/title_item_bank_widget.dart';
 import 'package:vietqr_admin/ViewModel/system_viewModel.dart';
@@ -27,22 +26,13 @@ enum Actions {
   // check,
 }
 
+// ignore: must_be_immutable
 class ListBankSystemWidget extends StatefulWidget {
   int pageSize;
   ListBankSystemWidget({
     super.key,
     required this.pageSize,
   });
-
-  // final Function(InvoiceItem) onShowPopup;
-  // final Function(InvoiceItem) onEdit;
-  // final Function(String) onDetail;
-
-  // const ListBankSystemWidget(
-  //     {super.key,
-  //     required this.onShowPopup,
-  //     required this.onEdit,
-  //     required this.onDetail});
 
   @override
   State<ListBankSystemWidget> createState() => _ListBankSystemWidgetState();
@@ -53,6 +43,7 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
   late ScrollController _horizontal;
   late ScrollController _vertical;
   late ScrollController _vertical2;
+  // ignore: unused_field
   late SystemViewModel _model;
 
   @override
