@@ -658,13 +658,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             child: Text(
                               'Loại HĐ:',
                               style: TextStyle(
-                                  fontSize: 13, color: AppColor.BLUE_TEXT),
+                                  fontSize: 13, color: AppColor.BLACK),
                             ),
                           ),
                           Text(
                             invoiceType,
                             style: const TextStyle(
-                                fontSize: 13, color: AppColor.BLUE_TEXT),
+                                fontSize: 13, color: AppColor.BLACK),
                           )
                         ],
                       ),
@@ -676,7 +676,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                             child: Text(
                               'Thời gian:',
                               style: TextStyle(
-                                  fontSize: 13, color: AppColor.BLUE_TEXT),
+                                  fontSize: 13, color: AppColor.BLACK),
                             ),
                           ),
                           Text(
@@ -685,7 +685,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                 : 'Tháng ${model.selectedDate.month}',
                             style: const TextStyle(
                               fontSize: 13,
-                              color: AppColor.BLUE_TEXT,
+                              color: AppColor.BLACK,
                             ),
                           )
                         ],
