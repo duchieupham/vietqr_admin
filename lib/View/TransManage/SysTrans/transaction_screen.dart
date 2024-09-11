@@ -179,9 +179,9 @@ class _TransactionScreenState extends State<_TransactionScreen> {
  Widget _headerWidget() {
     return Consumer<TransactionProvider>(builder: (context, provider, child) {
       return Container(
-        padding: const EdgeInsets.fromLTRB(0, 20, 30, 10),
+        padding: const EdgeInsets.fromLTRB(0, 0, 30, 10),
         width: MediaQuery.of(context).size.width,
-        height: 50,
+        height: 70,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
