@@ -472,22 +472,20 @@ class _TransactionScreenState extends State<_TransactionScreen> {
               ),
             ),
           ),
-          Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
-              child: SelectionArea(
-                child: Text(
-                  dto.referenceNumber.isNotEmpty ? dto.referenceNumber : '-',
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
-                ),
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
+            child: SelectionArea(
+              child: Text(
+                dto.referenceNumber.isNotEmpty ? dto.referenceNumber : '-',
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
@@ -507,22 +505,20 @@ class _TransactionScreenState extends State<_TransactionScreen> {
               ),
             ),
           ),
-          Expanded(
-            child: Container(
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                      right: BorderSide(color: AppColor.GREY_BUTTON))),
-              height: 50,
-              child: SelectionArea(
-                child: Text(
-                  dto.content,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
-                ),
+          Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                    right: BorderSide(color: AppColor.GREY_BUTTON))),
+            height: 50,
+            child: SelectionArea(
+              child: Text(
+                dto.content,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
