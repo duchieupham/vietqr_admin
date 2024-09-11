@@ -24,18 +24,17 @@ class TransactionRepository extends BaseDAO {
     try {
       String url = '';
       if (type == 9) {
-        // if(from.isEmpty && to.isEmpty){
-        //   url =
-        //     '${EnvConfig.instance.getBaseUrl()}admin/transactions/v2?page=$page&type=$type&value=&from=&to=&size=$size';
-        // }else{
-        //   url =
-        //    '${EnvConfig.instance.getBaseUrl()}admin/transactions/v2?page=$page&type=$type&value=&from=$from&to=$to&size=$size}';
-        // }
         url =
             '${EnvConfig.instance.getBaseUrl()}admin/transactions/v2?page=$page&type=$type&value=&from=&to=&size=$size';
       } else {
-        url =
+        if(from == '0' && to == '0'){
+             url =
+            '${EnvConfig.instance.getBaseUrl()}admin/transactions/v2?page=$page&type=$type&value=$value&from=&to=&size=$size';
+        }else{
+             url =
             '${EnvConfig.instance.getBaseUrl()}admin/transactions/v2?page=$page&type=$type&value=$value&from=$from&to=$to&size=$size';
+        }
+     
       }
 
       final response = await BaseAPIClient.getAPI(

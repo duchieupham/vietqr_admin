@@ -15,6 +15,7 @@ import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
+import 'package:vietqr_admin/commons/utils/format_date.dart';
 import 'package:vietqr_admin/commons/widget/box_layout.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
@@ -101,6 +102,15 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                         ItemBankWidget(
                           dto: e,
                           index: calculatedIndex,
+                          colorText: (e.validFeeTo != 0 &&
+                                  inclusiveDays(e.validFeeTo) <= 0)
+                              ? AppColor.RED_TEXT
+                              : (e.authenticated)
+                                  ? AppColor.GREEN
+                                  : (e.validFeeTo != 0 &&
+                                          inclusiveDays(e.validFeeTo) <= 7)
+                                      ? AppColor.ORANGE
+                                      : AppColor.BLACK,
                         ),
                         if (index + 1 != list.length)
                           const SizedBox(
@@ -119,9 +129,9 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
               return Stack(
                 children: [
                   Positioned.fill(
-                    right: 150,
+                    right: 220,
                     child: SizedBox(
-                      width: 1520,
+                      width: 1350,
                       child: RawScrollbar(
                         thumbVisibility: true,
                         controller: _horizontal,
@@ -176,7 +186,7 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                     ),
                   ),
                   SizedBox(
-                    width: 1740,
+                    width: 1550,
                     child: Row(
                       children: [
                         const Expanded(child: SizedBox()),
@@ -284,11 +294,11 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
             width: 120,
             child: SelectionArea(
                 child: Text(
-              !e.status ? 'Chưa liên kết' : 'Đã liên kết',
+              !e.authenticated ? 'Chưa liên kết' : 'Đã liên kết',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: !e.status ? AppColor.ORANGE_DARK : AppColor.GREEN_STATUS,
+                color: !e.authenticated ? AppColor.ORANGE_DARK : AppColor.GREEN_STATUS,
               ),
             )),
           ),

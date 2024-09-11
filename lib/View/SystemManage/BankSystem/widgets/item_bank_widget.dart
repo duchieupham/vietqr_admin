@@ -7,7 +7,12 @@ import '../../../../commons/constants/configurations/theme.dart';
 class ItemBankWidget extends StatelessWidget {
   final int index;
   final BankSystemItem dto;
-  const ItemBankWidget({super.key, required this.index, required this.dto});
+  final Color colorText;
+  const ItemBankWidget(
+      {super.key,
+      required this.index,
+      required this.dto,
+      required this.colorText});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,7 @@ class ItemBankWidget extends StatelessWidget {
                     ? '${dto.bankShortName} - ${dto.bankAccount}'
                     : '-',
                 textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12),
+                style:  TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -71,7 +76,7 @@ class ItemBankWidget extends StatelessWidget {
               child: Text(
                 dto.bankAccountName.isNotEmpty ? dto.bankAccountName : '-',
                 textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -85,7 +90,7 @@ class ItemBankWidget extends StatelessWidget {
               child: Text(
                 dto.validFrom.toString() != '0' ? formattedDateTimeStared : '-',
                 textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -102,7 +107,7 @@ class ItemBankWidget extends StatelessWidget {
                     ? formattedDateTimeRegister
                     : '-',
                 textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -115,7 +120,7 @@ class ItemBankWidget extends StatelessWidget {
               child: Text(
                 dto.mmsActive ? 'TF' : 'MF',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -130,7 +135,7 @@ class ItemBankWidget extends StatelessWidget {
               child: Text(
                 dto.nationalId.isNotEmpty ? dto.nationalId : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -147,7 +152,7 @@ class ItemBankWidget extends StatelessWidget {
                     ? dto.phoneAuthenticated
                     : '-',
                 textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -161,7 +166,7 @@ class ItemBankWidget extends StatelessWidget {
               child: Text(
                 dto.vso.isNotEmpty ? dto.vso : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -176,7 +181,7 @@ class ItemBankWidget extends StatelessWidget {
               child: Text(
                 dto.phoneNo.isNotEmpty ? dto.phoneNo : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
 
@@ -191,7 +196,7 @@ class ItemBankWidget extends StatelessWidget {
               child: Text(
                 dto.email.isNotEmpty ? dto.email : '-',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
           ],

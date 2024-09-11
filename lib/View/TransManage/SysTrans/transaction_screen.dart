@@ -126,15 +126,18 @@ class _TransactionScreenState extends State<_TransactionScreen> {
   Widget _bodyWidget() {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocProvider.value(
-              value: _bloc,
-              child: FilterTransactionWidget(
-                pageSize: pageSize,
-                controller: _textController,
+            Container(
+              margin: const EdgeInsets.only(left: 20),
+              child: BlocProvider.value(
+                value: _bloc,
+                child: FilterTransactionWidget(
+                  pageSize: pageSize,
+                  controller: _textController,
+                ),
               ),
             ),
             const SizedBox(
@@ -162,11 +165,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                       ),
                     ),
                     _pagingWidget()
-                    // ListBankSystemWidget(
-                    //   pageSize: pageSize,
-                    // ),
-                    // const MySeparator(color: AppColor.GREY_DADADA),
-                    // _pagingWidget(),
+
                   ],
                 ),
               ),
@@ -182,6 +181,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
       return Container(
         padding: const EdgeInsets.fromLTRB(0, 20, 30, 10),
         width: MediaQuery.of(context).size.width,
+        height: 50,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

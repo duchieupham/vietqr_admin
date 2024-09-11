@@ -24,7 +24,7 @@ class TransactionProvider with ChangeNotifier {
     const FilterTimeTransaction(id: 5, title: 'Khoảng thời gian'),
   ];
   FilterTimeTransaction _valueTimeFilter =
-      const FilterTimeTransaction(id: 0, title: 'Tất cả');
+      const FilterTimeTransaction(id: 2, title: '7 ngày gần nhất');
   FilterTimeTransaction get valueTimeFilter => _valueTimeFilter;
   DateTime _toDate = DateTime.now();
   DateTime get toDate => _toDate;
@@ -40,7 +40,7 @@ class TransactionProvider with ChangeNotifier {
 
   resetFilter() {
     _valueFilter = const FilterTransaction(id: 9, title: 'Tất cả');
-    _valueTimeFilter = const FilterTimeTransaction(id: 0, title: 'Tất cả');
+    _valueTimeFilter = const FilterTimeTransaction(id: 2, title: '7 ngày gần nhất');
     notifyListeners();
   }
 
