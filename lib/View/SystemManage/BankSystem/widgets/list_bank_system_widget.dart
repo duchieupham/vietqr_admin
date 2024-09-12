@@ -105,12 +105,10 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                           colorText: (e.validFeeTo != 0 &&
                                   inclusiveDays(e.validFeeTo) <= 0)
                               ? AppColor.RED_TEXT
-                              : (e.authenticated)
-                                  ? AppColor.GREEN
-                                  : (e.validFeeTo != 0 &&
-                                          inclusiveDays(e.validFeeTo) <= 7)
-                                      ? AppColor.ORANGE
-                                      : AppColor.BLACK,
+                              : (e.validFeeTo != 0 &&
+                                      inclusiveDays(e.validFeeTo) <= 7)
+                                  ? AppColor.ORANGE
+                                  : AppColor.BLACK,
                         ),
                         if (index + 1 != list.length)
                           const SizedBox(
@@ -298,7 +296,9 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: !e.authenticated ? AppColor.ORANGE_DARK : AppColor.GREEN_STATUS,
+                color: !e.authenticated
+                    ? AppColor.ORANGE_DARK
+                    : AppColor.GREEN_STATUS,
               ),
             )),
           ),
