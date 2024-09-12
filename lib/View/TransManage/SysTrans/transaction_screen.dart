@@ -124,56 +124,56 @@ class _TransactionScreenState extends State<_TransactionScreen> {
     );
   }
 
- Widget _bodyWidget() {
-  return Container(
-    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 20),
-          child: BlocProvider.value(
-            value: _bloc,
-            child: FilterTransactionWidget(
-              pageSize: pageSize,
-              controller: _textController,
+  Widget _bodyWidget() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 20),
+            child: BlocProvider.value(
+              value: _bloc,
+              child: FilterTransactionWidget(
+                pageSize: pageSize,
+                controller: _textController,
+              ),
             ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColor.WHITE,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor.BLACK.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                  offset: const Offset(0, 1),
-                )
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: _buildListTransaction(),
-                ),
-                _pagingWidget(),
-              ],
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColor.WHITE,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.BLACK.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 10,
+                    offset: const Offset(0, 1),
+                  )
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _buildListTransaction(),
+                  ),
+                  _pagingWidget(),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
- Widget _headerWidget() {
+  Widget _headerWidget() {
     return Consumer<TransactionProvider>(builder: (context, provider, child) {
       return Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 30, 10),
@@ -269,7 +269,6 @@ class _TransactionScreenState extends State<_TransactionScreen> {
     });
   }
 
- 
   Widget _buildListTransaction() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -366,20 +365,26 @@ class _TransactionScreenState extends State<_TransactionScreen> {
               width: 110,
               alignment: Alignment.center,
               textAlign: TextAlign.center),
-          _buildItemTitle('Mã GD (FT Code)',
-              height: 50,
-              alignment: Alignment.center,
-              textAlign: TextAlign.center),
+          Expanded(
+            flex: 2,
+            child: _buildItemTitle('Mã GD (FT Code)',
+                height: 50,
+                width: 150,
+                alignment: Alignment.center,
+                textAlign: TextAlign.center),
+          ),
           _buildItemTitle('Trạng thái',
               height: 50,
               width: 100,
               alignment: Alignment.center,
               textAlign: TextAlign.center),
-          _buildItemTitle('Nội dung',
-              height: 50,
-              width: 100,
-              alignment: Alignment.center,
-              textAlign: TextAlign.center),
+          Expanded(
+            flex: 3,
+            child: _buildItemTitle('Nội dung',
+                height: 50,
+                alignment: Alignment.center,
+                textAlign: TextAlign.center),
+          ),
           _buildItemTitle('TG tạo GD',
               height: 50,
               width: 120,
@@ -473,6 +478,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
             ),
           ),
           Expanded(
+            flex: 2,
             child: Container(
               alignment: Alignment.center,
               decoration: const BoxDecoration(
@@ -498,7 +504,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     bottom: BorderSide(color: AppColor.GREY_BUTTON),
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
-            width: 110,
+            width: 100,
             child: SelectionArea(
               child: Text(
                 dto.getStatus(),
@@ -508,6 +514,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
             ),
           ),
           Expanded(
+            flex: 3,
             child: Container(
               alignment: Alignment.center,
               decoration: const BoxDecoration(
@@ -617,7 +624,6 @@ class _TransactionScreenState extends State<_TransactionScreen> {
       ),
     );
   }
-
 
   Widget _pagingWidget() {
     return BlocBuilder<TransactionBloc, TransactionState>(
