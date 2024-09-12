@@ -87,7 +87,7 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
           if (list == null || list.isEmpty) {
             return [];
           }
-
+  
           return list
               .asMap()
               .map((index, e) {
@@ -112,7 +112,7 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                         ),
                         if (index + 1 != list.length)
                           const SizedBox(
-                              width: 1520,
+                              width: 1350,
                               child: MySeparator(color: AppColor.GREY_DADADA)),
                       ],
                     ));
