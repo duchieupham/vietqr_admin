@@ -87,7 +87,7 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
           if (list == null || list.isEmpty) {
             return [];
           }
-
+  
           return list
               .asMap()
               .map((index, e) {
@@ -105,16 +105,14 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
                           colorText: (e.validFeeTo != 0 &&
                                   inclusiveDays(e.validFeeTo) <= 0)
                               ? AppColor.RED_TEXT
-                              : (e.authenticated)
-                                  ? AppColor.GREEN
-                                  : (e.validFeeTo != 0 &&
-                                          inclusiveDays(e.validFeeTo) <= 7)
-                                      ? AppColor.ORANGE
-                                      : AppColor.BLACK,
+                              : (e.validFeeTo != 0 &&
+                                      inclusiveDays(e.validFeeTo) <= 7)
+                                  ? AppColor.ORANGE
+                                  : AppColor.BLACK,
                         ),
                         if (index + 1 != list.length)
                           const SizedBox(
-                              width: 1520,
+                              width: 1350,
                               child: MySeparator(color: AppColor.GREY_DADADA)),
                       ],
                     ));
@@ -298,7 +296,9 @@ class _ListBankSystemWidgetState extends State<ListBankSystemWidget> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: !e.authenticated ? AppColor.ORANGE_DARK : AppColor.GREEN_STATUS,
+                color: !e.authenticated
+                    ? AppColor.ORANGE_DARK
+                    : AppColor.GREEN_STATUS,
               ),
             )),
           ),
