@@ -1,5 +1,8 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 import 'package:vietqr_admin/models/DTO/bank_system_dto.dart';
 
 import '../../../../commons/constants/configurations/theme.dart';
@@ -27,26 +30,45 @@ class ItemBankWidget extends StatelessWidget {
     return Container(
       // color: index % 2 == 0 ? AppColor.GREY_BG : AppColor.WHITE,
       alignment: Alignment.center,
-      child: SelectionArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            //STT
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              alignment: Alignment.center,
-              height: 40,
-              width: 50,
-              child: Text(
-                '${index + 1}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          //STT
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            alignment: Alignment.center,
+            height: 40,
+            width: 50,
+            child: Text(
+              '${index + 1}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 12),
             ),
+          ),
 
-            //Số tk
-            Container(
+          //Số tk
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.bankAccount.isNotEmpty
+                    ? '${dto.bankShortName} - ${dto.bankAccount}'
+                    : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.bankAccount.isNotEmpty
                   ? Alignment.centerRight
@@ -61,12 +83,31 @@ class ItemBankWidget extends StatelessWidget {
                     ? '${dto.bankShortName} - ${dto.bankAccount}'
                     : '-',
                 textAlign: TextAlign.right,
-                style:  TextStyle(fontSize: 12, color: colorText),
+                style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //Chủ tk
-            Container(
+          //Chủ tk
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.bankAccountName.isNotEmpty ? dto.bankAccountName : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.bankAccountName.isNotEmpty
                   ? Alignment.centerRight
@@ -79,9 +120,28 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //Ngày kích hoạt
-            Container(
+          //Ngày kích hoạt
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.validFrom.toString() != '0' ? formattedDateTimeStared : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment:
                   dto.validFrom != 0 ? Alignment.centerRight : Alignment.center,
@@ -93,9 +153,30 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //Ngày hết hạn
-            Container(
+          //Ngày hết hạn
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.validFeeTo.toString() != '0'
+                    ? formattedDateTimeRegister
+                    : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.validFeeTo != 0
                   ? Alignment.centerRight
@@ -110,9 +191,28 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //Luồng
-            Container(
+          //Luồng
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.mmsActive ? 'TF' : 'MF',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: Alignment.center,
               height: 40,
@@ -123,9 +223,28 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //CCCD/CMND
-            Container(
+          //CCCD/CMND
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.nationalId.isNotEmpty ? dto.nationalId : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.nationalId.isNotEmpty
                   ? Alignment.centerRight
@@ -138,9 +257,30 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //SĐT xác thực
-            Container(
+          //SĐT xác thực
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.phoneAuthenticated.isNotEmpty
+                    ? dto.phoneAuthenticated
+                    : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.phoneAuthenticated.isNotEmpty
                   ? Alignment.centerRight
@@ -155,9 +295,28 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //vso
-            Container(
+          //vso
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.vso.isNotEmpty ? dto.vso : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment:
                   dto.vso.isNotEmpty ? Alignment.centerRight : Alignment.center,
@@ -169,9 +328,28 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //TK VietQR
-            Container(
+          //TK VietQR
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.phoneNo.isNotEmpty ? dto.phoneNo : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.phoneNo.isNotEmpty
                   ? Alignment.centerRight
@@ -184,9 +362,28 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
+          ),
 
-            //Email
-            Container(
+          //Email
+          InkWell(
+            onTap: () async {
+              await FlutterClipboard.copy(
+                dto.email.isNotEmpty ? dto.email : '-',
+              ).then(
+                (value) => Fluttertoast.showToast(
+                  msg: 'Đã sao chép',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Theme.of(context).cardColor,
+                  textColor: Colors.black,
+                  fontSize: 15,
+                  webBgColor: 'rgba(255, 255, 255)',
+                  webPosition: 'center',
+                ),
+              );
+            },
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               alignment: dto.email.isNotEmpty
                   ? Alignment.centerRight
@@ -199,8 +396,8 @@ class ItemBankWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: colorText),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
