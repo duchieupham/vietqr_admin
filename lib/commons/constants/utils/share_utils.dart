@@ -212,7 +212,8 @@ class ShareUtils {
     if (dto.email.isNotEmpty) {
       email = '\nEmail: ${dto.email}';
     }
-    status = '\nTrạng thái: ${dto.status ? 'Đã liên kết' : 'Chưa liên kết'}';
+    status =
+        '\nTrạng thái: ${dto.authenticated ? 'Đã liên kết' : 'Chưa liên kết'}';
 
     result =
         '$bankAccount $bankAccountName $bankShortName $phoneAuthenticated $mmsActive $nationalId $validFeeTo $vso $phoneNo $email $status';

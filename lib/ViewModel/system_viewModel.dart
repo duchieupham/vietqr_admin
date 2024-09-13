@@ -70,6 +70,7 @@ class SystemViewModel extends BaseModel {
           searchType: searchType);
       bankSystemDTO = result;
       metadata = _dao.metaDataDTO;
+
       await Future.delayed(const Duration(milliseconds: 500));
       setState(ViewStatus.Completed);
     } catch (e) {
