@@ -36,6 +36,8 @@ class _PopupCheckLogWidgetState extends State<PopupCheckLogWidget> {
     _accountNumberController.text = widget.bankAccount;
     _accountNameController.text = widget.dto.bankAccountName;
     _bankCodeController.text = widget.dto.bankCode;
+    _phoneNumberController.text = widget.dto.phoneNo;
+    _identityController.text = widget.dto.nationalId;
   }
 
   @override
