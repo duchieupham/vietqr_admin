@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:vietqr_admin/View/SystemManage/BankSystem/bank_system_screen.dart';
 import 'package:vietqr_admin/View/TransManage/SysTrans/widget/filter_transaction_widget.dart';
@@ -85,6 +87,22 @@ class _TransactionScreenState extends State<_TransactionScreen> {
     // Provider.of<TransactionProvider>(context, listen: false).resetFilter();
     // });
     super.initState();
+  }
+
+  void onCopy(String copy) async {
+    await FlutterClipboard.copy(copy).then(
+      (value) => Fluttertoast.showToast(
+        msg: 'Đã sao chép',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: AppColor.WHITE,
+        textColor: AppColor.BLACK,
+        fontSize: 15,
+        webBgColor: 'rgba(255, 255, 255)',
+        webPosition: 'center',
+      ),
+    );
   }
 
   @override
@@ -435,13 +453,35 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 130,
-            child: SelectionArea(
+            child: TextButton(
+              onPressed: () async {
+                await FlutterClipboard.copy(dto.bankAccount).then(
+                  (value) => Fluttertoast.showToast(
+                    msg: 'Đã sao chép',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: AppColor.WHITE,
+                    textColor: AppColor.BLACK,
+                    fontSize: 15,
+                    webBgColor: 'rgba(255, 255, 255)',
+                    webPosition: 'center',
+                  ),
+                );
+              },
               child: Text(
                 dto.bankAccount,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 12),
               ),
             ),
+            // child: SelectionArea(
+            //   child: Text(
+            //     dto.bankAccount,
+            //     textAlign: TextAlign.center,
+            //     style: const TextStyle(fontSize: 12),
+            //   ),
+            // ),
           ),
           Container(
             alignment: Alignment.center,
@@ -451,15 +491,19 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: SelectionArea(
-              child: Text(
-                dto.transType == 'D'
-                    ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
-                    : '+ ${StringUtils.formatNumber(dto.amount.toString())}',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: dto.getAmountColor()),
-              ),
-            ),
+            child: TextButton(
+                onPressed: () {
+                  onCopy(dto.transType == 'D'
+                      ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
+                      : '+ ${StringUtils.formatNumber(dto.amount.toString())}');
+                },
+                child: Text(
+                  dto.transType == 'D'
+                      ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
+                      : '+ ${StringUtils.formatNumber(dto.amount.toString())}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: dto.getAmountColor()),
+                )),
           ),
           Container(
             alignment: Alignment.center,
@@ -469,13 +513,15 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 110,
-            child: SelectionArea(
-              child: Text(
-                dto.orderId.isNotEmpty ? dto.orderId : '-',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
+            child: TextButton(
+                onPressed: () {
+                  onCopy(dto.orderId.isNotEmpty ? dto.orderId : '-');
+                },
+                child: Text(
+                  dto.orderId.isNotEmpty ? dto.orderId : '-',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                )),
           ),
           Expanded(
             flex: 2,
@@ -486,15 +532,19 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
-              child: SelectionArea(
-                child: Text(
-                  dto.referenceNumber.isNotEmpty ? dto.referenceNumber : '-',
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
+              child: TextButton(
+                  onPressed: () {
+                    onCopy(dto.referenceNumber.isNotEmpty
+                        ? dto.referenceNumber
+                        : '-');
+                  },
+                  child: Text(
+                    dto.referenceNumber.isNotEmpty ? dto.referenceNumber : '-',
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12),
+                  )),
             ),
           ),
           Container(
@@ -505,13 +555,15 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 100,
-            child: SelectionArea(
-              child: Text(
-                dto.getStatus(),
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: dto.getStatusColor()),
-              ),
-            ),
+            child: TextButton(
+                onPressed: () {
+                  onCopy(dto.getStatus());
+                },
+                child: Text(
+                  dto.getStatus(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: dto.getStatusColor()),
+                )),
           ),
           Expanded(
             flex: 3,
@@ -522,35 +574,43 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
-              child: SelectionArea(
-                child: Text(
-                  dto.content,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
+              child: TextButton(
+                  onPressed: () {
+                    onCopy(dto.content);
+                  },
+                  child: Text(
+                    dto.content,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12),
+                  )),
             ),
           ),
           Container(
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: AppColor.GREY_BUTTON),
-                    right: BorderSide(color: AppColor.GREY_BUTTON))),
-            height: 50,
-            width: 120,
-            child: SelectionArea(
-              child: Text(
-                dto.timeCreated == 0
-                    ? '-'
-                    : TimeUtils.instance.formatTimeDateFromInt(dto.timeCreated),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
-          ),
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: AppColor.GREY_BUTTON),
+                      right: BorderSide(color: AppColor.GREY_BUTTON))),
+              height: 50,
+              width: 120,
+              child: TextButton(
+                onPressed: () {
+                  onCopy(dto.timeCreated == 0
+                      ? '-'
+                      : TimeUtils.instance
+                          .formatTimeDateFromInt(dto.timeCreated));
+                },
+                child: Text(
+                  dto.timeCreated == 0
+                      ? '-'
+                      : TimeUtils.instance
+                          .formatTimeDateFromInt(dto.timeCreated),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              )),
           Container(
             alignment: Alignment.center,
             decoration: const BoxDecoration(
@@ -559,15 +619,19 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 140,
-            child: SelectionArea(
-              child: Text(
-                dto.timePaid == 0
-                    ? '-'
-                    : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
-              ),
-            ),
+            child: TextButton(
+                onPressed: () {
+                  onCopy(dto.timePaid == 0
+                      ? '-'
+                      : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid));
+                },
+                child: Text(
+                  dto.timePaid == 0
+                      ? '-'
+                      : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                )),
           ),
           Container(
             alignment: Alignment.center,
