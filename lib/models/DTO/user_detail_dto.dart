@@ -1,4 +1,3 @@
-
 class UserInfo {
   final String id;
   final String address;
@@ -74,6 +73,7 @@ class BankInfo {
   final int fromDate;
   final int toDate;
   final int activeService;
+  final bool isAuthenticated;
 
   BankInfo({
     required this.bankAccount,
@@ -86,6 +86,7 @@ class BankInfo {
     required this.fromDate,
     required this.toDate,
     required this.activeService,
+    required this.isAuthenticated,
   });
 
   factory BankInfo.fromJson(Map<String, dynamic> json) {
@@ -100,6 +101,7 @@ class BankInfo {
       fromDate: json['fromDate'],
       toDate: json['toDate'],
       activeService: json['activeService'],
+      isAuthenticated: json['isAuthenticated'],
     );
   }
 
@@ -115,6 +117,7 @@ class BankInfo {
       'fromDate': fromDate,
       'toDate': toDate,
       'activeService': activeService,
+      'isAuthenticated': isAuthenticated,
     };
   }
 }

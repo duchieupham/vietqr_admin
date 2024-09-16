@@ -727,7 +727,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             width: 120,
             child: SelectionArea(
               child: Text(
-                !dto.status ? 'Chưa liên kết' : 'Đã liên kết',
+                !dto.isAuthenticated ? 'Chưa liên kết' : 'Đã liên kết',
                 // textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 13),
                 maxLines: 2,
