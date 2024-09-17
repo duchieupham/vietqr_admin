@@ -29,10 +29,10 @@ class FilterBankSystemButton extends StatelessWidget {
         textPainter.layout();
 
         double textWidth = textPainter.width;
-        return Padding(
-          padding: const EdgeInsets.only(right: 30),
-          child: InkWell(
-            onTap: onTap,
+        return InkWell(
+          onTap: onTap,
+          child: Container(
+            margin: const EdgeInsets.only(right: 30),
             child: Column(
               children: [
                 ShaderMask(

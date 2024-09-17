@@ -640,7 +640,7 @@ class _BankSystemScreenState extends State<BankSystemScreen> {
                   int validCount = 0;
                   int notRegisteredCount = 0;
 
-                  if (filterSelect.type == 1 && model.bankSystemDTO != null) {
+                  if (model.bankSystemDTO != null) {
                     nearlyExpireCount =
                         model.bankSystemDTO!.extraData.nearlyExpireCount;
                     overdueCount = model.bankSystemDTO!.extraData.overdueCount;
