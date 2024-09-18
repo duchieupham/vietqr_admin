@@ -46,8 +46,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             alignment: Alignment.centerLeft,
             height: 50,
             width: 250,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.invoiceName).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -80,8 +80,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 200,
-            child: TextButton(
-                onPressed: () async {
+            child: InkWell(
+                onTap: () async {
                   await FlutterClipboard.copy(dto.fullName).then(
                     (value) => Fluttertoast.showToast(
                       msg: 'Đã sao chép',
@@ -114,8 +114,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-                onPressed: () async {
+            child: InkWell(
+                onTap: () async {
                   await FlutterClipboard.copy(dto.phoneNo).then(
                     (value) => Fluttertoast.showToast(
                       msg: 'Đã sao chép',
@@ -148,8 +148,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-                onPressed: () async {
+            child: InkWell(
+                onTap: () async {
                   await FlutterClipboard.copy(dto.billNumber).then(
                     (value) => Fluttertoast.showToast(
                       msg: 'Đã sao chép',
@@ -179,8 +179,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-                onPressed: () async {
+            child: InkWell(
+                onTap: () async {
                   await FlutterClipboard.copy(
                     StringUtils.formatNumberWithOutVND(dto.amount.toString()),
                   ).then(
@@ -228,8 +228,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 120,
-            child: TextButton(
-                onPressed: () async {
+            child: InkWell(
+                onTap: () async {
                   await FlutterClipboard.copy(dto.vso).then(
                     (value) => Fluttertoast.showToast(
                       msg: 'Đã sao chép',
@@ -259,8 +259,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 120,
-            child: TextButton(
-                onPressed: () async {
+            child: InkWell(
+                onTap: () async {
                   await FlutterClipboard.copy(
                     dto.timePaid.toString() != '0'
                         ? formattedDateTimePaid
@@ -301,8 +301,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(
                   dto.midName.isNotEmpty ? dto.midName : '-',
                 ).then(
@@ -335,8 +335,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-                onPressed: () async {
+            child: InkWell(
+                onTap: () async {
                   await FlutterClipboard.copy(
                           '${dto.bankAccount} - ${dto.bankShortName}')
                       .then(
@@ -368,8 +368,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(
                   dto.email.isNotEmpty ? dto.email : '-',
                 ).then(
@@ -407,8 +407,8 @@ class ItemInvoiceWidget extends StatelessWidget {
             //         right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 130,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.vso).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',

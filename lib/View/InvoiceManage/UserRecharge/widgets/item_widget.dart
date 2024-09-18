@@ -115,8 +115,8 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.amount.toString()).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -153,8 +153,8 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.billNumber).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -187,8 +187,8 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(service).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -219,8 +219,8 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.fullName).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -251,8 +251,8 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.phoneNo).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -283,8 +283,8 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 130,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.additionData).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -329,8 +329,8 @@ class ItemWidget extends StatelessWidget {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 final time = dto.timeCreated.toString().isNotEmpty
                     ? '${DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(dto.timeCreated * 1000))} ${DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(dto.timeCreated * 1000))}'
                     : '-';
