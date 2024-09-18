@@ -453,8 +453,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 130,
-            child: TextButton(
-              onPressed: () async {
+            child: InkWell(
+              onTap: () async {
                 await FlutterClipboard.copy(dto.bankAccount).then(
                   (value) => Fluttertoast.showToast(
                     msg: 'Đã sao chép',
@@ -491,8 +491,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 150,
-            child: TextButton(
-                onPressed: () {
+            child: InkWell(
+                onTap: () {
                   onCopy(dto.transType == 'D'
                       ? '- ${StringUtils.formatNumber(dto.amount.toString())}'
                       : '+ ${StringUtils.formatNumber(dto.amount.toString())}');
@@ -513,8 +513,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 110,
-            child: TextButton(
-                onPressed: () {
+            child: InkWell(
+                onTap: () {
                   onCopy(dto.orderId.isNotEmpty ? dto.orderId : '-');
                 },
                 child: Text(
@@ -532,8 +532,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
-              child: TextButton(
-                  onPressed: () {
+              child: InkWell(
+                  onTap: () {
                     onCopy(dto.referenceNumber.isNotEmpty
                         ? dto.referenceNumber
                         : '-');
@@ -555,8 +555,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 100,
-            child: TextButton(
-                onPressed: () {
+            child: InkWell(
+                onTap: () {
                   onCopy(dto.getStatus());
                 },
                 child: Text(
@@ -574,8 +574,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                       bottom: BorderSide(color: AppColor.GREY_BUTTON),
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
-              child: TextButton(
-                  onPressed: () {
+              child: InkWell(
+                  onTap: () {
                     onCopy(dto.content);
                   },
                   child: Text(
@@ -595,8 +595,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                       right: BorderSide(color: AppColor.GREY_BUTTON))),
               height: 50,
               width: 120,
-              child: TextButton(
-                onPressed: () {
+              child: InkWell(
+                onTap: () {
                   onCopy(dto.timeCreated == 0
                       ? '-'
                       : TimeUtils.instance
@@ -619,8 +619,8 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                     right: BorderSide(color: AppColor.GREY_BUTTON))),
             height: 50,
             width: 140,
-            child: TextButton(
-                onPressed: () {
+            child: InkWell(
+                onTap: () {
                   onCopy(dto.timePaid == 0
                       ? '-'
                       : TimeUtils.instance.formatTimeDateFromInt(dto.timePaid));
@@ -656,9 +656,7 @@ class _TransactionScreenState extends State<_TransactionScreen> {
                 'Chi tiết',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 12,
-                    color: AppColor.BLUE_TEXT,
-                    decoration: TextDecoration.underline),
+                    fontSize: 12, decoration: TextDecoration.underline),
               ),
             ),
           ),
