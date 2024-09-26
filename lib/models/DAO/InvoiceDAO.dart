@@ -278,6 +278,23 @@ class InvoiceDAO extends BaseDAO {
     }
   }
 
+  //   Future<List<TransactionMapInvoiceDTO>> getTransactionInvoices() async {
+  //   String url = '${EnvConfig.instance.getBaseUrl()}transaction/map-invoice';
+  //   final response = await BaseAPIClient.getAPI(
+  //     url: url,
+  //     type: AuthenticationType.SYSTEM,
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     List<dynamic> jsonResponse = json.decode(response.body);
+  //     return jsonResponse
+  //         .map((data) => PaymentRequestDTO.fromJson(data))
+  //         .toList();
+  //   } else {
+  //     throw Exception('Failed to load bank account info');
+  //   }
+  // }
+
   Future<InvoiceDetailQrDTO?> requestPaymnet({
     required String invoiceId,
     required List<String> itemItemIds,

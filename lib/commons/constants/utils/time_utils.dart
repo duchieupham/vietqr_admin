@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/time_picker_dialog_with_seconds.dart';
 import 'package:vietqr_admin/commons/constants/utils/log.dart';
+import 'package:vietqr_admin/main.dart';
 
 class TimeUtils {
   const TimeUtils._privateConstructor();
@@ -387,5 +389,56 @@ class TimeUtils {
     String month = dateString.substring(2, 4);
     String year = dateString.substring(4, 8);
     return '$day/$month/$year';
+  }
+
+    Future<DateTime?> showDateTimePicker({
+    required BuildContext context,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+    bool isSelectedTime = true,
+  }) async {
+    initialDate ??= DateTime.now();
+    firstDate ??= initialDate.subtract(const Duration(days: 365 * 100));
+    lastDate ??= firstDate.add(const Duration(days: 365 * 200));
+
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (selectedDate == null) return null;
+
+    bool mounted = NavigationService.navigatorKey.currentContext!.mounted;
+
+    if (!mounted) return selectedDate;
+
+    ExtendedTimeOfDay? selectedTime;
+
+    if (isSelectedTime) {
+      ExtendedTimeOfDay? initial;
+      // ignore: unnecessary_null_comparison
+      if (initialDate != null) {
+        initial = ExtendedTimeOfDay(
+            hour: initialDate.hour,
+            minute: initialDate.minute,
+            second: initialDate.second);
+      }
+      selectedTime = await showDialog<ExtendedTimeOfDay>(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return TimePickerDialogWithSeconds(
+              initialTime: initial ?? ExtendedTimeOfDay.now());
+        },
+      );
+    }
+
+    return selectedTime == null
+        ? selectedDate
+        : DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
+            selectedTime.hour, selectedTime.minute, selectedTime.second);
   }
 }

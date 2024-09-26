@@ -59,6 +59,7 @@ class InvoiceViewModel extends InvoiceStatus {
   List<ServiceItemDTO>? listService = [];
   ServiceItemDTO? serviceItemDTO;
   ResponseMessageDTO? responseMsg;
+  PaymentRequestDTO? paymentRequestDTO;
 
   InvoiceDetailQrDTO? detailQrDTO;
   UnpaidInvoiceDetailQrDTO? unpaidDetailQrDTO;
@@ -67,13 +68,22 @@ class InvoiceViewModel extends InvoiceStatus {
   List<InvoiceInfoItem>? listInvoiceItem = [];
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
+
+  //Gợp hóa đơn
   List<SelectUnpaidInvoiceItem> listUnpaidSelectInvoice = [];
   SelectUnpaidInvoiceItem? currentSelectUnpaidInvoiceItem;
+
   List<PaymentRequestDTO> listPaymentRequest = [];
   List<UnpaidInvoiceItem> listUnpaidInvoiceItem = [];
   PaymentUnpaidRequestDTO paymentUnpaidRequest =
       PaymentUnpaidRequestDTO(bankIdRecharge: '', invoiceIds: []);
   InvoiceExcelDTO? invoiceExcelDTO;
+
+  //list các item invoice đc chọn để gạch nợ
+  List<SelectInvoiceItemDebt> listSelectInvoiceItemDebt = [];
+  List<SelectTransactionItemDebt> listSelectTransactionItemDebt = [];
+  List<InvoiceItemDebtRequestDTO> listInvoiceItemDebtRequest = [];
+  List<TransactionInvoiceDebtRequestDTO> listTransactionInvoiceDebt = [];
 
   int totalUnpaidInvoice = 0;
   MerchantItem? selectMerchantItem;
@@ -85,6 +95,14 @@ class InvoiceViewModel extends InvoiceStatus {
   List<DataFilter> listFilterTime = [
     const DataFilter(id: 9, name: 'Tất cả'),
     const DataFilter(id: 0, name: 'Tùy chọn')
+  ];
+
+  List<DataFilter> listFilterByTime = [
+    const DataFilter(id: 1, name: '7 ngày gần nhất'),
+    const DataFilter(id: 2, name: 'Hôm nay'),
+    const DataFilter(id: 3, name: '1 tháng gần đây'),
+    const DataFilter(id: 4, name: '3 tháng gần đây'),
+    const DataFilter(id: 5, name: 'Khoảng thời gian'),
   ];
 
   int type = 0;
@@ -494,6 +512,19 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
+  void changePayment(int index) {
+    for (var e in invoiceDetailDTO!.paymentRequestDTOS) {
+      e.isChecked = false;
+    }
+    invoiceDetailDTO!.paymentRequestDTOS[index].isChecked = true;
+    paymentRequestDTO = invoiceDetailDTO!.paymentRequestDTOS
+        .where(
+          (e) => e.isChecked == true,
+        )
+        .first;
+    notifyListeners();
+  }
+
   void selectPaymentRequest(int index) {
     for (var e in listPaymentRequest) {
       e.isChecked = false;
@@ -510,13 +541,17 @@ class InvoiceViewModel extends InvoiceStatus {
   void appliedUnpaidInvoiceItem(bool value, int index) {
     listUnpaidSelectInvoice[index].isSelect = value;
     if (value) {
+      //Thêm hóa đơn chưa thanh toán để thanh toán
       paymentUnpaidRequest.invoiceIds
           .add(listUnpaidSelectInvoice[index].unpaidInvoiceItem.invoiceId);
+      //cập nhật tổng tiền
       totalUnpaidInvoice +=
           listUnpaidSelectInvoice[index].unpaidInvoiceItem.pendingAmount;
     } else {
+      //Xóa hóa đơn chưa thanh toán để thanh toán
       paymentUnpaidRequest.invoiceIds
           .remove(listUnpaidSelectInvoice[index].unpaidInvoiceItem.invoiceId);
+      //cập nhật tổng tiền
       totalUnpaidInvoice -=
           listUnpaidSelectInvoice[index].unpaidInvoiceItem.pendingAmount;
     }
@@ -539,6 +574,42 @@ class InvoiceViewModel extends InvoiceStatus {
       if (value) {
         paymentUnpaidRequest.invoiceIds.add(e.unpaidInvoiceItem.invoiceId);
         totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
+      }
+    }
+    notifyListeners();
+  }
+
+  void appliedAllItemDebt(bool value) {
+    //clear list
+    listInvoiceItemDebtRequest = [];
+    for (var e in listSelectInvoiceItemDebt) {
+      e.isSelect = value;
+      if (value) {
+        listInvoiceItemDebtRequest.add(
+          InvoiceItemDebtRequestDTO(
+            id: e.invoiceItem.invoiceItemId,
+            totalAfterVat: e.invoiceItem.amount.toDouble(),
+          ),
+        );
+        // totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
+      }
+    }
+    notifyListeners();
+  }
+
+  void appliedAllTransactionDebt(bool value) {
+    //clear list
+    listTransactionInvoiceDebt = [];
+    for (var e in listSelectTransactionItemDebt) {
+      e.isSelect = value;
+      if (value) {
+        listTransactionInvoiceDebt.add(
+          TransactionInvoiceDebtRequestDTO(
+            id: e.transactionItem.transactionId,
+            amount: e.transactionItem.amount.toDouble(),
+          ),
+        );
+        // totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
       }
     }
     notifyListeners();
@@ -764,6 +835,13 @@ class InvoiceViewModel extends InvoiceStatus {
         .toList();
   }
 
+  List<SelectInvoiceItemDebt> mapToSelectInvoiceItemsDebt(
+      List<InvoiceItemDetailDTO> invoiceItems) {
+    return invoiceItems
+        .map((item) => SelectInvoiceItemDebt(isSelect: true, invoiceItem: item))
+        .toList();
+  }
+
   List<SelectUnpaidInvoiceItem> mapToSelectUnpaidInvoiceItems(
       List<UnpaidInvoiceItem> unpaidInvoiceItems) {
     paymentUnpaidRequest.invoiceIds = [];
@@ -785,8 +863,18 @@ class InvoiceViewModel extends InvoiceStatus {
       invoiceDetailDTO = await _dao.getInvoiceDetail(id);
       if (invoiceDetailDTO != null) {
         listInvoiceDetailItem = invoiceDetailDTO!.invoiceItemDetailDTOS;
+
         listSelectInvoice =
             mapToSelectInvoiceItems(invoiceDetailDTO!.invoiceItemDetailDTOS);
+
+        listSelectInvoiceItemDebt = mapToSelectInvoiceItemsDebt(
+            invoiceDetailDTO!.invoiceItemDetailDTOS);
+
+        paymentRequestDTO = invoiceDetailDTO!.paymentRequestDTOS
+            .where(
+              (e) => e.isChecked == true,
+            )
+            .first;
       }
       setInvoiceState(
           status: ViewStatus.Completed,
@@ -1158,5 +1246,25 @@ class SelectUnpaidInvoiceItem {
   SelectUnpaidInvoiceItem({
     this.isSelect,
     required this.unpaidInvoiceItem,
+  });
+}
+
+class SelectInvoiceItemDebt {
+  bool? isSelect;
+  final InvoiceItemDetailDTO invoiceItem;
+
+  SelectInvoiceItemDebt({
+    this.isSelect,
+    required this.invoiceItem,
+  });
+}
+
+class SelectTransactionItemDebt {
+  bool? isSelect;
+  final TransactionMapInvoiceDTO transactionItem;
+
+  SelectTransactionItemDebt({
+    this.isSelect,
+    required this.transactionItem,
   });
 }

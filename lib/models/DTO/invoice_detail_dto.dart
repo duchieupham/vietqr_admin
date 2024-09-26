@@ -237,3 +237,91 @@ class InvoiceDetailDTO {
     );
   }
 }
+
+class TransactionMapInvoiceDTO {
+  String transactionId;
+  int amount;
+  int timePaid;
+  String referenceNumber;
+  String content;
+  String orderId;
+
+  TransactionMapInvoiceDTO({
+    required this.transactionId,
+    required this.amount,
+    required this.timePaid,
+    required this.referenceNumber,
+    required this.content,
+    required this.orderId,
+  });
+
+  factory TransactionMapInvoiceDTO.fromJson(Map<String, dynamic> json) {
+    return TransactionMapInvoiceDTO(
+      transactionId: json['transactionId'],
+      amount: json['amount'],
+      timePaid: json['timePaid'],
+      referenceNumber: json['referenceNumber'],
+      content: json['content'],
+      orderId: json['orderId'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['transactionId'] = transactionId;
+    data['amount'] = amount;
+    data['timePaid'] = timePaid;
+    data['referenceNumber'] = referenceNumber;
+    data['content'] = content;
+    data['orderId'] = orderId;
+    return data;
+  }
+}
+
+class InvoiceItemDebtRequestDTO {
+  String id;
+  double totalAfterVat;
+
+  InvoiceItemDebtRequestDTO({
+    required this.id,
+    required this.totalAfterVat,
+  });
+
+  factory InvoiceItemDebtRequestDTO.fromJson(Map<String, dynamic> json) {
+    return InvoiceItemDebtRequestDTO(
+      id: json['id'],
+      totalAfterVat: json['totalAfterVat'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['totalAfterVat'] = totalAfterVat;
+    return data;
+  }
+}
+
+class TransactionInvoiceDebtRequestDTO {
+  String id;
+  double amount;
+
+  TransactionInvoiceDebtRequestDTO({
+    required this.id,
+    required this.amount,
+  });
+
+  factory TransactionInvoiceDebtRequestDTO.fromJson(Map<String, dynamic> json) {
+    return TransactionInvoiceDebtRequestDTO(
+      id: json['id'],
+      amount: json['amount'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['amount'] = amount;
+    return data;
+  }
+}

@@ -1200,7 +1200,7 @@ class _InvoiceDetailScreenState extends State<InvoiceDetailScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
+          Flexible(
             child: Scrollbar(
               controller: controller4,
               child: SingleChildScrollView(

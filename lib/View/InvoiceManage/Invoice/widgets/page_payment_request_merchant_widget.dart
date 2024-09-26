@@ -7,7 +7,6 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_unpaid_qr_
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
-import 'package:vietqr_admin/commons/constants/utils/custom_scroll.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_detail_dto.dart';

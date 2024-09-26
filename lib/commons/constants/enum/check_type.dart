@@ -64,3 +64,37 @@ enum TokenType {
   Fcm_success,
   Fcm_failed,
 }
+
+enum TypeTimeFilter {
+  ALL,
+  TODAY,
+  SEVEN_LAST_DAY,
+  THIRTY_LAST_DAY,
+  THREE_MONTH_LAST_DAY,
+  PERIOD,
+  NONE
+}
+
+
+extension TypeTimeFilterExt on TypeTimeFilter {
+  int get id {
+    switch (this) {
+      case TypeTimeFilter.ALL:
+        return 0;
+      case TypeTimeFilter.TODAY:
+        return 2;
+      case TypeTimeFilter.SEVEN_LAST_DAY:
+        return 1;
+      case TypeTimeFilter.THIRTY_LAST_DAY:
+        return 3;
+      case TypeTimeFilter.THREE_MONTH_LAST_DAY:
+        return 4;
+      case TypeTimeFilter.PERIOD:
+        return 5;
+      default:
+        return 0;
+    }
+  }
+}
+
+
