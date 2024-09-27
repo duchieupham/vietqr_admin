@@ -45,6 +45,7 @@ class _FilterInvoiceWidgetState extends State<FilterInvoiceWidget> {
 
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
+        // ignore: unused_local_variable
         String inputText = '';
         if (widget.filterBy == 0) {
           switch (model.subMenuType) {
