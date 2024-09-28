@@ -40,7 +40,6 @@ class _PopupRemoveInvoiceDebtWidgetState
   DateTime get now => DateTime.now();
   final monthCalculator = MonthCalculator();
 
-  //khởi tạo thời gian 7 ngày
   DateTime _fromDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime _toDate =
@@ -62,7 +61,7 @@ class _PopupRemoveInvoiceDebtWidgetState
   }
 
   DateFormat get _format => DateFormat('dd/MM/yyyy HH:mm:ss');
-  DateFormat get _format2 => DateFormat('yyyy/MM/dd HH:mm:ss');
+  DateFormat get _format2 => DateFormat('yyyy-MM-dd HH:mm:ss');
 
   DateTime? selectFromDate;
   DateTime? selectToDate;
@@ -115,42 +114,39 @@ class _PopupRemoveInvoiceDebtWidgetState
                           model.invoiceDetailDTO!.paymentRequestDTOS
                               .any((x) => x.isChecked) &&
                           model.listSelectTransactionItemDebt
-                              .any((x) => x.isSelect == true);
+                              .any((x) => x.isSelect == true) &&
+                          (model.listInvoiceItemDebtRequest.isEmpty ||
+                              model.listTransactionInvoiceDebtRequest.isEmpty);
                     }
                     if (model.invoiceDetailDTO == null) {
                       return const SizedBox.shrink();
                     }
                     return Stack(
                       children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Gạch nợ hóa đơn thủ công',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              _buildInvoiceDetailWidget(
-                                  model.invoiceDetailDTO!),
-                              const MySeparator(color: AppColor.GREY_DADADA),
-                              const SizedBox(height: 20),
-                              const Text(
-                                'Danh mục hàng hoá / dịch vụ',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              _buildInvoiceWidget(),
-                              const SizedBox(height: 20),
-                              const MySeparator(color: AppColor.GREY_DADADA),
-                              _buildTransactionWidget(model, _filterByTime),
-                              const SizedBox(height: 20),
-                              _buildInvoiceWidget(),
-                              _buildInvoiceWidget(),
-                              _buildInvoiceWidget(),
-                              const SizedBox(height: 50),
-                            ],
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Gạch nợ hóa đơn thủ công',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            _buildInvoiceDetailWidget(model.invoiceDetailDTO!),
+                            const MySeparator(color: AppColor.GREY_DADADA),
+                            const SizedBox(height: 20),
+                            const Text(
+                              'Danh mục hàng hoá / dịch vụ',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            _buildInvoiceWidget(),
+                            const SizedBox(height: 20),
+                            const MySeparator(color: AppColor.GREY_DADADA),
+                            _buildTransactionWidget(model, _filterByTime),
+                            const SizedBox(height: 20),
+                            _buildTransactionInvoiceDebt(),
+                            const SizedBox(height: 50),
+                          ],
                         ),
                         Positioned(
                           top: 0,
@@ -249,6 +245,7 @@ class _PopupRemoveInvoiceDebtWidgetState
   }
 
   Widget _buildReqPayment(List<PaymentRequestDTO> listReq, bool isEnable) {
+    // isEnable = true;
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -270,8 +267,8 @@ class _PopupRemoveInvoiceDebtWidgetState
                         dto: listReq[index],
                         onChange: (value) {
                           _model.changePayment(index);
-                          _model.changeBankId(index, _format.format(_fromDate),
-                              _format.format(_toDate), page, size);
+                          _model.changeBankId(index, _format2.format(_fromDate),
+                              _format2.format(_toDate), page, size);
                         },
                       );
                     },
@@ -295,7 +292,8 @@ class _PopupRemoveInvoiceDebtWidgetState
                       .mapInvoiceDebt(
                           invoiceId: widget.dto.invoiceId,
                           invoiceItemList: _model.listInvoiceItemDebtRequest,
-                          transactionList: _model.listTransactionInvoiceDebt)
+                          transactionList:
+                              _model.listTransactionInvoiceDebtRequest)
                       .then(
                     (value) {
                       if (value) {
@@ -319,10 +317,14 @@ class _PopupRemoveInvoiceDebtWidgetState
                         );
                       } else {
                         Navigator.of(context).pop();
+                        DialogWidget.instance.openMsgDialog(
+                            title: 'Gạch nợ thất bại',
+                            msg: 'Yêu cầu gạch nợ không hợp lệ');
                       }
                     },
                   );
                 }
+              // ignore: dead_code
               : null,
         ),
       ],
@@ -372,7 +374,7 @@ class _PopupRemoveInvoiceDebtWidgetState
                             activeColor: AppColor.BLUE_TEXT,
                             value: isAllSelectInvoice,
                             onChanged: (value) {
-                              model.appliedAllTransactionDebt(value!);
+                              model.appliedAllItemDebt(value!);
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
@@ -550,21 +552,25 @@ class _PopupRemoveInvoiceDebtWidgetState
   Widget _buildTransactionInvoiceDebt() {
     return ScopedModelDescendant<InvoiceViewModel>(
       builder: (context, child, model) {
-        if (model.status == ViewStatus.Loading &&
+        if (model.status == ViewStatus.Loading_Transaction_Item_Debt &&
             model.request == InvoiceType.GET_INVOICE_DETAIL) {
           return const Expanded(
               child: Center(
             child: CircularProgressIndicator(),
           ));
         }
-        if (model.listTransactionInvoice.isEmpty) {
-          return const SizedBox.shrink();
+        if (model.listSelectTransactionItemDebt.isEmpty) {
+          return const Center(
+            child: Text(
+              'Không có giao dịch để hiển thị',
+              style: TextStyle(color: AppColor.BLACK, fontSize: 14),
+            ),
+          );
         }
         bool isAllSelectInvoice = model.listSelectTransactionItemDebt
             .every((element) => element.isSelect == true);
         return SizedBox(
-          width: 700,
-          height: model.listSelectInvoice.length >= 4 ? 250 : 150,
+          width: 1100,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -589,7 +595,7 @@ class _PopupRemoveInvoiceDebtWidgetState
                             activeColor: AppColor.BLUE_TEXT,
                             value: isAllSelectInvoice,
                             onChanged: (value) {
-                              model.appliedAllItemDebt(value!);
+                              model.appliedAllTransactionDebt(value!);
                             },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
@@ -613,7 +619,7 @@ class _PopupRemoveInvoiceDebtWidgetState
                         height: 50,
                         alignment: Alignment.centerLeft),
                     const BuildItemlTitle(
-                        title: 'Nội dung hoá đơn thanh toán',
+                        title: 'Mã GD (FT Code)',
                         height: 50,
                         width: 250,
                         alignment: Alignment.centerLeft,
@@ -626,9 +632,15 @@ class _PopupRemoveInvoiceDebtWidgetState
                         alignment: Alignment.centerLeft,
                         textAlign: TextAlign.center),
                     const BuildItemlTitle(
-                        title: 'Trạng thái',
+                        title: 'Thời gian thanh toán',
                         height: 50,
-                        width: 120,
+                        width: 150,
+                        alignment: Alignment.centerLeft,
+                        textAlign: TextAlign.center),
+                    const BuildItemlTitle(
+                        title: 'Nội dung',
+                        height: 50,
+                        width: 250,
                         alignment: Alignment.centerLeft,
                         textAlign: TextAlign.center),
                   ],
@@ -636,7 +648,7 @@ class _PopupRemoveInvoiceDebtWidgetState
               ),
               Expanded(
                 child: SizedBox(
-                  width: 700,
+                  width: 1100,
                   child: ListView.separated(
                     separatorBuilder: (context, index) => Container(
                       decoration: const BoxDecoration(
@@ -653,9 +665,9 @@ class _PopupRemoveInvoiceDebtWidgetState
                       // if (isAlreadyPay) {
                       //   model.appliedInvoiceItem(isAlreadyPay, index);
                       // }
-                      return _invoiceItemWidget(
+                      return _transactionItemWidget(
                           index: index,
-                          dto: model.listSelectInvoiceItemDebt[index],
+                          dto: model.listSelectTransactionItemDebt[index],
                           model: model);
                     },
                     itemCount: model.listSelectInvoice.length,
@@ -928,6 +940,109 @@ class _PopupRemoveInvoiceDebtWidgetState
           ],
         ),
       ],
+    );
+  }
+
+  Widget _transactionItemWidget(
+      {required int index,
+      required SelectTransactionItemDebt dto,
+      required InvoiceViewModel model}) {
+    return Container(
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            width: 100,
+            height: 50,
+            child: Checkbox(
+              activeColor: AppColor.BLUE_TEXT,
+              value: dto.isSelect,
+              onChanged: (value) {
+                setState(() {
+                  model.appliedTransationItemDebt(value!, index);
+                });
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(
+                  color: AppColor.GREY_TEXT.withOpacity(0.3),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 50,
+            child: SelectionArea(
+              child: Text(
+                (index + 1).toString(),
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 250,
+            padding: const EdgeInsets.only(right: 4),
+            child: SelectionArea(
+              child: Text(
+                dto.transactionItem.referenceNumber,
+                // textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                StringUtils.formatNumberWithOutVND(dto.transactionItem.amount),
+                style:
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 150,
+            child: SelectionArea(
+              child: Text(
+                _format2.format(DateTime.fromMillisecondsSinceEpoch(
+                    dto.transactionItem.timePaid * 1000)),
+                style:
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            height: 50,
+            width: 250,
+            child: SelectionArea(
+              child: Text(
+                dto.transactionItem.content,
+                style:
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

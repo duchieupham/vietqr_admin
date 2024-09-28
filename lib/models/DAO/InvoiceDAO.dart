@@ -83,6 +83,7 @@ class InvoiceDAO extends BaseDAO {
       param['vat'] = vat;
       param['items'] = invoice.invoiceItems.map((e) => e.toJson()).toList();
       param['bankIdRecharge'] = bankIdRecharge;
+      // ignore: avoid_print
       print("REQ: $param");
       String url =
           '${EnvConfig.instance.getBaseUrl()}invoice/update-invoice/${invoice.invoiceId}';
@@ -290,12 +291,14 @@ class InvoiceDAO extends BaseDAO {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       metaDataDTO = MetaDataDTO.fromJson(data['metadata']);
-      List<dynamic> jsonResponse = json.decode(data['data']);
-      return jsonResponse
-          .map((data) => TransactionMapInvoiceDTO.fromJson(data))
-          .toList();
+      // final jsonResponse = data['data'];
+      // List<TransactionMapInvoiceDTO> list = jsonResponse
+      //     .map((data) => TransactionMapInvoiceDTO.fromJson(data))
+      //     .toList();
+      return List<TransactionMapInvoiceDTO>.from(
+          data['data'].map((x) => TransactionMapInvoiceDTO.fromJson(x)));
     } else {
-      throw Exception('Failed to load bank account info');
+      throw Exception('Failed to load transaction list');
     }
   }
 
@@ -305,12 +308,17 @@ class InvoiceDAO extends BaseDAO {
       List<TransactionInvoiceDebtRequestDTO> transactionList) async {
     try {
       String url = '${EnvConfig.instance.getBaseUrl()}invoice/admin-map';
+      List<Map<String, dynamic>> invoiceList =
+          invoiceItemList.map((invoice) => invoice.toJson()).toList();
+      List<Map<String, dynamic>> transactionsList =
+          transactionList.map((trans) => trans.toJson()).toList();
+      print(invoiceList);
       final response = await BaseAPIClient.putAPI(
           url: url,
           body: {
             'invoiceId': invoiceId,
-            'invoiceItemList': invoiceItemList,
-            'transactionList': transactionList,
+            'invoiceItemList': invoiceList,
+            'transactionList': transactionsList,
           },
           type: AuthenticationType.SYSTEM);
       var data = jsonDecode(response.body);
