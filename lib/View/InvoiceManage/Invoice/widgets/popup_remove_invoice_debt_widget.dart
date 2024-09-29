@@ -66,18 +66,14 @@ class _PopupRemoveInvoiceDebtWidgetState
   DateTime? selectFromDate;
   DateTime? selectToDate;
   int page = 1;
-  int size = 5;
+  int size = 10;
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
-
-    // setState(() {
-    //   _fromDate =
-    //       DateTime.fromMillisecondsSinceEpoch(widget.dto.timeCreated * 1000);
-    // });
-
     _model.getInvoiceDetail(widget.dto.invoiceId).then(
       (value) {
         _model.getTransactionInvoiceDebt(
@@ -88,6 +84,21 @@ class _PopupRemoveInvoiceDebtWidgetState
             size: size);
       },
     );
+    scrollController.addListener(
+      () {
+        _model.loadMoreTransactionInvoiceList(
+            bankId: _model.bankId,
+            scrollController: scrollController,
+            fromDate: _format2.format(_fromDate),
+            toDate: _format2.format(_toDate));
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
   }
 
   @override
@@ -142,7 +153,7 @@ class _PopupRemoveInvoiceDebtWidgetState
                             _buildInvoiceWidget(),
                             const SizedBox(height: 20),
                             const MySeparator(color: AppColor.GREY_DADADA),
-                            _buildTransactionWidget(model, _filterByTime),
+                            _buildTransactionHeaderWidget(model, _filterByTime),
                             const SizedBox(height: 20),
                             _buildTransactionInvoiceDebt(),
                             const SizedBox(height: 50),
@@ -650,6 +661,8 @@ class _PopupRemoveInvoiceDebtWidgetState
                 child: SizedBox(
                   width: 1100,
                   child: ListView.separated(
+                    controller: scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
                     separatorBuilder: (context, index) => Container(
                       decoration: const BoxDecoration(
                         border: Border(
@@ -660,17 +673,28 @@ class _PopupRemoveInvoiceDebtWidgetState
                     ),
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
-                      // bool isAlreadyPay =
-                      //     model.listInvoiceDetailItem[index].status == 1;
-                      // if (isAlreadyPay) {
-                      //   model.appliedInvoiceItem(isAlreadyPay, index);
-                      // }
-                      return _transactionItemWidget(
-                          index: index,
-                          dto: model.listSelectTransactionItemDebt[index],
-                          model: model);
+                      if (index >= model.listSelectTransactionItemDebt.length) {
+                        return Container(
+                          key: const ValueKey('loading'),
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 50,
+                          width: 15,
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.BLUE_TEXT,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return _transactionItemWidget(
+                            index: index,
+                            dto: model.listSelectTransactionItemDebt[index],
+                            model: model);
+                      }
                     },
-                    itemCount: model.listSelectInvoice.length,
+                    itemCount: model.hasReachedTransMax
+                        ? model.listSelectTransactionItemDebt.length
+                        : model.listSelectTransactionItemDebt.length + 1,
                   ),
                 ),
               ),
@@ -876,7 +900,8 @@ class _PopupRemoveInvoiceDebtWidgetState
     );
   }
 
-  Widget _buildTransactionWidget(InvoiceViewModel model, DataFilter filterBy) {
+  Widget _buildTransactionHeaderWidget(
+      InvoiceViewModel model, DataFilter filterBy) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -902,7 +927,7 @@ class _PopupRemoveInvoiceDebtWidgetState
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
@@ -910,32 +935,39 @@ class _PopupRemoveInvoiceDebtWidgetState
                 _itemPickTime(onTap: _pickFromDate, borderLeft: true),
                 _itemPickTime(
                     title: 'Đến ngày', date: _toDate, onTap: _pickToDate),
-              ],
-            ),
-            const SizedBox(width: 8),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: VietQRButton.gradient(
-                  borderRadius: 100,
-                  onPressed: () {
-                    model.getTransactionInvoiceDebt(
-                      bankId: model.bankId,
-                      fromDate: _format2.format(_fromDate),
-                      toDate: _format2.format(_toDate),
-                      page: page,
-                      size: size,
-                    );
-                  },
-                  isDisabled: false,
-                  height: 30,
-                  width: 30,
-                  padding: EdgeInsets.zero,
-                  child: const Center(
+                const SizedBox(width: 8),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: VietQRButton.gradient(
+                    borderRadius: 100,
+                    onPressed: () {
+                      model.getTransactionInvoiceDebt(
+                        bankId: model.bankId,
+                        fromDate: _format2.format(_fromDate),
+                        toDate: _format2.format(_toDate),
+                        page: page,
+                        size: size,
+                      );
+                    },
+                    isDisabled: false,
+                    height: 30,
+                    width: 30,
+                    padding: EdgeInsets.zero,
+                    child: const Center(
                       child: Icon(
-                    Icons.search,
-                    size: 15,
-                    color: AppColor.WHITE,
-                  ))),
+                        Icons.search,
+                        size: 15,
+                        color: AppColor.WHITE,
+                      ),
+                    ),
+                  ),
+                ),
+                if (model.listSelectTransactionItemDebt.isNotEmpty)
+                  Text(
+                    'Đang hiển thị: ${model.listSelectTransactionItemDebt.length}/${model.metaTransactionItem?.total}',
+                    style: const TextStyle(fontSize: 10),
+                  )
+              ],
             ),
           ],
         ),

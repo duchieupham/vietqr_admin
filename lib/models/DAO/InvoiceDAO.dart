@@ -312,15 +312,22 @@ class InvoiceDAO extends BaseDAO {
           invoiceItemList.map((invoice) => invoice.toJson()).toList();
       List<Map<String, dynamic>> transactionsList =
           transactionList.map((trans) => trans.toJson()).toList();
-      print(invoiceList);
+      print(
+        {
+          '"invoiceId"': invoiceId,
+          '"invoiceItemList"': invoiceList,
+          '"transactionList"': transactionsList,
+        },
+      );
       final response = await BaseAPIClient.putAPI(
           url: url,
           body: {
-            'invoiceId': invoiceId,
-            'invoiceItemList': invoiceList,
-            'transactionList': transactionsList,
+            '"invoiceId"': invoiceId,
+            '"invoiceItemList"': invoiceList,
+            '"transactionList"': transactionsList,
           },
           type: AuthenticationType.SYSTEM);
+
       var data = jsonDecode(response.body);
       return ResponseMessageDTO.fromJson(data);
     } catch (e) {
@@ -367,6 +374,7 @@ class InvoiceDAO extends BaseDAO {
 
       String url =
           '${EnvConfig.instance.getBaseUrl()}invoice/request-payment/v2';
+      print(param);
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,

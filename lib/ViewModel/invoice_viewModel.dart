@@ -1406,13 +1406,14 @@ class InvoiceViewModel extends InvoiceStatus {
     try {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        if (hasReachedMax) {
-          hasReachedMax = true;
-          listUnpaidInvoiceItem = List.from(listUnpaidInvoiceItem);
-          pagingUnpaidInvoicePage = 1;
+        if (hasReachedTransMax) {
+          hasReachedTransMax = true;
+          listSelectTransactionItemDebt =
+              List.from(listSelectTransactionItemDebt);
+          pagingTransItemPage = 1;
         } else {
           // isLoadingMore = true;
-          pagingUnpaidInvoicePage++;
+          pagingTransItemPage++;
           final result = await _dao.getTransactionInvoices(
               bankId, fromDate, toDate, pagingTransItemPage, 10);
           // ignore: unnecessary_null_comparison
