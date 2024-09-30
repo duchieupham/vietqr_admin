@@ -59,6 +59,8 @@ class InvoiceViewModel extends InvoiceStatus {
   List<ServiceItemDTO>? listService = [];
   ServiceItemDTO? serviceItemDTO;
   ResponseMessageDTO? responseMsg;
+  PaymentRequestDTO? paymentRequestDTO;
+  String bankId = '';
 
   InvoiceDetailQrDTO? detailQrDTO;
   UnpaidInvoiceDetailQrDTO? unpaidDetailQrDTO;
@@ -67,13 +69,23 @@ class InvoiceViewModel extends InvoiceStatus {
   List<InvoiceInfoItem>? listInvoiceItem = [];
   List<InvoiceItemDetailDTO> listInvoiceDetailItem = [];
   List<SelectInvoiceItem> listSelectInvoice = [];
+
+  //Gợp hóa đơn
   List<SelectUnpaidInvoiceItem> listUnpaidSelectInvoice = [];
   SelectUnpaidInvoiceItem? currentSelectUnpaidInvoiceItem;
+
   List<PaymentRequestDTO> listPaymentRequest = [];
   List<UnpaidInvoiceItem> listUnpaidInvoiceItem = [];
   PaymentUnpaidRequestDTO paymentUnpaidRequest =
       PaymentUnpaidRequestDTO(bankIdRecharge: '', invoiceIds: []);
   InvoiceExcelDTO? invoiceExcelDTO;
+
+  //list các item invoice đc chọn để gạch nợ
+  List<SelectInvoiceItemDebt> listSelectInvoiceItemDebt = [];
+  List<SelectTransactionItemDebt> listSelectTransactionItemDebt = [];
+  List<InvoiceItemDebtRequestDTO> listInvoiceItemDebtRequest = [];
+  List<TransactionInvoiceDebtRequestDTO> listTransactionInvoiceDebtRequest = [];
+  List<TransactionMapInvoiceDTO> listTransactionInvoice = [];
 
   int totalUnpaidInvoice = 0;
   MerchantItem? selectMerchantItem;
@@ -87,6 +99,14 @@ class InvoiceViewModel extends InvoiceStatus {
     const DataFilter(id: 0, name: 'Tùy chọn')
   ];
 
+  List<DataFilter> listFilterByTime = [
+    const DataFilter(id: 1, name: '7 ngày gần nhất'),
+    const DataFilter(id: 2, name: 'Hôm nay'),
+    const DataFilter(id: 3, name: '1 tháng gần đây'),
+    const DataFilter(id: 4, name: '3 tháng gần đây'),
+    const DataFilter(id: 5, name: 'Khoảng thời gian'),
+  ];
+
   int type = 0;
   int serviceType = 1;
   int subMenuType = 0;
@@ -94,6 +114,7 @@ class InvoiceViewModel extends InvoiceStatus {
   int? filterByDate = 1;
   int pagingPage = 1;
   int pagingUnpaidInvoicePage = 1;
+  int pagingTransItemPage = 1;
   String? selectInvoiceId;
 
   int totalAmount = 0;
@@ -103,6 +124,8 @@ class InvoiceViewModel extends InvoiceStatus {
   int totalEditAmount = 0;
   int totalEditVat = 0;
   int totalEditAmountVat = 0;
+  int totalTransaction = 0;
+  int totalInvoiceItemDetail = 0;
 
   int currentPagePopupUnpaid = 0;
   String? currentInvoiceId;
@@ -184,9 +207,11 @@ class InvoiceViewModel extends InvoiceStatus {
 
   bool? isInsert;
   bool hasReachedMax = false;
+  bool hasReachedTransMax = false;
 
   MetaDataDTO? metadata;
   MetaDataDTO? metaUnpaidInvoice;
+  MetaDataDTO? metaTransactionItem;
   MetaDataDTO? createMetaData;
 
   PageInvoice pageType = PageInvoice.LIST;
@@ -273,6 +298,16 @@ class InvoiceViewModel extends InvoiceStatus {
   void selectServiceType(int value) async {
     serviceType = value;
     isInsert = null;
+    notifyListeners();
+  }
+
+  void clearDebt() {
+    listSelectTransactionItemDebt = [];
+    listInvoiceItemDebtRequest = [];
+    listSelectInvoiceItemDebt = [];
+    listTransactionInvoiceDebtRequest = [];
+    totalInvoiceItemDetail = 0;
+    totalTransaction = 0;
     notifyListeners();
   }
 
@@ -494,6 +529,36 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
+  void changePayment(int index) {
+    for (var e in invoiceDetailDTO!.paymentRequestDTOS) {
+      e.isChecked = false;
+    }
+    invoiceDetailDTO!.paymentRequestDTOS[index].isChecked = true;
+    paymentRequestDTO = invoiceDetailDTO!.paymentRequestDTOS
+        .where(
+          (e) => e.isChecked == true,
+        )
+        .first;
+    notifyListeners();
+  }
+
+  void changeBankId(
+      int index, String fromDate, String toDate, int page, int size) {
+    for (var e in invoiceDetailDTO!.paymentRequestDTOS) {
+      e.isChecked = false;
+    }
+    invoiceDetailDTO!.paymentRequestDTOS[index].isChecked = true;
+    bankId = invoiceDetailDTO!.paymentRequestDTOS[index].bankId;
+    listTransactionInvoiceDebtRequest = [];
+    getTransactionInvoiceDebt(
+        bankId: bankId,
+        fromDate: fromDate,
+        toDate: toDate,
+        page: page,
+        size: size);
+    notifyListeners();
+  }
+
   void selectPaymentRequest(int index) {
     for (var e in listPaymentRequest) {
       e.isChecked = false;
@@ -510,17 +575,80 @@ class InvoiceViewModel extends InvoiceStatus {
   void appliedUnpaidInvoiceItem(bool value, int index) {
     listUnpaidSelectInvoice[index].isSelect = value;
     if (value) {
+      //Thêm hóa đơn chưa thanh toán để thanh toán
       paymentUnpaidRequest.invoiceIds
           .add(listUnpaidSelectInvoice[index].unpaidInvoiceItem.invoiceId);
+      //cập nhật tổng tiền
       totalUnpaidInvoice +=
           listUnpaidSelectInvoice[index].unpaidInvoiceItem.pendingAmount;
     } else {
+      //Xóa hóa đơn chưa thanh toán để thanh toán
       paymentUnpaidRequest.invoiceIds
           .remove(listUnpaidSelectInvoice[index].unpaidInvoiceItem.invoiceId);
+      //cập nhật tổng tiền
       totalUnpaidInvoice -=
           listUnpaidSelectInvoice[index].unpaidInvoiceItem.pendingAmount;
     }
 
+    notifyListeners();
+  }
+
+  void appliedInvoiceItemDebt(bool value, int index) {
+    listSelectInvoiceItemDebt[index].isSelect = value;
+    if (value) {
+      //Thêm hóa đơn để gạch nợ
+      listInvoiceItemDebtRequest.add(InvoiceItemDebtRequestDTO(
+          id: listSelectInvoiceItemDebt[index].invoiceItem.invoiceItemId,
+          totalAfterVat: listSelectInvoiceItemDebt[index]
+              .invoiceItem
+              .totalAmountAfterVat
+              .toDouble()));
+      //cập nhật tổng tiền
+      totalInvoiceItemDetail +=
+          listSelectInvoiceItemDebt[index].invoiceItem.amount;
+    } else {
+      //Xóa hóa đơn gạch nợ
+      listInvoiceItemDebtRequest.removeWhere(
+        (element) =>
+            element.id ==
+            listSelectInvoiceItemDebt[index].invoiceItem.invoiceItemId,
+      );
+      //cập nhật tổng tiền
+      totalInvoiceItemDetail -=
+          listSelectInvoiceItemDebt[index].invoiceItem.amount;
+    }
+    notifyListeners();
+  }
+
+  void appliedTransationItemDebt(bool value, int index) {
+    listSelectTransactionItemDebt[index].isSelect = value;
+    if (value) {
+      //Thêm GD để gạch nợ
+      listTransactionInvoiceDebtRequest.add(
+        TransactionInvoiceDebtRequestDTO(
+          id: listSelectTransactionItemDebt[index]
+              .transactionItem
+              .transactionId,
+          amount: listSelectTransactionItemDebt[index]
+              .transactionItem
+              .amount
+              .toDouble(),
+        ),
+      );
+      //cập nhật tổng tiền
+      totalTransaction +=
+          listSelectTransactionItemDebt[index].transactionItem.amount;
+    } else {
+      //Xóa GD
+      listTransactionInvoiceDebtRequest.removeWhere(
+        (element) =>
+            element.id ==
+            listSelectTransactionItemDebt[index].transactionItem.transactionId,
+      );
+      //cập nhật tổng tiền
+      totalTransaction -=
+          listSelectTransactionItemDebt[index].transactionItem.amount;
+    }
     notifyListeners();
   }
 
@@ -539,6 +667,43 @@ class InvoiceViewModel extends InvoiceStatus {
       if (value) {
         paymentUnpaidRequest.invoiceIds.add(e.unpaidInvoiceItem.invoiceId);
         totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
+      }
+    }
+    notifyListeners();
+  }
+
+  void appliedAllItemDebt(bool value) {
+    totalInvoiceItemDetail = 0;
+    //clear list
+    listInvoiceItemDebtRequest = [];
+    for (var e in listSelectInvoiceItemDebt) {
+      e.isSelect = value;
+      if (value) {
+        listInvoiceItemDebtRequest.add(
+          InvoiceItemDebtRequestDTO(
+            id: e.invoiceItem.invoiceItemId,
+            totalAfterVat: e.invoiceItem.totalAmountAfterVat.toDouble(),
+          ),
+        );
+        totalInvoiceItemDetail += e.invoiceItem.amount;
+      }
+    }
+    notifyListeners();
+  }
+
+  void appliedAllTransactionDebt(bool value) {
+    //clear list
+    listTransactionInvoiceDebtRequest = [];
+    for (var e in listSelectTransactionItemDebt) {
+      e.isSelect = value;
+      if (value) {
+        listTransactionInvoiceDebtRequest.add(
+          TransactionInvoiceDebtRequestDTO(
+            id: e.transactionItem.transactionId,
+            amount: e.transactionItem.amount.toDouble(),
+          ),
+        );
+        // totalUnpaidInvoice += e.unpaidInvoiceItem.pendingAmount;
       }
     }
     notifyListeners();
@@ -764,6 +929,13 @@ class InvoiceViewModel extends InvoiceStatus {
         .toList();
   }
 
+  List<SelectInvoiceItemDebt> mapToSelectInvoiceItemsDebt(
+      List<InvoiceItemDetailDTO> invoiceItems) {
+    return invoiceItems
+        .map((item) => SelectInvoiceItemDebt(isSelect: true, invoiceItem: item))
+        .toList();
+  }
+
   List<SelectUnpaidInvoiceItem> mapToSelectUnpaidInvoiceItems(
       List<UnpaidInvoiceItem> unpaidInvoiceItems) {
     paymentUnpaidRequest.invoiceIds = [];
@@ -776,7 +948,7 @@ class InvoiceViewModel extends InvoiceStatus {
         .toList();
   }
 
-  Future<void> getInvoiceDetail(String id) async {
+  Future<void> getInvoiceDetail(String id, {bool isRemoveDebt = false}) async {
     try {
       // setState(ViewStatus.Empty);
       setInvoiceState(
@@ -785,8 +957,48 @@ class InvoiceViewModel extends InvoiceStatus {
       invoiceDetailDTO = await _dao.getInvoiceDetail(id);
       if (invoiceDetailDTO != null) {
         listInvoiceDetailItem = invoiceDetailDTO!.invoiceItemDetailDTOS;
+
         listSelectInvoice =
             mapToSelectInvoiceItems(invoiceDetailDTO!.invoiceItemDetailDTOS);
+
+        paymentRequestDTO = invoiceDetailDTO!.paymentRequestDTOS
+            .where(
+              (e) => e.isChecked == true,
+            )
+            .first;
+
+        if (isRemoveDebt) {
+          listSelectInvoiceItemDebt = mapToSelectInvoiceItemsDebt(
+              invoiceDetailDTO!.invoiceItemDetailDTOS);
+          totalInvoiceItemDetail = 0;
+
+          if (listSelectInvoiceItemDebt.isNotEmpty) {
+            listInvoiceItemDebtRequest.addAll(
+              listSelectInvoiceItemDebt.map(
+                (item) => InvoiceItemDebtRequestDTO(
+                  id: item.invoiceItem.invoiceItemId,
+                  totalAfterVat:
+                      item.invoiceItem.totalAmountAfterVat.toDouble(),
+                ),
+              ),
+            );
+
+            for (var e in listSelectInvoiceItemDebt) {
+              if (e.isSelect != null) {
+                if (e.isSelect!) {
+                  totalInvoiceItemDetail += e.invoiceItem.totalAmountAfterVat;
+                }
+              }
+            }
+          }
+
+          bankId = invoiceDetailDTO!.paymentRequestDTOS
+              .where(
+                (e) => e.isChecked == true,
+              )
+              .first
+              .bankId;
+        }
       }
       setInvoiceState(
           status: ViewStatus.Completed,
@@ -907,6 +1119,76 @@ class InvoiceViewModel extends InvoiceStatus {
       LOG.error(e.toString());
       setState(ViewStatus.Error);
     }
+  }
+
+  Future<void> getTransactionInvoiceDebt({
+    required String bankId,
+    required String fromDate,
+    required String toDate,
+    required int page,
+    required int size,
+  }) async {
+    try {
+      // String formattedDate = '';
+      // formattedDate = valueFilterTime.id == 9
+      //     ? ''
+      //     : DateFormat('yyyy-MM').format(selectedDate);
+      setState(ViewStatus.Loading_Transaction_Item_Debt);
+      final result = await _dao.getTransactionInvoices(
+          bankId, fromDate, toDate, page, size);
+      listSelectTransactionItemDebt = [];
+      // ignore: unnecessary_null_comparison
+      if (result != null) {
+        // listTransactionInvoice = result;
+        metaTransactionItem = _dao.metaDataDTO;
+        listSelectTransactionItemDebt = result
+            .map(
+              (e) => SelectTransactionItemDebt(
+                  transactionItem: e, isSelect: false),
+            )
+            .toList();
+
+        if (metaTransactionItem != null) {
+          if (metaTransactionItem!.total == result.length) {
+            hasReachedTransMax = true;
+          } else {
+            hasReachedTransMax = false;
+          }
+        }
+      } else {
+        setState(ViewStatus.Error);
+        return;
+      }
+
+      metadata = _dao.metaDataDTO;
+      await Future.delayed(const Duration(milliseconds: 500));
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
+
+  Future<bool> mapInvoiceDebt(
+      {required String invoiceId,
+      required List<InvoiceItemDebtRequestDTO> invoiceItemList,
+      required List<TransactionInvoiceDebtRequestDTO> transactionList}) async {
+    try {
+      final result = await _dao.mapInvoiceDebt(
+          invoiceId, invoiceItemList, transactionList);
+      // ignore: unnecessary_null_comparison
+      if (result != null) {
+        if (result.status == 'SUCCESS') {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+    return false;
   }
 
   Future<void> getQrDetail(String id) async {
@@ -1139,6 +1421,61 @@ class InvoiceViewModel extends InvoiceStatus {
       setState(ViewStatus.Error);
     }
   }
+
+  Future<void> loadMoreTransactionInvoiceList({
+    required ScrollController scrollController,
+    required String bankId,
+    required String fromDate,
+    required String toDate,
+  }) async {
+    try {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (hasReachedTransMax) {
+          hasReachedTransMax = true;
+          listSelectTransactionItemDebt =
+              List.from(listSelectTransactionItemDebt);
+          pagingTransItemPage = 1;
+        } else {
+          // isLoadingMore = true;
+          pagingTransItemPage++;
+          final result = await _dao.getTransactionInvoices(
+              bankId, fromDate, toDate, pagingTransItemPage, 20);
+          // ignore: unnecessary_null_comparison
+          if (result != null) {
+            // ignore: unnecessary_null_comparison
+            metaTransactionItem = _dao.metaDataDTO;
+            // ignore: unnecessary_null_comparison
+            if (metaTransactionItem != null) {
+              if (result.isEmpty) {
+                hasReachedTransMax = true;
+                listSelectTransactionItemDebt =
+                    List.from(listSelectTransactionItemDebt);
+                pagingTransItemPage = 1;
+              } else {
+                hasReachedTransMax = false;
+                listSelectTransactionItemDebt =
+                    List.from(listSelectTransactionItemDebt)
+                      ..addAll(result
+                          .map(
+                            (e) => SelectTransactionItemDebt(
+                                transactionItem: e, isSelect: false),
+                          )
+                          .toList());
+              }
+              notifyListeners();
+            }
+          }
+        }
+      }
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      setState(ViewStatus.Completed);
+    } catch (e) {
+      LOG.error(e.toString());
+      setState(ViewStatus.Error);
+    }
+  }
 }
 
 class SelectInvoiceItem {
@@ -1158,5 +1495,25 @@ class SelectUnpaidInvoiceItem {
   SelectUnpaidInvoiceItem({
     this.isSelect,
     required this.unpaidInvoiceItem,
+  });
+}
+
+class SelectInvoiceItemDebt {
+  bool? isSelect;
+  final InvoiceItemDetailDTO invoiceItem;
+
+  SelectInvoiceItemDebt({
+    this.isSelect,
+    required this.invoiceItem,
+  });
+}
+
+class SelectTransactionItemDebt {
+  bool? isSelect;
+  final TransactionMapInvoiceDTO transactionItem;
+
+  SelectTransactionItemDebt({
+    this.isSelect,
+    required this.transactionItem,
   });
 }

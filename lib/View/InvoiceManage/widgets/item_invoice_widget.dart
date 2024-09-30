@@ -132,7 +132,7 @@ class ItemInvoiceWidget extends StatelessWidget {
                 },
                 child: Text(
                   dto.phoneNo,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColor.BLACK,
@@ -141,7 +141,7 @@ class ItemInvoiceWidget extends StatelessWidget {
           ),
           Container(
             // padding: const EdgeInsets.only(left: 5),
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             // decoration: const BoxDecoration(
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -166,13 +166,13 @@ class ItemInvoiceWidget extends StatelessWidget {
                 },
                 child: Text(
                   dto.billNumber,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: const TextStyle(fontSize: 12, color: AppColor.BLACK),
                 )),
           ),
           Container(
             // padding: const EdgeInsets.only(left: 5),
-            alignment: Alignment.centerRight,
+            alignment: Alignment.center,
             // decoration: const BoxDecoration(
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -199,7 +199,7 @@ class ItemInvoiceWidget extends StatelessWidget {
                 },
                 child: Text(
                   StringUtils.formatNumberWithOutVND(dto.amount.toString()),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -220,8 +220,7 @@ class ItemInvoiceWidget extends StatelessWidget {
           ),
           Container(
             // padding: const EdgeInsets.only(left: 5),
-            alignment:
-                dto.vso.isNotEmpty ? Alignment.centerLeft : Alignment.center,
+            alignment: Alignment.center,
             // decoration: const BoxDecoration(
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -252,7 +251,7 @@ class ItemInvoiceWidget extends StatelessWidget {
           ),
           Container(
             // padding: const EdgeInsets.only(left: 5),
-            alignment: Alignment.centerRight,
+            alignment: Alignment.centerLeft,
             // decoration: const BoxDecoration(
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),
@@ -292,9 +291,7 @@ class ItemInvoiceWidget extends StatelessWidget {
           ),
           Container(
             // padding: const EdgeInsets.only(left: 5),
-            alignment: dto.midName.isNotEmpty
-                ? Alignment.centerLeft
-                : Alignment.center,
+            alignment: Alignment.center,
             // decoration: const BoxDecoration(
             //     border: Border(
             //         bottom: BorderSide(color: AppColor.GREY_BUTTON),

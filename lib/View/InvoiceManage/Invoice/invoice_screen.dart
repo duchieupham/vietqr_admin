@@ -2,7 +2,6 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/views/invoice_detail_screen.dart';
@@ -12,11 +11,10 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_invoice_wid
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/list_merchant_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_filter_invoice.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_payment_request_widget.dart';
-import 'package:vietqr_admin/View/SystemManage/BankSystem/bank_system_screen.dart';
+import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_remove_invoice_debt_widget.dart';
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/utils/share_utils.dart';
 import 'package:vietqr_admin/commons/widget/dialog_pick_month.dart';
-import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 import '../../../commons/constants/configurations/theme.dart';
@@ -111,6 +109,32 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         onPop: (id) {
           _model.onChangePage(PageInvoice.DETAIL);
           _model.updateSelectInvoiceId(id);
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  void onShowPopupRemoveInvoiceDebt(InvoiceItem dto) async {
+    return await showDialog(
+      context: context,
+      // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
+      builder: (context) => PopupRemoveInvoiceDebtWidget(
+        dto: dto,
+        onPop: (value) {
+          _model.onChangePage(PageInvoice.DETAIL);
+          if (value) {
+            _model.onChangePage(PageInvoice.LIST);
+            _model.filterListInvoice(
+              invoiceType: _choiceChipSelected,
+              size: pageSize,
+              page: 1,
+              filterType: filterSelect.type,
+              search: textEditingController.text,
+            );
+          } else {
+            _model.onChangePage(PageInvoice.LIST);
+          }
           setState(() {});
         },
       ),
@@ -272,6 +296,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           _model.onChangePage(PageInvoice.EDIT);
                                           _clearFilter();
                                         },
+                                        onShowPopupDebt:
+                                            onShowPopupRemoveInvoiceDebt,
                                         onDetail: (invoiceId) {
                                           setState(() {
                                             _model.updateSelectInvoiceId(
@@ -939,6 +965,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     );
   }
 
+  // ignore: unused_element
   Future<dynamic> _onPickMonth(
       InvoiceViewModel model, DateTime dateTime) async {
     DateTime? result = await showDialog(
@@ -968,6 +995,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     }
   }
 
+  // ignore: unused_element
   List<PopupMenuEntry<DataFilter>> _buildMenuItems(
       List<DataFilter> value, DataFilter selected) {
     List<PopupMenuEntry<DataFilter>> items = value

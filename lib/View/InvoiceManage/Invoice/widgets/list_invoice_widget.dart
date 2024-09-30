@@ -25,21 +25,23 @@ enum Actions {
   edit,
   exportExcel,
   delete,
+  debt,
 }
 
 class ListInvoiceWidget extends StatefulWidget {
   final Function(InvoiceItem) onShowPopup;
   final Function(InvoiceItem) onEdit;
   final Function(String) onDetail;
+  final Function(InvoiceItem) onShowPopupDebt;
   final int pageSize;
 
-  const ListInvoiceWidget({
-    super.key,
-    required this.onShowPopup,
-    required this.onEdit,
-    required this.onDetail,
-    required this.pageSize,
-  });
+  const ListInvoiceWidget(
+      {super.key,
+      required this.onShowPopup,
+      required this.onEdit,
+      required this.onDetail,
+      required this.pageSize,
+      required this.onShowPopupDebt});
 
   @override
   State<ListInvoiceWidget> createState() => _ListInvoiceWidgetState();
@@ -389,6 +391,9 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                           },
                         );
                         break;
+                      case Actions.debt:
+                        widget.onShowPopupDebt(e);
+                        break;
                     }
                   },
                   itemBuilder: (BuildContext context) =>
@@ -443,6 +448,10 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
         const PopupMenuItem<Actions>(
           value: Actions.delete,
           child: Text('Xoá hoá đơn'),
+        ),
+        const PopupMenuItem<Actions>(
+          value: Actions.debt,
+          child: Text('Gạch nợ hóa đơn'),
         ),
       ]);
     }

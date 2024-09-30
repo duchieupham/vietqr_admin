@@ -5,6 +5,7 @@ enum ViewStatus {
   Loading,
   Loading_Page,
   Loading_Page_View,
+  Loading_Transaction_Item_Debt,
   Completed,
   Error,
   LoadMore,

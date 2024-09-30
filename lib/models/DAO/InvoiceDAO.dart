@@ -83,6 +83,7 @@ class InvoiceDAO extends BaseDAO {
       param['vat'] = vat;
       param['items'] = invoice.invoiceItems.map((e) => e.toJson()).toList();
       param['bankIdRecharge'] = bankIdRecharge;
+      // ignore: avoid_print
       print("REQ: $param");
       String url =
           '${EnvConfig.instance.getBaseUrl()}invoice/update-invoice/${invoice.invoiceId}';
@@ -278,6 +279,57 @@ class InvoiceDAO extends BaseDAO {
     }
   }
 
+  Future<List<TransactionMapInvoiceDTO>> getTransactionInvoices(
+      String bankId, String fromDate, String toDate, int page, int size) async {
+    String url =
+        '${EnvConfig.instance.getBaseUrl()}admin/transaction/map-invoice?bankId=$bankId&fromDate=$fromDate&toDate=$toDate&page=$page&size=$size';
+    final response = await BaseAPIClient.getAPI(
+      url: url,
+      type: AuthenticationType.SYSTEM,
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      metaDataDTO = MetaDataDTO.fromJson(data['metadata']);
+      // final jsonResponse = data['data'];
+      // List<TransactionMapInvoiceDTO> list = jsonResponse
+      //     .map((data) => TransactionMapInvoiceDTO.fromJson(data))
+      //     .toList();
+      return List<TransactionMapInvoiceDTO>.from(
+          data['data'].map((x) => TransactionMapInvoiceDTO.fromJson(x)));
+    } else {
+      throw Exception('Failed to load transaction list');
+    }
+  }
+
+  Future<ResponseMessageDTO?> mapInvoiceDebt(
+      String invoiceId,
+      List<InvoiceItemDebtRequestDTO> invoiceItemList,
+      List<TransactionInvoiceDebtRequestDTO> transactionList) async {
+    try {
+      String url = '${EnvConfig.instance.getBaseUrl()}invoice/admin-map';
+      List<Map<String, dynamic>> invoiceList =
+          invoiceItemList.map((invoice) => invoice.toJson()).toList();
+      List<Map<String, dynamic>> transactionsList =
+          transactionList.map((trans) => trans.toJson()).toList();
+
+      final response = await BaseAPIClient.putAPI(
+          url: url,
+          body:   {
+          'invoiceId': invoiceId,
+          'invoiceItemList': invoiceList,
+          'transactionList': transactionsList,
+        },
+          type: AuthenticationType.SYSTEM);
+
+      var data = jsonDecode(response.body);
+      return ResponseMessageDTO.fromJson(data);
+    } catch (e) {
+      LOG.error("Failed to fetch invoice data: ${e.toString()}");
+    }
+    return null;
+  }
+
   Future<InvoiceDetailQrDTO?> requestPaymnet({
     required String invoiceId,
     required List<String> itemItemIds,
@@ -316,6 +368,7 @@ class InvoiceDAO extends BaseDAO {
 
       String url =
           '${EnvConfig.instance.getBaseUrl()}invoice/request-payment/v2';
+      print(param);
       final response = await BaseAPIClient.postAPI(
         body: param,
         url: url,
