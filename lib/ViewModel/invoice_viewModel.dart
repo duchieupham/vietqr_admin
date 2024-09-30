@@ -306,6 +306,9 @@ class InvoiceViewModel extends InvoiceStatus {
     listInvoiceItemDebtRequest = [];
     listSelectInvoiceItemDebt = [];
     listTransactionInvoiceDebtRequest = [];
+    totalInvoiceItemDetail = 0;
+    totalTransaction = 0;
+    notifyListeners();
   }
 
   void selectMerchant(MerchantItem item) {
