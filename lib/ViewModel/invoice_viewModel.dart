@@ -605,7 +605,7 @@ class InvoiceViewModel extends InvoiceStatus {
               .toDouble()));
       //cập nhật tổng tiền
       totalInvoiceItemDetail +=
-          listSelectInvoiceItemDebt[index].invoiceItem.amount;
+          listSelectInvoiceItemDebt[index].invoiceItem.totalAmountAfterVat;
     } else {
       //Xóa hóa đơn gạch nợ
       listInvoiceItemDebtRequest.removeWhere(
@@ -615,7 +615,7 @@ class InvoiceViewModel extends InvoiceStatus {
       );
       //cập nhật tổng tiền
       totalInvoiceItemDetail -=
-          listSelectInvoiceItemDebt[index].invoiceItem.amount;
+          listSelectInvoiceItemDebt[index].invoiceItem.totalAmountAfterVat;
     }
     notifyListeners();
   }
@@ -678,14 +678,14 @@ class InvoiceViewModel extends InvoiceStatus {
     listInvoiceItemDebtRequest = [];
     for (var e in listSelectInvoiceItemDebt) {
       e.isSelect = value;
-      if (value) {
+      if (value && e.invoiceItem.status == 0) {
         listInvoiceItemDebtRequest.add(
           InvoiceItemDebtRequestDTO(
             id: e.invoiceItem.invoiceItemId,
             totalAfterVat: e.invoiceItem.totalAmountAfterVat.toDouble(),
           ),
         );
-        totalInvoiceItemDetail += e.invoiceItem.amount;
+        totalInvoiceItemDetail += e.invoiceItem.totalAmountAfterVat;
       }
     }
     notifyListeners();
@@ -985,7 +985,7 @@ class InvoiceViewModel extends InvoiceStatus {
 
             for (var e in listSelectInvoiceItemDebt) {
               if (e.isSelect != null) {
-                if (e.isSelect!) {
+                if (e.isSelect! && e.invoiceItem.status == 0) {
                   totalInvoiceItemDetail += e.invoiceItem.totalAmountAfterVat;
                 }
               }
