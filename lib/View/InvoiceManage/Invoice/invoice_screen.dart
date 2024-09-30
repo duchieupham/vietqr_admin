@@ -121,9 +121,20 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       // builder: (context) => PopupQrCodeInvoice(invoiceId: dto.invoiceId),
       builder: (context) => PopupRemoveInvoiceDebtWidget(
         dto: dto,
-        onPop: (id) {
+        onPop: (value) {
           _model.onChangePage(PageInvoice.DETAIL);
-          _model.updateSelectInvoiceId(id);
+          if (value) {
+            _model.onChangePage(PageInvoice.LIST);
+            _model.filterListInvoice(
+              invoiceType: _choiceChipSelected,
+              size: pageSize,
+              page: 1,
+              filterType: filterSelect.type,
+              search: textEditingController.text,
+            );
+          } else {
+            _model.onChangePage(PageInvoice.LIST);
+          }
           setState(() {});
         },
       ),
@@ -285,7 +296,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                                           _model.onChangePage(PageInvoice.EDIT);
                                           _clearFilter();
                                         },
-                                        onShowPopupDebt: onShowPopupRemoveInvoiceDebt,
+                                        onShowPopupDebt:
+                                            onShowPopupRemoveInvoiceDebt,
                                         onDetail: (invoiceId) {
                                           setState(() {
                                             _model.updateSelectInvoiceId(

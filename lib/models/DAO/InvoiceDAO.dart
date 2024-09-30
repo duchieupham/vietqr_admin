@@ -312,20 +312,14 @@ class InvoiceDAO extends BaseDAO {
           invoiceItemList.map((invoice) => invoice.toJson()).toList();
       List<Map<String, dynamic>> transactionsList =
           transactionList.map((trans) => trans.toJson()).toList();
-      print(
-        {
-          '"invoiceId"': invoiceId,
-          '"invoiceItemList"': invoiceList,
-          '"transactionList"': transactionsList,
-        },
-      );
+
       final response = await BaseAPIClient.putAPI(
           url: url,
-          body: {
-            '"invoiceId"': invoiceId,
-            '"invoiceItemList"': invoiceList,
-            '"transactionList"': transactionsList,
-          },
+          body:   {
+          'invoiceId': invoiceId,
+          'invoiceItemList': invoiceList,
+          'transactionList': transactionsList,
+        },
           type: AuthenticationType.SYSTEM);
 
       var data = jsonDecode(response.body);
