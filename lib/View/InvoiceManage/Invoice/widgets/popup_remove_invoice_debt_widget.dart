@@ -510,26 +510,42 @@ class _PopupRemoveInvoiceDebtWidgetState
       alignment: Alignment.center,
       child: Row(
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            width: 100,
-            height: 50,
-            child: Checkbox(
-              activeColor: AppColor.BLUE_TEXT,
-              value: dto.isSelect,
-              onChanged: (value) {
-                setState(() {
-                  model.appliedInvoiceItemDebt(value!, index);
-                });
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-                side: BorderSide(
-                  color: AppColor.GREY_TEXT.withOpacity(0.3),
+          dto.invoiceItem.status == 1
+              ? Container(
+                  alignment: Alignment.centerLeft,
+                  width: 100,
+                  height: 50,
+                  child: Checkbox(
+                    activeColor: AppColor.ITEM_MENU_SELECTED,
+                    checkColor: AppColor.BLUE_TEXT,
+                    value: true,
+                    onChanged: (value) {},
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(
+                            color: AppColor.GREY_TEXT.withOpacity(0.3))),
+                  ),
+                )
+              : Container(
+                  alignment: Alignment.centerLeft,
+                  width: 100,
+                  height: 50,
+                  child: Checkbox(
+                    activeColor: AppColor.BLUE_TEXT,
+                    value: dto.isSelect,
+                    onChanged: (value) {
+                      setState(() {
+                        model.appliedInvoiceItemDebt(value!, index);
+                      });
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      side: BorderSide(
+                        color: AppColor.GREY_TEXT.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
           Container(
             alignment: Alignment.centerLeft,
             height: 50,
