@@ -974,13 +974,16 @@ class InvoiceViewModel extends InvoiceStatus {
 
           if (listSelectInvoiceItemDebt.isNotEmpty) {
             listInvoiceItemDebtRequest.addAll(
-              listSelectInvoiceItemDebt.map(
-                (item) => InvoiceItemDebtRequestDTO(
-                  id: item.invoiceItem.invoiceItemId,
-                  totalAfterVat:
-                      item.invoiceItem.totalAmountAfterVat.toDouble(),
-                ),
-              ),
+              listSelectInvoiceItemDebt
+                  .where((item) => item.invoiceItem.status == 0)
+                  .map(
+                    (item) => InvoiceItemDebtRequestDTO(
+                      id: item.invoiceItem.invoiceItemId,
+                      totalAfterVat:
+                          item.invoiceItem.totalAmountAfterVat.toDouble(),
+                    ),
+                  )
+                  .toList(),
             );
 
             for (var e in listSelectInvoiceItemDebt) {
