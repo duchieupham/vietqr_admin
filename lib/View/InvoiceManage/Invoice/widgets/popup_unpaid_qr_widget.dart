@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -6,7 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
-
+import 'dart:js' as js;
 import '../../../../ViewModel/invoice_viewModel.dart';
 import '../../../../commons/constants/configurations/theme.dart';
 import '../../../../commons/constants/utils/share_utils.dart';
@@ -229,9 +230,61 @@ class _PopupUnpaidQrCodeInvoiceState extends State<PopupUnpaidQrCodeInvoice> {
                                     color: AppColor.BLUE_TEXT,
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 80,
+                               const SizedBox(
+                          height: 15,
+                        ),
+                        if (model.unpaidDetailQrDTO!.urlLink.isNotEmpty)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                // color: AppColor.WHITE,
+                                gradient: VietQRTheme.gradientColor.lilyLinear),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      js.context.callMethod(
+                                          'open', [model.unpaidDetailQrDTO!.urlLink]);
+                                    },
+                                    child: Text(
+                                      model.unpaidDetailQrDTO!.urlLink,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: AppColor.BLUE_TEXT,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
                                 ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Clipboard.setData(ClipboardData(
+                                        text: model.unpaidDetailQrDTO!.urlLink));
+                                    Fluttertoast.showToast(
+                                      msg: 'Đã sao chép',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      backgroundColor:
+                                          Theme.of(context).cardColor,
+                                      textColor: Theme.of(context).hintColor,
+                                      fontSize: 15,
+                                    );
+                                  },
+                                  child: Image.asset(
+                                    'assets/images/ic-copy-blue.png',
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        const SizedBox(
+                          height: 15,
+                        ),
                                 InkWell(
                                   onTap: () {
                                     onSaveImage(context,

@@ -10,6 +10,7 @@ class InvoiceDetailQrDTO {
   String invoiceNumber;
   String userBankName;
   int totalAmount;
+  String urlLink;
   double vat;
   int vatAmount;
   String invoiceId;
@@ -25,6 +26,7 @@ class InvoiceDetailQrDTO {
     required this.invoiceNumber,
     required this.userBankName,
     required this.totalAmount,
+    required this.urlLink,
     required this.vat,
     required this.vatAmount,
     required this.invoiceId,
@@ -42,6 +44,7 @@ class InvoiceDetailQrDTO {
       invoiceNumber: json['invoiceNumber'],
       userBankName: json['userBankName'],
       totalAmount: json['totalAmount'],
+      urlLink: json['urlLink'] ?? '',
       vat: json['vat'].toDouble(),
       vatAmount: json['vatAmount'],
       invoiceId: json['invoiceId'],
@@ -60,6 +63,7 @@ class UnpaidInvoiceDetailQrDTO {
   String invoiceNumber;
   String userBankName;
   int totalAmount;
+  String urlLink;
   int vat;
   int vatAmount;
   String invoiceId;
@@ -76,6 +80,7 @@ class UnpaidInvoiceDetailQrDTO {
     required this.invoiceNumber,
     required this.userBankName,
     required this.totalAmount,
+    required this.urlLink,
     required this.vat,
     required this.vatAmount,
     required this.invoiceId,
@@ -94,6 +99,7 @@ class UnpaidInvoiceDetailQrDTO {
       invoiceNumber: json['invoiceNumber'],
       userBankName: json['userBankName'],
       totalAmount: json['totalAmount'],
+      urlLink: json['urlLink'],
       vat: json['vat'],
       vatAmount: json['vatAmount'],
       invoiceId: json['invoiceId'],
@@ -113,6 +119,7 @@ class UnpaidInvoiceDetailQrDTO {
     data['invoiceNumber'] = invoiceNumber;
     data['userBankName'] = userBankName;
     data['totalAmount'] = totalAmount;
+    data['urlLink'] = urlLink;
     data['vat'] = vat;
     data['vatAmount'] = vatAmount;
     data['invoiceId'] = invoiceId;
