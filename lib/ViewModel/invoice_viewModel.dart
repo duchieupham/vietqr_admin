@@ -251,6 +251,11 @@ class InvoiceViewModel extends InvoiceStatus {
     notifyListeners();
   }
 
+  void updateInvoiceDTO(InvoiceDTO invoiceDTO) {
+    this.invoiceDTO = invoiceDTO;
+    notifyListeners();
+  }
+
   void onChangePage(PageInvoice page) {
     pageType = page;
     notifyListeners();

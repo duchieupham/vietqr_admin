@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:toastification/toastification.dart';
 import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/widgets/popup_excel_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/item_invoice_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/widgets/title_invoice_widget.dart';
@@ -243,7 +244,7 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                                         (e) {
                                           return Column(
                                             children: [
-                                              _rightItem(e),
+                                              _rightItem(e, model),
                                               // if (index + 1 != list.length)
                                               const SizedBox(
                                                   width: 220,
@@ -272,7 +273,7 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
     );
   }
 
-  Widget _rightItem(InvoiceItem e) {
+  Widget _rightItem(InvoiceItem e, InvoiceViewModel model) {
     return Container(
       alignment: Alignment.center,
       child: Row(
@@ -387,6 +388,25 @@ class _ListInvoiceWidgetState extends State<ListInvoiceWidget> {
                               //     time: selectDate!,
                               //     page: 1,
                               //     filter: textInput()!);
+                              model.invoiceDTO!.items.remove(e);
+                              model.updateInvoiceDTO(model.invoiceDTO!);
+                              toastification.show(
+                                context: context,
+                                type: ToastificationType.success,
+                                style: ToastificationStyle.flat,
+                                title: const Text(
+                                  'Xóa hóa đơn thành công',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                showProgressBar: false,
+                                alignment: Alignment.topRight,
+                                autoCloseDuration: const Duration(seconds: 5),
+                                boxShadow: highModeShadow,
+                                dragToClose: true,
+                                pauseOnHover: true,
+                              );
                             }
                           },
                         );
