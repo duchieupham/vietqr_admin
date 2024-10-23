@@ -58,8 +58,9 @@ class _PopupPaymentRequestMerchantWidgetState
                   dto: model.currentSelectUnpaidInvoiceItem!,
                 ),
               );
-            } else
+            } else {
               return const SizedBox.shrink();
+            }
           }
         },
       ),

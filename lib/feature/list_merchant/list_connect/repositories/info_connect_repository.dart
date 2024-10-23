@@ -149,10 +149,16 @@ class InfoConnectRepository {
     return result;
   }
 
-  Future<BankNameInformationDTO> searchBankName(String accountNumber) async {
-    String transferType = 'INHOUSE';
+  Future<BankNameInformationDTO> searchBankName(
+      String accountNumber, String bankCode, String caiValue) async {
+    String transferType = '';
+    if (bankCode == 'MB') {
+      transferType = 'INHOUSE';
+    } else {
+      transferType = 'NAPAS';
+    }
     String accountType = 'ACCOUNT';
-    String bankCode = '970422';
+    // String bankCode = '970422';
     String generateCheckSum(
         String bankCode, String accountType, String accountNumber) {
       String key = "VietQRAccesskey";
@@ -178,7 +184,7 @@ class InfoConnectRepository {
         url: url,
         type: AuthenticationType.SYSTEM,
         body: {
-          'bankCode': bankCode,
+          'bankCode': caiValue,
           'accountNumber': accountNumber,
           'accountType': accountType,
           'transferType': transferType,
@@ -209,10 +215,10 @@ class InfoConnectRepository {
         body: param,
       );
       var data = jsonDecode(response.body);
-        if (data != null) {
-          result = ResponseMessageDTO.fromJson(data);
-          return result;
-        }
+      if (data != null) {
+        result = ResponseMessageDTO.fromJson(data);
+        return result;
+      }
     } catch (e) {
       LOG.error(e.toString());
     }
