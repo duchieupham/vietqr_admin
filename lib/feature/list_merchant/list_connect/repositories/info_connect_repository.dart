@@ -169,7 +169,7 @@ class InfoConnectRepository {
       return digest.toString();
     }
 
-    String checkSum = generateCheckSum(bankCode, accountType, accountNumber);
+    String checkSum = generateCheckSum(caiValue, accountType, accountNumber);
 
     BankNameInformationDTO result = const BankNameInformationDTO(
       accountName: '',

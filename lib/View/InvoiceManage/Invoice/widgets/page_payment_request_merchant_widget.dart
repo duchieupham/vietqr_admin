@@ -35,40 +35,40 @@ class _PagePaymentRequestMerchantWidgetState
   late InvoiceViewModel _model;
   final ScrollController scrollController = ScrollController();
 
-  //khởi tạo ngày tháng để lọc
-  DataFilter _filterByTime = const DataFilter(id: 1, name: '7 ngày gần nhất');
+  // //khởi tạo ngày tháng để lọc
+  // DataFilter _filterByTime = const DataFilter(id: 1, name: '7 ngày gần nhất');
 
-  DateTime get now => DateTime.now();
-  final monthCalculator = MonthCalculator();
+  // DateTime get now => DateTime.now();
+  // final monthCalculator = MonthCalculator();
 
-  DateTime _fromDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-          .subtract(const Duration(days: 30));
-  DateTime _toDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-          .add(const Duration(days: 1))
-          .subtract(const Duration(seconds: 1));
+  // DateTime _fromDate =
+  //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+  //         .subtract(const Duration(days: 30));
+  // DateTime _toDate =
+  //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+  //         .add(const Duration(days: 1))
+  //         .subtract(const Duration(seconds: 1));
 
-  DateTime _formatFromDate(DateTime now) {
-    DateTime fromDate = DateTime(now.year, now.month, now.day);
-    return fromDate.subtract(const Duration(days: 7));
-  }
+  // DateTime _formatFromDate(DateTime now) {
+  //   DateTime fromDate = DateTime(now.year, now.month, now.day);
+  //   return fromDate.subtract(const Duration(days: 7));
+  // }
 
-  // ignore: unused_element
-  DateTime _formatEndDate(DateTime now) {
-    DateTime fromDate = _formatFromDate(now);
-    return fromDate
-        .add(const Duration(days: 8))
-        .subtract(const Duration(seconds: 1));
-  }
+  // // ignore: unused_element
+  // DateTime _formatEndDate(DateTime now) {
+  //   DateTime fromDate = _formatFromDate(now);
+  //   return fromDate
+  //       .add(const Duration(days: 8))
+  //       .subtract(const Duration(seconds: 1));
+  // }
 
-  DateFormat get _format => DateFormat('dd/MM/yyyy HH:mm:ss');
-  DateFormat get _format2 => DateFormat('yyyy-MM-dd HH:mm:ss');
+  // DateFormat get _format => DateFormat('dd/MM/yyyy HH:mm:ss');
+  // DateFormat get _format2 => DateFormat('yyyy-MM-dd HH:mm:ss');
 
-  DateTime? selectFromDate;
-  DateTime? selectToDate;
-  int page = 1;
-  int size = 10;
+  // DateTime? selectFromDate;
+  // DateTime? selectToDate;
+  // int page = 1;
+  // int size = 10;
 
   @override
   void initState() {
