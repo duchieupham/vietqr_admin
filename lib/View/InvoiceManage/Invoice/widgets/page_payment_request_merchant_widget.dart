@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:vietqr_admin/View/InvoiceCreateManage/InvoiceCreate/item_title_widget.dart';
 import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/item_unpaid_invoice_widget.dart';
@@ -7,8 +8,10 @@ import 'package:vietqr_admin/View/InvoiceManage/Invoice/widgets/popup_unpaid_qr_
 import 'package:vietqr_admin/ViewModel/invoice_viewModel.dart';
 import 'package:vietqr_admin/commons/constants/configurations/theme.dart';
 import 'package:vietqr_admin/commons/constants/enum/view_status.dart';
+import 'package:vietqr_admin/commons/constants/utils/month_calculator.dart';
 import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
+import 'package:vietqr_admin/models/DTO/data_filter_dto.dart';
 import 'package:vietqr_admin/models/DTO/invoice_detail_dto.dart';
 
 import 'bank_account_item.dart';
@@ -31,6 +34,41 @@ class _PagePaymentRequestMerchantWidgetState
     extends State<PagePaymentRequestMerchantWidget> {
   late InvoiceViewModel _model;
   final ScrollController scrollController = ScrollController();
+
+  // //khởi tạo ngày tháng để lọc
+  // DataFilter _filterByTime = const DataFilter(id: 1, name: '7 ngày gần nhất');
+
+  // DateTime get now => DateTime.now();
+  // final monthCalculator = MonthCalculator();
+
+  // DateTime _fromDate =
+  //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+  //         .subtract(const Duration(days: 30));
+  // DateTime _toDate =
+  //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+  //         .add(const Duration(days: 1))
+  //         .subtract(const Duration(seconds: 1));
+
+  // DateTime _formatFromDate(DateTime now) {
+  //   DateTime fromDate = DateTime(now.year, now.month, now.day);
+  //   return fromDate.subtract(const Duration(days: 7));
+  // }
+
+  // // ignore: unused_element
+  // DateTime _formatEndDate(DateTime now) {
+  //   DateTime fromDate = _formatFromDate(now);
+  //   return fromDate
+  //       .add(const Duration(days: 8))
+  //       .subtract(const Duration(seconds: 1));
+  // }
+
+  // DateFormat get _format => DateFormat('dd/MM/yyyy HH:mm:ss');
+  // DateFormat get _format2 => DateFormat('yyyy-MM-dd HH:mm:ss');
+
+  // DateTime? selectFromDate;
+  // DateTime? selectToDate;
+  // int page = 1;
+  // int size = 10;
 
   @override
   void initState() {
@@ -62,8 +100,8 @@ class _PagePaymentRequestMerchantWidgetState
     return Center(
       child: Container(
         color: AppColor.WHITE,
-        width: 1150,
-        height: 700,
+        width: 1250,
+        height: 800,
         padding: const EdgeInsets.all(20),
         child: ScopedModelDescendant<InvoiceViewModel>(
           builder: (context, child, model) {

@@ -10,7 +10,6 @@ import 'package:vietqr_admin/commons/constants/utils/string_utils.dart';
 import 'package:vietqr_admin/commons/widget/m_button_widget.dart';
 import 'package:vietqr_admin/commons/widget/separator_widget.dart';
 import 'package:vietqr_admin/models/DTO/invoice_detail_dto.dart';
-import 'package:vietqr_admin/models/DTO/invoice_dto.dart';
 
 import 'bank_account_item.dart';
 
@@ -34,6 +33,7 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
     super.initState();
     _model = Get.find<InvoiceViewModel>();
 
+    // ignore: unnecessary_null_comparison
     if (widget.dto != null) {
       _model.getInvoiceDetail(widget.dto.unpaidInvoiceItem.invoiceId);
     }
@@ -487,6 +487,7 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
             width: 150,
             child: SelectionArea(
               child: Text(
+                // ignore: unnecessary_null_comparison
                 widget.dto != null
                     ? widget.dto.unpaidInvoiceItem.billNumber
                     : '-',
@@ -516,6 +517,7 @@ class _PagePaymentRequestWidgetState extends State<PagePaymentRequestWidget> {
             width: 100,
             child: SelectionArea(
               child: Text(
+                // ignore: unnecessary_null_comparison
                 widget.dto.unpaidInvoiceItem != null
                     ? widget.dto.unpaidInvoiceItem.vso
                     : '-',
